@@ -1,0 +1,1 @@
+Cinzel, Lora, Vazirmatn, Lalezar: SIL Open Font License 1.1 (via fontsource and the vazirmatn npm package).

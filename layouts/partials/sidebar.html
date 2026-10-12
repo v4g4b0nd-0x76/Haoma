@@ -1,0 +1,10 @@
+{{ $cur := .RelPermalink }}
+{{ with .Params.culture }}{{ with site.GetPage (printf "/cultures/%s" .) }}
+<button type="button" class="navtab" data-act="nav" aria-label="{{ i18n "tNav" }}">☰</button>
+<aside class="side"><h3>{{ .Title }}</h3><ul>
+{{ range .Sections }}{{ $open := hasPrefix $cur .RelPermalink }}
+<li><a href="{{ .RelPermalink }}"{{ if eq $cur .RelPermalink }} class="active"{{ end }}>{{ .Title }}</a>
+{{ if $open }}<ul>{{ range .Pages }}<li><a href="{{ .RelPermalink }}"{{ if eq $cur .RelPermalink }} class="active"{{ end }}>{{ .Title }}</a></li>{{ end }}</ul>{{ end }}</li>
+{{ end }}
+</ul></aside>
+{{ end }}{{ end }}

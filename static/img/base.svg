@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice">
+<style>
+.r1{animation:spin 120s linear infinite;transform-box:fill-box;transform-origin:center}
+.r2{animation:spin 80s linear infinite reverse;transform-box:fill-box;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.st{animation:tw 5s ease-in-out infinite alternate}.s2{animation-delay:-2.5s}
+@keyframes tw{to{opacity:.15}}
+</style>
+<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f1115"/><stop offset="1" stop-color="#232833"/></linearGradient></defs>
+<rect width="1200" height="300" fill="url(#g)"/>
+<g stroke="#9aa3b5" stroke-opacity=".25" fill="none">
+<path d="M0 220H1200M0 250H1200" stroke-dasharray="2 8"/>
+<g class="r1"><circle cx="600" cy="150" r="130"/><circle cx="600" cy="150" r="100" stroke-dasharray="4 10"/></g>
+<g class="r2"><circle cx="600" cy="150" r="70"/><path d="M600 60V240M510 150H690"/></g>
+</g>
+<g fill="#c9ccd3"><circle class="st" cx="180" cy="70" r="1.6"/><circle class="st s2" cx="320" cy="140" r="1.3"/><circle class="st" cx="470" cy="50" r="1.5"/><circle class="st s2" cx="760" cy="60" r="1.4"/><circle class="st" cx="900" cy="150" r="1.6"/><circle class="st s2" cx="1040" cy="80" r="1.3"/></g>
+<path d="M180 70L320 140L470 50L600 150L760 60L900 150L1040 80" stroke="#9aa3b5" stroke-opacity=".2" fill="none"/>
+</svg>

@@ -1,0 +1,34 @@
+baseURL = "/"
+title = "Mythology Notebook"
+defaultContentLanguage = "en"
+[markup.goldmark.renderer]
+  unsafe = true
+[languages.en]
+  languageName = "English"
+  languageCode = "en"
+  languageDirection = "ltr"
+  weight = 1
+  contentDir = "content/en"
+  [[languages.en.menus.main]]
+    name = "Episodes"
+    pageRef = "/episodes"
+    weight = 2
+  [[languages.en.menus.main]]
+    name = "About"
+    pageRef = "/about"
+    weight = 4
+[languages.fa]
+  languageName = "فارسی"
+  languageCode = "fa"
+  languageDirection = "rtl"
+  title = "یادداشت‌های اسطوره‌شناسی"
+  weight = 2
+  contentDir = "content/fa"
+  [[languages.fa.menus.main]]
+    name = "قسمت‌ها"
+    pageRef = "/episodes"
+    weight = 2
+  [[languages.fa.menus.main]]
+    name = "دربارهٔ ما"
+    pageRef = "/about"
+    weight = 4

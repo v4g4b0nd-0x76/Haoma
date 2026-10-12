@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice">
+<style>
+.au{animation:sh 9s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+.au2{animation-duration:13s;animation-delay:-5s}
+@keyframes sh{from{opacity:.2;transform:translateX(-40px) scaleY(.85)}to{opacity:.65;transform:translateX(40px) scaleY(1.1)}}
+.ship{animation:bob 6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes bob{50%{transform:translateY(5px) rotate(-1.5deg)}}
+.tw{animation:tw 4s ease-in-out infinite alternate}.tw2{animation-delay:-2s}
+@keyframes tw{to{opacity:.15}}
+</style>
+<defs>
+<linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a101c"/><stop offset="1" stop-color="#1f3045"/></linearGradient>
+<linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fe0b0" stop-opacity="0"/><stop offset=".5" stop-color="#5fe0b0"/><stop offset="1" stop-color="#7fa8c9" stop-opacity="0"/></linearGradient>
+<filter id="b"><feGaussianBlur stdDeviation="14"/></filter>
+</defs>
+<rect width="1200" height="300" fill="url(#s)"/>
+<g fill="#cfe3f5"><circle class="tw" cx="90" cy="40" r="1.5"/><circle class="tw tw2" cx="240" cy="90" r="1.2"/><circle class="tw" cx="420" cy="30" r="1.4"/><circle class="tw tw2" cx="700" cy="50" r="1.2"/><circle class="tw" cx="930" cy="35" r="1.6"/><circle class="tw tw2" cx="1100" cy="85" r="1.3"/><circle class="tw" cx="800" cy="95" r="1"/></g>
+<g filter="url(#b)" fill="url(#a)"><path class="au" d="M150 30 Q400 120 650 40 L700 170 Q420 190 170 160Z"/><path class="au au2" d="M600 20 Q850 100 1100 30 L1120 150 Q850 170 620 140Z"/></g>
+<circle cx="1010" cy="70" r="20" fill="#dfe9f3" opacity=".85"/>
+<path d="M0 220 L90 150 L150 190 L260 110 L360 200 L470 140 L560 210 L700 120 L800 200 L920 135 L1040 205 L1130 160 L1200 200 L1200 300 L0 300Z" fill="#17263a"/>
+<path d="M0 255 L120 205 L230 245 L360 200 L500 250 L640 215 L780 255 L930 210 L1070 250 L1200 220 L1200 300 L0 300Z" fill="#0e1928"/>
+<rect y="262" width="1200" height="38" fill="#0a121e"/>
+<g class="ship" fill="#050a12">
+<path d="M520 246 Q570 276 660 276 Q750 276 800 246 L792 240 Q820 222 806 200 Q826 206 824 232 L812 246 Q740 262 660 262 Q580 262 528 240Z"/>
+<rect x="656" y="170" width="3" height="76"/>
+<path d="M600 176 L716 176 L706 226 L610 226Z" fill="#7a2f2f"/>
+<path d="M608 190h100M606 204h96" stroke="#c9ccd3" stroke-opacity=".35" stroke-width="3"/>
+</g>
+</svg>

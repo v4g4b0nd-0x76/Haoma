@@ -1,0 +1,2 @@
+{{- $d := .Destination -}}{{- if hasPrefix $d "/" -}}{{- $d = $d | relLangURL -}}{{- end -}}
+<a href="{{ $d | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>

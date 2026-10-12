@@ -1,0 +1,21 @@
+name: Correction
+description: Report a mistake or a missing source on a page
+labels: [correction]
+body:
+  - type: input
+    id: page
+    attributes: {label: Page URL}
+    validations: {required: true}
+  - type: textarea
+    id: wrong
+    attributes: {label: What is wrong or missing?}
+    validations: {required: true}
+  - type: textarea
+    id: fix
+    attributes: {label: Suggested fix}
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: Primary text with chapter/verse, or a scholarly reference. Prefer open-access sources.
+    validations: {required: true}

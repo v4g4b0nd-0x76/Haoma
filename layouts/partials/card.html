@@ -1,0 +1,4 @@
+<li{{ with .Params.culture }} data-culture="{{ . }}"{{ end }}>
+{{ with .Params.culture }}{{ $b := (index site.Data.themes . | default dict).banner }}{{ if $b }}<a class="art" href="{{ $.RelPermalink }}" tabindex="-1" aria-hidden="true"><img src="{{ printf "img/%s" $b | relURL }}" alt="" loading="lazy"></a>{{ end }}{{ end }}
+<div class="body"><h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3><p>{{ with .Params.tagline }}{{ . }}{{ else }}{{ .Summary | plainify | truncate 120 }}{{ end }}</p></div>
+</li>

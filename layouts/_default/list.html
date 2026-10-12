@@ -1,0 +1,9 @@
+{{ define "main" }}
+<div class="layout{{ if not .Params.culture }} solo{{ end }}">{{ partial "sidebar.html" . }}
+<article>
+{{ partial "tools.html" . }}{{ partial "crumbs.html" . }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+<ul class="cards">{{ range .Pages }}{{ partial "card.html" . }}{{ end }}</ul>
+</article></div>
+{{ end }}

@@ -1,0 +1,219 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="token" content="__TOKEN__"><title>Site editor</title>
+<style>
+:root{--bg:#0f1115;--s:#171a20;--s2:#1e222a;--b:#2b303a;--t:#d6d9e0;--m:#8a909c;--a:#7fa8c9;--ok:#6fbf8b;--bad:#e06c6c;--warn:#e0b45a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--t);font:14px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;height:100vh;overflow:hidden}
+button,select,input,textarea{font:inherit;color:var(--t);background:var(--bg);border:1px solid var(--b);border-radius:8px;padding:6px 11px}
+button{cursor:pointer;background:var(--s2)}button:hover{border-color:var(--a)}button.pri{background:var(--a);color:#0b0d10;border-color:var(--a);font-weight:600}button.link{background:none;border:0;color:var(--a);padding:0}
+input:focus,textarea:focus,select:focus{outline:2px solid var(--a);outline-offset:-1px}
+#app{display:grid;grid-template-columns:210px 290px 1fr;height:100vh}#app.nolist{grid-template-columns:210px 1fr}#app.nolist #panel{display:none}
+#app.pv{grid-template-columns:210px 290px 1fr 1fr}#app.pv.nolist{grid-template-columns:210px 1fr 1fr}
+#rail{background:var(--s);border-right:1px solid var(--b);display:flex;flex-direction:column;padding:12px 8px}
+.logo{font-weight:700;font-size:15px;padding:6px 10px 14px}#rl{flex:1}
+.rb{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:none;border-radius:8px;padding:9px 10px;margin:1px 0;color:var(--m)}
+.rb span{width:22px;text-align:center}.rb:hover{background:var(--s2);color:var(--t)}.rb.on{background:var(--s2);color:var(--a);box-shadow:inset 3px 0 var(--a)}
+.rbot{border-top:1px solid var(--b);padding-top:10px;display:grid;gap:6px}.rbot button{width:100%}#branch{color:var(--m);font-size:12px;padding:0 4px}
+#panel{background:var(--s);border-right:1px solid var(--b);overflow:auto;padding:12px}#main{overflow:auto;padding:22px 26px;min-width:0}
+#pvwrap{display:none;border-left:1px solid var(--b);flex-direction:column;min-width:0}#app.pv #pvwrap{display:flex}#pvwrap iframe{flex:1;border:0;background:#fff}#pvwrap .row{padding:8px;background:var(--s)}
+label{display:block;margin:10px 0 3px;color:var(--m);font-size:12px}input[type=text],select,textarea{width:100%}
+.row{display:flex;gap:8px;align-items:center}.row>input,.row>select{flex:1}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.item{display:block;width:100%;text-align:left;border:0;background:none;padding:4px 8px;border-radius:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.item:hover{background:var(--s2)}.item.on{color:var(--a);background:var(--s2)}
+summary{cursor:pointer;color:var(--m);padding:3px 4px;font-size:12px;text-transform:uppercase;letter-spacing:.05em}summary.s2{text-transform:none;font-size:13px;color:var(--t);letter-spacing:0;padding-left:10px}details details{margin-left:6px}
+.grp{color:var(--m);font-size:12px;margin:14px 0 4px;text-transform:uppercase;letter-spacing:.05em}.msg{color:var(--m);margin-left:8px}.ok{color:var(--ok)}.bad{color:var(--bad)}.warn{color:var(--warn)}
+pre{background:var(--s);border:1px solid var(--b);padding:12px;border-radius:8px;overflow:auto;max-height:50vh;white-space:pre-wrap;font-size:12.5px}
+.card{background:var(--s);border:1px solid var(--b);border-radius:12px;margin:12px 0;overflow:hidden}.card.pad{padding:14px 16px}.card .bn{height:90px;background:#000 center/cover}.card div.t{padding:10px 14px}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px;flex-wrap:wrap}.crumb{color:var(--m);font-size:13px}h2{margin:.1em 0 .6em;font-size:22px}h3{margin:.2em 0 .6em}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:12px}.stat{background:var(--s);border:1px solid var(--b);border-radius:12px;padding:14px;text-align:left;cursor:pointer}.stat b{display:block;font-size:28px}.stat span{color:var(--m)}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}.chip{border-radius:99px;padding:3px 13px;font-size:13px}.chip.on{background:var(--a);color:#0b0d10;border-color:var(--a)}
+table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--b)}tr.go{cursor:pointer}tr.go:hover{background:var(--s)}th{color:var(--m);font-weight:500;font-size:12px}
+.tag{display:inline-block;border:1px solid var(--b);border-radius:99px;padding:0 8px;font-size:11px;margin-right:4px;color:var(--warn)}
+.sw{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}.sw input[type=color]{width:100%;height:32px;padding:2px}
+textarea.ed{height:calc(100vh - 340px);min-height:240px}textarea.mono,textarea.ed{font:13px/1.6 ui-monospace,Menlo,Consolas,monospace;resize:vertical;tab-size:2}.tb{display:flex;gap:6px;margin:10px 0 6px;flex-wrap:wrap}
+.pend{background:var(--s2);border:1px solid var(--warn);border-radius:8px;padding:8px}.pend b{color:var(--warn);display:block;margin-bottom:6px}.pend .row button{flex:1;padding:4px}
+</style></head><body>
+<div id="app"><nav id="rail"><div class="logo">📜 Site editor</div><div id="rl"></div><div class="rbot"><div id="pend" class="pend" hidden><b></b><div class="row"><button class="pri" id="sa">Save all</button><button id="da">Discard</button></div></div><div id="branch"></div><button id="bundo">↶ Undo last change</button><button id="bpv">▶ Preview</button><button id="bchk">Check build</button><div id="hmsg" class="msg"></div></div></nav>
+<div id="panel"></div><div id="main"></div>
+<div id="pvwrap"><div class="row"><input type="text" id="purl" readonly><button id="pre">⟳</button></div><iframe id="pf"></iframe></div></div>
+<script>const T=document.querySelector('meta[name=token]').content;
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+async function api(p,o={}){const r=await fetch('/api/'+p,{...o,headers:{'X-Token':T}});const ct=r.headers.get('content-type')||'';const d=ct.includes('json')?await r.json():await r.text();if(!r.ok)throw new Error(d.error||d);return d}
+const E=encodeURIComponent,get=p=>api('file?path='+E(p));
+const q=s=>JSON.stringify(s),slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''),today=()=>new Date().toISOString().slice(0,10),nid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const say=(t,c='')=>{$('#hmsg').className='msg '+c;$('#hmsg').textContent=t};
+/* ===== state: nothing touches project files until Save ===== */
+let files=[],orig={},drafts=new Map(),git={},audit=[],cur=null,view='dash',rf='all',cT=null,cN='en',timers={};
+const DATA=['data/themes.json','data/nav.json','data/site.json'];
+const J=p=>drafts.has(p)?drafts.get(p):orig[p];
+const themes=()=>JSON.parse(J('data/themes.json')),nav=()=>JSON.parse(J('data/nav.json')),site=()=>{try{return JSON.parse(J('data/site.json'))}catch(e){return{repo:'',branch:'master'}}};
+const setJ=(p,o)=>setDraft(p,JSON.stringify(o,null,2));
+const allFiles=()=>{const s=new Set(files);drafts.forEach((v,p)=>v===null?s.delete(p):s.add(p));return[...s].sort()};
+function setDraft(p,v){const o=orig[p];if(typeof v==='string'&&o!==undefined&&v===o){drafts.delete(p);clearTimeout(timers[p]);api('discard?path='+E(p),{method:'POST'}).catch(()=>{})}else{drafts.set(p,v);clearTimeout(timers[p]);timers[p]=setTimeout(()=>push(p),450)}pend()}
+async function push(p){clearTimeout(timers[p]);const v=drafts.get(p);if(v===undefined)return;try{if(v===null)await api('draft?path='+E(p),{method:'DELETE'});else await api('draft?path='+E(p),{method:'PUT',body:(v&&v.file)||v})}catch(e){say(e.message,'bad')}}
+function pend(){const n=drafts.size;$('#pend').hidden=!n;$('#pend b').textContent=n+' unsaved'}
+async function commit(paths,label){const x=nid(),sf=`&x=${x}&l=${E(label)}`;for(const p of paths){const v=drafts.get(p);if(v===undefined)continue;
+  if(v===null){if(files.includes(p))await api('file?path='+E(p)+sf,{method:'DELETE'})}
+  else if(v.file)await api('upload?path='+E(p)+sf,{method:'POST',body:v.file});else await api('file?path='+E(p)+sf,{method:'PUT',body:v});
+  drafts.delete(p);delete orig[p]}await load();pend();refresh();say('Saved ✓','ok')}
+async function discardPaths(paths){for(const p of paths){drafts.delete(p);clearTimeout(timers[p]);await api('discard?path='+E(p),{method:'POST'}).catch(()=>{})}await load();pend();refresh()}
+async function load(){files=await api('tree');for(const p of DATA){try{orig[p]=await get(p)}catch(e){}}git=await api('git');$('#branch').textContent=git.ok?'⎇ '+git.branch:'not a git repo';audit=(await api('audit')).items;pend()}
+function refresh(){const c=cur;render();if(c&&VIEWS[view][3]&&allFiles().includes(c)&&view!=='themes'&&view!=='nav')openFile(c)}
+const VIEWS={dash:['🏠','Dashboard',pDash,0],content:['📝','Content',pContent,1],themes:['🎨','Themes',pThemes,1],nav:['🧭','Navigation',pNav,1],review:['🔎','Review',pReview,0],files:['🗂','Files',pFiles,1],history:['↶','History',pHistory,0],publish:['🚀','Publish & PR',pPublish,0],settings:['⚙️','Settings',pSettings,0]};
+function render(){$('#rl').innerHTML='';for(const k in VIEWS){const b=document.createElement('button');b.className='rb'+(k===view?' on':'');b.innerHTML=`<span>${VIEWS[k][0]}</span>${VIEWS[k][1]}`;b.onclick=()=>{view=k;render()};$('#rl').append(b)}
+ $('#app').classList.toggle('nolist',!VIEWS[view][3]);$('#panel').innerHTML='';$('#main').innerHTML='';VIEWS[view][2]()}
+function list(paths,filter=''){return paths.filter(p=>p.includes(filter)).map(p=>`<button class="item ${p===cur?'on':''}" data-p="${esc(p)}" title="${esc(p)}">${drafts.has(p)?'● ':''}${esc(p.replace(/^content\//,''))}</button>`).join('')}
+function bindItems(){document.querySelectorAll('#panel .item').forEach(b=>b.onclick=()=>openFile(b.dataset.p))}
+function ctree(paths,filter){const f=filter.toLowerCase(),g={};paths.filter(p=>p.toLowerCase().includes(f)).forEach(p=>{const m=p.match(/^content\/(\w+)\/(.*)$/),l=m?m[1]:'other',rest=m?m[2]:p,pt=rest.split('/'),k=pt[0]==='cultures'&&pt.length>2?'cultures / '+pt[1]:pt[0].replace(/\.md$/,'');g[l]=g[l]||{};(g[l][k]=g[l][k]||[]).push(p)});
+ return Object.keys(g).sort().map(l=>`<details open><summary>${l}</summary>${Object.keys(g[l]).sort().map(k=>`<details ${f?'open':''}><summary class="s2">${esc(k)}</summary>${g[l][k].map(p=>`<button class="item ${p===cur?'on':''}" data-p="${esc(p)}" title="${esc(p)}">${drafts.has(p)?'● ':''}${esc(p.split('/').slice(-2).join('/').replace(/\.md$/,''))}</button>`).join('')}</details>`).join('')}</details>`).join('')}
+function pContent(){const md=allFiles().filter(f=>f.startsWith('content/'));$('#panel').innerHTML=`<div class="row"><button class="pri" id="np">+ Page</button><button id="nc">+ Culture</button></div><input type="text" id="cs" placeholder="Search content…" style="margin-top:10px"><div id="ct" style="margin-top:8px">${ctree(md,'')}</div>`;bindItems();$('#np').onclick=wizPage;$('#nc').onclick=wizCulture;$('#cs').oninput=()=>{$('#ct').innerHTML=ctree(md,$('#cs').value);bindItems()}}
+/* ===== dashboard / review ===== */
+const issues={drafts:a=>a.draft&&!a.index,stale:a=>a.stale,nosrc:a=>!a.sources&&!a.index,untr:a=>a.missing.length&&!a.index};
+function pDash(){const pg=audit.filter(a=>!a.index),n=k=>audit.filter(issues[k]).length,ch=(git.status||'').split('\n').filter(Boolean);
+ $('#main').innerHTML=`<h2>Dashboard</h2><p class="msg" style="margin:0">Counts describe saved files. Unsaved edits live only in the editor and the preview.</p><div class="stats" style="margin-top:12px">${[['all','Pages',pg.length],['drafts','Drafts',n('drafts')],['stale','Need review',n('stale')],['nosrc','Without sources',n('nosrc')],['untr','Untranslated',n('untr')]].map(([k,l,v])=>`<button class="stat" data-r="${k}"><b>${v}</b><span>${l}</span></button>`).join('')}<button class="stat" data-v="publish"><b>${ch.length}</b><span>Uncommitted files</span></button></div>
+ <h3 style="margin-top:22px">Quick actions</h3><div class="row" style="flex-wrap:wrap"><button class="pri" id="qp">+ New page</button><button id="qc">+ New culture</button><button id="qv">▶ Preview site</button><button id="qk">Check build</button>${site().repo?`<button id="qi">GitHub issues ↗</button><button id="qr">Pull requests ↗</button>`:''}</div>
+ <h3 style="margin-top:22px">Uncommitted changes</h3><pre>${esc(ch.join('\n')||'Working tree clean')}</pre>`;
+ document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{rf=b.dataset.r;view='review';render()});document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{view=b.dataset.v;render()});
+ $('#qp').onclick=()=>{view='content';render();wizPage()};$('#qc').onclick=()=>{view='content';render();wizCulture()};$('#qv').onclick=()=>$('#bpv').click();$('#qk').onclick=()=>$('#bchk').click();
+ if(site().repo){$('#qi').onclick=()=>window.open(site().repo+'/issues');$('#qr').onclick=()=>window.open(site().repo+'/pulls')}}
+function pReview(){const L={all:'All',drafts:'Drafts',stale:'Need review (older than 180 days)',nosrc:'No sources',untr:'Missing translation'};
+ const rows=audit.filter(a=>!a.index&&(rf==='all'||issues[rf](a)));
+ $('#main').innerHTML=`<h2>Review</h2><p class="msg" style="margin:0">Find pages that need a source, a translation or a fresh review.</p><div class="chips">${Object.keys(L).map(k=>`<button class="chip ${k===rf?'on':''}" data-r="${k}">${L[k]}</button>`).join('')}</div>
+ <table><tr><th>Page</th><th>Lang</th><th>Grade</th><th>Reviewed</th><th>Flags</th></tr>${rows.map(a=>`<tr class="go" data-p="${esc(a.path)}"><td>${esc(a.title)}<br><span class="msg" style="margin:0">${esc(a.path.replace('content/',''))}</span></td><td>${a.lang}</td><td>${esc(a.grade)}</td><td>${esc(a.reviewed||'-')}</td><td>${a.draft?'<span class="tag">draft</span>':''}${a.stale?'<span class="tag">review</span>':''}${a.sources?'':'<span class="tag">no sources</span>'}${a.missing.map(m=>`<span class="tag">no ${m}</span>`).join('')}</td></tr>`).join('')||'<tr><td colspan=5 class="ok">Nothing to fix here.</td></tr>'}</table>`;
+ document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{rf=b.dataset.r;pReview()});document.querySelectorAll('tr.go').forEach(r=>r.onclick=()=>openFile(r.dataset.p))}
+/* ===== new page / culture wizards (create DRAFTS, not files) ===== */
+const cultures=()=>Object.keys(themes()).filter(k=>k!=='base'),SECS=['characters','stories','history'],SECFA={characters:'شخصیت‌ها',stories:'داستان‌ها',history:'تاریخ'};
+const cap=s=>s[0].toUpperCase()+s.slice(1);
+const cultIdx=(cu,title,tag)=>`---\ntitle: ${q(title)}\nculture: ${cu}\nquote: ""\nquoteSource: ""\ntagline: ${q(tag||'')}\ncascade:\n  culture: ${cu}\n---\n\nAbout ${title}.\n`;
+const secIdx=(l,s)=>`---\ntitle: ${q(l==='fa'&&SECFA[s]?SECFA[s]:cap(s))}\ncascade:\n  sec: ${s}\n---\n`;
+const fm=o=>'---\n'+Object.entries(o).filter(([k,v])=>v!==''&&v!==undefined&&!(Array.isArray(v)&&!v.length)).map(([k,v])=>Array.isArray(v)?k+':\n'+v.map(x=>'  - '+q(x)).join('\n'):k+': '+(typeof v==='string'&&!/^\d{4}-\d\d-\d\d$/.test(v)?q(v):v)).join('\n')+'\n---\n';
+const ensure=(p,t)=>{if(!allFiles().includes(p))setDraft(p,t)};
+function wizPage(){$('#main').innerHTML=`<h2>New page</h2><p class="msg" style="margin:0">Created as an unsaved draft. Nothing is written to the project until you press Save.</p><div class="two"><div><label>Type</label><select id="ty"><option value="culture">Culture page (character, story, history…)</option><option value="episode">Podcast episode</option><option value="plain">Plain page</option></select>
+<label>Language</label><select id="lg"><option value="en">English</option><option value="fa">فارسی</option></select><label>Culture</label><select id="cu">${cultures().map(c=>`<option>${c}</option>`).join('')}</select>
+<label>Section</label><input type="text" id="se" list="sl" value="characters"><datalist id="sl">${SECS.map(s=>`<option>${s}</option>`).join('')}</datalist><label>Title</label><input type="text" id="ti"><label>URL name (a-z, 0-9, dashes)</label><input type="text" id="sg"></div>
+<div><label>Tagline</label><input type="text" id="tg"><label>Evidence grade</label><select id="gr"><option>primary text</option><option>later compilation</option><option>archaeology</option><option>modern scholarship</option><option>draft</option></select>
+<label>Sources (one per line)</label><textarea id="so" rows="4"></textarea><label><input type="checkbox" id="st" checked> also create a stub in the other language</label></div></div><p><button class="pri" id="go">Create draft</button><span id="wm" class="msg"></span></p>`;
+ $('#ti').oninput=()=>{if(!$('#sg').dataset.m)$('#sg').value=slug($('#ti').value)};$('#sg').oninput=()=>$('#sg').dataset.m=1;$('#go').onclick=createPage}
+function createPage(){try{const g=id=>$('#'+id).value.trim(),ty=g('ty'),lg=g('lg'),cu=g('cu'),sg=g('sg');if(!g('ti'))throw Error('a title is required');if(!/^[a-z0-9-]+$/.test(sg))throw Error('URL name: use a-z, 0-9 and dashes only');
+ const base={tagline:g('tg'),grade:g('gr'),sources:g('so').split('\n').map(s=>s.trim()).filter(Boolean),reviewed:today()};
+ const mk=(l,title)=>{let path,front;if(ty==='culture'){const se=slug(g('se'))||'characters';ensure(`content/${l}/cultures/${cu}/_index.md`,cultIdx(cu,cap(cu)));ensure(`content/${l}/cultures/${cu}/${se}/_index.md`,secIdx(l,se));path=`content/${l}/cultures/${cu}/${se}/${sg}.md`;front=fm({title,...base})}
+  else if(ty==='episode'){path=`content/${l}/episodes/${sg}/index.md`;front=fm({title,date:today(),culture:cu,grade:g('gr'),sources:base.sources,reviewed:today()})}
+  else{path=`content/${l}/${sg}/_index.md`;front=fm({title})}
+  if(allFiles().includes(path))throw Error('already exists: '+path);setDraft(path,front+'\nWrite here.\n');return path};
+ const first=mk(lg,g('ti'));if($('#st').checked)mk(lg==='en'?'fa':'en','TODO translate: '+g('ti'));view='content';render();openFile(first)}catch(e){$('#wm').textContent=e.message;$('#wm').className='msg bad'}}
+function wizCulture(){$('#main').innerHTML=`<h2>New culture</h2><p class="msg" style="margin:0">Created as unsaved drafts (folders, theme and banner).</p><div class="two"><div><label>Key (a-z, e.g. egyptian)</label><input type="text" id="k"><label>English name</label><input type="text" id="n1"><label>Farsi name</label><input type="text" id="n2" dir="rtl"><label>Tagline (English)</label><input type="text" id="t1"><label>Tagline (Farsi)</label><input type="text" id="t2" dir="rtl"></div>
+<div><div class="sw"><div><label>Accent</label><input type="color" id="ac" value="#c9a45a"></div><div><label>Background</label><input type="color" id="bg" value="#15171a"></div></div><label>Background animation</label><select id="an"><option>fall</option><option>drift</option><option>rise</option><option>none</option></select><label>Top strip pattern</label><select id="pa"><option>none</option><option>meander</option><option>rosette</option><option>zigzag</option><option>waves</option></select>
+<label>Banner art</label><select id="bs"><option value="mountains">Mountains + moon</option><option value="waves">Waves</option><option value="">None</option></select></div></div><p><button class="pri" id="go">Create draft</button><span id="wm" class="msg"></span></p>`;
+ $('#go').onclick=()=>{try{const g=id=>$('#'+id).value.trim(),k=slug(g('k'));if(!k)throw Error('enter a key using a-z');const all=themes();if(all[k])throw Error('a theme named '+k+' already exists');
+  for(const [l,n,t] of [['en',g('n1')||cap(k),g('t1')],['fa',g('n2')||g('n1')||cap(k),g('t2')]]){setDraft(`content/${l}/cultures/${k}/_index.md`,cultIdx(k,n,t));for(const s of SECS)setDraft(`content/${l}/cultures/${k}/${s}/_index.md`,secIdx(l,s))}
+  let banner='';if(g('bs')){banner=k+'-gen.svg';setDraft('static/img/'+banner,genBanner(g('bs'),g('bg'),g('ac')))}
+  all[k]={accent:g('ac'),bg:g('bg'),surface:mix(g('bg'),'#ffffff',.04),border:mix(g('bg'),'#ffffff',.13),text:'#cfd2d9',muted:'#8d929d',anim:g('an'),pattern:g('pa'),glyphs:'',banner};setJ('data/themes.json',all);cT=k;view='themes';render()}catch(e){$('#wm').textContent=e.message;$('#wm').className='msg bad'}}}
+/* ===== editor ===== */
+const split=t=>{const m=t.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);return m?{fm:m[1],body:m[2]}:{fm:'',body:t}};
+const getK=(f,k)=>{const m=f.match(new RegExp('^'+k+':\\s*(.*)$','m'));if(!m)return'';let v=m[1].trim();if(v[0]==='"')try{v=JSON.parse(v)}catch(e){}return v};
+const setK=(f,k,v)=>{const re=new RegExp('^'+k+':.*$','m');if(v===''&&!re.test(f))return f;const line=k+': '+(/^\d{4}-\d\d-\d\d$/.test(v)?v:JSON.stringify(v));return re.test(f)?f.replace(re,()=>line):(f?f+'\n':'')+line};
+const getSrc=f=>{const m=(f+'\n').match(/^sources:\s*\n((?:[ \t]+- .*\n?)*)/m);if(m&&m[1])return m[1].split('\n').filter(Boolean).map(l=>{let v=l.replace(/^\s*-\s*/,'');try{v=JSON.parse(v)}catch(e){}return v});const i=f.match(/^sources:\s*\[(.*)\]/m);if(i)try{return JSON.parse('['+i[1]+']')}catch(e){}return[]};
+const setSrc=(f,a)=>{f=(f+'\n').replace(/^sources:\s*\n(?:[ \t]+- .*\n?)*/m,'').replace(/^sources:\s*\[.*\]\n?/m,'').replace(/\n+$/,'');return a.length?f+'\nsources:\n'+a.map(s=>'  - '+JSON.stringify(s)).join('\n'):f};
+const eolOf={};
+async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;document.querySelectorAll('#panel .item').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
+ let txt;try{const d=drafts.get(p);
+  if(d===null){$('#main').innerHTML=`<div class="bar"><div class="crumb">${esc(p)}</div><button id="un">Restore (cancel delete)</button></div><p class="warn">Marked for deletion. Save all to apply.</p>`;$('#un').onclick=()=>discardPaths([p]);return}
+  if(d&&d.file){$('#main').innerHTML=`<div class="bar"><div class="crumb">${esc(p)}</div><button id="un">Discard</button></div><p class="warn">Unsaved upload: ${esc(d.file.name)} (${d.file.size} bytes). It is in the preview only until you save.</p>`;$('#un').onclick=()=>discardPaths([p]);return}
+  if(files.includes(p)&&orig[p]===undefined)orig[p]=await get(p);txt=d!==undefined?d:await get(p);if(files.includes(p)&&orig[p]===undefined)orig[p]=txt}
+ catch(e){$('#main').innerHTML=`<p class="bad">${esc(e.message)}</p>`;return}
+ eolOf[p]=txt.includes('\r\n')?'\r\n':'\n';txt=txt.replace(/\r\n/g,'\n');
+ const md=p.endsWith('.md'),svg=p.endsWith('.svg'),sp=md?split(txt):{fm:'',body:txt},hasFm=md&&sp.fm!=='';
+ const lm=p.match(/^content\/(\w+)\//),ol=lm&&(lm[1]==='en'?'fa':lm[1]==='fa'?'en':null),op=ol&&p.replace('content/'+lm[1]+'/','content/'+ol+'/'),isNew=!files.includes(p);
+ $('#main').innerHTML=`<div class="bar"><div class="crumb">${esc(p.replace(/\//g,' › '))}${isNew?' <span class="tag">new</span>':''}</div><div class="row">${op?`<button id="tr">${allFiles().includes(op)?'Open '+ol.toUpperCase():'Create '+ol.toUpperCase()+' stub'}</button>`:''}<button class="pri" id="sv">Save</button><button id="rv">Discard changes</button><button id="dl">Delete</button><span id="em" class="msg"></span></div></div>
+ ${hasFm?`<div class="card pad"><div class="two"><div><label>Title</label><input type="text" id="mt"><label>Tagline</label><input type="text" id="mg"></div><div><label>Evidence grade</label><input type="text" id="mr" list="gl"><datalist id="gl"><option>primary text<option>later compilation<option>archaeology<option>modern scholarship<option>draft</datalist><label>Reviewed</label><div class="row"><input type="text" id="mv"><button id="mn" type="button">Today</button></div></div></div><label>Sources (one per line)</label><textarea id="ms" rows="3"></textarea><details style="margin-top:8px"><summary>Raw front matter</summary><textarea id="fm" rows="8" class="mono"></textarea></details></div>`:''}
+ ${md?`<div class="tb"><button id="tH">H2</button><button id="tB">B</button><button id="tI">I</button><button id="tQ">❝</button><button id="tL">Link</button><button id="tA">Attach file…</button></div><input type="file" id="fi" hidden>`:''}
+ <div class="${svg?'two':''}"><textarea class="ed" id="ta" spellcheck="false"></textarea>${svg?'<div class="card"><img id="sp" style="width:100%"></div>':''}</div>`;
+ const ta=$('#ta');ta.value=sp.body;const prev=()=>{if(svg)$('#sp').src='data:image/svg+xml;utf8,'+encodeURIComponent(ta.value)};prev();
+ const compose=()=>{const t=hasFm?'---\n'+$('#fm').value.replace(/\n+$/,'')+'\n---\n'+ta.value:ta.value;return eolOf[p]==='\r\n'?t.replace(/\n/g,'\r\n'):t};
+ const mark=()=>{setDraft(p,compose());const d=drafts.has(p);$('#em').textContent=d?'● unsaved (preview only)':'';$('#em').className='msg warn'};
+ if(drafts.has(p)){$('#em').textContent='● unsaved (preview only)';$('#em').className='msg warn'}
+ ta.oninput=()=>{prev();mark()};
+ if(hasFm){const FM=$('#fm');FM.value=sp.fm;const fill=()=>{$('#mt').value=getK(FM.value,'title');$('#mg').value=getK(FM.value,'tagline');$('#mr').value=getK(FM.value,'grade');$('#mv').value=getK(FM.value,'reviewed');$('#ms').value=getSrc(FM.value).join('\n')};fill();
+  const sync=()=>{let f=FM.value;f=setK(f,'title',$('#mt').value);f=setK(f,'tagline',$('#mg').value);f=setK(f,'grade',$('#mr').value);f=setK(f,'reviewed',$('#mv').value);f=setSrc(f,$('#ms').value.split('\n').map(s=>s.trim()).filter(Boolean));FM.value=f;mark()};
+  ['mt','mg','mr','mv','ms'].forEach(i=>$('#'+i).oninput=sync);$('#mn').onclick=()=>{$('#mv').value=today();sync()};FM.oninput=()=>{fill();mark()}}
+ const wrap=(a,b)=>{const s=ta.selectionStart,e=ta.selectionEnd;ta.setRangeText(a+ta.value.slice(s,e)+b,s,e,'end');ta.focus();prev();mark()};
+ const save=async()=>{try{setDraft(p,compose());if(drafts.has(p))await commit([p],'Edit '+p.replace('content/',''));else say('No changes to save')}catch(e){$('#em').textContent=e.message;$('#em').className='msg bad'}};
+ $('#sv').onclick=save;ta.onkeydown=e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();save()}if(e.key==='Tab'){e.preventDefault();ta.setRangeText('  ',ta.selectionStart,ta.selectionEnd,'end');mark()}};
+ $('#rv').onclick=()=>discardPaths([p]);
+ $('#dl').onclick=async()=>{if(!confirm('Mark '+p+' for deletion? (applied on Save, can be rolled back)'))return;if(files.includes(p)){setDraft(p,null);await push(p)}else{drafts.delete(p);await api('draft?path='+E(p),{method:'DELETE'});pend()}cur=null;render()};
+ if(op)$('#tr').onclick=()=>{if(!allFiles().includes(op)){const t=hasFm?'---\n'+setK($('#fm').value,'title','TODO translate: '+getK($('#fm').value,'title'))+'\n---\n\nTranslate this page.\n':'Translate this page.\n';setDraft(op,t)}openFile(op)};
+ if(md){$('#tH').onclick=()=>wrap('\n## ','\n');$('#tB').onclick=()=>wrap('**','**');$('#tI').onclick=()=>wrap('*','*');$('#tQ').onclick=()=>wrap('\n> ','\n');$('#tL').onclick=()=>wrap('[','](https://)');
+  $('#tA').onclick=()=>$('#fi').click();$('#fi').onchange=async()=>{const f=$('#fi').files[0];if(!f)return;const ext=(f.name.split('.').pop()||'').toLowerCase(),n=f.name.toLowerCase().replace(/[^a-z0-9.]+/g,'-');
+   const img=['png','jpg','jpeg','gif','webp','svg'].includes(ext),au=['mp3','ogg','wav','m4a','mp4','webm'].includes(ext),dir=img?'img/media/':au?'audio/':'library/';
+   setDraft('static/'+dir+n,{file:f});await push('static/'+dir+n);wrap(img?`![${n}](/${dir}${n})`:(au||ext==='pdf')?`\n{{< media src="${dir}${n}" >}}\n`:`[${n}](/${dir}${n})`,'');say('Attached '+n+' (unsaved)','warn')}}}
+/* ===== themes (edits are drafts of data/themes.json) ===== */
+const COLS=[['bg','Background'],['surface','Surface'],['border','Border'],['text','Text'],['muted','Muted'],['accent','Accent']];
+function pThemes(){const all=themes();$('#panel').innerHTML=Object.keys(all).map(k=>`<button class="item ${k===cT?'on':''}" data-k="${k}">${k==='base'?'General (no culture)':k}</button>`).join('');document.querySelectorAll('#panel .item').forEach(b=>b.onclick=()=>{cT=b.dataset.k;pThemes()});if(cT&&all[cT])pickTheme(cT)}
+const themeFiles=()=>['data/themes.json',...[...drafts.keys()].filter(p=>p.startsWith('static/img/'))];
+function pickTheme(k){const all=themes(),t=all[k],imgs=allFiles().filter(f=>f.startsWith('static/img/')&&/\.(svg|png|jpe?g|webp)$/.test(f)).map(f=>f.slice(11));if(t.banner&&!imgs.includes(t.banner))imgs.push(t.banner);
+ $('#main').innerHTML=`<h2>Theme: ${k==='base'?'General':k}</h2><div class="two"><div><div class="sw">${COLS.map(([c,l])=>`<div><label>${l}</label><input type="color" data-c="${c}" value="${t[c]}"></div>`).join('')}</div>
+ <label>Background animation</label><select data-c="anim">${['fall','drift','rise','none'].map(x=>`<option ${t.anim===x?'selected':''}>${x}</option>`).join('')}</select><label>Top strip pattern</label><select data-c="pattern">${['none','meander','rosette','zigzag','waves'].map(x=>`<option ${t.pattern===x?'selected':''}>${x}</option>`).join('')}</select>
+ <label>Glyph strip (characters, e.g. runes)</label><input type="text" data-c="glyphs" value="${esc(t.glyphs||'')}"><label>Banner image</label><div class="row"><select data-c="banner"><option value="">none</option>${imgs.map(x=>`<option ${t.banner===x?'selected':''}>${x}</option>`).join('')}</select><button id="ub">Upload…</button></div><input type="file" id="bf" hidden>
+ <label>Generate new banner art (saved as ${k}-gen.svg; existing images are never overwritten)</label><div class="row"><select id="gs"><option value="mountains">Mountains + moon</option><option value="waves">Waves</option></select><button id="gb">Generate</button></div></div>
+ <div><div class="card" id="pc"><div class="bn" id="pb"></div><div class="t"><b id="pt">Sample card</b><br><span id="ps">Text, muted text and the accent colour.</span> <a id="pa" href="#">link</a></div></div><p class="msg">Changes appear in the preview pane immediately but are written to the project only when you press Save.</p></div></div>
+ <p><button class="pri" id="st">Save theme</button> <button id="dt">Discard changes</button><span id="wm" class="msg"></span></p>`;
+ const paint=()=>{const c=themes()[k],pc=$('#pc');pc.style.background=c.surface;pc.style.borderColor=c.border;pc.style.color=c.text;$('#pt').style.color=c.accent;$('#ps').style.color=c.muted;$('#pa').style.color=c.accent;$('#pb').style.background=c.banner?`url(/api/raw?path=${E('static/img/'+c.banner)}&ws=1&t=${T}&v=${Date.now()}) center/cover`:c.bg};paint();
+ document.querySelectorAll('[data-c]').forEach(e=>e.oninput=e.onchange=()=>{const a=themes();a[k][e.dataset.c]=e.value;setJ('data/themes.json',a);paint()});
+ const setBanner=async(n)=>{await push('static/img/'+n);const a=themes();a[k].banner=n;setJ('data/themes.json',a);pThemes()};
+ $('#ub').onclick=()=>$('#bf').click();$('#bf').onchange=()=>{const f=$('#bf').files[0];if(!f)return;const n=k+'-'+f.name.toLowerCase().replace(/[^a-z0-9.]+/g,'-');setDraft('static/img/'+n,{file:f});setBanner(n)};
+ $('#gb').onclick=()=>{const n=k+'-gen.svg';setDraft('static/img/'+n,genBanner($('#gs').value,t.bg,t.accent));setBanner(n)};
+ $('#st').onclick=()=>commit(themeFiles(),'Theme '+k);$('#dt').onclick=()=>discardPaths(themeFiles())}
+const hx=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16)),th=a=>'#'+a.map(v=>Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');
+const mix=(a,b,t)=>{const x=hx(a),y=hx(b);return th(x.map((v,i)=>v+(y[i]-v)*t))};
+function genBanner(style,bg,ac){const top=mix(bg,'#000000',.4),bot=mix(bg,ac,.28),m1=mix(bg,ac,.12),m2=mix(bg,'#000000',.5);
+ const stars=Array.from({length:16},(_,i)=>`<circle class="t${i%2}" cx="${(i*97+40)%1200}" cy="${(i*53)%130+15}" r="1.4"/>`).join('');
+ const wave=y=>`M-120 ${y} q60-28 120 0`+' t120 0'.repeat(12)+' V300 H-120Z';
+ const body=style==='waves'?`<g class="w1"><path d="${wave(215)}" fill="${m1}"/></g><g class="w2"><path d="${wave(250)}" fill="${m2}"/></g>`:`<path d="M0 230 L120 150 L240 210 L380 120 L520 215 L680 140 L820 220 L980 130 L1100 200 L1200 160 V300H0Z" fill="${m1}"/><path d="M0 270 L160 215 L320 262 L500 220 L700 270 L900 225 L1100 268 L1200 240 V300H0Z" fill="${m2}"/>`;
+ return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice"><style>.t0{animation:tw 4s ease-in-out infinite alternate}.t1{animation:tw 6s ease-in-out infinite alternate-reverse}@keyframes tw{to{opacity:.15}}.o{animation:pl 7s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes pl{to{opacity:.5;transform:scale(1.1)}}.w1{animation:sw 16s linear infinite}.w2{animation:sw 26s linear infinite reverse}@keyframes sw{to{transform:translateX(240px)}}</style><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${bot}"/></linearGradient></defs><rect width="1200" height="300" fill="url(#g)"/><g fill="#ffffff">${stars}</g><circle class="o" cx="900" cy="95" r="70" fill="${ac}" opacity=".18"/><circle cx="900" cy="95" r="32" fill="${ac}"/>${body}</svg>`}
+/* ===== navigation (drafts of data/nav.json) ===== */
+function pNav(){const a=nav();$('#panel').innerHTML=Object.keys(a).map(l=>`<button class="item ${l===cN?'on':''}" data-l="${l}">Menu: ${l}</button>`).join('');document.querySelectorAll('#panel .item').forEach(b=>b.onclick=()=>{cN=b.dataset.l;pNav()});editNav(cN)}
+function editNav(l){const rows=nav()[l]||[];$('#main').innerHTML=`<h2>Navigation (${l})</h2>`+rows.map((r,i)=>`<div class="row" style="margin:6px 0"><input type="text" data-i="${i}" data-f="name" value="${esc(r.name)}"><input type="text" data-i="${i}" data-f="url" value="${esc(r.url)}"><button data-u="${i}">↑</button><button data-d="${i}">↓</button><button data-x="${i}">✕</button></div>`).join('')+`<p><button id="ad">+ Add link</button> <button class="pri" id="sn">Save navigation</button> <button id="dn">Discard changes</button><span id="wm" class="msg"></span></p><p class="msg">Link = path relative to the language root, e.g. cultures/ or about/</p>`;
+ const mut=f=>{const a=nav();a[l]=a[l]||[];f(a[l]);setJ('data/nav.json',a)};
+ document.querySelectorAll('#main input').forEach(e=>e.oninput=()=>mut(r=>r[e.dataset.i][e.dataset.f]=e.value));
+ const mv=(i,j)=>{mut(r=>{if(j<0||j>=r.length)return;[r[i],r[j]]=[r[j],r[i]]});editNav(l)};
+ document.querySelectorAll('[data-u]').forEach(b=>b.onclick=()=>mv(+b.dataset.u,b.dataset.u-1));document.querySelectorAll('[data-d]').forEach(b=>b.onclick=()=>mv(+b.dataset.d,+b.dataset.d+1));document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{mut(r=>r.splice(b.dataset.x,1));editNav(l)});
+ $('#ad').onclick=()=>{mut(r=>r.push({name:'New',url:''}));editNav(l)};$('#sn').onclick=()=>commit(['data/nav.json'],'Navigation');$('#dn').onclick=()=>discardPaths(['data/nav.json'])}
+/* ===== files ===== */
+function pFiles(){$('#panel').innerHTML=`<input type="text" id="ff" placeholder="filter…"><div id="fl">${list(allFiles())}</div>`;bindItems();$('#ff').oninput=()=>{$('#fl').innerHTML=list(allFiles(),$('#ff').value);document.querySelectorAll('#fl .item').forEach(b=>b.onclick=()=>openFile(b.dataset.p))}}
+/* ===== history / rollback ===== */
+async function undo(id){const n=id?'this change and everything after it':'the last saved change';if(!confirm('Roll back '+n+'?'))return;try{const r=await api('rollback'+(id?'?id='+id:''),{method:'POST'});r.paths.forEach(p=>{drafts.delete(p);delete orig[p]});await load();pend();say('Rolled back: '+r.undone.join(', '),'ok');render()}catch(e){say(e.message,'bad')}}
+async function pHistory(){const h=(await api('history')).items;$('#main').innerHTML=`<h2>History</h2><p class="msg" style="margin:0">Every Save is recorded. Rolling back restores the files exactly as they were before that change (it undoes newer changes too).</p><div class="row" style="margin:12px 0"><button class="pri" id="u1" ${h.length?'':'disabled'}>↶ Undo last change</button></div>
+ <table><tr><th>When</th><th>Change</th><th>Files</th><th></th></tr>${h.map(t=>`<tr><td>${new Date(t.time*1000).toLocaleString()}</td><td>${esc(t.label)}</td><td>${t.files.map(f=>`<div class="msg" style="margin:0">${esc(f)}</div>`).join('')}</td><td><button data-id="${t.id}">Roll back to before this</button></td></tr>`).join('')||'<tr><td colspan=4 class="msg">No saved changes yet.</td></tr>'}</table>`;
+ $('#u1').onclick=()=>undo();document.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>undo(b.dataset.id))}
+/* ===== publish & PR ===== */
+async function pPublish(){git=await api('git');const ch=(git.status||'').split('\n').filter(Boolean),repo=site().repo||git.remote,un=drafts.size;
+ $('#main').innerHTML=`<h2>Publish &amp; pull requests</h2>${un?`<div class="card pad warn">You have ${un} unsaved change(s). Only saved files are committed. <button class="pri" id="sa2">Save all</button></div>`:''}
+ <div class="card pad"><h3>1. Check your work</h3><div class="row"><button id="a1">▶ Preview</button><button id="a2">Check build (saved files)</button><button id="a3">Pull latest</button><span id="am" class="msg"></span></div></div>
+ <div class="card pad"><h3>2. Changes (${ch.length})</h3><pre>${esc(ch.join('\n')||'Working tree clean')}</pre><button id="df">Show diff</button></div>
+ <div class="card pad"><h3>3. Commit</h3><label>Message</label><input type="text" id="cm" placeholder="Fix Mehr festival date"><label>How to publish</label><select id="md"><option value="pr">New branch + pull request (recommended for corrections)</option><option value="direct">Commit straight to ${esc(git.branch||'master')}</option></select>
+ <label>Branch</label><input type="text" id="br"><label><input type="checkbox" id="ps" checked> push to origin</label><p><button class="pri" id="cp">Commit</button> <button id="rc">Revert last commit</button></p><pre id="co">Nothing run yet.</pre><div id="prl"></div></div>
+ ${repo?`<p><button class="link" onclick="window.open('${repo}/issues')">Issues ↗</button> · <button class="link" onclick="window.open('${repo}/pulls')">Pull requests ↗</button></p>`:''}`;
+ if(un)$('#sa2').onclick=()=>commit([...drafts.keys()],'Save '+un+' changes').then(pPublish);
+ const setBr=()=>{$('#br').value=$('#md').value==='pr'?'fix/'+(slug($('#cm').value)||'update').slice(0,40):(git.branch||'master')};setBr();$('#md').onchange=setBr;$('#cm').oninput=()=>{if($('#md').value==='pr')setBr()};
+ $('#a1').onclick=()=>$('#bpv').click();$('#a2').onclick=()=>$('#bchk').click();$('#a3').onclick=async()=>{if(drafts.size&&!confirm('Pulling resets the preview copy; your unsaved edits stay in the editor. Continue?'))return;const r=await api('pull',{method:'POST'});await load();$('#am').textContent=r.output.split('\n').pop();$('#am').className='msg '+(r.ok?'ok':'bad');drafts.forEach((v,p)=>push(p))};
+ $('#df').onclick=async()=>{$('#main').insertAdjacentHTML('beforeend','<pre id="dp"></pre>');$('#dp').textContent=(await api('diff')).diff||'No tracked changes (new files are listed above).'};
+ $('#rc').onclick=async()=>{if(!confirm('Create a new commit that reverses the last commit?'))return;const r=await api('revert',{method:'POST'});$('#co').textContent=r.output;$('#co').className=r.ok?'ok':'bad';await load()};
+ $('#cp').onclick=async()=>{if(drafts.size){$('#co').textContent='Save or discard your unsaved changes first.';$('#co').className='bad';return}const pr=$('#md').value==='pr',b=$('#br').value;$('#co').textContent='Working…';$('#prl').innerHTML='';try{const r=await api('commit',{method:'POST',body:JSON.stringify({message:$('#cm').value,branch:b,push:$('#ps').checked,newBranch:pr})});$('#co').textContent=r.output;$('#co').className=r.ok?'ok':'bad';
+  if(r.ok&&pr&&$('#ps').checked&&repo){const u=`${repo}/compare/${site().branch||'master'}...${b}?expand=1&title=${E($('#cm').value)}`;$('#prl').innerHTML=`<p><button class="pri" onclick="window.open('${u}')">Open pull request on GitHub ↗</button></p>`}await load()}catch(e){$('#co').textContent=e.message;$('#co').className='bad'}}}
+/* ===== settings ===== */
+function pSettings(){const s=site();$('#main').innerHTML=`<h2>Settings</h2><div class="card pad"><h3>GitHub project</h3><p class="msg" style="margin:0">Adds "Edit this page", "Report a correction" and "Page history" links under every article.</p>
+ <label>Repository URL</label><div class="row"><input type="text" id="sr" placeholder="https://github.com/you/mythblog" value="${esc(s.repo||'')}"><button id="sd">Detect from git</button></div><label>Main branch</label><input type="text" id="sb" value="${esc(s.branch||'master')}"><p><button class="pri" id="ss">Save</button> <button id="sx">Discard changes</button><span id="wm" class="msg"></span></p></div>`;
+ const upd=()=>setJ('data/site.json',{repo:$('#sr').value.trim().replace(/\/$/,''),branch:$('#sb').value.trim()||'master'});$('#sr').oninput=upd;$('#sb').oninput=upd;
+ $('#sd').onclick=()=>{if(git.remote){$('#sr').value=git.remote;upd()}else{$('#wm').textContent='No git remote named origin';$('#wm').className='msg bad'}};
+ $('#ss').onclick=()=>{upd();commit(['data/site.json'],'Settings')};$('#sx').onclick=()=>discardPaths(['data/site.json'])}
+/* ===== preview + check ===== */
+let pvOn=false;
+async function pv(a){await api('preview?a='+a,{method:'POST'});say(a==='start'?'Starting preview…':'');
+ for(let i=0;i<24;i++){await new Promise(r=>setTimeout(r,500));const s=await api('preview');
+  if(a==='stop'&&!s.running){pvOn=false;break}
+  if(a==='start'&&(!s.running||s.log.includes('Web Server is available'))){pvOn=s.running;if(s.running){$('#purl').value=s.url;$('#pf').src=s.url;say('')}else{say('Preview failed','bad');$('#main').innerHTML='<h2>Preview could not start</h2><pre>'+esc(s.log)+'</pre>'}break}}
+ $('#app').classList.toggle('pv',pvOn);$('#bpv').textContent=pvOn?'■ Stop preview':'▶ Preview'}
+$('#bpv').onclick=()=>pv(pvOn?'stop':'start');$('#pre').onclick=()=>{$('#pf').src=$('#purl').value};
+$('#bchk').onclick=async()=>{say('Building…');const r=await api('check');say(r.ok?'Build OK ✓ (saved files)':'Build failed',r.ok?'ok':'bad');if(!r.ok)$('#main').innerHTML='<h2>Build output</h2><pre>'+esc(r.output)+'</pre>'};
+$('#bundo').onclick=()=>undo();$('#sa').onclick=()=>commit([...drafts.keys()],'Save '+drafts.size+' changes');
+$('#da').onclick=()=>{if(confirm('Discard all unsaved changes?'))discardPaths([...drafts.keys()])};
+window.onbeforeunload=e=>{if(drafts.size){e.preventDefault();e.returnValue=''}};
+api('resync',{method:'POST'}).then(load).then(render).catch(e=>say(e.message,'bad'));
+</script></body></html>

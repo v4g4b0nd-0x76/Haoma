@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="{{ site.Language.LanguageCode }}" dir="{{ site.Language.LanguageDirection | default "ltr" }}" data-culture="{{ .Params.culture | default "base" }}"{{ if .Params.culture }} data-fixed="1"{{ end }}>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
+<script src="{{ "js/boot.js" | relURL }}"></script>
+<link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+<style>{{ range $k, $t := site.Data.themes }}[data-culture="{{ $k }}"]{--accent:{{ $t.accent | safeCSS }};--bg:{{ $t.bg | safeCSS }};--surface:{{ $t.surface | safeCSS }};--border:{{ $t.border | safeCSS }};--text:{{ $t.text | safeCSS }};--muted:{{ $t.muted | safeCSS }};--anim:{{ $t.anim | default "none" | safeCSS }};--meander:var(--m-{{ $t.pattern | default "none" | safeCSS }});--rune:{{ printf "%q" ($t.glyphs | default "") | safeCSS }}}
+{{ end }}</style>
+<link rel="preload" href="{{ "fonts/vazirmatn.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+{{ range .AlternativeOutputFormats }}<link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink }}">{{ end }}
+</head>
+<body>
+<div class="bg"></div>
+<header class="top">
+  <a class="brand" href="{{ "/" | relLangURL }}">{{ site.Title }}</a>
+  <nav>{{ range index site.Data.nav site.Language.Lang }}<a href="{{ .url | relLangURL }}">{{ .name }}</a>{{ end }}</nav>
+  <div class="ctrl">
+    <select id="culture-pick" aria-label="{{ i18n "pickLabel" }}"><option value="base" data-href="{{ (site.GetPage "/cultures").RelPermalink }}">{{ i18n "all" }}</option>{{ range (site.GetPage "/cultures").Sections }}<option value="{{ .Params.culture }}" data-href="{{ .RelPermalink }}">{{ .Title }}</option>{{ end }}</select>
+    {{ $t := .Translations }}{{ if not $t }}{{ $t = site.Home.Translations }}{{ end }}
+    {{ range $t }}<a class="lang" href="{{ .RelPermalink }}" hreflang="{{ .Language.Lang }}" lang="{{ .Language.Lang }}">{{ .Language.LanguageName }}</a>{{ end }}
+  </div>
+</header>
+<div class="motif"></div>
+{{ with .Params.culture }}{{ $b := (index site.Data.themes . | default dict).banner }}{{ if $b }}{{ $cp := site.GetPage "/cultures" }}
+<div class="hero-art{{ if and $.IsSection (eq $.Parent.RelPermalink $cp.RelPermalink) }} tall{{ end }}"><img src="{{ printf "img/%s" $b | relURL }}" alt=""></div>
+{{ end }}{{ end }}
+<main>{{ block "main" . }}{{ end }}</main>
+<footer>Text CC BY-SA · Code MIT{{ with site.Home.OutputFormats.Get "rss" }} · <a href="{{ .RelPermalink }}">RSS</a>{{ end }} · <a href="{{ "about/" | relLangURL }}">{{ i18n "sources" }}</a></footer>
+<script src="{{ "js/site.js" | relURL }}"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{{ define "main" }}
+{{ $cs := (site.GetPage "/cultures").Sections }}
+<section class="cine" data-culture="base">
+<div class="slide on" data-culture="base">{{ with (index site.Data.themes "base").banner }}<img src="{{ printf "img/%s" . | relURL }}" alt="">{{ end }}<template><span>{{ i18n "baseQuote" }}</span></template></div>
+{{ range $cs }}{{ $b := (index site.Data.themes .Params.culture | default dict).banner }}{{ if $b }}
+<div class="slide" data-culture="{{ .Params.culture }}"><img src="{{ printf "img/%s" $b | relURL }}" alt=""><template><span>{{ .Params.quote }}</span><cite>{{ .Params.quoteSource }}</cite></template></div>
+{{ end }}{{ end }}
+<div class="cine-text"><p class="eyebrow">{{ i18n "eyebrow" }}</p><h1>{{ site.Title }}</h1><p class="quote" aria-live="polite"></p>
+<div class="pills"><button type="button" data-pick="base" aria-pressed="true">{{ i18n "all" }}</button>{{ range $cs }}<button type="button" data-pick="{{ .Params.culture }}" aria-pressed="false">{{ .Title }}</button>{{ end }}</div>
+<a class="btn enter" href="#" hidden>{{ i18n "enter" }}</a></div>
+</section>
+<section class="wrap slider"><div class="slider-head"><h2>{{ i18n "latest" }}</h2><div class="arrows"><button type="button" data-dir="-1" aria-label="{{ i18n "prev" }}">‹</button><button type="button" data-dir="1" aria-label="{{ i18n "next" }}">›</button></div></div>
+<ul class="cards rail">{{ range first 8 (where site.RegularPages "Section" "episodes") }}{{ partial "card.html" . }}{{ end }}</ul></section>
+<section class="wrap intro"><h2>{{ i18n "introTitle" }}</h2><p>{{ i18n "introText" }}</p></section>
+<section class="wrap"><h2>{{ i18n "choose" }}</h2>
+<div class="panels">{{ range $cs }}<a class="panel" data-culture="{{ .Params.culture }}" href="{{ .RelPermalink }}">{{ with .Params.culture }}{{ $b := (index site.Data.themes . | default dict).banner }}{{ if $b }}<img src="{{ printf "img/%s" $b | relURL }}" alt="" loading="lazy">{{ end }}{{ end }}<div><h3>{{ .Title }}</h3><p>{{ .Params.tagline }}</p></div></a>{{ end }}</div></section>
+<section class="wrap"><h2>{{ i18n "explore" }}</h2>
+<div class="tabs" role="tablist"><button role="tab" aria-selected="true" aria-controls="t-ch">{{ i18n "characters" }}</button><button role="tab" aria-selected="false" aria-controls="t-st">{{ i18n "stories" }}</button><button role="tab" aria-selected="false" aria-controls="t-hi">{{ i18n "history" }}</button></div>
+{{ $all := where site.RegularPages "Section" "cultures" }}
+<div id="t-ch" class="tabpanel"><ul class="cards">{{ range where $all "Params.sec" "characters" }}{{ partial "card.html" . }}{{ end }}</ul></div>
+<div id="t-st" class="tabpanel" hidden><ul class="cards">{{ range where $all "Params.sec" "stories" }}{{ partial "card.html" . }}{{ end }}</ul></div>
+<div id="t-hi" class="tabpanel" hidden><ul class="cards">{{ range where $all "Params.sec" "history" }}{{ partial "card.html" . }}{{ end }}</ul></div></section>
+<section class="wrap"><h2>{{ i18n "media" }}</h2>
+<div class="tabs" role="tablist"><button role="tab" aria-selected="true" aria-controls="m-ep">{{ i18n "episodes" }}</button><button role="tab" aria-selected="false" aria-controls="m-lib">{{ i18n "library" }}</button></div>
+<div id="m-ep" class="tabpanel"><ul class="cards">{{ range where site.RegularPages "Section" "episodes" }}{{ partial "card.html" . }}{{ end }}</ul></div>
+<div id="m-lib" class="tabpanel" hidden>{{ partial "files.html" . }}</div></section>
+{{ end }}

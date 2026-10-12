@@ -1,0 +1,62 @@
+[latest]
+  other = "تازه‌ترین قسمت‌ها"
+[listen]
+  other = "بشنوید و بخوانید"
+[explore]
+  other = "کاوش"
+[characters]
+  other = "شخصیت‌ها"
+[stories]
+  other = "داستان‌ها"
+[history]
+  other = "تاریخ"
+[choose]
+  other = "جهان خود را برگزینید"
+[media]
+  other = "رسانه"
+[episodes]
+  other = "قسمت‌ها"
+[library]
+  other = "کتابخانه"
+[all]
+  other = "همهٔ فرهنگ‌ها"
+[introTitle]
+  other = "هر اسطوره‌ای منبعی دارد"
+[introText]
+  other = "شخصیت‌ها، داستان‌ها و تاریخ هر فرهنگ، پیوسته به متن‌هایی که از آن‌ها آمده‌اند. هر صفحه بر پایهٔ سندیت درجه‌بندی شده و پذیرای اصلاح است."
+[eyebrow]
+  other = "پادکست · دانشنامه · منبع‌های باز"
+[baseQuote]
+  other = "فرهنگی را برگزینید تا وارد جهانش شوید، یا میان همه بگردید."
+[enter]
+  other = "ورود به این جهان"
+[reviewed]
+  other = "بازبینی"
+[sources]
+  other = "منبع‌ها"
+[onPage]
+  other = "در این صفحه"
+[tNav]
+  other = "پیمایش"
+[tDock]
+  other = "جابه‌جایی پیمایش به سوی دیگر"
+[tFocus]
+  other = "حالت تمرکز"
+[tSmaller]
+  other = "متن کوچک‌تر"
+[tBigger]
+  other = "متن بزرگ‌تر"
+[pickLabel]
+  other = "فرهنگ"
+[home]
+  other = "خانه"
+[prev]
+  other = "قبلی"
+[next]
+  other = "بعدی"
+[cEdit]
+  other = "ویرایش در گیت‌هاب"
+[cIssue]
+  other = "گزارش اشتباه"
+[cHistory]
+  other = "تاریخچهٔ صفحه"

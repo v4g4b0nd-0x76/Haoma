@@ -1,0 +1,1 @@
+<ul class="files">{{ range readDir "static/library" }}{{ if not .IsDir }}<li><a href="{{ printf "library/%s" .Name | relURL }}">{{ .Name }}</a><span class="muted">{{ path.Ext .Name }}</span></li>{{ end }}{{ end }}</ul>

@@ -1,0 +1,11 @@
+name: Suggest a topic
+description: Propose a character, story, culture or episode
+labels: [suggestion]
+body:
+  - type: textarea
+    id: topic
+    attributes: {label: Topic and why it belongs}
+    validations: {required: true}
+  - type: textarea
+    id: sources
+    attributes: {label: Sources you would start from}

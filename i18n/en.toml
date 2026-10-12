@@ -1,0 +1,62 @@
+[latest]
+  other = "Latest episodes"
+[listen]
+  other = "Listen & read"
+[explore]
+  other = "Explore"
+[characters]
+  other = "Characters"
+[stories]
+  other = "Stories"
+[history]
+  other = "History"
+[choose]
+  other = "Choose your world"
+[media]
+  other = "Media"
+[episodes]
+  other = "Episodes"
+[library]
+  other = "Library"
+[all]
+  other = "All cultures"
+[introTitle]
+  other = "Every myth has a source"
+[introText]
+  other = "Characters, stories and history for each culture, linked to the texts they come from. Every page is graded by evidence and open to corrections."
+[eyebrow]
+  other = "Podcast · Wiki · Open sources"
+[baseQuote]
+  other = "Pick a culture to enter its world, or wander through everything."
+[enter]
+  other = "Enter this world"
+[reviewed]
+  other = "Reviewed"
+[sources]
+  other = "Sources"
+[onPage]
+  other = "On this page"
+[tNav]
+  other = "Navigation"
+[tDock]
+  other = "Move navigation to the other side"
+[tFocus]
+  other = "Focus mode"
+[tSmaller]
+  other = "Smaller text"
+[tBigger]
+  other = "Larger text"
+[pickLabel]
+  other = "Culture"
+[home]
+  other = "Home"
+[prev]
+  other = "Previous"
+[next]
+  other = "Next"
+[cEdit]
+  other = "Edit this page on GitHub"
+[cIssue]
+  other = "Report a correction"
+[cHistory]
+  other = "Page history"
