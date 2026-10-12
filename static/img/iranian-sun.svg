@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice">
+<style>
+.rays{animation:spin 90s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes spin{to{transform:rotate(360deg)}}
+.glow{animation:pulse 6s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+@keyframes pulse{to{opacity:.45;transform:scale(1.12)}}
+.em{animation:rise 9s linear infinite;opacity:0}
+.e2{animation-duration:12s;animation-delay:-4s}.e3{animation-duration:15s;animation-delay:-8s}
+@keyframes rise{0%{transform:translateY(0);opacity:0}15%{opacity:.8}100%{transform:translateY(-190px) translateX(20px);opacity:0}}
+</style>
+<defs>
+<linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#17122b"/><stop offset=".55" stop-color="#4a2530"/><stop offset="1" stop-color="#b8743a"/></linearGradient>
+<radialGradient id="g"><stop offset="0" stop-color="#ffd27a"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+<g id="w" fill="none" stroke="#e0a03a" stroke-width="3" stroke-linecap="round"><path d="M548 128 Q500 110 440 118"/><path d="M544 138 Q490 126 428 138"/><path d="M542 148 Q494 144 440 160"/></g>
+</defs>
+<rect width="1200" height="300" fill="url(#s)"/>
+<circle class="glow" cx="600" cy="170" r="130" fill="url(#g)"/>
+<g class="rays" stroke="#f0b650" stroke-width="2" opacity=".55"><path d="M600 170 m70 0 h80 M600 170 m-70 0 h-80 M600 170 m0 70 v70 M600 170 m0 -70 v-70 M600 170 m50 50 l56 56 M600 170 m-50 -50 l-56 -56 M600 170 m50 -50 l56 -56 M600 170 m-50 50 l-56 56"/></g>
+<circle cx="600" cy="130" r="22" fill="#ffd27a"/><circle cx="600" cy="130" r="11" fill="none" stroke="#7a3d1e" stroke-width="2"/>
+<use href="#w"/><use href="#w" transform="translate(1200 0) scale(-1 1)"/>
+<path d="M0 230 L100 160 L200 215 L330 120 L450 210 L600 150 L760 215 L900 125 L1030 205 L1130 165 L1200 210 L1200 300 L0 300Z" fill="#2a1a28"/>
+<path d="M0 262 L140 215 L300 255 L480 220 L700 262 L880 225 L1060 258 L1200 235 L1200 300 L0 300Z" fill="#150f1a"/>
+<g fill="#0b0810"><path d="M120 280 Q100 200 120 140 Q140 200 120 280Z"/><path d="M1080 280 Q1060 205 1080 150 Q1100 205 1080 280Z"/><path d="M1130 280 Q1115 220 1130 180 Q1145 220 1130 280Z"/><path d="M80 280 Q68 230 80 195 Q92 230 80 280Z"/></g>
+<g fill="#ffb347"><circle class="em" cx="560" cy="270" r="2"/><circle class="em e2" cx="620" cy="275" r="1.6"/><circle class="em e3" cx="660" cy="268" r="2"/><circle class="em e2" cx="520" cy="278" r="1.5"/></g>
+</svg>
