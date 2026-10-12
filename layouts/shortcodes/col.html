@@ -1,0 +1,8 @@
+{{- $st := "" -}}
+{{- with .Get "span" }}{{ $v := printf "%v" . }}{{ if findRE `^[1-9]$` $v }}{{ $st = printf "%sgrid-column:span %s;" $st $v }}{{ end }}{{ end -}}
+{{- with .Get "rowspan" }}{{ $v := printf "%v" . }}{{ if findRE `^[1-9]$` $v }}{{ $st = printf "%sgrid-row:span %s;" $st $v }}{{ end }}{{ end -}}
+<div class="col"{{ with $st }} style="{{ . | safeCSS }}"{{ end }}>
+
+{{ .Inner }}
+
+</div>

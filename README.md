@@ -1,8 +1,9 @@
 # Mythology Notebook
-Local editor: `python tools/editor.py` (needs Python 3.8+, git, hugo). Opens http://localhost:8765
-- Content: + Page / + Culture generate the files and folders for you (English and Farsi).
-- Themes: colours, animation, strip pattern, banner (upload or generate). Data lives in data/themes.json.
-- Navigation: data/nav.json. Files: edit any template, CSS, SVG or i18n file.
-- Preview: starts `hugo server` and shows it beside the editor. Publish: check build, commit, push.
-Deploy: Settings > Pages > Source = "GitHub Actions"; the workflow builds on push.
-Large audio: host on archive.org and set `audio:` to the full URL (keep the repo under ~1 GB).
+Static Hugo site (English + Farsi) for GitHub Pages. Local editor: `python tools/editor.py` (Python 3.8+, git, hugo).
+
+- **Editor:** temporary drafts (survive reloads, never touch files until Save), live preview of the page you are editing, undo/rollback history, themes, navigation, review dashboard, publish and pull requests.
+- **Writing tools:** sliders (images, GIFs, video), hover notes, figures, play-on-scroll GIFs, grids (2/3 + 1/3 and more), Wikipedia-style infobox. See `content/en/guide/_index.md`.
+- **Agents and contributors:** read `AI.md` and `CONTRIBUTING.md`.
+
+Deploy (free): push to GitHub, Settings > Pages > Source = "GitHub Actions"; `.github/workflows/hugo.yml` builds on every push.
+Large audio: host on archive.org and set `audio:` to the full URL (keep the repo under about 1 GB).

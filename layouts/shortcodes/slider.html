@@ -1,0 +1,10 @@
+{{- $ratio := printf "%v" (.Get "ratio" | default "16/9") -}}{{ if not (findRE `^[0-9]{1,2}/[0-9]{1,2}$` $ratio) }}{{ $ratio = "16/9" }}{{ end -}}
+<figure class="slider-md" data-auto="{{ printf "%v" (.Get "autoplay" | default 0) }}" style="{{ printf "--ratio:%s" $ratio | safeCSS }}">
+<div class="sm-track">
+{{- range split (trim .Inner "\r\n ") "\n" -}}{{ $p := split . "|" }}{{ $src := trim (index $p 0) " \r\t" }}{{ $cap := "" }}{{ if gt (len $p) 1 }}{{ $cap = trim (index $p 1) " \r\t" }}{{ end }}
+{{- if $src }}<div class="sm-slide">{{ partial "mediaitem.html" (dict "src" $src "cap" $cap) }}{{ with $cap }}<figcaption>{{ . }}</figcaption>{{ end }}</div>{{ end }}
+{{- end }}
+</div>
+<button class="sm-prev" type="button" aria-label="Previous">‹</button><button class="sm-next" type="button" aria-label="Next">›</button>
+<div class="sm-dots"></div>
+</figure>

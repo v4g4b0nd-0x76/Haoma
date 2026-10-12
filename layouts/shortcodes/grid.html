@@ -1,0 +1,9 @@
+{{- $cols := printf "%v" (.Get "cols" | default "1fr 1fr") -}}{{ if not (findRE `^[0-9a-z.% ()/-]{1,60}$` $cols) }}{{ $cols = "1fr 1fr" }}{{ end -}}
+{{- $rows := printf "%v" (.Get "rows" | default "auto") -}}{{ if not (findRE `^[0-9a-z.% ()/-]{1,60}$` $rows) }}{{ $rows = "auto" }}{{ end -}}
+{{- $gap := printf "%v" (.Get "gap" | default "2rem") -}}{{ if not (findRE `^[0-9.]{1,4}(rem|px|em)$` $gap) }}{{ $gap = "2rem" }}{{ end -}}
+{{- $al := printf "%v" (.Get "align" | default "start") -}}{{ if not (in (slice "start" "center" "end" "stretch") $al) }}{{ $al = "start" }}{{ end -}}
+<div class="grid-md" style="{{ printf "--cols:%s;--rows:%s;--gap:%s;--al:%s" $cols $rows $gap $al | safeCSS }}">
+
+{{ .Inner }}
+
+</div>

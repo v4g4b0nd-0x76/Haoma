@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Local site editor. Standard library only. Run from the project: python tools/editor.py
 Binds to 127.0.0.1 only. Needs: python 3.8+, git, hugo (in PATH)."""
-import time, json, mimetypes, os, re, secrets, shutil, socket, subprocess, sys, tempfile, atexit, webbrowser
+import hashlib, time, json, mimetypes, os, re, secrets, shutil, socket, subprocess, sys, tempfile, atexit, webbrowser
 from datetime import date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -16,6 +16,9 @@ TEXT = {".md", ".json", ".toml", ".yaml", ".yml", ".html", ".css", ".js", ".svg"
 LOG = ROOT / "tools" / ".preview.log"
 WS = ROOT / "tools" / ".preview"
 HIST = ROOT / "tools" / ".history"
+DRAFTS = ROOT / "tools" / ".drafts"
+DRAFTS = ROOT / "tools" / ".drafts"
+DEL = DRAFTS / "__deleted.json"
 MAXH = 60
 preview = {"proc": None, "port": None}
 
@@ -50,6 +53,7 @@ def tree():
 
 
 def ws_sync():
+    """Preview copy = saved files + temporary drafts."""
     shutil.rmtree(WS, ignore_errors=True)
     WS.mkdir(parents=True)
     for d in DIRS:
@@ -57,6 +61,51 @@ def ws_sync():
             shutil.copytree(ROOT / d, WS / d)
     if (ROOT / "hugo.toml").exists():
         shutil.copy2(ROOT / "hugo.toml", WS / "hugo.toml")
+    for rel, e in dr_load().items():
+        real = ROOT / rel
+        if e["kind"] == "del":
+            ws_delete(real)
+        elif dr_blob(rel).exists():
+            ws_write(real, dr_blob(rel).read_bytes())
+
+
+def dr_load():
+    f = DRAFTS / "index.json"
+    return json.loads(f.read_text()) if f.exists() else {}
+
+
+def dr_save(d):
+    DRAFTS.mkdir(parents=True, exist_ok=True)
+    (DRAFTS / "index.json").write_text(json.dumps(d))
+
+
+def dr_blob(rel):
+    return DRAFTS / hashlib.sha1(rel.encode()).hexdigest()
+
+
+def dr_put(rel, data):
+    d = dr_load()
+    DRAFTS.mkdir(parents=True, exist_ok=True)
+    dr_blob(rel).write_bytes(data)
+    kind = "text" if Path(rel).suffix.lower() in TEXT else "bin"
+    d[rel] = {"kind": kind, "time": time.time(), "size": len(data)}
+    dr_save(d)
+
+
+def dr_mark_delete(rel):
+    d = dr_load()
+    if dr_blob(rel).exists():
+        dr_blob(rel).unlink()
+    d[rel] = {"kind": "del", "time": time.time(), "size": 0}
+    dr_save(d)
+
+
+def dr_drop(rel):
+    d = dr_load()
+    d.pop(rel, None)
+    if dr_blob(rel).exists():
+        dr_blob(rel).unlink()
+    dr_save(d)
 
 
 def ws_path(real):
@@ -73,6 +122,89 @@ def ws_delete(real):
     w = ws_path(real)
     if w.exists():
         w.unlink()
+
+
+def rel_of(p):
+    return p.relative_to(ROOT).as_posix()
+
+
+def dr_deleted():
+    return json.loads(DEL.read_text()) if DEL.exists() else []
+
+
+def dr_save_deleted(lst):
+    DRAFTS.mkdir(parents=True, exist_ok=True)
+    DEL.write_text(json.dumps(sorted(set(lst))))
+
+
+def draft_write(p, data):
+    d = DRAFTS / rel_of(p)
+    d.parent.mkdir(parents=True, exist_ok=True)
+    d.write_bytes(data)
+    ws_write(p, data)
+    lst = dr_deleted()
+    if rel_of(p) in lst:
+        lst.remove(rel_of(p))
+        dr_save_deleted(lst)
+
+
+def draft_discard(p):
+    d = DRAFTS / rel_of(p)
+    if d.exists():
+        d.unlink()
+    lst = dr_deleted()
+    if rel_of(p) in lst:
+        lst.remove(rel_of(p))
+        dr_save_deleted(lst)
+    if p.exists():
+        ws_write(p, p.read_bytes())
+    else:
+        ws_delete(p)
+
+
+def draft_delete(p):
+    if not p.exists():
+        return draft_discard(p)
+    d = DRAFTS / rel_of(p)
+    if d.exists():
+        d.unlink()
+    ws_delete(p)
+    dr_save_deleted(dr_deleted() + [rel_of(p)])
+
+
+def draft_list():
+    items = []
+    if DRAFTS.exists():
+        for f in DRAFTS.rglob("*"):
+            if f.is_file() and f.name != "__deleted.json":
+                rel = f.relative_to(DRAFTS).as_posix()
+                items.append({"path": rel, "state": "edited" if (ROOT / rel).exists() else "new", "size": f.stat().st_size, "mtime": f.stat().st_mtime})
+    for r in dr_deleted():
+        items.append({"path": r, "state": "deleted", "size": 0, "mtime": time.time()})
+    return items
+
+
+def draft_apply(paths, x, lab):
+    dl = dr_deleted()
+    for r in paths:
+        p = safe(r)
+        if r in dl:
+            hist_record(x, lab, p)
+            if p.exists():
+                p.unlink()
+            ws_delete(p)
+            dl.remove(r)
+            continue
+        d = DRAFTS / r
+        if not d.exists():
+            continue
+        data = d.read_bytes()
+        hist_record(x, lab, p)
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_bytes(data)
+        ws_write(p, data)
+        d.unlink()
+    dr_save_deleted(dl)
 
 
 def hist_load():
@@ -174,7 +306,7 @@ def preview_start():
     preview["port"] = port
     log = open(LOG, "w")
     preview["proc"] = subprocess.Popen(
-        ["hugo", "server", "--source", str(WS), "--port", str(port), "--bind", "127.0.0.1", "--disableFastRender", "--navigateToChanged"],
+        ["hugo", "server", "--source", str(WS), "--port", str(port), "--bind", "127.0.0.1", "--disableFastRender"],
         cwd=WS, stdout=log, stderr=subprocess.STDOUT)
 
 
@@ -297,20 +429,57 @@ class H(BaseHTTPRequestHandler):
                 p.write_bytes(data)
                 ws_write(p, data)
                 return self.send(200, {"ok": True})
-            if ep == "draft":
+            if ep == "draft" and method == "PUT":
                 p = safe(q["path"])
-                if method == "PUT":
-                    ws_write(p, self.body())
-                elif method == "DELETE":
-                    ws_delete(p)
+                data = self.body()
+                dr_put(p.relative_to(ROOT).as_posix(), data)
+                ws_write(p, data)
+                return self.send(200, {"ok": True})
+            if ep == "draftdel" and method == "POST":
+                p = safe(q["path"])
+                dr_mark_delete(p.relative_to(ROOT).as_posix())
+                ws_delete(p)
                 return self.send(200, {"ok": True})
             if ep == "discard" and method == "POST":
                 p = safe(q["path"])
+                dr_drop(p.relative_to(ROOT).as_posix())
                 if p.exists():
                     ws_write(p, p.read_bytes())
                 else:
                     ws_delete(p)
                 return self.send(200, {"ok": True})
+            if ep == "drafts":
+                items = []
+                for rel, e in sorted(dr_load().items()):
+                    it = {"path": rel, "kind": e["kind"], "time": e["time"], "size": e["size"]}
+                    if e["kind"] == "text" and dr_blob(rel).exists():
+                        it["text"] = dr_blob(rel).read_bytes().decode("utf-8", "replace")
+                    items.append(it)
+                return self.send(200, {"items": items})
+            if ep == "apply" and method == "POST":
+                d = json.loads(self.body())
+                x = d.get("x") or secrets.token_hex(4)
+                if not re.fullmatch(r"[\w-]+", x):
+                    raise ValueError("bad change id")
+                lab, n, drafts = str(d.get("l", ""))[:120], 0, dr_load()
+                for rel in d.get("paths", []):
+                    e = drafts.get(rel)
+                    if not e:
+                        continue
+                    p = safe(rel)
+                    hist_record(x, lab, p)
+                    if e["kind"] == "del":
+                        if p.exists():
+                            p.unlink()
+                        ws_delete(p)
+                    else:
+                        data = dr_blob(rel).read_bytes()
+                        p.parent.mkdir(parents=True, exist_ok=True)
+                        p.write_bytes(data)
+                        ws_write(p, data)
+                    dr_drop(rel)
+                    n += 1
+                return self.send(200, {"ok": True, "applied": n})
             if ep == "resync" and method == "POST":
                 ws_sync()
                 return self.send(200, {"ok": True})

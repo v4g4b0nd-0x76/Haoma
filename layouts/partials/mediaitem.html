@@ -1,0 +1,4 @@
+{{ $u := .src | relURL }}{{ $e := lower (path.Ext .src) }}
+{{- if in (slice ".mp4" ".webm") $e -}}<video muted loop playsinline preload="metadata" data-scroll src="{{ $u }}"></video>
+{{- else if eq $e ".gif" -}}<img data-gif="{{ $u }}" alt="{{ .cap }}" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+{{- else -}}<img src="{{ $u }}" alt="{{ .cap }}" loading="lazy">{{- end -}}

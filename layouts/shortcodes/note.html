@@ -1,0 +1,2 @@
+{{- $t := .Get "text" -}}{{- if not $t }}{{ $t = .Get 0 }}{{ end -}}
+<span class="note" tabindex="0">{{ .Inner | safeHTML }}<span class="note-pop" role="tooltip">{{ $t }}</span></span>

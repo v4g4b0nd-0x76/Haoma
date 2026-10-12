@@ -1,0 +1,8 @@
+{{- $side := .Get "side" | default "end" -}}{{ if not (in (slice "start" "end") $side) }}{{ $side = "end" }}{{ end -}}
+{{- $w := printf "%v" (.Get "w" | default "33%") -}}{{ if not (findRE `^[0-9]{1,3}(%|px|rem)$` $w) }}{{ $w = "33%" }}{{ end -}}
+<div class="infobox {{ $side }}" style="{{ printf "--w:%s" $w | safeCSS }}">
+{{ with .Get "title" }}<div class="ib-title">{{ . }}</div>{{ end }}
+
+{{ .Inner }}
+
+</div>

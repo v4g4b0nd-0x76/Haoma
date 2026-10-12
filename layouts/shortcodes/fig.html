@@ -1,0 +1,2 @@
+{{- $a := .Get "align" | default "full" -}}
+<figure class="fig {{ $a }}"{{ with .Get "w" }}{{ if findRE `^[0-9]{1,3}(%|px|rem)$` . }} style="{{ printf "--w:%s" . | safeCSS }}"{{ end }}{{ end }}>{{ partial "mediaitem.html" (dict "src" (.Get "src") "cap" (or (.Get "caption") (.Get "alt"))) }}{{ with .Get "note" }}<span class="note-pop" role="tooltip">{{ . }}</span>{{ end }}{{ with .Get "caption" }}<figcaption>{{ . }}</figcaption>{{ end }}</figure>
