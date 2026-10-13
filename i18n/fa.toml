@@ -75,3 +75,9 @@
   other = "بازنشانی نما"
 [tagline]
   other = "اسطوره‌های ایران و خاور، با منبع‌هایشان"
+[textLabel]
+  other = "متن"
+[codeLabel]
+  other = "کد"
+[mapScale]
+  other = "مقیاس"

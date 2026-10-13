@@ -1,6 +1,8 @@
 baseURL = "/"
 title = "Haoma"
 defaultContentLanguage = "en"
+# no content is ever filed under categories/tags, so don't emit those pages
+taxonomies = {}
 [markup.goldmark.renderer]
   unsafe = true
 [languages.en]

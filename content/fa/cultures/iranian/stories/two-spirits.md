@@ -1,7 +1,7 @@
 ---
 title: دو مینو
 tagline: گزینش میان راستی و دروغ در هستهٔ هستی
-grade: "primary text"
+grade: متن اصلی
 sources:
   - "اوستا، یسنا ۳۰ (گاهان) — متن اصلی"
   - "Mary Boyce, A History of Zoroastrianism — پژوهش نوین"

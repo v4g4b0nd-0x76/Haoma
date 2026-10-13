@@ -32,7 +32,7 @@
 <div class="hero-art c-{{ . }}"><img class="sbg" src="{{ printf "img/%s" $b | relURL }}" alt="" aria-hidden="true"><img class="sfg" src="{{ printf "img/%s" $b | relURL }}" alt="{{ $.Params.culture }} banner art"></div>
 {{ end }}{{ end }}
 <main>{{ block "main" . }}{{ end }}</main>
-<footer>Text CC BY-SA · Code MIT{{ with site.Home.OutputFormats.Get "rss" }} · <a href="{{ .RelPermalink }}">RSS</a>{{ end }} · <a href="{{ "about/" | relLangURL }}">{{ i18n "sources" }}</a></footer>
+<footer>{{ i18n "textLabel" }} CC BY-SA · {{ i18n "codeLabel" }} MIT{{ with site.Home.OutputFormats.Get "rss" }} · <a href="{{ .RelPermalink }}">RSS</a>{{ end }} · <a href="{{ "about/" | relLangURL }}">{{ i18n "sources" }}</a></footer>
 <script src="{{ "js/site.js" | relURL }}"></script>
 </body>
 </html>

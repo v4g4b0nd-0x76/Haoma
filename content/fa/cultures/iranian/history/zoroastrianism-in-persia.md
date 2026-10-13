@@ -1,7 +1,7 @@
 ---
 title: دین زرتشتی در ایران
 tagline: از سرودهای اوستایی تا کلیسای دولتی ساسانی
-grade: "modern scholarship"
+grade: پژوهش نوین
 sources:
   - "Mary Boyce, A History of Zoroastrianism (۳ جلد) — پژوهش نوین"
   - "یادداشت: منابع اولیهٔ دورهٔ هخامنشی و ساسانی افزوده شود"

@@ -1,1 +1,1 @@
-<div class="crumbs"><a href="/">Home</a>{{ range .Ancestors.Reverse }}{{ if not .IsHome }} › <a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}{{ end }}</div>
+<div class="crumbs"><a href="{{ site.Home.RelPermalink }}">{{ i18n "home" }}</a>{{ range .Ancestors.Reverse }}{{ if not .IsHome }} › <a href="{{ .RelPermalink }}">{{ .Title }}</a>{{ end }}{{ end }}</div>

@@ -1,5 +1,6 @@
 ---
 title: Odin
+tagline: Chief of the Aesir
 sources: ["Poetic Edda, Voluspa (primary)", "Prose Edda, Gylfaginning (later compilation)"]
 grade: primary text
 reviewed: 2026-10-12

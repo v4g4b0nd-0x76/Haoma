@@ -1,7 +1,7 @@
 ---
 title: زرتشت
 tagline: پیامبری که سرودهایش دین زرتشتی را بنیاد نهاد
-grade: "primary text"
+grade: متن اصلی
 sources:
   - "اوستا، گاهان (در یسنا) — متن اصلی"
   - "Mary Boyce, A History of Zoroastrianism — پژوهش نوین"

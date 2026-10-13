@@ -75,3 +75,9 @@
   other = "Reset view"
 [tagline]
   other = "Myths of Iran and the East, with their sources"
+[textLabel]
+  other = "Text"
+[codeLabel]
+  other = "Code"
+[mapScale]
+  other = "scale"
