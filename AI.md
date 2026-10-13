@@ -35,8 +35,11 @@ tools/genmaps.py          map artwork generator (Natural Earth data in tools/geo
 tools/regions.py          prints `region` lines for a map (lon/lat rings -> % points)
 tools/editor.py           local editor server (Python standard library only)
 tools/admin.html          the editor UI (single file, vanilla JS)
-tools/uicheck.py          headless-Chrome (CDP) driver + `uicheck_map.py` scenario
-                          for testing the editor UI without clicking by hand
+tools/uicheck.py          headless-Chrome (CDP) driver (+ `nocache`, see 10)
+tools/uicheck_map.py      the editor's map studio, driven without clicking
+tools/uicheck_layout.py   the page grid: one shell, one reading column, no overflow
+tools/uicheck_pick.py     the culture picker: colours, keyboard, RTL anchoring
+tools/linkcheck.py        every internal link and anchor in a built site
 tools/parity.py           EN/FA structural parity check (see 10, Verify)
 .github/                  Pages workflow, issue and PR templates
 ```
@@ -119,6 +122,8 @@ New culture checklist: folder + `_index.md` files in both languages (3.1), theme
 ## 7. Navigation and UI strings
 `data/nav.json`: `{"en":[{"name":"Cultures","url":"cultures/"}],"fa":[...]}`; `url` is relative to the language root. UI strings live in `i18n/<lang>.toml` as `[key]\n  other = "..."`; add every new key to both files.
 
+**The culture picker in the top bar is a listbox, not a `<select>`.** A native select cannot tint an option with that culture's colour while you hover it, which is the whole point of this control (`layouts/_default/baseof.html`, `.cpick*` in style.css, wired in `site.js`). Each `<li role="option">` carries `data-pick` (the culture key), `data-href`, `data-name`, and inline `--c` — that culture's main colour from `data/themes.json` — plus `--pat`, its motif (`--m-meander|rosette|zigzag|waves`; `--m-star` for the general box). The wrapper `#culture-pick` carries the colour of the culture *in force*, which is what tints the trigger and the panel frame, and `paintPick()` copies the chosen option's `--c`/`--pat` onto it and sets `aria-selected`. The first entry is the **general box**: neutral `#9aa3b5`, star-marked, divided off from the cultures. Keep the accessibility contract when touching it — `aria-haspopup`/`aria-expanded` on the button, `role="listbox"` on the panel, arrows move focus, Enter picks, Escape closes and returns focus, a click outside closes — and keep the panel anchored to the trigger's *inline-end* edge so it opens toward the page centre in both directions.
+
 ## 8. Media
 - Images/GIFs: `static/img/media/`. Video: `static/video/` (MP4 H.264 or WebM, muted loops; prefer MP4/WebM over GIF above ~1 MB). Audio: `static/audio/`. PDFs/Markdown: `static/library/` (listed automatically in the Library).
 - Lower-case file names, `a-z0-9.-` only. Keep the repo under ~1 GB; host long audio on archive.org and put the full URL in `audio:`.
@@ -152,6 +157,21 @@ New culture checklist: folder + `_index.md` files in both languages (3.1), theme
 
 **Ornament system** (all CSS, tinted by the active theme accent): a headpiece under every page title (`--m-orn` mask on `article h1::after`), eight-pointed star list markers (`--m-star`), the couplet cartouche (`.verse`), an optional drop cap (front matter `dropcap: true`, English only), and the pearl ring and star-cornered frame in cover art. Add new ornaments as small SVG masks, not images, so they follow the theme. Live demo: `content/en/guide/typography.md`.
 
+## 8b. Page grid and spacing
+Three tokens in `:root` define the whole layout; change them there and never inline a width:
+
+| token | value | what it fixes |
+|---|---|---|
+| `--shell` | `1320px` | every page container. `.layout` and `.wrap` share it, so the home sections and the article pages use the same box |
+| `--aside` | `210px` | both rails — the culture nav and the on-page table of contents |
+| `--col` | `772px` | the reading column: shell − 2 gutters − 2 rails − 2 gaps |
+
+`.layout` is a **three-column grid**, `var(--aside) minmax(0,var(--col)) var(--aside)`, and `aside.side` / `article` / `aside.toc` are placed *explicitly* (`grid-column:1|2|3`, `grid-row:1`). A page with no table of contents simply leaves the third slot empty, so the reading column starts at the same place on every page in both languages and at every width: 250px in from the content edge (210 rail + 40 gap). `article.wide` spans `2/-1` and ends flush with the shell. Do not reach for `margin:0 auto` or a `ch` width here — the column is the measure, and an RTL page mirrors it exactly (which is why `uicheck_layout.py` judges the rail offset rather than the raw x).
+
+Prose never exceeds `--col`, including inside a wide article (`article.wide > p,ul,ol,blockquote`); maps, grids, sliders and figures may use the full article width. Vertical rhythm comes off the `--s1..--s5` scale only: 16px between paragraphs, 24px around a content block, 40px above a section heading and above `sources`.
+
+Two cascade traps to keep in mind. **Responsive overrides live at the bottom of style.css** — the `article h1` scale rule sits in the reading section, so a `@media` block written above it is silently overridden and headings stayed full size on phones. And **`html[dir=rtl]` rules outrank plain class selectors**, so an RTL margin can beat a mobile reset; when you reset a floated box for small screens, list the RTL selector too.
+
 ## 9. The editor (`python tools/editor.py`)
 Needs Python 3.8+, git, hugo. Binds to 127.0.0.1; every API call needs the per-run token (`X-Token` header or `t` query parameter); only `content data i18n layouts static assets hugo.toml` are writable.
 
@@ -181,5 +201,10 @@ Verify before finishing:
 - Editor changes: `python3 -c "import ast;ast.parse(open('tools/editor.py').read())"`, a `node --check` of the script extracted from `tools/admin.html`, and — for anything you can only reach by clicking — `python3 tools/uicheck_map.py` (headless Chrome over CDP against a running `tools/editor.py`): edits stay drafts, the builder round-trips its own output, Save writes, rollback restores, drafts survive reload.
 - Any new page or section: `python3 tools/parity.py` must print **0 difference(s)**. It walks `content/en` against `content/fa` and compares the file set, front-matter keys, heading depths, link targets (the `/fa/` prefix ignored), the shortcode sequence and its static parameters, pin/region line counts, the number of `sources` cited and the media paths a slider points at — and only reports a body-size gap when one side is a stub. It also checks the two other places EN/FA drift: `i18n/*.toml` must define the same keys, and no template may bake English into a text node (`HARDCODED` — this is what catches a `>Home<` or `>scale<` that would render untranslated on every Farsi page). Word counts drift ~10% between languages and are not a bug; a structural difference is. `-v` also lists every file that matches. Add a check here whenever you fix a new class of EN/FA divergence.
 - **Strings belong in `i18n/en.toml` + `i18n/fa.toml`, never inline in a template.** Every reader-visible word in `layouts/` goes through `{{ i18n "key" }}` — breadcrumbs, the footer licence, map labels, tool buttons. When you add a key, add it to *both* language files (parity.py fails otherwise). `{{ i18n "key" | default "English fallback" }}` is the established pattern in shortcodes.
+
+- `python3 tools/linkcheck.py` must print **0 broken** — and again with `--baseURL=/repo/` against a `hugo --baseURL https://x.github.io/repo/` build, because that is the only way to catch a root-absolute link. It resolves every internal `href`/`src` in the output tree and checks fragments too. **The rule behind it: a path starting with `/` is passed through untouched by Hugo's `relURL`/`relLangURL`, so the baseURL path is never applied** and the link breaks whenever the site is served from a subdirectory. Trim it first — `relLangURL (strings.TrimPrefix "/" $p)` — which is why `layouts/shortcodes/map.html` (pin and region hrefs) and `layouts/_default/_markup/render-link.html` (every Markdown link) do so. Follow that pattern for any path that comes out of front matter or a body.
+- `python3 tools/uicheck_layout.py [width height]` must exit 0 (try 1440×980 and 390×844). It asserts one shell for `.layout` and `.wrap`, one reading column at the same rail offset in EN and FA, prose inside that column, every `:root` token defined and `box-sizing:border-box` in force, and no horizontal overflow. The token check exists because **a stray `}` anywhere in style.css silently swallows the following rule** — one put `*{box-sizing:border-box}` inside a bogus selector and made every container 48px too wide before anything looked obviously wrong.
+- `python3 tools/uicheck_pick.py` must exit 0: the trigger names and tints itself from the culture in force, the general box leads the list, every option lights in its own colour on hover (dot, sigil motif, wash, label), the keyboard drives the listbox, picking navigates and switches the theme, and in Farsi the panel hangs off the trigger's inline-end edge and stays inside the viewport.
+- The CDP profile directory persists between runs, so `connect()` in `uicheck.py` is always followed by `nocache(p)`. Without it a scenario can silently test the previous build's CSS or JS — which looks exactly like a bug in your change.
 
 Commit style: one logical change per commit, message in the imperative; open a pull request (`fix/<topic>`) rather than pushing to the main branch when proposing corrections.
