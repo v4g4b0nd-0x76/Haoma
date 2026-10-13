@@ -35,5 +35,5 @@ The Roman mystery cult of Mithras shares the name and some imagery (the bull-sla
 
 ## Related
 
-- [Zarathustra](/en/cultures/iranian/characters/zarathustra/) — the prophet who articulated Ahura Mazda's supremacy
-- [The Two Spirits](/en/cultures/iranian/stories/two-spirits/) — the foundational ethical choice in the Gathas
+- [Zarathustra](/cultures/iranian/characters/zarathustra/) — the prophet who articulated Ahura Mazda's supremacy
+- [The Two Spirits](/cultures/iranian/stories/two-spirits/) — the foundational ethical choice in the Gathas

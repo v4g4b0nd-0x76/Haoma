@@ -31,6 +31,6 @@ Only a fraction of the original Avestan corpus survives. The Yasna (including th
 
 ## Related
 
-- [Zarathustra](/en/cultures/iranian/characters/zarathustra/) — the prophet at the origin of the tradition
-- [The Two Spirits](/en/cultures/iranian/stories/two-spirits/) — the foundational ethical text
-- [Mehr (Mithra)](/en/cultures/iranian/characters/mehr/) — one of the great yazatas
+- [Zarathustra](/cultures/iranian/characters/zarathustra/) — the prophet at the origin of the tradition
+- [The Two Spirits](/cultures/iranian/stories/two-spirits/) — the foundational ethical text
+- [Mehr (Mithra)](/cultures/iranian/characters/mehr/) — one of the great yazatas

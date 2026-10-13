@@ -1,7 +1,7 @@
 ---
 title: Library
 ---
-Put PDFs in static/library/ and link them, e.g. [Prose Edda](/library/prose-edda.pdf).
+Put PDFs in `static/library/` — they are listed on this page automatically after the next build.
 
 ## Media credits
 

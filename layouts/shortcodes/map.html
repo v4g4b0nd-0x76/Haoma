@@ -18,10 +18,26 @@
     caption — figure caption
     route   — dashed travel line: "auto" joins the pins in the order given,
               or explicit points route="58,54 54,47 28,38" (percent of the map box)
+    pulse   — "true" (default) makes every pin ring pulse; pulse="false" draws the
+              pins still (used on the overview map, where points are places, not events)
 
   Pin lines (inside the shortcode body):
-    pin x="25%" y="60%" label="Place name" note="Hover text" color="gold|fire|blood|teal|silver" /
+    pin x="25%" y="60%" label="Place name" note="Hover text" color="gold|fire|blood|teal|silver" href="/optional/page/" /
     label is optional; note shows on hover/focus.
+    href is optional: when present the pin becomes a link to that page (for a fuller
+    description elsewhere). Internal paths get the current-language prefix applied
+    (/cultures/x/ -> /fa/cultures/x/ on Farsi pages); http(s)://, mailto: and #anchor
+    values pass through untouched.
+
+  Region lines (inside the shortcode body, before the pins):
+    region points="49.7,35.9 52.8,37 52.8,30 46,28" label="Mesopotamia" note="Hover text"
+            color="gold" href="/cultures/mesopotamian/" /
+    Draws the border of a country or civilization: a dashed outline you can hover or
+    focus for the description, and (when href is there) click through to that culture's
+    own page. points are "x,y" pairs in % of the map box, three or more, in order.
+    label is the region's name (it sits in the tooltip as a heading); note is the
+    description. Without href the region is hover/focus only. href is language-prefixed
+    exactly like a pin's.
 
   Coordinates are % from the top-left of the map image.
   No external JS/CSS dependencies.
@@ -37,11 +53,12 @@
 {{- $theme   := .Get "theme"   | default "dark" | printf "%v" -}}
 {{- $caption := .Get "caption" | default ""  | printf "%v" -}}
 {{- $route   := .Get "route"   | default ""  | printf "%v" -}}
+{{- $pulse   := .Get "pulse"   | default "true" | printf "%v" -}}
 {{- $pts     := slice -}}
 {{- $inner   := .Inner -}}
 
 <figure class="myth-map-wrap" style="width:{{ $w }}">
-<div class="myth-map{{ if eq $theme "sepia" }} myth-map--sepia{{ end }}" id="{{ $id }}" style="height:{{ $h }}" role="region" aria-label="{{ i18n "mapLabel" | default "Interactive myth map" }}" tabindex="0">
+<div class="myth-map{{ if eq $theme "sepia" }} myth-map--sepia{{ end }}{{ if eq $pulse "false" }} myth-map--still{{ end }}" id="{{ $id }}" style="height:{{ $h }}" role="region" aria-label="{{ i18n "mapLabel" | default "Interactive myth map" }}" tabindex="0">
 
   {{- if $src }}
   <img class="myth-map__bg" src="{{ $src | relURL }}" alt="" aria-hidden="true" draggable="false">
@@ -123,6 +140,74 @@
   </svg>
   {{- end }}
 
+  <!-- Region borders: countries and civilizations (parsed from `region` lines) -->
+  {{- range split $inner "\n" -}}
+    {{- $line := trim . " \t\r" -}}
+    {{- if hasPrefix $line "region " -}}
+      {{- $rpp := "" -}}
+      {{- $rlab := "" -}}
+      {{- $rnote := "" -}}
+      {{- $rcolor := "gold" -}}
+      {{- $rhref := "" -}}
+      {{- range findRE `[a-z]+=".+?"` $line -}}
+        {{- $kv := split . "=" -}}
+        {{- $key := printf "%v" (index $kv 0) -}}
+        {{- $val := trim (index $kv 1) "\"" -}}
+        {{- if eq $key "points" -}}{{- $rpp = $val -}}{{- end -}}
+        {{- if eq $key "label"  -}}{{- $rlab = $val -}}{{- end -}}
+        {{- if eq $key "note"   -}}{{- $rnote = $val -}}{{- end -}}
+        {{- if eq $key "color"  -}}{{- $rcolor = $val -}}{{- end -}}
+        {{- if eq $key "href"   -}}{{- $rhref = $val -}}{{- end -}}
+      {{- end -}}
+      {{- /* parse the outline: "x,y x,y ..." in % of the map box, >= 3 points.
+            Two flat parallel lists - `append` merges a nested slice, so pairs do
+            not survive an `append (slice $x $y)`. */ -}}
+      {{- $xs := slice -}}{{- $ys := slice -}}{{- $sx := 0.0 -}}{{- $sy := 0.0 -}}
+      {{- range split $rpp " " -}}
+        {{- $c := split . "," -}}
+        {{- if ge (len $c) 2 -}}
+          {{- $x := float (trim (index $c 0) "%") -}}
+          {{- $y := float (trim (index $c 1) "%") -}}
+          {{- $xs = $xs | append $x -}}{{- $ys = $ys | append $y -}}
+          {{- $sx = add $sx $x -}}{{- $sy = add $sy $y -}}
+        {{- end -}}
+      {{- end -}}
+      {{- if ge (len $xs) 3 -}}
+        {{- $n := float (len $xs) -}}
+        {{- $hx := printf "%g" (div $sx $n) -}}
+        {{- $hy := printf "%g" (div $sy $n) -}}
+        {{- $clip := slice -}}{{- $d := slice -}}
+        {{- range $i, $x := $xs -}}
+          {{- $y := index $ys $i -}}
+          {{- $clip = $clip | append (printf "%g%% %g%%" $x $y) -}}
+          {{- $d = $d | append (printf "%g %g" $x $y) -}}
+        {{- end -}}
+        {{- $poly := delimit $clip "," -}}
+        {{- $path := printf "M%s Z" (delimit $d " L") -}}
+        {{- $rlink := "" -}}
+        {{- with $rhref -}}
+          {{- if or (hasPrefix . "http://") (hasPrefix . "https://") (hasPrefix . "mailto:") (hasPrefix . "#") -}}
+            {{- $rlink = . -}}
+          {{- else -}}
+            {{- $rlink = relLangURL . -}}
+          {{- end -}}
+        {{- end -}}
+        {{- $rname := $rlab -}}{{- if not $rname -}}{{- $rname = $rnote -}}{{- end -}}
+{{- if $rlink }}
+<a class="myth-region myth-region--{{ $rcolor }}" style="--hx:{{ $hx }}%;--hy:{{ $hy }}%" href="{{ $rlink }}" aria-label="{{ $rname }}">
+  <span class="myth-region__hit" style="clip-path:polygon({{ $poly }})" aria-hidden="true"><svg class="myth-region__line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="{{ $path }}"/></svg></span>
+  {{- if or $rlab $rnote }}<span class="myth-region__pop" role="tooltip">{{ if $rlab }}<b>{{ $rlab }}</b>{{ end }}{{ if $rnote }}<span>{{ $rnote }}</span>{{ end }}</span>{{ end }}
+</a>
+{{- else }}
+<span class="myth-region myth-region--{{ $rcolor }}" style="--hx:{{ $hx }}%;--hy:{{ $hy }}%" tabindex="0" role="img" aria-label="{{ $rname }}">
+  <span class="myth-region__hit" style="clip-path:polygon({{ $poly }})" aria-hidden="true"><svg class="myth-region__line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="{{ $path }}"/></svg></span>
+  {{- if or $rlab $rnote }}<span class="myth-region__pop" role="tooltip">{{ if $rlab }}<b>{{ $rlab }}</b>{{ end }}{{ if $rnote }}<span>{{ $rnote }}</span>{{ end }}</span>{{ end }}
+</span>
+{{- end }}
+      {{- end -}}
+    {{- end -}}
+  {{- end }}
+
   <!-- Pins -->
   <div class="myth-map__pins" aria-label="{{ i18n "mapPins" | default "Map locations" }}">
     {{- range split $inner "\n" -}}
@@ -134,6 +219,7 @@
         {{- $label := "" -}}
         {{- $note  := "" -}}
         {{- $color := "gold" -}}
+        {{- $href  := "" -}}
         {{- range findRE `[a-z]+=".+?"` $line -}}
           {{- $kv  := split . "=" -}}
           {{- $key := printf "%v" (index $kv 0) -}}
@@ -143,15 +229,35 @@
           {{- if eq $key "label" -}}{{- $label = $val -}}{{- end -}}
           {{- if eq $key "note"  -}}{{- $note  = $val -}}{{- end -}}
           {{- if eq $key "color" -}}{{- $color = $val -}}{{- end -}}
+          {{- if eq $key "href"  -}}{{- $href  = $val -}}{{- end -}}
+        {{- end -}}
+        {{- /* optional link: internal paths are language-prefixed, absolute and
+               anchor URLs pass through */ -}}
+        {{- $link := "" -}}
+        {{- with $href -}}
+          {{- if or (hasPrefix . "http://") (hasPrefix . "https://") (hasPrefix . "mailto:") (hasPrefix . "#") -}}
+            {{- $link = . -}}
+          {{- else -}}
+            {{- $link = relLangURL . -}}
+          {{- end -}}
         {{- end -}}
         {{- if and $px $py -}}
           {{- if eq $route "auto" -}}{{- $pts = $pts | append (printf "%s,%s" (replace $px "%" "") (replace $py "%" "")) -}}{{- end -}}
+{{- if $link }}
+<a class="myth-pin myth-pin--{{ $color }}" style="left:{{ $px }};top:{{ $py }}" href="{{ $link }}" aria-label="{{ with $label }}{{ . }}{{ else }}{{ $note }}{{ end }}">
+  <span class="myth-pin__dot" aria-hidden="true"></span>
+  <span class="myth-pin__ring" aria-hidden="true"></span>
+  {{- if $label }}<span class="myth-pin__label">{{ $label }}</span>{{ end }}
+  {{- if $note }}<span class="myth-pin__pop" role="tooltip">{{ $note }}</span>{{- end }}
+</a>
+{{- else }}
 <button class="myth-pin myth-pin--{{ $color }}" style="left:{{ $px }};top:{{ $py }}" aria-label="{{ with $label }}{{ . }}{{ else }}{{ $note }}{{ end }}" type="button">
   <span class="myth-pin__dot" aria-hidden="true"></span>
   <span class="myth-pin__ring" aria-hidden="true"></span>
   {{- if $label }}<span class="myth-pin__label">{{ $label }}</span>{{ end }}
   {{- if $note }}<span class="myth-pin__pop" role="tooltip">{{ $note }}</span>{{- end }}
 </button>
+{{- end }}
         {{- end -}}
       {{- end -}}
     {{- end }}

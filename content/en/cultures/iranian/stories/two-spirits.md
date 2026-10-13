@@ -31,5 +31,5 @@ Good thoughts (*humata*), good words (*hukhta*), good deeds (*hvarshta*) — the
 
 ## Related
 
-- [Zarathustra](/en/cultures/iranian/characters/zarathustra/) — the prophet of the Gathas
-- [Zoroastrianism in Persia](/en/cultures/iranian/history/zoroastrianism-in-persia/) — how these ideas shaped empires
+- [Zarathustra](/cultures/iranian/characters/zarathustra/) — the prophet of the Gathas
+- [Zoroastrianism in Persia](/cultures/iranian/history/zoroastrianism-in-persia/) — how these ideas shaped empires

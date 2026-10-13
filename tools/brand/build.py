@@ -110,7 +110,9 @@ def build():
     full_en=f'<svg class="logo logo-full" viewBox="0 0 {116+W+4:.0f} 100" role="img" aria-label="{{{{ site.Title }}}}"><defs>{GOLD}</defs><g>{markS}</g><g transform="translate(116 20)">{en}</g></svg>'
     full_fa=f'<svg class="logo logo-full" viewBox="0 0 {fw+16+104:.0f} 100" role="img" aria-label="{{{{ site.Title }}}}"><defs>{GOLD}</defs><g transform="translate(0 11)">{fa}</g><g transform="translate({fw+16:.0f} 0)">{markS}</g></svg>'
     mk=f'<svg class="logo logo-mark" viewBox="0 0 100 100" role="img" aria-label="{{{{ site.Title }}}}"><defs>{GOLD}</defs>{markS}</svg>'
-    part='{{- $i := .id | default "x" -}}\n{{- if eq .v "mark" -}}'+inl(mk)+'{{- else if eq site.Language.Lang "fa" -}}'+inl(full_fa)+'{{- else -}}'+inl(full_en)+'{{- end -}}\n'
+    word_en_s=f'<svg class="logo logo-word" viewBox="0 0 {W+4:.0f} 63" role="img" aria-label="{{{{ site.Title }}}}"><defs>{GOLD}</defs>{en}</svg>'
+    word_fa_s=f'<svg class="logo logo-word" viewBox="0 0 {fw+2:.0f} {fh+2:.0f}" role="img" aria-label="{{{{ site.Title }}}}"><defs>{GOLD}</defs>{fa}</svg>'
+    part='{{- $i := .id | default "x" -}}\n{{- if eq .v "mark" -}}'+inl(mk)+'{{- else if eq .v "word" -}}{{- if eq site.Language.Lang "fa" -}}'+inl(word_fa_s)+'{{- else -}}'+inl(word_en_s)+'{{- end -}}'+'{{- else if eq site.Language.Lang "fa" -}}'+inl(full_fa)+'{{- else -}}'+inl(full_en)+'{{- end -}}\n'
     out['_partial_logo.html']=part
     return out
 if __name__=='__main__':

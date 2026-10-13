@@ -17,7 +17,7 @@ Almost everything about his life is uncertain. The language of the Gathas places
 
 The Gathas present **Ahura Mazda** (the "Wise Lord") as the supreme deity. Humans choose between *asha* (truth, order, rightness) and *druj* (the lie, disorder, destruction), and that choice shapes the fate of the world. This ethical dualism is the core of what Zarathustra taught.
 
-See [The Two Spirits](/en/cultures/iranian/stories/two-spirits/) for the foundational Gathic passage.
+See [The Two Spirits](/cultures/iranian/stories/two-spirits/) for the foundational Gathic passage.
 
 ## The call
 
@@ -29,6 +29,6 @@ Texts written many centuries later (the *Denkard*, the *Arda Viraf Namag*) added
 
 ## Related
 
-- [Mehr (Mithra)](/en/cultures/iranian/characters/mehr/) — the yazata of oaths and light
-- [The Two Spirits](/en/cultures/iranian/stories/two-spirits/) — Yasna 30, the core ethical text
-- [Zoroastrianism in Persia](/en/cultures/iranian/history/zoroastrianism-in-persia/) — how the religion spread and changed
+- [Mehr (Mithra)](/cultures/iranian/characters/mehr/) — the yazata of oaths and light
+- [The Two Spirits](/cultures/iranian/stories/two-spirits/) — Yasna 30, the core ethical text
+- [Zoroastrianism in Persia](/cultures/iranian/history/zoroastrianism-in-persia/) — how the religion spread and changed

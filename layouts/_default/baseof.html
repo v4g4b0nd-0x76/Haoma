@@ -19,7 +19,7 @@
 <body>
 <div class="bg"></div>
 <header class="top">
-  <a class="brand" href="{{ site.Home.RelPermalink }}">{{ partial "logo.html" (dict "v" "full" "id" "h") }}</a>
+  <a class="brand" href="{{ site.Home.RelPermalink }}">{{ partial "logo.html" (dict "v" "word" "id" "h") }}</a>
   <nav>{{ range index site.Data.nav site.Language.Lang }}<a href="{{ .url | relLangURL }}">{{ .name }}</a>{{ end }}</nav>
   <div class="ctrl">
     <select id="culture-pick" aria-label="{{ i18n "pickLabel" }}"><option value="base" data-href="{{ (site.GetPage "/cultures").RelPermalink }}">{{ i18n "all" }}</option>{{ range (site.GetPage "/cultures").Sections }}<option value="{{ .Params.culture }}" data-href="{{ .RelPermalink }}">{{ .Title }}</option>{{ end }}</select>
@@ -28,8 +28,8 @@
   </div>
 </header>
 <div class="motif"></div>
-{{ with .Params.culture }}{{ $b := (index site.Data.themes . | default dict).banner }}{{ if $b }}{{ $cp := site.GetPage "/cultures" }}
-<div class="hero-art{{ if and $.IsSection (eq $.Parent.RelPermalink $cp.RelPermalink) }} tall{{ end }}"><img class="sbg" src="{{ printf "img/%s" $b | relURL }}" alt="" aria-hidden="true"><img class="sfg" src="{{ printf "img/%s" $b | relURL }}" alt="{{ $.Params.culture }} banner art"></div>
+{{ with .Params.culture }}{{ $b := (index site.Data.themes . | default dict).banner }}{{ if $b }}
+<div class="hero-art c-{{ . }}"><img class="sbg" src="{{ printf "img/%s" $b | relURL }}" alt="" aria-hidden="true"><img class="sfg" src="{{ printf "img/%s" $b | relURL }}" alt="{{ $.Params.culture }} banner art"></div>
 {{ end }}{{ end }}
 <main>{{ block "main" . }}{{ end }}</main>
 <footer>Text CC BY-SA · Code MIT{{ with site.Home.OutputFormats.Get "rss" }} · <a href="{{ .RelPermalink }}">RSS</a>{{ end }} · <a href="{{ "about/" | relLangURL }}">{{ i18n "sources" }}</a></footer>

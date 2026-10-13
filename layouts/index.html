@@ -5,9 +5,10 @@
 {{ range $cs }}{{ $b := (index site.Data.themes .Params.culture | default dict).banner }}{{ if $b }}
 <div class="slide" data-culture="{{ .Params.culture }}"><img class="sbg" src="{{ printf "img/%s" $b | relURL }}" alt="" aria-hidden="true"><img class="sfg" src="{{ printf "img/%s" $b | relURL }}" alt="{{ .Title }} banner art"><template><span>{{ .Params.quote }}</span><cite>{{ .Params.quoteSource }}</cite></template></div>
 {{ end }}{{ end }}
-<div class="cine-text"><p class="eyebrow">{{ i18n "eyebrow" }}</p><h1 class="cine-logo"><span class="sr">{{ site.Title }}</span>{{ partial "logo.html" (dict "v" "full" "id" "x") }}</h1><p class="sub">{{ i18n "tagline" }}</p><p class="quote" aria-live="polite"></p>
+<div class="cine-text"><div class="cine-top"><p class="eyebrow">{{ i18n "eyebrow" }}</p><h1 class="cine-logo"><span class="sr">{{ site.Title }}</span>{{ partial "logo.html" (dict "v" "word" "id" "x") }}</h1><p class="sub">{{ i18n "tagline" }}</p></div>
+<div class="cine-bot"><p class="quote" aria-live="polite"></p>
 <div class="pills"><button type="button" data-pick="base" aria-pressed="true">{{ i18n "all" }}</button>{{ range $cs }}<button type="button" data-pick="{{ .Params.culture }}" aria-pressed="false">{{ .Title }}</button>{{ end }}</div>
-<a class="btn enter" href="#" hidden>{{ i18n "enter" }}</a></div>
+<a class="btn enter" href="#" hidden>{{ i18n "enter" }}</a></div></div>
 </section>
 <section class="wrap slider"><div class="slider-head"><h2>{{ i18n "latest" }}</h2><div class="arrows"><button type="button" data-dir="-1" aria-label="{{ i18n "prev" }}">‹</button><button type="button" data-dir="1" aria-label="{{ i18n "next" }}">›</button></div></div>
 <ul class="cards rail">{{ range first 8 (where site.RegularPages "Section" "episodes") }}{{ partial "card.html" . }}{{ end }}</ul></section>

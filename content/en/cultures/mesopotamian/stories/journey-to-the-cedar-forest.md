@@ -45,5 +45,5 @@ The map under these pins is drawn from real coastlines and rivers (Natural Earth
 
 ## Related
 
-- [Mesopotamian myths](/en/cultures/mesopotamian/) — the culture this story belongs to
-- [Cultures](/en/cultures/) — the world map of every mythology on this site
+- [Mesopotamian myths](/cultures/mesopotamian/) — the culture this story belongs to
+- [Cultures](/cultures/) — the world map of every mythology on this site

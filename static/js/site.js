@@ -18,14 +18,18 @@ function setPick(p,first){
  var eff=fixed||p;D.dataset.pick=p;if(!fixed)D.dataset.culture=p;
  if(sel)sel.value=eff;
  Q('.pills button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.pick===p)});
- Q('.cards li[data-culture],.panel[data-culture]').forEach(function(e){e.hidden=eff!=='base'&&e.dataset.culture!==eff});
+ /* The pick filters the home page only: on the cultures index it hid every card but
+    the last culture chosen, so the page "showed only one culture". */
+ if(cine)Q('.cards li[data-culture],.panel[data-culture]').forEach(function(e){e.hidden=eff!=='base'&&e.dataset.culture!==eff});
  if(cine){var sl=Q('.slide',cine),on=sl.filter(function(s){return s.dataset.culture===p})[0]||sl[0],q=Q('.quote',cine)[0],en=Q('.enter',cine)[0],o=opt(p);
   cine.dataset.culture=p;sl.forEach(function(s){s.classList.toggle('on',s===on)});
   var put=function(){q.innerHTML=on.querySelector('template').innerHTML;q.style.opacity=1};
   if(first)put();else{q.style.opacity=0;setTimeout(put,250)}
   en.hidden=p==='base';if(o)en.href=o.dataset.href}}
-if(sel)sel.onchange=function(){var v=sel.value;setPick(v);if(fixed&&v!==fixed)location.href=opt(v).dataset.href};
-Q('.pills button').forEach(function(b){b.onclick=function(){setPick(b.dataset.pick)}});
+/* choosing a culture always goes straight to that culture's own page */
+function pickGo(p){var o=opt(p);if(!o)return;try{localStorage.setItem('culture',p)}catch(e){}if(o.dataset.href)location.href=o.dataset.href}
+if(sel)sel.onchange=function(){pickGo(sel.value)};
+Q('.pills button').forEach(function(b){b.onclick=function(){pickGo(b.dataset.pick)}});
 var p0='iranian';try{p0=localStorage.getItem('culture')||'iranian'}catch(e){}
 if(!opt(p0)&&p0!=='base')p0='iranian';
 setPick(p0,true);
@@ -61,12 +65,17 @@ Q('.note').forEach(function(n){var p=n.querySelector('.note-pop');function fit()
 (function(){
 var Q=function(s,r){return[].slice.call((r||document).querySelectorAll(s))};
 Q('.myth-map').forEach(function(map){
-  var minZ=0.5,maxZ=4,z=1,ox=0,oy=0,dragging=false,lastX=0,lastY=0,lastDist=0,inner=null;
-  /* Wrap bg + pins in a transform layer */
+  var minZ=0.5,maxZ=4,z=1,ox=0,oy=0,dragging=false,lastX=0,lastY=0,lastDist=0,inner=null,moved=false,sx=0,sy=0;
+  /* Wrap bg + regions + pins in one transform layer: everything that carries a
+     position on the artwork (background, country borders, pins, route) has to
+     pan and zoom together, and each one's % coordinates are measured against
+     this box rather than the outer frame. */
   var bg=map.querySelector('.myth-map__bg')||map.querySelector('.myth-map__svg');
   var pins=map.querySelector('.myth-map__pins');
+  var regions=Q('.myth-region',map);
   inner=document.createElement('div');inner.className='myth-map__inner';
   if(bg)inner.appendChild(bg);
+  regions.forEach(function(rg){inner.appendChild(rg)});
   if(pins)inner.appendChild(pins);
   map.insertBefore(inner,map.querySelector('.myth-map__ctrl'));
   /* Fit the layer to the artwork's own aspect ratio: the image is drawn edge-to-edge
@@ -81,23 +90,36 @@ Q('.myth-map').forEach(function(map){
     if(h>ch){h=ch;w=h*ar}
     inner.style.width=w+'px';inner.style.height=h+'px';
   }
-  function apply(){inner.style.transform='translate('+ox+'px,'+oy+'px) scale('+z+')'}
+  /* --iz carries the current zoom to CSS so the hover cards can cancel it and
+     stay the same on-screen size no matter how far the map is zoomed */
+  function apply(){inner.style.transform='translate('+ox+'px,'+oy+'px) scale('+z+')';map.style.setProperty('--iz',z);map.style.setProperty('--izr',1/z)}
   function clamp(){if(z<=1.001){ox=0;oy=0;return}var mw=map.clientWidth*(z-1)/2,mh=map.clientHeight*(z-1)/2;ox=Math.max(-mw,Math.min(mw,ox));oy=Math.max(-mh,Math.min(mh,oy))}
   /* Zoom controls */
   Q('[data-zm]',map).forEach(function(b){b.onclick=function(){var v=+b.dataset.zm;if(v===0){z=1;ox=0;oy=0}else{z=Math.max(minZ,Math.min(maxZ,z+v*0.4))}apply()}});
   /* Wheel zoom */
   map.addEventListener('wheel',function(e){e.preventDefault();z=Math.max(minZ,Math.min(maxZ,z-e.deltaY*0.001));clamp();apply()},{passive:false});
-  /* Mouse drag */
-  map.addEventListener('mousedown',function(e){if(e.target.closest('.myth-pin,.myth-map__zoom'))return;dragging=true;lastX=e.clientX;lastY=e.clientY;e.preventDefault()});
-  document.addEventListener('mousemove',function(e){if(!dragging)return;ox+=e.clientX-lastX;oy+=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;clamp();apply()});
+  /* Mouse drag — you can start a drag on a region border or a pin, so remember where
+     the pointer went down and swallow the click that follows a real drag: panning the
+     map must never follow a link. */
+  map.addEventListener('mousedown',function(e){sx=e.clientX;sy=e.clientY;moved=false;if(e.target.closest('.myth-pin,.myth-map__zoom'))return;dragging=true;lastX=e.clientX;lastY=e.clientY;e.preventDefault()});
+  document.addEventListener('mousemove',function(e){if(!dragging)return;if(Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)>6)moved=true;ox+=e.clientX-lastX;oy+=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;clamp();apply()});
   document.addEventListener('mouseup',function(){dragging=false});
+  map.addEventListener('click',function(e){if(moved){e.preventDefault();e.stopPropagation();moved=false}},true);
   /* Touch pan + pinch-zoom */
-  map.addEventListener('touchstart',function(e){if(e.touches.length===2){lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)}else if(e.touches.length===1){lastX=e.touches[0].clientX;lastY=e.touches[0].clientY}},{passive:true});
-  map.addEventListener('touchmove',function(e){if(e.touches.length===2){var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);z=Math.max(minZ,Math.min(maxZ,z*(d/lastDist)));lastDist=d;clamp();apply()}else if(e.touches.length===1){ox+=e.touches[0].clientX-lastX;oy+=e.touches[0].clientY-lastY;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;clamp();apply()}e.preventDefault()},{passive:false});
+  map.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;moved=false;if(e.touches.length===2){lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)}else if(e.touches.length===1){lastX=e.touches[0].clientX;lastY=e.touches[0].clientY}},{passive:true});
+  map.addEventListener('touchmove',function(e){if(Math.abs(e.touches[0].clientX-sx)+Math.abs(e.touches[0].clientY-sy)>8)moved=true;if(e.touches.length===2){var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);z=Math.max(minZ,Math.min(maxZ,z*(d/lastDist)));lastDist=d;clamp();apply()}else if(e.touches.length===1){ox+=e.touches[0].clientX-lastX;oy+=e.touches[0].clientY-lastY;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;clamp();apply()}e.preventDefault()},{passive:false});
   /* Pin tooltip edge-fitting */
   Q('.myth-pin',map).forEach(function(pin){var pop=pin.querySelector('.myth-pin__pop');if(!pop)return;
    function fit(){pop.style.setProperty('--nx','0px');var r=pop.getBoundingClientRect(),mr=map.getBoundingClientRect(),dx=0;if(r.left<mr.left+8)dx=mr.left+8-r.left;else if(r.right>mr.right-8)dx=mr.right-8-r.right;pop.style.setProperty('--nx',dx+'px')}
    pin.addEventListener('mouseenter',fit);pin.addEventListener('focusin',fit)});
+  /* Region descriptions: keep the tooltip inside the frame, horizontally and vertically */
+  Q('.myth-region',map).forEach(function(rg){var pop=rg.querySelector('.myth-region__pop'),hit=rg.querySelector('.myth-region__hit');if(!pop||!hit)return;
+   function fit(){pop.style.setProperty('--nx','0px');pop.style.setProperty('--ny','0px');
+    var r=pop.getBoundingClientRect(),mr=map.getBoundingClientRect(),dx=0,dy=0;
+    if(r.left<mr.left+8)dx=mr.left+8-r.left;else if(r.right>mr.right-8)dx=mr.right-8-r.right;
+    if(r.top<mr.top+8)dy=mr.top+8-r.top;else if(r.bottom>mr.bottom-8)dy=mr.bottom-8-r.bottom;
+    pop.style.setProperty('--nx',dx+'px');pop.style.setProperty('--ny',dy+'px')}
+   hit.addEventListener('mouseenter',fit);rg.addEventListener('focusin',fit)});
   fit();
   if(bg&&bg.tagName.toLowerCase()==='img'){if(bg.complete&&bg.naturalWidth)fit();else bg.addEventListener('load',fit)}
   var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(fit,120)});
@@ -105,3 +127,6 @@ Q('.myth-map').forEach(function(map){
   apply();
 });
 })();
+
+/* ===== hero height comes from CSS (--hero-h): the same box on every page, so
+   nothing is measured or stretched to the viewport here ===== */
