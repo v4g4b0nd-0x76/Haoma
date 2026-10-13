@@ -166,8 +166,60 @@ body{font-family:var(--ui)}
    that culture's own colour while you hover it, which is the point of this one.
    Every option carries --c (the culture's main colour) and --pat (its motif from
    themes.json); the wrapper carries the colour of the culture in force. */
-.ctrl select{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:99px;padding:6px 14px;font:inherit;font-size:.9rem;cursor:pointer}
-.ctrl select:focus-visible{outline:2px solid var(--accent)}
+.cpick{position:relative}
+.cpick__btn{display:flex;align-items:center;gap:9px;padding:5px 9px 5px 6px;min-width:130px;
+  background:linear-gradient(var(--surface),var(--bg));
+  border:1px solid color-mix(in srgb,var(--c) 38%,var(--border));
+  border-radius:10px;color:var(--text);font:600 .88rem/1 var(--ui);cursor:pointer;position:relative;
+  transition:border-color .18s,box-shadow .18s}
+.cpick__btn::before{content:"";position:absolute;inset:0;background:var(--pat);background-size:15px 15px;
+  opacity:.09;pointer-events:none}
+.cpick__btn:hover{border-color:color-mix(in srgb,var(--c) 70%,transparent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 13%,transparent)}
+.cpick__btn[aria-expanded=true]{border-color:var(--c);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 19%,transparent)}
+.cpick__btn:focus-visible{outline:2px solid var(--c);outline-offset:2px}
+.cpick__name{flex:1;text-align:start;white-space:nowrap}
+/* the sigil takes whichever culture colour it inherits, so it lights up on hover:
+   a chip tinted with the culture's colour, carrying that culture's motif from
+   themes.json (meander, rosette, zigzag, waves) -- or the star, for the general box */
+.cpick__sig{flex:none;width:20px;height:20px;border-radius:50%;display:grid;place-items:center;
+  background:color-mix(in srgb,var(--c) 24%,var(--surface));
+  box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--c) 80%,transparent)}
+.cpick__sig::after{content:"";width:14px;height:14px;background:var(--c);
+  -webkit-mask:var(--pat) no-repeat center/contain;mask:var(--pat) no-repeat center/contain}
+.cpick__chev{flex:none;width:11px;height:11px;margin-inline-start:auto;background:var(--muted);
+  -webkit-mask:var(--m-star) no-repeat center/contain;mask:var(--m-star) no-repeat center/contain;
+  transition:transform .2s,background .2s}
+.cpick__btn[aria-expanded=true] .cpick__chev{transform:rotate(45deg);background:var(--c)}
+.cpick__list{position:absolute;top:calc(100% + 10px);inset-inline-end:0;z-index:60;min-width:250px;
+  margin:0;padding:18px 10px 16px;list-style:none;
+  background:linear-gradient(var(--surface),color-mix(in srgb,var(--bg) 88%,#000));
+  border:1px solid color-mix(in srgb,var(--c) 45%,var(--border));border-radius:12px;
+  box-shadow:0 18px 44px -12px #000;animation:cpop .16s ease-out}
+/* double cartouche ornament, in the culture colour, capping the panel top and bottom */
+.cpick__list::before,.cpick__list::after{content:"";position:absolute;inset-inline:16px;height:8px;
+  background:var(--c);opacity:.55;pointer-events:none;
+  -webkit-mask:var(--m-orn) no-repeat center/contain;mask:var(--m-orn) no-repeat center/contain}
+.cpick__list::before{top:5px}
+.cpick__list::after{bottom:5px;transform:scaleX(-1)}
+@keyframes cpop{from{opacity:0;transform:translateY(-6px) scale(.98)}}
+.cpick__opt{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;
+  position:relative;color:var(--text);font:500 .92rem/1.2 var(--ui);
+  transition:background .16s,box-shadow .16s}
+.cpick__opt+.cpick__opt{margin-top:2px}
+.cpick__opt::before{content:"";position:absolute;inset-inline-start:0;top:16%;bottom:16%;width:2px;
+  border-radius:2px;background:var(--c);transform:scaleY(0);transform-origin:center;transition:transform .18s}
+.cpick__opt:hover,.cpick__opt:focus-visible,.cpick__opt[aria-selected=true]{
+  background:color-mix(in srgb,var(--c) 15%,transparent);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 40%,transparent);outline:none}
+.cpick__opt:hover::before,.cpick__opt:focus-visible::before,.cpick__opt[aria-selected=true]::before{transform:scaleY(1)}
+.cpick__opt:hover .cpick__name,.cpick__opt:focus-visible .cpick__name,.cpick__opt[aria-selected=true] .cpick__name{color:var(--c)}
+/* the main colour of the culture, shown on hover and always on the chosen one */
+.cpick__dot{flex:none;width:8px;height:8px;border-radius:50%;margin-inline-start:auto;background:var(--c);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--c) 16%,transparent)}
+.cpick__opt--all{--c:#9aa3b5;--pat:var(--m-star);border-bottom:1px solid var(--border);
+  border-radius:8px 8px 0 0;margin-bottom:7px;padding-bottom:11px}
 .lang{border:1px solid var(--accent);border-radius:99px;padding:3px 14px;text-decoration:none;font-size:.9rem}
 .lang:hover{background:var(--accent);color:#111}
 /* hero without auto-rotation */
@@ -220,7 +272,7 @@ html[data-nav=hidden] .navtab,html[data-focus="1"] .navtab{display:block}
 aside a{border-left:0;border-inline-start:2px solid var(--border);border-radius:0 4px 4px 0}
 html[dir=rtl] aside a{border-radius:4px 0 0 4px}
 aside.toc ul{border-left:0;border-inline-start:1px solid var(--border);padding-left:0;padding-inline-start:var(--s2)}
-@media(max-width:900px){aside.side,html[data-dock=end] aside.side,html[data-dock=end] aside.toc{grid-column:1;grid-row:auto}.navtab{display:none!important}.ctrl{width:100%}}
+@media(max-width:900px){aside.side,html[data-dock=end] aside.side,html[data-dock=end] aside.toc{grid-column:1;grid-row:auto}.navtab{display:none!important}.ctrl{width:100%}.cpick{flex:1 1 auto;min-width:0}.cpick__btn{width:100%}.cpick__list{inset-inline-end:auto;inset-inline-start:0;width:100%;min-width:0}}
 
 /* data-driven theme hooks */
 .bg{animation-name:var(--anim,fall)}

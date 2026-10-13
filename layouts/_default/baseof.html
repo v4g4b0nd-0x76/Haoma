@@ -22,7 +22,19 @@
   <a class="brand" href="{{ site.Home.RelPermalink }}">{{ partial "logo.html" (dict "v" "word" "id" "h") }}</a>
   <nav>{{ range index site.Data.nav site.Language.Lang }}<a href="{{ .url | relLangURL }}">{{ .name }}</a>{{ end }}</nav>
   <div class="ctrl">
-    <select id="culture-pick" aria-label="{{ i18n "pickLabel" }}"><option value="base" data-href="{{ (site.GetPage "/cultures").RelPermalink }}">{{ i18n "all" }}</option>{{ range (site.GetPage "/cultures").Sections }}<option value="{{ .Params.culture }}" data-href="{{ .RelPermalink }}">{{ .Title }}</option>{{ end }}</select>
+    {{- /* culture picker: a listbox rather than a <select>, because a native one
+           cannot show the culture's own colour while you hover its option.
+           Each option carries that culture's --c (its main colour) and --pat (its
+           motif); the wrapper holds the colour of the culture currently in force,
+           which is what tints the trigger and the panel frame. */ -}}
+    <div class="cpick" id="culture-pick" style="--c:#9aa3b5;--pat:var(--m-star)">
+      <button type="button" class="cpick__btn" id="cpick-btn" aria-haspopup="listbox" aria-expanded="false" aria-controls="cpick-list" aria-label="{{ i18n "pickLabel" }}"><span class="cpick__sig" aria-hidden="true"></span><span class="cpick__name"></span><span class="cpick__chev" aria-hidden="true"></span></button>
+      <ul class="cpick__list" id="cpick-list" role="listbox" aria-labelledby="cpick-btn" hidden>
+        {{- /* the general box: neutral, star-marked, listed on its own above the cultures */ -}}
+        <li class="cpick__opt cpick__opt--all" role="option" data-pick="base" data-name="{{ i18n "all" }}" data-href="{{ (site.GetPage "/cultures").RelPermalink }}" style="--c:#9aa3b5;--pat:var(--m-star)" aria-selected="false"><span class="cpick__sig" aria-hidden="true"></span><span class="cpick__name">{{ i18n "all" }}</span><span class="cpick__dot" aria-hidden="true"></span></li>
+        {{ range (site.GetPage "/cultures").Sections }}{{ $t := index site.Data.themes .Params.culture | default dict }}<li class="cpick__opt" role="option" data-pick="{{ .Params.culture }}" data-name="{{ .Title }}" data-href="{{ .RelPermalink }}" style="--c:{{ $t.accent | default "#9aa3b5" | safeCSS }};--pat:var(--m-{{ $t.pattern | default "none" | safeCSS }})" aria-selected="false"><span class="cpick__sig" aria-hidden="true"></span><span class="cpick__name">{{ .Title }}</span><span class="cpick__dot" aria-hidden="true"></span></li>{{ end }}
+      </ul>
+    </div>
     {{ $t := .Translations }}{{ if not $t }}{{ $t = site.Home.Translations }}{{ end }}
     {{ range $t }}<a class="lang" href="{{ .RelPermalink }}" hreflang="{{ .Language.Lang }}" lang="{{ .Language.Lang }}">{{ .Language.LanguageName }}</a>{{ end }}
   </div>

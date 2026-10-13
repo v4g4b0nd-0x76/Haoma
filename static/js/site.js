@@ -10,13 +10,23 @@ var act={
 function size(d){P.size=Math.min(1.7,Math.max(1,Math.round(((P.size||1.2)+d)*100)/100));D.style.setProperty('--read',P.size+'rem')}
 var hasSide=!!document.querySelector('aside.side');
 Q('[data-act]').forEach(function(b){if(!hasSide&&/nav|dock/.test(b.dataset.act))b.hidden=true;b.onclick=function(){act[b.dataset.act]();save()}});
-/* culture pick */
-var sel=document.getElementById('culture-pick'),cine=Q('.cine')[0];
-function opt(v){return sel&&sel.querySelector('option[value="'+v+'"]')}
+/* culture pick: a listbox, so an option can be tinted with its own colour on hover */
+var pick=document.getElementById('culture-pick'),btn=document.getElementById('cpick-btn'),
+    list=document.getElementById('cpick-list'),cine=Q('.cine')[0];
+function opt(v){return pick&&pick.querySelector('[data-pick="'+v+'"]')}
+/* mirror the choice onto the trigger -- label, sigil colour and motif, and the
+   option itself. The page theme follows via data-culture on <html>. */
+function paintPick(eff){
+ var o=opt(eff);if(!o||!pick||!btn)return;
+ pick.style.setProperty('--c',o.style.getPropertyValue('--c').trim()||'#9aa3b5');
+ pick.style.setProperty('--pat',o.style.getPropertyValue('--pat').trim()||'var(--m-none)');
+ var n=btn.querySelector('.cpick__name');if(n)n.textContent=o.dataset.name||'';
+ Q('.cpick__opt',pick).forEach(function(x){x.setAttribute('aria-selected',x===o)});
+}
 function setPick(p,first){
  try{localStorage.setItem('culture',p)}catch(e){}
  var eff=fixed||p;D.dataset.pick=p;if(!fixed)D.dataset.culture=p;
- if(sel)sel.value=eff;
+ paintPick(eff);
  Q('.pills button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.pick===p)});
  /* The pick filters the home page only: on the cultures index it hid every card but
     the last culture chosen, so the page "showed only one culture". */
@@ -28,7 +38,31 @@ function setPick(p,first){
   en.hidden=p==='base';if(o)en.href=o.dataset.href}}
 /* choosing a culture always goes straight to that culture's own page */
 function pickGo(p){var o=opt(p);if(!o)return;try{localStorage.setItem('culture',p)}catch(e){}if(o.dataset.href)location.href=o.dataset.href}
-if(sel)sel.onchange=function(){pickGo(sel.value)};
+/* open, close and keyboard: a listbox, not a select */
+function openPick(open){
+ if(!btn||!list)return;
+ btn.setAttribute('aria-expanded',open?'true':'false');list.hidden=!open;
+ if(open){var c=pick.querySelector('.cpick__opt[aria-selected=true]')||list.querySelector('.cpick__opt');if(c)c.focus()}
+}
+if(btn&&list){
+ btn.onclick=function(){openPick(btn.getAttribute('aria-expanded')!=='true')};
+ var items=Q('.cpick__opt',list);
+ items.forEach(function(o){o.tabIndex=-1;o.onclick=function(){pickGo(o.dataset.pick)}});
+ list.onkeydown=function(e){
+  var i=items.indexOf(document.activeElement);
+  if(e.key==='Escape'){e.preventDefault();openPick(false);btn.focus();return}
+  if(e.key==='Tab'){openPick(false);return}
+  if(e.key==='ArrowDown'||e.key==='ArrowUp'){
+   var d=e.key==='ArrowDown'?1:items.length-1;
+   e.preventDefault();items[i<0?(d===1?0:items.length-1):(i+d)%items.length].focus();return}
+  if(e.key==='Home'){e.preventDefault();items[0].focus();return}
+  if(e.key==='End'){e.preventDefault();items[items.length-1].focus();return}};
+ btn.onkeydown=function(e){
+  if(e.key==='ArrowDown'||e.key==='Enter'||e.key===' '){e.preventDefault();openPick(true)}
+  else if(e.key==='Escape'){openPick(false)}};
+ document.addEventListener('click',function(e){
+  if(btn.getAttribute('aria-expanded')==='true'&&pick&&!pick.contains(e.target))openPick(false)});
+}
 Q('.pills button').forEach(function(b){b.onclick=function(){pickGo(b.dataset.pick)}});
 var p0='iranian';try{p0=localStorage.getItem('culture')||'iranian'}catch(e){}
 if(!opt(p0)&&p0!=='base')p0='iranian';
