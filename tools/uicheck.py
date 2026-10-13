@@ -103,3 +103,10 @@ def start():
 def connect(url):
     ws = websocket.create_connection(url, timeout=30, origin="http://127.0.0.1:%d" % PORT)
     return Page(ws)
+
+
+def nocache(page):
+    """Never reuse the persistent profile's cache: a scenario must always see the
+    files that are on disk right now, not the last build that was opened."""
+    page.call("Network.enable")
+    page.call("Network.setCacheDisabled", cacheDisabled=True)

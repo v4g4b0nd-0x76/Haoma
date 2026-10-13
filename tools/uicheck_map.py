@@ -5,7 +5,7 @@ import sys
 import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from uicheck import BASE, connect, start  # noqa: E402
+from uicheck import BASE, connect, nocache, start  # noqa: E402
 
 OUT = "/tmp/opencode/"
 
