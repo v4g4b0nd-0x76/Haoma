@@ -34,6 +34,68 @@ textarea.ed{height:calc(100vh - 340px);min-height:240px}textarea.mono,textarea.e
 .mh{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-bottom:1px solid var(--b)}.mh .x{border:0;background:none;font-size:16px}.mb{padding:14px 18px;overflow:auto}.mf{padding:12px 18px;border-top:1px solid var(--b);display:flex;gap:8px;align-items:center}
 .pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin:10px 0;max-height:210px;overflow:auto}.mi{position:relative;padding:4px;border-radius:10px;display:flex;flex-direction:column;gap:3px;text-align:center;font-size:11px}.mi img,.mi .vt{width:100%;height:64px;object-fit:cover;border-radius:7px;background:#000;display:flex;align-items:center;justify-content:center;font-size:24px}.mi span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.mi.on{border-color:var(--a);background:var(--s2)}.mi i{position:absolute;top:6px;right:6px;background:var(--a);color:#0b0d10;font-style:normal;font-weight:700;border-radius:99px;min-width:20px;padding:0 5px;font-size:12px}
 .gpick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}.gp{padding:8px;text-align:center;font-size:12px;display:flex;flex-direction:column;gap:6px}.gp.on{border-color:var(--a);background:var(--s2)}.gm{display:grid;gap:3px;height:46px}.gm i{background:var(--b);border-radius:3px;min-height:12px}.gm i.i{background:var(--a);opacity:.65}.gm i.h{background:var(--m);opacity:.5;min-height:10px}
+/* ===== myth map studio ===== */
+.mdl.wide{width:min(1340px,96vw);max-height:94vh;--a:#e0a03a;--s2:#1c1b18}
+.mdl.wide .mh b{font:600 17px Georgia,serif;letter-spacing:.01em;color:#ecc98a}
+.ms-grid{display:grid;grid-template-columns:minmax(0,1fr) 326px;gap:18px;align-items:start}
+.ms-stage{background:radial-gradient(130% 130% at 50% 0%,#181c24,#0d0f13);border:1px solid var(--b);border-radius:14px;padding:14px;display:flex;justify-content:center;min-height:260px;box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.ms-canvas{position:relative;border-radius:8px;outline:1px solid rgba(224,160,58,.45);box-shadow:0 16px 46px rgba(0,0,0,.6);background:#0a0c10;cursor:crosshair;touch-action:none}
+.ms-canvas>img{display:block;width:100%;height:100%;border-radius:8px;background:#0a0c10}
+.ms-canvas.noart>img{display:none}
+.ms-canvas.noart{display:flex;align-items:center;justify-content:center;padding:18px;color:#93896a;font:italic 14px/1.7 Georgia,serif;text-align:center;letter-spacing:.03em}
+.ms-ov{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+.mpoly{pointer-events:none;cursor:pointer}
+.regmode .mpoly{pointer-events:auto}
+.regmode.drawing .mpoly{pointer-events:none}
+.mpoly polygon{fill:var(--c);fill-opacity:.13;stroke:var(--c);stroke-width:1.6;stroke-dasharray:5 4;vector-effect:non-scaling-stroke}
+.mpoly.on polygon{fill-opacity:.32;stroke-width:2.6;stroke-dasharray:none}
+.mroute{fill:none;stroke:#f0d79a;stroke-width:1.6;stroke-dasharray:6 5;vector-effect:non-scaling-stroke;opacity:.85}
+.mdraft{fill:#e0a03a;fill-opacity:.13;stroke:#e0a03a;stroke-width:1.6;stroke-dasharray:3 3;vector-effect:non-scaling-stroke}
+.mdraftband{fill:none;stroke:#e0a03a;stroke-width:1.4;stroke-dasharray:3 3;vector-effect:non-scaling-stroke;opacity:.8}
+.ms-pins{position:absolute;inset:0;pointer-events:none}
+.mpin{position:absolute;transform:translate(-50%,-50%);background:none;border:0;padding:7px;cursor:grab;line-height:0;color:inherit;pointer-events:auto}
+.regmode .mpin{pointer-events:none}
+.mpin .d{display:block;width:11px;height:14px;background:var(--c);border-radius:50% 50% 50% 50%/60% 60% 40% 40%;box-shadow:0 0 0 2px #0a0c10,0 0 12px var(--c)}
+.mpin .n{position:absolute;top:-5px;left:50%;transform:translateX(-50%);font:700 9px/12px system-ui;color:#0a0c10;background:var(--c);border-radius:99px;min-width:12px;padding:0 2px;pointer-events:none}
+.mpin .l{position:absolute;top:100%;left:50%;transform:translateX(-50%);font:600 11px/1.3 Georgia,serif;color:#f2ead8;white-space:nowrap;text-shadow:0 1px 4px #000,0 0 10px rgba(0,0,0,.9);pointer-events:none}
+.mpin.on .d{box-shadow:0 0 0 2px #e0a03a,0 0 20px var(--c)}
+.mpin.on .l{text-decoration:underline;text-underline-offset:3px}
+.ms-verts{position:absolute;inset:0;pointer-events:none}
+.mvert{position:absolute;width:12px;height:12px;transform:translate(-50%,-50%);background:#e0a03a;border:2px solid #0a0c10;border-radius:3px;cursor:grab;pointer-events:auto;padding:0;box-shadow:0 0 8px rgba(0,0,0,.7)}
+.mvert:hover{transform:translate(-50%,-50%) scale(1.35)}
+.ms-bar{display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.ms-modes{display:flex;gap:4px;background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:3px}
+.ms-modes button{border:0;background:none;padding:6px 14px;border-radius:8px;font-size:13px;color:var(--m)}
+.ms-modes button.on{background:var(--a);color:#14161a;font-weight:600}
+.ms-hint{color:var(--m);font-size:12.5px}
+.ms-arts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-height:264px;overflow:auto;padding:2px}
+.ms-arts button{padding:5px;border-radius:10px;background:none;border:1px solid transparent;cursor:pointer;text-align:left}
+.ms-arts .ph{display:flex;height:46px;align-items:center;justify-content:center;background:#12141a;border-radius:6px;font-size:18px;color:var(--m);overflow:hidden}
+.ms-arts img{display:block;width:100%;height:46px;object-fit:cover;border-radius:6px;background:#000}
+.ms-arts b{display:block;font-weight:500;font-size:10.5px;color:var(--m);line-height:1.3;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ms-arts button.on{border-color:var(--a);background:var(--s2)}
+.ms-arts button.on b{color:var(--a)}
+.msw{display:flex;gap:6px}
+.msw button{width:24px;height:24px;border-radius:50%;border:2px solid transparent;background:var(--c);cursor:pointer;padding:0;box-shadow:inset 0 0 0 1px rgba(0,0,0,.35)}
+.msw button.on{border-color:#fff;box-shadow:0 0 0 2px var(--c)}
+.ms-items{margin-top:18px;display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+.ms-sec>summary{cursor:pointer;color:var(--m);font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.05em;padding:2px 0}
+.ms-set h4{margin:16px 0 6px;font:700 11.5px system-ui;letter-spacing:.06em;text-transform:uppercase;color:var(--m)}
+.ms-set h4:first-child{margin-top:0}
+.ms-set .lab{margin:12px 0 3px;display:block}
+.mrow{display:flex;gap:8px;align-items:center;padding:5px 8px;border-radius:8px;cursor:pointer;border:1px solid transparent}
+.mrow:hover{background:var(--s2)}
+.mrow.on{background:var(--s2);border-color:var(--a)}
+.mrow>i{width:11px;height:11px;border-radius:50%;background:var(--c);flex:0 0 auto;box-shadow:0 0 8px var(--c)}
+.mrow>b{flex:1;font-weight:500;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mrow>em{font-style:normal;color:var(--m);font-size:11.5px;font-family:ui-monospace,Menlo,monospace}
+.mrow .x{border:0;background:none;color:var(--m);padding:0 2px;line-height:1}
+.mrow .x:hover{color:#e05040}
+.mform{border-top:1px dashed var(--b);margin-top:8px;padding-top:8px}
+.mform label{margin:8px 0 2px}
+.mp-read{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--warn)}
+.mp-posbtn{padding:4px 7px;font-size:11px;line-height:1}
+#mp_draw button[disabled]{opacity:.4;cursor:default}
 </style></head><body>
 <div id="app"><nav id="rail"><div class="logo"><svg class="lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6cf7a"/><stop offset="1" stop-color="#d9972c"/></linearGradient></defs><circle cx="50" cy="50" r="46.5" fill="none" stroke="url(#hg)" stroke-width="1.4"/><circle cx="50" cy="50" r="42" fill="none" stroke="url(#hg)" stroke-width="1.8" stroke-dasharray="0.1 3.15" stroke-linecap="round" opacity=".8"/><g transform="translate(6 6) scale(.88)"><path d="M26 65H74Q74 84 50 87Q26 84 26 65Z" fill="url(#hg)"/><path d="M41 87Q50 90 59 87L58 91H42Z" fill="url(#hg)"/><path d="M30 68H70" stroke="#14161a" stroke-width="1" opacity=".35"/><g fill="none" stroke="#e8b455" stroke-width="3.2" stroke-linecap="round"><path d="M50 65V33"/><path d="M45 65Q40 51 32 38"/><path d="M55 65Q60 51 68 38"/></g><g fill="none" stroke="#e8b455" stroke-width="1.8" stroke-linecap="round"><path d="M46.3 55H53.7M46.8 47H53.2M47.4 40H52.6"/></g><g fill="url(#hg)"><path transform="translate(32 38) rotate(-34)" d="M0 0Q-3.4-7 0-15Q3.4-7 0 0Z"/><path transform="translate(68 38) rotate(34)" d="M0 0Q-3.4-7 0-15Q3.4-7 0 0Z"/><path transform="translate(41.5 52) rotate(-62)" d="M0 0Q-2.2-4.5 0-9.5Q2.2-4.5 0 0Z"/><path transform="translate(58.5 52) rotate(62)" d="M0 0Q-2.2-4.5 0-9.5Q2.2-4.5 0 0Z"/><path transform="translate(43.5 45) rotate(-48)" d="M0 0Q-1.8-3.6 0-7.6Q1.8-3.6 0 0Z"/><path transform="translate(56.5 45) rotate(48)" d="M0 0Q-1.8-3.6 0-7.6Q1.8-3.6 0 0Z"/></g><path class="hm-drop" d="M50 8C58 18 59 25 50 32C41 25 42 18 50 8Z" fill="url(#hg)"/><path d="M50 14C54 20 54 24 50 28C46 24 46 20 50 14Z" fill="#fff4cf" opacity=".55"/><g fill="#f6cf7a"><circle class="hm-sp" cx="41" cy="24" r="1"/><circle class="hm-sp2" cx="59" cy="22" r="1"/></g></g></svg>Haoma editor</div><div id="rl"></div><div class="rbot"><div id="pend" class="pend" hidden><b></b><div class="row"><button class="pri" id="sa">Save all to files</button><button id="da">Discard</button></div></div><div id="branch"></div><button id="bundo">↶ Undo last change</button><button id="bpv">▶ Preview</button><button id="bchk">Check build</button><div id="hmsg" class="msg"></div></div></nav>
 <div id="panel"></div><div id="main"></div>
@@ -157,7 +219,7 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
  $('#dl').onclick=async()=>{if(!confirm('Mark '+p+' for deletion? (applied on Save, can be rolled back)'))return;if(files.includes(p)){setDraft(p,null);await push(p)}else{drafts.delete(p);await api('discard?path='+E(p),{method:'POST'});pend()}cur=null;render()};
  if(op)$('#tr').onclick=()=>{if(!allFiles().includes(op)){const t=hasFm?'---\n'+setK($('#fm').value,'title','TODO translate: '+getK($('#fm').value,'title'))+'\n---\n\nTranslate this page.\n':'Translate this page.\n';setDraft(op,t)}openFile(op)};
  if(md){const ins=t=>{const s=ta.selectionStart;ta.setRangeText(t,s,ta.selectionEnd,'end');ta.focus();prev();mark()};const wide=()=>{if(hasFm&&!$('#mw').checked){$('#mw').checked=true;$('#mw').dispatchEvent(new Event('input'))}};
-  $('#iL').onclick=()=>bGrid(t=>{ins(t);wide()});$('#iS').onclick=()=>bSlider(ins);$('#iI').onclick=()=>bInfobox(t=>{ins(t);wide()});$('#iF').onclick=()=>bFig(ins);$('#iP').onclick=()=>bPlay(ins);$('#iN').onclick=()=>bNote(ins,ta.value.slice(ta.selectionStart,ta.selectionEnd));$('#iM').onclick=()=>bMap(t=>{ins(t);wide()});$('#iV').onclick=()=>bVerse(ins);
+  $('#iL').onclick=()=>bGrid(t=>{ins(t);wide()});$('#iS').onclick=()=>bSlider(ins);$('#iI').onclick=()=>bInfobox(t=>{ins(t);wide()});$('#iF').onclick=()=>bFig(ins);$('#iP').onclick=()=>bPlay(ins);$('#iN').onclick=()=>bNote(ins,ta.value.slice(ta.selectionStart,ta.selectionEnd));$('#iM').onclick=()=>bMap({ins,ta,wide});$('#iV').onclick=()=>bVerse(ins);
   $('#tH').onclick=()=>wrap('\n## ','\n');$('#tB').onclick=()=>wrap('**','**');$('#tI').onclick=()=>wrap('*','*');$('#tQ').onclick=()=>wrap('\n> ','\n');$('#tL').onclick=()=>wrap('[','](https://)');
   $('#tA').onclick=()=>$('#fi').click();$('#fi').onchange=async()=>{const f=$('#fi').files[0];if(!f)return;const ext=(f.name.split('.').pop()||'').toLowerCase(),n=f.name.toLowerCase().replace(/[^a-z0-9.]+/g,'-');
    const img=['png','jpg','jpeg','gif','webp','svg'].includes(ext),au=['mp3','ogg','wav','m4a','mp4','webm'].includes(ext),dir=img?'img/media/':/^(mp4|webm)$/.test(ext)?'video/':au?'audio/':'library/';
@@ -205,7 +267,7 @@ async function pDrafts(){const r=(await api('drafts')).items;
  $('#dsa').onclick=()=>commit([...drafts.keys()],'Save '+drafts.size+' drafts');$('#dda').onclick=()=>{if(confirm('Discard all temporary drafts?'))discardPaths([...drafts.keys()])};
  document.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>openFile(b.dataset.o));document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>commit([b.dataset.s],'Save draft '+b.dataset.s));document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>discardPaths([b.dataset.x]))}
 /* ===== insert builders (slider, grid, infobox, figure, scroll-play, note) ===== */
-function modal(title,html,onOk){const o=document.createElement('div');o.className='ovl';o.innerHTML=`<div class="mdl"><div class="mh"><b>${title}</b><button class="x">✕</button></div><div class="mb">${html}</div><div class="mf"><button class="pri ok">Insert</button><button class="cn">Cancel</button><span class="msg" id="mm"></span></div></div>`;document.body.append(o);
+function modal(title,html,onOk,opts){opts=opts||{};const o=document.createElement('div');o.className='ovl';o.innerHTML=`<div class="mdl${opts.wide?' wide':''}"><div class="mh"><b>${title}</b><button class="x">✕</button></div><div class="mb">${html}</div><div class="mf"><button class="cn">Cancel</button><button class="pri ok">${opts.ok||'Insert'}</button><span class="msg" id="mm"></span></div></div>`;document.body.append(o);
  const close=()=>o.remove();o.querySelector('.x').onclick=o.querySelector('.cn').onclick=close;o.onclick=e=>{if(e.target===o)close()};
  o.querySelector('.ok').onclick=()=>{try{onOk(o);close()}catch(e){const m=o.querySelector('#mm');m.textContent=e.message;m.className='msg bad'}};return o}
 const MEDIA_RE=/\.(png|jpe?g|gif|webp|svg|mp4|webm)$/i,isVid=f=>/\.(mp4|webm)$/i.test(f),relp=f=>f.replace(/^static\//,''),qv=s=>String(s).replace(/"/g,'\\"').replace(/\s*\n\s*/g,' ').trim();
@@ -244,23 +306,300 @@ function bPlay(ins){const sel=[];
 function bNote(ins,selText){const m=modal('Insert hover note',`<label>Highlighted text</label><input type="text" id="m_nh" value="${esc(selText||'')}"><label>Note (appears above on hover / tap)</label><textarea id="m_nt" rows="3"></textarea>`,
   m=>{const h=m.querySelector('#m_nh').value.trim(),t=qv(m.querySelector('#m_nt').value);if(!h||!t)throw Error('Both the highlighted text and the note are required');ins(`{{< note text="${t}" >}}${h}{{< /note >}}`)})}
 /* ===== map builder ===== */
-function bMap(ins){const pins=[];
- const pinRow=(p,i)=>`<div class="row" style="margin:4px 0;gap:6px"><span class="msg" style="width:18px;margin:0">${i+1}.</span><input type="text" style="width:60px" data-pi="${i}" data-f="x" placeholder="x%" value="${esc(p.x||'')}"><input type="text" style="width:60px" data-pi="${i}" data-f="y" placeholder="y%" value="${esc(p.y||'')}"><input type="text" style="flex:2" data-pi="${i}" data-f="label" placeholder="Place name" value="${esc(p.label||'')}"><input type="text" style="flex:3" data-pi="${i}" data-f="note" placeholder="Description on hover" value="${esc(p.note||'')}"><input type="text" style="flex:2" data-pi="${i}" data-f="href" placeholder="Link to page (optional)" value="${esc(p.href||'')}"><select data-pi="${i}" data-f="color" style="width:72px">${['gold','fire','blood','teal','silver'].map(c=>`<option ${(p.color||'gold')===c?'selected':''}>${c}</option>`).join('')}</select><button type="button" data-xp="${i}">✕</button></div>`;
- const m=modal('Insert interactive myth map',
-  `<div class="two"><div><label>Map image (optional; leave empty for auto-generated parchment map — the ready-made maps are in img/maps/, e.g. world.svg, persia.svg)</label>${pickerHtml(false)}</div>
-  <div><label>Height</label><select id="m_mh"><option value="400px">400 px (compact)</option><option value="480px" selected>480 px (standard)</option><option value="600px">600 px (tall)</option><option value="360px">360 px (short)</option></select>
-  <label>Style</label><select id="m_mt"><option value="dark">Dark (default)</option><option value="sepia">Sepia (parchment light)</option></select>
-  <label>Caption (optional)</label><input type="text" id="m_mc">
-  <label style="display:flex;align-items:center;gap:8px;margin-top:8px"><input type="checkbox" id="m_mr"> Draw a dashed route joining the pins in the order listed</label></div></div>
-  <p style="margin:8px 0 4px;color:var(--m);font-size:12px">Pins — position is % from top-left corner of the map image</p>
-  <div id="m_pl"></div><button type="button" id="m_pa">+ Add pin</button>`,
-  m=>{const mid='map-'+nid();const src=sel[0]?relp(sel[0]):'';const h=m.querySelector('#m_mh').value,th=m.querySelector('#m_mt').value,cap=qv(m.querySelector('#m_mc').value),rt=m.querySelector('#m_mr').checked;
-   const pinsOut=pins.map(p=>`pin x="${p.x||'50%'}" y="${p.y||'50%'}" label="${qv(p.label||'Place')}"${p.note?` note="${qv(p.note)}"`:''}${p.href?` href="${qv(p.href)}"`:''}${p.color&&p.color!=='gold'?` color="${p.color}"`:''} /`).join('\n');
-   ins(`\n{{< map id="${mid}"${src?` src="${src}"`:''}${h!=='480px'?` height="${h}"`:''}${th!=='dark'?` theme="${th}"`:''}${rt?' route="auto"':''}${cap?` caption="${cap}"`:''} >}}\n${pinsOut}\n{{< /map >}}\n`)});
- const sel=[];
- const draw=()=>{const box=m.querySelector('#m_pl');box.innerHTML=pins.map(pinRow).join('');box.querySelectorAll('input,select').forEach(e=>e.oninput=e.onchange=()=>{pins[e.dataset.pi][e.dataset.f]=e.value});box.querySelectorAll('[data-xp]').forEach(b=>b.onclick=()=>{pins.splice(+b.dataset.xp,1);draw()})};
- m.querySelector('#m_pa').onclick=()=>{pins.push({x:'50%',y:'50%',label:'',note:'',href:'',color:'gold'});draw()};
- wirePicker(m.querySelector('.mp'),sel,false,x=>!isVid(x));draw()}
+/* ===== myth map studio ===== */
+const MAPCOL={gold:'#e0a03a',fire:'#e05030',blood:'#b02028',teal:'#3090a8',silver:'#9aacb8'};
+const MAPORD=['world','middle-east','persia','india','aegean','scandinavia'];
+function mattrs(s){const o={};let x,re=/([a-z]+)="([^"]*)"/g;while((x=re.exec(s)))o[x[1]]=x[2];return o}
+function parseMap(txt){
+ const h=/\{\{<\s*map\b([\s\S]*?)>\}\}/.exec(txt),A=mattrs(h?h[1]:''),st=h?h[0].length:0;
+ const cl=txt.indexOf('{{<',st),body=txt.slice(st,cl<0?txt.length:cl),pins=[],regions=[];
+ body.split('\n').forEach(l=>{const t=l.trim();
+  if(/^pin\b/.test(t)){const a=mattrs(t);pins.push({x:parseFloat(a.x)||50,y:parseFloat(a.y)||50,label:a.label||'',note:a.note||'',href:a.href||'',color:a.color||'gold'})}
+  else if(/^region\b/.test(t)){const a=mattrs(t);regions.push({pts:(a.points||'').split(/\s+/).map(s=>s.split(',').map(Number)).filter(p=>p.length===2&&isFinite(p[0])&&isFinite(p[1])),label:a.label||'',note:a.note||'',href:a.href||'',color:a.color||'gold'})}});
+ return{id:A.id||'',src:A.src||'',width:A.width||'100%',height:A.height||'480px',theme:A.theme||'dark',route:A.route||'',pulse:A.pulse!=='false',caption:A.caption||'',pins,regions};
+}
+async function mapDims(src){
+ if(!src)return{w:800,h:480};
+ if(/\.svg$/i.test(src))try{const v=/viewBox="([\d.\s,+-]+)"/.exec(await get('static/'+src));
+  if(v){const a=v[1].trim().split(/[\s,]+/).map(Number);if(a.length===4&&a[2]>0&&a[3]>0)return{w:a[2],h:a[3]}}}catch(e){}
+ return await new Promise(r=>{const i=new Image();i.onload=()=>r({w:i.naturalWidth||1200,h:i.naturalHeight||650});i.onerror=()=>r({w:1200,h:650});i.src=`/api/raw?path=${E('static/'+src)}&ws=1&t=${T}`});
+}
+const MAPFA=r=>/-fa(?=\.[a-z]+$)/i.test(r),MAPSTRIP=r=>r.replace(/-fa(?=\.[a-z]+$)/i,'');
+function bMap(env){
+ const {ins,ta,wide}=env,NS='http://www.w3.org/2000/svg';
+ const clamp=v=>Math.max(0,Math.min(100,Math.round((+v||0)*10)/10));
+ /* every map shortcode already on this page */
+ const blocks=[];{const re=/\{\{<\s*map\b[\s\S]*?\{\{<\s*\/map\s*>\}\}/g;let g;while((g=re.exec(ta.value)))blocks.push({s:g.index,e:g.index+g[0].length,t:g[0]})}
+ const pos=ta.selectionStart;let idx=blocks.findIndex(b=>pos>=b.s&&pos<=b.e);
+ const blank=()=>({id:'',src:'',width:'100%',height:'480px',theme:'dark',route:'',pulse:true,caption:'',pins:[],regions:[]});
+ let S=idx<0?blank():parseMap(blocks[idx].t);
+ let mode='pin',sel=null,draft=null,lastAdd=0,AR=5/3,langFA=/^content\/fa\//.test(cur||'');
+ /* ready-made artwork, grouped into EN / FA pairs */
+ const byBase={};
+ allFiles().filter(f=>/^static\/img\/maps\//.test(f)&&MEDIA_RE.test(f)).forEach(f=>{const r=relp(f),b=MAPSTRIP(r);(byBase[b]=byBase[b]||{})[MAPFA(r)?'fa':'en']=r});
+ const bases=Object.keys(byBase).sort((a,b)=>{const na=a.slice(a.lastIndexOf('/')+1),nb=b.slice(b.lastIndexOf('/')+1);const ia=MAPORD.indexOf(na),ib=MAPORD.indexOf(nb);return(ia<0?99:ia)-(ib<0?99:ib)||na.localeCompare(nb)});
+ const baseOf=src=>MAPSTRIP(src||'');
+ const pickSrc=b=>byBase[b]?(byBase[b][langFA?'fa':'en']||byBase[b][langFA?'en':'fa']||''):'';
+ const pages=[...new Set(allFiles().filter(f=>/^content\/.+\.md$/.test(f)).map(pageUrl).filter(Boolean))];
+ let m=null,el,cv,imgEl,ov,dynG,band,pw,vw;
+ const q=s=>m.querySelector(s),stErr=t=>{const n=q('#mm');if(n){n.textContent=t;n.className='msg bad'}};
+ const raw=f=>`/api/raw?path=${E('static/'+f)}&ws=1&t=${T}`;
+ const curObj=()=>!sel?null:(sel.t==='pin'?S.pins[sel.i]:S.regions[sel.i]);
+ const routePts=()=>!S.route?[]:(S.route==='auto'?S.pins.map(p=>[p.x,p.y])
+   :S.route.split(/\s+/).map(s=>s.split(',').map(Number)).filter(a=>a.length===2&&isFinite(a[0])&&isFinite(a[1])));
+ const HT=(l,c)=>l.map(v=>`<option value="${esc(v)}"${v===c?' selected':''}>${esc(v)}</option>`).join('');
+ const has=(l,c)=>l.includes(c)?l:l.concat([c]);
+ const ROV=!S.route?'none':S.route==='auto'?'auto':'custom';
+ const SET=`<h4>Artwork</h4>
+  <div class="ms-arts" id="mp_arts">
+   <button type="button" data-none data-s=""><span class="ph">◈</span><b>parchment</b></button>
+   ${bases.map(b=>{const f=pickSrc(b);return f?`<button type="button" data-b="${esc(b)}"><img src="${raw(f)}" alt=""><b>${esc(f.split('/').pop().replace(/\.[a-z]+$/i,''))}</b></button>`:''}).join('')}
+   <button type="button" id="mp_up"><span class="ph">＋</span><b>upload…</b></button>
+  </div>
+  <div class="two" style="gap:10px"><div><label class="lab">Label language</label><select id="mp_lang"><option value="en"${langFA?'':' selected'}>English</option><option value="fa"${langFA?' selected':''}>فارسی</option></select></div>
+  <div><label class="lab">Height</label><select id="mp_h">${HT(has(['360px','400px','440px','460px','480px','540px','560px','600px','640px'],S.height),S.height)}</select></div></div>
+  <div class="two" style="gap:10px"><div><label class="lab">Width</label><select id="mp_w">${HT(has(['100%','90%','80%','700px','900px'],S.width),S.width)}</select></div>
+  <div><label class="lab">Style</label><select id="mp_t"><option value="dark"${S.theme==='dark'?' selected':''}>Dark</option><option value="sepia"${S.theme==='sepia'?' selected':''}>Sepia</option></select></div></div>
+  <div class="two" style="gap:10px"><div><label class="lab">Pin rings</label><select id="mp_pu"><option value="1"${S.pulse?' selected':''}>Pulsing</option><option value="0"${S.pulse?'':' selected'}>Still</option></select></div>
+  <div><label class="lab">Route line</label><select id="mp_ro"><option value="none">None</option><option value="auto">Join pins in order</option><option value="custom">Custom points</option></select></div></div>
+  <input type="text" id="mp_rc" placeholder="58,54 54,47 28,38" style="margin-top:6px;font-family:ui-monospace,Menlo,monospace;display:${ROV==='custom'?'block':'none'}">
+  <label class="lab">Caption</label><input type="text" id="mp_cap" placeholder="What this map shows" value="${esc(S.caption)}">
+  <label class="lab">Map id</label><input type="text" id="mp_id" placeholder="generated automatically" value="${esc(S.id)}">
+  <datalist id="mp_pages">${pages.map(p=>`<option value="${esc(p)}">`).join('')}</datalist>`;
+ const HTML=`
+  ${blocks.length?`<div class="row" style="margin:0 0 12px;gap:8px"><label style="margin:0;white-space:nowrap">Map on this page</label><select id="mp_which" style="flex:1"><option value="-1">＋ New map</option>${blocks.map((b,i)=>{const a=parseMap(b.t);return `<option value="${i}"${i===idx?' selected':''}>${esc(a.id||'map #'+(i+1))} — ${a.pins.length} pin(s), ${a.regions.length} region(s)</option>`}).join('')}</select></div>`:''}
+  <div class="ms-grid">
+   <div>
+    <div class="ms-stage" id="mp_stage"></div>
+    <div class="ms-bar"><div class="ms-modes"><button type="button" data-mo="pin">📍 Pins</button><button type="button" data-mo="region">⬡ Regions</button></div><span class="ms-hint" id="mp_hint"></span></div>
+    <div class="ms-bar" id="mp_draw"><button type="button" class="pri" id="mp_new">✎ Start a new border</button><button type="button" id="mp_undo">↶ Corner</button><button type="button" id="mp_drop">Cancel border</button><button type="button" class="pri" id="mp_fin">✓ Close border</button><span class="msg" id="mp_dcount" style="margin:0"></span></div>
+    <div class="ms-items" id="mp_items"></div>
+   </div>
+   <div class="ms-set" id="mp_set">${SET}</div>
+  </div>`;
+
+ /* ---------- canvas ---------- */
+ function fit(){
+  if(!cv||!el)return;
+  const cs=getComputedStyle(el);
+  const availW=el.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);
+  if(availW<50)return;
+  const maxH=Math.max(240,Math.min(window.innerHeight*0.48,520)-parseFloat(cs.paddingTop)-parseFloat(cs.paddingBottom));
+  let w=availW,h=w/AR;if(h>maxH){h=maxH;w=h*AR}
+  cv.style.width=Math.round(w)+'px';cv.style.height=Math.round(h)+'px';
+ }
+ const refit=()=>mapDims(S.src).then(d=>{AR=d.w/d.h;fit()}).catch(()=>{});
+ function buildStage(){
+  el=q('#mp_stage');el.innerHTML='';
+  cv=document.createElement('div');cv.className='ms-canvas';
+  imgEl=document.createElement('img');imgEl.alt='';cv.append(imgEl);
+  const ph=document.createElement('span');ph.className='noartph';ph.textContent='Procedural parchment map — choose artwork below, or upload your own';ph.style.display='none';cv.append(ph);
+  ov=document.createElementNS(NS,'svg');ov.setAttribute('class','ms-ov');
+  ov.setAttribute('viewBox','0 0 100 100');ov.setAttribute('preserveAspectRatio','none');
+  dynG=document.createElementNS(NS,'g');ov.append(dynG);
+  band=document.createElementNS(NS,'polyline');band.setAttribute('class','mdraftband');band.style.display='none';ov.append(band);
+  cv.append(ov);
+  pw=document.createElement('div');pw.className='ms-pins';cv.append(pw);
+  vw=document.createElement('div');vw.className='ms-verts';cv.append(vw);
+  el.append(cv);wire();
+ }
+ function syncGeom(){
+  if(!cv)return;
+  const ph=cv.querySelector('.noartph');
+  if(S.src){imgEl.style.display='';if(ph)ph.style.display='none';cv.classList.remove('noart');
+   if(imgEl.dataset.s!==S.src){imgEl.dataset.s=S.src;imgEl.src=raw(S.src)}}
+  else{imgEl.style.display='none';imgEl.removeAttribute('src');delete imgEl.dataset.s;ph.style.display='';cv.classList.add('noart')}
+  dynG.textContent='';
+  const rp=routePts();
+  if(rp.length>1){const pl=document.createElementNS(NS,'polyline');pl.setAttribute('class','mroute');pl.setAttribute('points',rp.map(p=>p.join(',')).join(' '));dynG.append(pl)}
+  S.regions.forEach((R,i)=>{if(R.pts.length<3)return;
+   const g=document.createElementNS(NS,'g');g.setAttribute('class','mpoly'+(sel&&sel.t==='reg'&&sel.i===i?' on':''));g.dataset.i=i;
+   g.style.setProperty('--c',MAPCOL[R.color]||MAPCOL.gold);
+   const pg=document.createElementNS(NS,'polygon');pg.setAttribute('points',R.pts.map(p=>p[0]+','+p[1]).join(' '));g.append(pg);dynG.append(g)});
+  if(draft&&draft.length){const g=document.createElementNS(NS,'g');g.setAttribute('class','mdraft');
+   const pg=document.createElementNS(NS,'polygon');pg.setAttribute('points',draft.map(p=>p[0]+','+p[1]).join(' '));g.append(pg);dynG.append(g);
+   band.setAttribute('points',draft.map(p=>p[0]+','+p[1]).join(' '));band.style.display=''}
+  else band.style.display='none';
+  pw.textContent='';
+  S.pins.forEach((P,i)=>{const b=document.createElement('button');b.type='button';
+   b.className='mpin'+(sel&&sel.t==='pin'&&sel.i===i?' on':'');
+   b.style.left=P.x+'%';b.style.top=P.y+'%';b.style.setProperty('--c',MAPCOL[P.color]||MAPCOL.gold);b.dataset.i=i;
+   b.innerHTML=`<span class="d"></span><span class="n">${i+1}</span><span class="l">${esc(P.label||'pin '+(i+1))}</span>`;
+   pw.append(b)});
+  vw.textContent='';
+  const vh=(k,r,i,p)=>{const b=document.createElement('button');b.type='button';b.className='mvert';
+   b.dataset.k=k;b.dataset.r=r;b.dataset.i=i;b.style.left=p[0]+'%';b.style.top=p[1]+'%';return b};
+  if(draft)draft.forEach((p,i)=>vw.append(vh('d','',i,p)));
+  if(mode==='region'&&sel&&sel.t==='reg'){const R=S.regions[sel.i];if(R)R.pts.forEach((p,i)=>vw.append(vh('r',sel.i,i,p)))}
+  cv.classList.toggle('regmode',mode==='region');
+  cv.classList.toggle('drawing',!!draft);
+  const o=curObj();
+  const rd=q('#mp_pos');if(rd&&o&&sel&&sel.t==='pin')rd.textContent=o.x.toFixed(1)+'%, '+o.y.toFixed(1)+'%';
+  const re=q('.mrow.on>em');if(re&&o)re.textContent=sel.t==='pin'?o.x.toFixed(1)+','+o.y.toFixed(1):o.pts.length+' pts';
+ }
+ function wire(){
+  const at=e=>{const r=cv.getBoundingClientRect();return[clamp((e.clientX-r.left)/r.width*100),clamp((e.clientY-r.top)/r.height*100)]};
+  let dg=null;
+  cv.addEventListener('pointerdown',e=>{
+   const vt=e.target.closest('.mvert');
+   if(vt){dg={k:'v',kind:vt.dataset.k,r:vt.dataset.r,i:+vt.dataset.i};cv.setPointerCapture(e.pointerId);e.preventDefault();return}
+   const pg=e.target.closest('.mpoly');
+   if(pg&&!draft){sel={t:'reg',i:+pg.dataset.i};mode='region';redraw();return}
+   const pn=e.target.closest('.mpin');
+   if(pn){sel={t:'pin',i:+pn.dataset.i};mode='pin';draft=null;dg={k:'p',i:+pn.dataset.i};cv.setPointerCapture(e.pointerId);redraw();return}
+   const p=at(e);
+   if(mode==='region'){if(!draft)draft=[];draft.push(p);lastAdd=Date.now();sel=null;redraw()}
+   else{S.pins.push({x:p[0],y:p[1],label:'',note:'',href:'',color:'gold'});sel={t:'pin',i:S.pins.length-1};redraw()}
+  });
+  cv.addEventListener('pointermove',e=>{
+   if(dg){const p=at(e);
+    if(dg.k==='p'){S.pins[dg.i].x=p[0];S.pins[dg.i].y=p[1]}
+    else if(dg.kind==='r'){S.regions[+dg.r].pts[dg.i]=p}
+    else if(draft)draft[dg.i]=p;
+    syncGeom();return}
+   if(draft){const p=at(e);band.setAttribute('points',draft.map(z=>z[0]+','+z[1]).concat([p[0]+','+p[1]]).join(' '))}
+  });
+  cv.addEventListener('pointerup',()=>{dg=null});
+  cv.addEventListener('pointercancel',()=>{dg=null});
+  cv.addEventListener('dblclick',()=>{if(!draft)return;if(Date.now()-lastAdd<600&&draft.length>2){draft.pop();draft.pop()}finish()});
+ }
+ function finish(){
+  if(!draft||draft.length<3){stErr('A border needs at least 3 corners.');return}
+  S.regions.push({pts:draft.map(p=>[p[0],p[1]]),label:'',note:'',href:'',color:'gold'});
+  sel={t:'reg',i:S.regions.length-1};draft=null;mode='region';redraw();
+ }
+
+ /* ---------- panels ---------- */
+ const sw=o=>`<div class="msw">${Object.keys(MAPCOL).map(c=>`<button type="button" class="${o.color===c?'on':''}" data-c="${c}" style="--c:${MAPCOL[c]}" title="${c}"></button>`).join('')}</div>`;
+ const formFor=(o,t)=>`<div class="mform">
+  <label>Label</label><input type="text" data-f="label" value="${esc(o.label)}" placeholder="${t==='pin'?'Place name':'Region name'}">
+  <label>Description shown on hover</label><input type="text" data-f="note" value="${esc(o.note)}" placeholder="What happens there">
+  <label>Link (optional)</label><input type="text" data-f="href" list="mp_pages" value="${esc(o.href)}" placeholder="/cultures/iranian/">
+  <label>Colour</label>${sw(o)}
+  ${t==='pin'?`<label>Position on the map</label><div class="row" style="gap:6px;flex-wrap:wrap"><span class="mp-read" id="mp_pos">${o.x.toFixed(1)}%, ${o.y.toFixed(1)}%</span><button type="button" class="mp-posbtn" data-nud="x-">−X</button><button type="button" class="mp-posbtn" data-nud="x+">+X</button><button type="button" class="mp-posbtn" data-nud="y-">−Y</button><button type="button" class="mp-posbtn" data-nud="y+">+Y</button></div>`
+   :`<label>Corners</label><div class="row" style="gap:6px;flex-wrap:wrap"><span class="mp-read">${o.pts.length} corners (need 3+)</span><button type="button" class="mp-posbtn" data-addv="1">＋ Corner</button></div>`}
+  </div>`;
+ function drawItems(){
+  const box=q('#mp_items');
+  const a=box.querySelector('#ms_p1'),b=box.querySelector('#ms_p2'),oP=a?a.open:1,oR=b?b.open:1;
+  const row=(t,i,o)=>`<div class="mrow${sel&&sel.t===t&&sel.i===i?' on':''}" data-t="${t}" data-i="${i}"><i style="--c:${MAPCOL[o.color]||MAPCOL.gold}"></i><b>${esc(o.label||(t==='pin'?'Pin '+(i+1):'Region '+(i+1)))}</b><em>${t==='pin'?o.x.toFixed(1)+','+o.y.toFixed(1):o.pts.length+' pts'}</em><button type="button" class="x" data-del="1" title="Delete">✕</button></div>`;
+  box.innerHTML=`
+  <details class="ms-sec" id="ms_p1"${oP?' open':''}><summary>Pins (${S.pins.length})</summary>
+   <div style="margin-top:8px">${S.pins.map((p,i)=>row('pin',i,p)).join('')||'<p class="msg" style="margin:6px 0">Click the map to drop a pin.</p>'}</div>
+   <div class="row" style="margin-top:8px"><button type="button" id="mp_ap">+ Add pin at the centre</button></div>
+   ${sel&&sel.t==='pin'?formFor(S.pins[sel.i],'pin'):''}
+  </details>
+  <details class="ms-sec" id="ms_p2"${oR?' open':''}><summary>Regions &amp; borders (${S.regions.length})</summary>
+   <div style="margin-top:8px">${S.regions.map((r,i)=>row('reg',i,r)).join('')||'<p class="msg" style="margin:6px 0">The shaded, labelled areas of the site maps — click one on the map to edit it.</p>'}</div>
+   <div class="row" style="margin-top:8px"><button type="button" id="mp_ag">✎ Draw a new border</button></div>
+   ${sel&&sel.t==='reg'?formFor(S.regions[sel.i],'reg'):''}
+  </details>`;
+  box.querySelectorAll('.mrow').forEach(r=>r.onclick=e=>{if(e.target.closest('[data-del]'))return;
+   sel={t:r.dataset.t,i:+r.dataset.i};mode=sel.t==='reg'?'region':'pin';if(mode==='pin')draft=null;redraw()});
+  box.querySelectorAll('[data-del]').forEach(x=>x.onclick=()=>{const r=x.closest('.mrow'),t=r.dataset.t,i=+r.dataset.i;
+   if(t==='pin')S.pins.splice(i,1);else S.regions.splice(i,1);sel=null;redraw()});
+  box.querySelectorAll('[data-f]').forEach(f=>f.oninput=()=>{const o=curObj();if(!o)return;o[f.dataset.f]=f.value;
+   const rb=box.querySelector('.mrow.on>b');if(rb)rb.textContent=o.label||(sel.t==='pin'?'Pin '+(sel.i+1):'Region '+(sel.i+1));syncGeom()});
+  box.querySelectorAll('[data-c]').forEach(x=>x.onclick=()=>{const o=curObj();if(!o)return;o.color=x.dataset.c;redraw()});
+  box.querySelectorAll('[data-nud]').forEach(x=>x.onclick=()=>{const o=curObj();if(!o)return;const d=x.dataset.nud,s=d[1]==='+'?1:-1;
+   if(d[0]==='x')o.x=clamp(o.x+s);else o.y=clamp(o.y+s);syncGeom()});
+  box.querySelectorAll('[data-addv]').forEach(x=>x.onclick=()=>{const o=curObj();if(!o)return;o.pts.push([50,50]);redraw()});
+  const ap=q('#mp_ap');if(ap)ap.onclick=()=>{S.pins.push({x:50,y:50,label:'',note:'',href:'',color:'gold'});sel={t:'pin',i:S.pins.length-1};mode='pin';redraw()};
+  const ag=q('#mp_ag');if(ag)ag.onclick=startDraw;
+ }
+ function drawArt(){
+  const c=q('#mp_arts');if(!c)return;
+  c.querySelectorAll('button[data-b]').forEach(b=>{
+   const k=b.dataset.b,s=(S.src&&baseOf(S.src)===k)?S.src:pickSrc(k);
+   if(!s)return;
+   b.dataset.s=s;
+   const im=b.querySelector('img');if(im&&im.getAttribute('src')!==raw(s))im.setAttribute('src',raw(s));
+   const lb=b.querySelector('b');if(lb)lb.textContent=s.split('/').pop().replace(/\.[a-z]+$/i,'');
+   b.classList.toggle('on',S.src===s);
+  });
+  const n=c.querySelector('button[data-none]');if(n)n.classList.toggle('on',!S.src);
+  const want=(S.src&&!(baseOf(S.src) in byBase))?S.src:'';
+  let cu=c.querySelector('button[data-custom]');
+  if(want&&!cu){cu=document.createElement('button');cu.type='button';cu.dataset.custom='1';c.append(cu)}
+  if(cu){if(!want)cu.remove();else{cu.dataset.s=want;cu.innerHTML=`<span class="ph">◈</span><b>${esc(want.split('/').pop())}</b>`;cu.classList.toggle('on',S.src===want)}}
+ }
+ function drawBars(){
+  m.querySelectorAll('[data-mo]').forEach(b=>b.classList.toggle('on',b.dataset.mo===mode));
+  const dr=!!draft;
+  q('#mp_hint').textContent=mode==='pin'
+   ? 'Click the map to drop a pin — drag it to fine-tune, click it to edit.'
+   : dr?'Adding corners — drag them to reshape, then Close border (Esc cancels).'
+       : 'Click a shaded area to select it, or press “Start a new border” and click to add corners.';
+  const d=q('#mp_draw');d.style.display=mode==='region'?'flex':'none';
+  q('#mp_new').style.display=dr?'none':'';
+  ['mp_undo','mp_drop','mp_fin'].forEach(i=>q('#'+i).style.display=dr?'':'none');
+  q('#mp_undo').disabled=!draft||!draft.length;
+  q('#mp_fin').disabled=!draft||draft.length<3;
+  q('#mp_dcount').textContent=dr?draft.length+' corners (need 3+)':'';
+ }
+ const redraw=()=>{syncGeom();drawItems();drawBars();drawArt()};
+ const startDraw=()=>{draft=[];sel=null;mode='region';redraw()};
+ function syncSet(){
+  q('#mp_h').value=S.height;q('#mp_w').value=S.width;q('#mp_t').value=S.theme;q('#mp_pu').value=S.pulse?'1':'0';
+  q('#mp_cap').value=S.caption;q('#mp_id').value=S.id;
+  const v=!S.route?'none':S.route==='auto'?'auto':'custom',rc=q('#mp_rc');
+  q('#mp_ro').value=v;rc.style.display=v==='custom'?'block':'none';rc.value=v==='custom'?S.route:'';
+  const lg=q('#mp_lang');if(lg)lg.value=langFA?'fa':'en';
+ }
+
+ /* ---------- mount ---------- */
+ m=modal(idx<0?'Insert myth map':'Edit myth map',HTML,x=>{
+  if(draft&&draft.length>=3)finish();
+  if(draft)throw Error('The border you are drawing needs at least 3 corners — add more, or press “Cancel border”.');
+  const id=S.id||('map-'+nid());
+  let a=`id="${id}"`;
+  if(S.src)a+=` src="${S.src}"`;
+  if(S.width!=='100%')a+=` width="${S.width}"`;
+  if(S.height!=='480px')a+=` height="${S.height}"`;
+  if(S.theme!=='dark')a+=` theme="${S.theme}"`;
+  if(S.route==='auto')a+=' route="auto"';else if(S.route)a+=` route="${S.route}"`;
+  if(S.caption)a+=` caption="${qv(S.caption)}"`;
+  if(!S.pulse)a+=' pulse="false"';
+  const body=[];
+  S.regions.forEach(R=>{if(R.pts.length<3)return;
+   let l=`region points="${R.pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')}" label="${qv(R.label||'Region')}"`;
+   if(R.note)l+=` note="${qv(R.note)}"`;if(R.href)l+=` href="${qv(R.href)}"`;if(R.color!=='gold')l+=` color="${R.color}"`;body.push(l+' /')});
+  S.pins.forEach(P=>{let l=`pin x="${P.x.toFixed(1)}%" y="${P.y.toFixed(1)}%" label="${qv(P.label||'Place')}"`;
+   if(P.note)l+=` note="${qv(P.note)}"`;if(P.href)l+=` href="${qv(P.href)}"`;if(P.color!=='gold')l+=` color="${P.color}"`;body.push(l+' /')});
+  const out=`{{< map ${a} >}}\n${body.join('\n')}\n{{< /map >}}`;
+  if(idx>=0){ta.setRangeText(out,blocks[idx].s,blocks[idx].e,'end');ta.focus();ins('')}
+  else ins('\n'+out+'\n');
+  wide();
+ },{wide:1,ok:idx<0?'Insert map':'Update map'});
+
+ /* wiring */
+ buildStage();redraw();refit();
+ m.querySelectorAll('[data-mo]').forEach(b=>b.onclick=()=>{mode=b.dataset.mo;draft=null;redraw()});
+ q('#mp_new').onclick=startDraw;
+ q('#mp_undo').onclick=()=>{if(draft&&draft.length){draft.pop();redraw()}};
+ q('#mp_drop').onclick=()=>{draft=null;sel=null;redraw()};
+ q('#mp_fin').onclick=finish;
+ q('#mp_arts').onclick=e=>{const b=e.target.closest('button[data-s]');if(!b)return;S.src=b.dataset.s||'';redraw();refit()};
+ q('#mp_up').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='image/*';
+  i.onchange=async()=>{if(!i.files.length)return;try{const r=await uploadMedia([...i.files]);S.src=relp(r[0]);redraw();refit()}catch(e){stErr(e.message)}};i.click()};
+ q('#mp_lang').onchange=e=>{langFA=e.target.value==='fa';const b=baseOf(S.src);if(byBase[b])S.src=pickSrc(b);redraw();refit()};
+ q('#mp_h').onchange=e=>S.height=e.target.value;
+ q('#mp_w').onchange=e=>S.width=e.target.value;
+ q('#mp_t').onchange=e=>S.theme=e.target.value;
+ q('#mp_pu').onchange=e=>S.pulse=e.target.value==='1';
+ q('#mp_ro').onchange=e=>{const v=e.target.value,rc=q('#mp_rc');
+  if(v==='none')S.route='';else if(v==='auto')S.route='auto';else{S.route=rc.value||'50,50 60,60';rc.focus()}
+  rc.style.display=v==='custom'?'block':'none';syncGeom()};
+ q('#mp_rc').oninput=e=>{S.route=e.target.value;syncGeom()};
+ q('#mp_cap').oninput=e=>S.caption=e.target.value;
+ q('#mp_id').oninput=e=>S.id=e.target.value;
+ const wsel=q('#mp_which');
+ if(wsel)wsel.onchange=()=>{idx=+wsel.value;S=idx<0?blank():parseMap(blocks[idx].t);sel=null;draft=null;mode='pin';syncSet();redraw();refit()};
+ const kd=e=>{if(!document.body.contains(m)){document.removeEventListener('keydown',kd);return}
+  if(e.key==='Escape'&&draft){e.preventDefault();draft=null;redraw()}};
+ document.addEventListener('keydown',kd);
+ window.addEventListener('resize',fit);
+}
 function bVerse(ins){const m=modal('Insert couplets',`<p class="msg" style="margin:0">One couplet per line. Separate the two hemistichs with a vertical bar ( | ). The first hemistich sits on the reading-start side.</p><label>Language</label><select id="m_vg"><option value="">English / Latin</option><option value="fa">فارسی (Nastaliq)</option></select><label>Couplets</label><textarea id="m_vl" rows="6" dir="auto"></textarea><label>Source (optional)</label><input type="text" id="m_vs">`,
   m=>{const t=m.querySelector('#m_vl').value.trim();if(!t)throw Error('Write at least one line');const g=m.querySelector('#m_vg').value,so=qv(m.querySelector('#m_vs').value);ins(`\n{{< verse${g?` lang="${g}"`:''}${so?` source="${so}"`:''} >}}\n${t}\n{{< /verse >}}\n`)})}
 /* ===== history / rollback ===== */
