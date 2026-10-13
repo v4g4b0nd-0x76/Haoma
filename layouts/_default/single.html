@@ -1,6 +1,6 @@
 {{ define "main" }}
 <div class="layout{{ if not .Params.culture }} solo{{ end }}">{{ partial "sidebar.html" . }}
-<article{{ if .Params.wide }} class="wide"{{ end }}>
+<article class="{{ if .Params.wide }}wide{{ end }}{{ if .Params.dropcap }} dc{{ end }}">
 {{ partial "tools.html" . }}{{ partial "crumbs.html" . }}
 <h1>{{ .Title }}</h1>
 {{ with .Params.grade }}<span class="chip">{{ . }}</span>{{ end }}{{ with .Params.reviewed }}<span class="muted">{{ i18n "reviewed" }} {{ . }}</span>{{ end }}

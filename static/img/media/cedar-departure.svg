@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-label="Gilgamesh and Enkidu leave Uruk at dawn">
+<!-- original art for this project (like the rest of static/img): dawn outside the gate of Uruk -->
+<defs>
+  <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a1626"/><stop offset=".55" stop-color="#3a2436"/><stop offset="1" stop-color="#6e3a2e"/></linearGradient>
+  <radialGradient id="sun" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffd27a"/><stop offset=".6" stop-color="#e0913a"/><stop offset="1" stop-color="#e0913a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="grd" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#241c14"/><stop offset="1" stop-color="#120e0a"/></linearGradient>
+</defs>
+<rect width="960" height="540" fill="url(#sky)"/>
+<circle cx="700" cy="300" r="150" fill="url(#sun)" opacity=".9"/>
+<circle cx="700" cy="300" r="46" fill="#ffdf9a" opacity=".95"/>
+<g fill="#0d0a10" opacity=".9">
+  <!-- city wall and gate of Uruk -->
+  <path d="M0 330h60v-22h14v22h30v-30h14v30h44v-22h14v22h56v-30h14v30h30l-6-64-26-40-28 40z"/>
+  <rect x="0" y="330" width="278" height="8"/>
+  <rect x="30" y="300" width="10" height="26"/><rect x="96" y="292" width="10" height="34"/><rect x="226" y="300" width="10" height="26"/>
+</g>
+<!-- ziggurat behind the wall -->
+<g fill="#0d0a10"><path d="M120 246h120l-10 34h-100zM132 214h96l-8 32h-80zM146 190h68l-6 24h-56zM164 190l10-24 10 24z"/></g>
+<!-- date palms -->
+<g fill="#0d0a10"><path d="M320 338l4-70 4 70zM324 272q-24-12-40-2 22-2 40 6zM324 272q24-12 40-2-22-2-40 6zM324 268q-10-24-28-32 24 4 30 24zM324 268q12-24 30-32-26 4-32 24z"/></g>
+<path d="M0 338h960v202H0z" fill="url(#grd)"/>
+<path d="M0 338q240 18 480 6t480 4v-10H0z" fill="#2c2118"/>
+<!-- the two heroes walking toward the rising sun -->
+<g fill="#0d0a10">
+  <path d="M556 470l6-52q2-14 12-14t12 14l6 52-8 2-4-24-2 40h-8l-2-40-4 24zM568 402a7 7 0 1 1 .1 0z"/>
+  <path d="M612 474l7-60q3-16 13-16t13 16l7 60-9 2-5-28-2 46h-8l-2-46-5 28zM626 394a8 8 0 1 1 .1 0z"/>
+  <rect x="646" y="380" width="4" height="96" rx="2"/><path d="M648 372l8 14h-16z"/>
+</g>
+<g fill="#e0a03a" opacity=".8"><circle cx="120" cy="392" r="3"/><circle cx="300" cy="420" r="2.4"/><circle cx="820" cy="404" r="3"/><circle cx="880" cy="440" r="2"/></g>
+<rect width="960" height="540" fill="none"/>
+</svg>

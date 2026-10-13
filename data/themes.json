@@ -1,6 +1,74 @@
 {
-  "base":    {"accent":"#9aa3b5","bg":"#14161a","surface":"#1c1f25","border":"#2a2e36","text":"#c9ccd3","muted":"#8a8f9a","anim":"fall","pattern":"none","glyphs":"","banner":"base.svg"},
-  "norse":   {"accent":"#7fa8c9","bg":"#12161c","surface":"#1a2029","border":"#273241","text":"#c9ccd3","muted":"#8a8f9a","anim":"fall","pattern":"none","glyphs":"ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ","banner":"norse.svg"},
-  "greek":   {"accent":"#c98a5a","bg":"#14161a","surface":"#1c1f25","border":"#2a2e36","text":"#c9ccd3","muted":"#8a8f9a","anim":"drift","pattern":"meander","glyphs":"","banner":""},
-  "iranian": {"accent":"#e0a03a","bg":"#171412","surface":"#201b18","border":"#342d27","text":"#d1c9c0","muted":"#968c82","anim":"rise","pattern":"rosette","glyphs":"","banner":"iranian.svg"}
+  "base": {
+    "accent": "#9aa3b5",
+    "bg": "#14161a",
+    "surface": "#1c1f25",
+    "border": "#2a2e36",
+    "text": "#c9ccd3",
+    "muted": "#8a8f9a",
+    "anim": "fall",
+    "pattern": "none",
+    "glyphs": "",
+    "banner": "base.svg"
+  },
+  "norse": {
+    "accent": "#7fa8c9",
+    "bg": "#12161c",
+    "surface": "#1a2029",
+    "border": "#273241",
+    "text": "#c9ccd3",
+    "muted": "#8a8f9a",
+    "anim": "fall",
+    "pattern": "none",
+    "glyphs": "ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ",
+    "banner": "norse.svg"
+  },
+  "greek": {
+    "accent": "#c98a5a",
+    "bg": "#14161a",
+    "surface": "#1c1f25",
+    "border": "#2a2e36",
+    "text": "#c9ccd3",
+    "muted": "#8a8f9a",
+    "anim": "drift",
+    "pattern": "meander",
+    "glyphs": "",
+    "banner": "greek.svg"
+  },
+  "iranian": {
+    "accent": "#e0a03a",
+    "bg": "#171412",
+    "surface": "#201b18",
+    "border": "#342d27",
+    "text": "#d1c9c0",
+    "muted": "#968c82",
+    "anim": "rise",
+    "pattern": "rosette",
+    "glyphs": "•  𐎠𐎪𐎥 𐎡𐎠𐎼𐎾𐎥𐎢𐏃 𐎿𐎦𐎠𐎹𐎡𐎡𐎹 𐎥𐎪𐎼𐎥 𐎿𐎦𐎠𐎹𐎡𐎡𐎹 𐎿𐎦𐎠𐎹𐎡𐎡𐎹𐎠𐎾𐎠𐎥 𐎿𐎦𐎠𐎹𐎡𐎡𐎹 𐎢𐎠𐎼𐎿𐎡𐎹",
+    "banner": "iranian-epic-derafsh.svg"
+  },
+  "mesopotamian": {
+    "accent": "#6f8fd6",
+    "bg": "#12141b",
+    "surface": "#1a1e29",
+    "border": "#2a3042",
+    "text": "#cfd2da",
+    "muted": "#8e93a3",
+    "anim": "drift",
+    "pattern": "zigzag",
+    "glyphs": "",
+    "banner": "mesopotamian.svg"
+  },
+  "indian": {
+    "accent": "#d9708f",
+    "bg": "#15121b",
+    "surface": "#1e1a27",
+    "border": "#312a3d",
+    "text": "#d3ccd8",
+    "muted": "#968da0",
+    "anim": "fall",
+    "pattern": "waves",
+    "glyphs": "",
+    "banner": "indian.svg"
+  }
 }

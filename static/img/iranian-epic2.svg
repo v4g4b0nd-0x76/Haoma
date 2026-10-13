@@ -1,0 +1,397 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice">
+<!-- Refs: Mehr sun disc (Mihr Yasht); Simurgh over the Alborz; Damavand with smoke and coils (Zahhak chained);
+     Derafsh Kaviani — the royal standard of the Shahanshahs, originally Kaveh the blacksmith's leather apron
+     (charmed/jewelled with precious stones by Fereydoun; green, yellow and red stripes; gold fringe; central sun disc);
+     Rostam on Rakhsh with his mace; the White Div and eyes of divs in the rocks; Zarathustra before the fire;
+     Ahriman as a serpent piercing the sky; creeping mist = evil (shar, druj); cypress trees -->
+<style>
+.rays{animation:sp 140s linear infinite;transform-box:fill-box;transform-origin:center}@keyframes sp{to{transform:rotate(360deg)}}
+.glow{animation:pl 7s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes pl{to{opacity:.5;transform:scale(1.1)}}
+.sim{animation:fl 12s ease-in-out infinite alternate}@keyframes fl{to{transform:translate(-30px,-8px)}}
+.flag{animation:wv 4.5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:left center}@keyframes wv{from{transform:skewX(1deg) scaleX(1)}to{transform:skewX(-2deg) scaleX(0.97) skewY(0.8deg)}}
+.fringe{animation:fr 4.5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:top center}@keyframes fr{from{transform:skewX(1deg)}to{transform:skewX(-2deg) scaleX(0.97)}}
+.sm{animation:up 10s ease-out infinite;opacity:0;transform-box:fill-box;transform-origin:center}.s2{animation-delay:-3.3s}.s3{animation-delay:-6.6s}
+@keyframes up{0%{opacity:0;transform:translate(0,0) scale(.6)}20%{opacity:.32}100%{opacity:0;transform:translate(16px,-74px) scale(2.3)}}
+.em{animation:rs 9s linear infinite;opacity:0}.e2{animation-duration:12s;animation-delay:-4s}.e3{animation-duration:15s;animation-delay:-8s}
+@keyframes rs{0%{transform:translateY(0);opacity:0}15%{opacity:.8}100%{transform:translateY(-170px) translateX(18px);opacity:0}}
+.rk{animation:bb 3.2s ease-in-out infinite alternate}@keyframes bb{to{transform:translateY(-1.6px)}}
+.ah{animation:sl 20s ease-in-out infinite alternate}@keyframes sl{to{transform:translate(26px,7px)}}
+.pu2{animation:p2 5s ease-in-out infinite alternate}@keyframes p2{to{opacity:.2}}
+.ey{animation:bk 9s ease-in-out infinite;opacity:0}.y2{animation-delay:-3s}.y3{animation-delay:-6s}@keyframes bk{0%,70%,100%{opacity:0}78%,92%{opacity:.75}}
+.ms{animation:md 24s ease-in-out infinite alternate}.m2{animation-duration:30s;animation-delay:-10s}@keyframes md{to{transform:translateX(60px)}}
+.fk{animation:fq 1.3s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}@keyframes fq{to{transform:scale(.8,1.12)}}
+.sk{animation:sk 5.5s ease-out infinite;opacity:0}.k2{animation-delay:-1.8s}.k3{animation-delay:-3.6s}@keyframes sk{0%{opacity:0;transform:translateY(0)}20%{opacity:.85}100%{opacity:0;transform:translateY(-38px)}}
+.t0{animation:tw 4s ease-in-out infinite alternate}.t1{animation:tw 6s ease-in-out infinite alternate-reverse}@keyframes tw{to{opacity:.15}}
+.gem{animation:gm 3s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes gm{to{opacity:0.4}}
+.gem2{animation:gm2 4s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes gm2{to{opacity:0.3}}
+.sunr{animation:sp 80s linear infinite;transform-box:fill-box;transform-origin:center}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<defs>
+  <linearGradient id="s" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="#130f26"/>
+    <stop offset=".55" stop-color="#3d2336"/>
+    <stop offset="1" stop-color="#a8672f"/>
+  </linearGradient>
+  <radialGradient id="g"><stop offset="0" stop-color="#ffd27a"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient>
+  <radialGradient id="ms"><stop offset="0" stop-color="#0a0612" stop-opacity=".6"/><stop offset="1" stop-color="#0a0612" stop-opacity="0"/></radialGradient>
+  <!-- Derafsh Kaviani flag gradient — three horizontal stripes (green, yellow, red per classical accounts) -->
+  <linearGradient id="dfk" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0"    stop-color="#2a6e3a"/>
+    <stop offset="0.33" stop-color="#2a6e3a"/>
+    <stop offset="0.33" stop-color="#c8a228"/>
+    <stop offset="0.66" stop-color="#c8a228"/>
+    <stop offset="0.66" stop-color="#8c1e1e"/>
+    <stop offset="1"    stop-color="#8c1e1e"/>
+  </linearGradient>
+  <!-- Sun disc radial for center emblem -->
+  <radialGradient id="sdr" cx="50%" cy="50%" r="50%">
+    <stop offset="0"   stop-color="#ffeea0"/>
+    <stop offset="0.4" stop-color="#e0a03a"/>
+    <stop offset="1"   stop-color="#7a3d10" stop-opacity="0"/>
+  </radialGradient>
+  <!-- Gold shimmer for border trim -->
+  <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0"   stop-color="#ffe080"/>
+    <stop offset="0.5" stop-color="#c8882a"/>
+    <stop offset="1"   stop-color="#ffe080"/>
+  </linearGradient>
+  <!-- Spear shaft gradient -->
+  <linearGradient id="spear" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0"   stop-color="#1a0e04"/>
+    <stop offset="0.4" stop-color="#5a3a18"/>
+    <stop offset="1"   stop-color="#1a0e04"/>
+  </linearGradient>
+  <!-- leather/worn texture for the pole wrap -->
+  <linearGradient id="pole" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0" stop-color="#2a1a08"/>
+    <stop offset="0.5" stop-color="#4a2e12"/>
+    <stop offset="1" stop-color="#2a1a08"/>
+  </linearGradient>
+</defs>
+
+<!-- Sky gradient background -->
+<rect width="1200" height="300" fill="url(#s)"/>
+
+<!-- Stars -->
+<g fill="#ffffff" opacity="0.6">
+  <circle class="t0" cx="497" cy="83" r="1"/><circle class="t1" cx="767" cy="85" r="1.6"/>
+  <circle class="t0" cx="144" cy="85" r="0.8"/><circle class="t1" cx="970" cy="41" r="1"/>
+  <circle class="t0" cx="402" cy="99" r="1.6"/><circle class="t1" cx="1117" cy="115" r="1.6"/>
+  <circle class="t0" cx="823" cy="89" r="1"/><circle class="t1" cx="484" cy="89" r="1"/>
+  <circle class="t0" cx="1081" cy="57" r="0.8"/><circle class="t1" cx="141" cy="28" r="0.8"/>
+  <circle class="t0" cx="626" cy="107" r="0.8"/><circle class="t1" cx="561" cy="68" r="1.6"/>
+  <circle class="t0" cx="884" cy="58" r="1.6"/><circle class="t1" cx="284" cy="120" r="1.3"/>
+  <circle class="t0" cx="209" cy="12" r="1"/><circle class="t1" cx="1023" cy="35" r="1.3"/>
+  <circle class="t0" cx="903" cy="107" r="1.3"/><circle class="t1" cx="872" cy="72" r="1.6"/>
+  <circle class="t1" cx="485" cy="51" r="0.8"/><circle class="t0" cx="582" cy="85" r="1"/>
+</g>
+
+<!-- Ahriman serpent (evil) -->
+<g class="ah">
+  <path d="M-10 34C40 6 90 64 150 36S210 20 236 58" fill="none" stroke="#06040a" stroke-width="4" stroke-linecap="round" opacity=".9"/>
+  <path d="M-10 31C40 3 90 61 150 33S210 17 236 55" fill="none" stroke="#7a2434" stroke-width="1" opacity=".5"/>
+  <path d="M234 60l9-9 3 11z" fill="#06040a"/>
+  <circle class="pu2" cx="241" cy="58" r="1.3" fill="#d44a3a"/>
+  <g stroke="#7a2434" stroke-width=".8" opacity=".4" fill="none">
+    <path d="M252 56l14-6M252 61l16 4M247 68l8 14M245 50l4-14M259 53l10-10"/>
+  </g>
+</g>
+
+<!-- Mehr/Mihr sun disc glow -->
+<circle class="glow" cx="370" cy="170" r="150" fill="url(#g)"/>
+<!-- Rotating sun rays -->
+<g class="rays" stroke="#f0b650" stroke-width="1.6" opacity=".5">
+  <path d="M414 170L500 170M411 187L455 205M401 201L462 262M387 211L405 255M370 214L370 300M353 211L335 255M339 201L278 262M329 187L285 205M326 170L240 170M329 153L285 135M339 139L278 78M353 129L335 85M370 126L370 40M387 129L405 85M401 139L462 78M411 153L455 135"/>
+</g>
+<!-- Sun disc core -->
+<circle cx="370" cy="170" r="30" fill="#ffd27a"/>
+<circle cx="370" cy="170" r="16" fill="none" stroke="#7a3d1e" stroke-width="1.6"/>
+
+<!-- Simurgh over the Alborz -->
+<g transform="translate(905 88) scale(1.15)">
+  <g class="sim" fill="none" stroke="#f0c070" stroke-width="1.6" stroke-linecap="round" opacity=".55">
+    <path d="M0 0q14-9 30-2q-12 8-30 2z" fill="#f0c070" fill-opacity=".5"/>
+    <path d="M8-2q-6-18-22-22"/>
+    <path d="M14-2q4-16 18-22"/>
+    <path d="M0 1q-40 8-70-6"/>
+    <path d="M0 2q-42 14-78 4"/>
+    <path d="M0 3q-36 20-70 18"/>
+    <circle cx="30" cy="-3" r="2.2" fill="#f0c070"/>
+  </g>
+</g>
+
+<!-- Mountain range (Alborz + Damavand) -->
+<path d="M876 242L938 152L968 118H1012L1042 152L1104 242Z" fill="#2b1b2c"/>
+<g fill="none" stroke="#5a3a52" stroke-width="2.4" stroke-linecap="round" opacity=".8">
+  <path d="M918 204Q950 186 984 204T1052 198"/>
+  <path d="M944 170Q972 156 1000 170T1040 168"/>
+</g>
+<!-- Damavand smoke -->
+<g fill="#d8c8b8">
+  <circle class="sm" cx="990" cy="114" r="7"/>
+  <circle class="sm s2" cx="988" cy="114" r="6"/>
+  <circle class="sm s3" cx="992" cy="114" r="8"/>
+</g>
+
+<!-- Far mountain silhouette layer -->
+<path d="M0 232L120 170L220 214L330 166L460 224L600 176L740 228L840 196L880 242L1200 250V300H0Z" fill="#2b1b2c"/>
+
+<!-- White Div shape (ghost-like, near the rocks, left) -->
+<g opacity=".3" fill="#b9afc9" stroke="#b9afc9" stroke-linecap="round">
+  <path d="M98 172Q96 152 112 147Q126 143 138 151Q150 161 146 172Z" stroke="none"/>
+  <circle cx="116" cy="141" r="7" stroke="none"/>
+  <path d="M109 136Q103 124 107 117M123 136Q129 124 125 117" fill="none" stroke-width="2.2"/>
+  <path d="M134 154Q143 164 139 176" fill="none" stroke-width="3"/>
+</g>
+<g fill="#d44a3a">
+  <circle class="pu2" cx="113" cy="141" r="1.3"/>
+  <circle class="pu2" cx="119" cy="141" r="1.3"/>
+</g>
+
+<!-- Evil mist -->
+<g class="ms"><ellipse cx="500" cy="214" rx="90" ry="9" fill="url(#ms)"/><circle cx="470" cy="214" r=".9" fill="#d44a3a" opacity=".5"/></g>
+<g class="ms m2"><ellipse cx="800" cy="232" rx="110" ry="10" fill="url(#ms)"/></g>
+
+<!-- Rostam on Rakhsh -->
+<g transform="translate(600 177)">
+  <g class="rk" fill="#0d0910" stroke="#0d0910" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cy="-14" rx="15" ry="6"/>
+    <path d="M10-16L19-31L25-29L23-24L17-19Z"/>
+    <path d="M19-31L18-35M22-30L22-34" stroke-width="1" fill="none"/>
+    <path d="M9-9L16 0M7-9L8 0M-9-9L-13 0M-11-10L-20-2" stroke-width="1.8" fill="none"/>
+    <path d="M-15-17Q-27-14-29-3" stroke-width="2" fill="none"/>
+    <path d="M-3-19L-2-33L3-33L3-19Z"/>
+    <circle cy="-37" r="3.2"/>
+    <path d="M0-40V-44" stroke-width="1.4" fill="none"/>
+    <path d="M2-31L11-46" stroke-width="1.8" fill="none"/>
+    <circle cx="12" cy="-47.5" r="3"/>
+    <path d="M10-50L9-53M14-50L15-53" stroke-width="1" fill="none"/>
+    <path d="M-3-31q-8 3-11 12" stroke-width="1.6" fill="none"/>
+  </g>
+</g>
+
+<!-- Near mountain / foreground ridge -->
+<path d="M0 252L90 214L190 238L300 150L410 240L560 206L700 250L860 236L1000 256L1200 240V300H0Z" fill="#1b1120"/>
+
+<!-- Eyes of divs in the rocks -->
+<g fill="#d44a3a">
+  <g class="ey"><circle cx="228" cy="232" r=".9"/><circle cx="233" cy="232" r=".9"/></g>
+  <g class="ey y2"><circle cx="520" cy="233" r=".9"/><circle cx="525" cy="233" r=".9"/></g>
+  <g class="ey y3"><circle cx="660" cy="247" r=".9"/><circle cx="665" cy="247" r=".9"/></g>
+</g>
+
+<!-- ===== DERAFSH KAVIANI — THE ROYAL STANDARD ===== -->
+<!-- Historical basis: started as Kaveh the blacksmith's leather apron on a spear; Fereydoun added jewels;
+     later Shahanshahs attached more gems; historically described as having green, yellow & red colours,
+     a central sun disc emblem, gold fringe, and tassels hanging from the hem -->
+<!-- Spear pole — tall, dark wood with leather wrap markings -->
+<g id="derafsh">
+  <!-- Main pole shaft — dark lacquered wood -->
+  <rect x="298" y="72" width="4.5" height="185" fill="url(#spear)" rx="1"/>
+  <!-- Leather wrap bands on pole (historical: wound leather strips) -->
+  <g fill="none" stroke="#3d2208" stroke-width="1" opacity=".7">
+    <path d="M298 90h4.5M298 98h4.5M298 106h4.5M298 148h4.5M298 156h4.5M298 164h4.5M298 198h4.5M298 206h4.5M298 214h4.5"/>
+  </g>
+  <!-- Spearhead — leaf-shaped iron blade -->
+  <path d="M300.25 72 L295 84 L300.25 80 L305.5 84 Z" fill="#a8a8b8"/>
+  <path d="M300.25 72 L299 80 L300.25 78 L301.5 80 Z" fill="#d0d0e0"/>
+  <!-- Spearhead socket ring (gold) -->
+  <rect x="297.5" y="84" width="5.5" height="3" fill="url(#gold)" rx=".5"/>
+
+  <!-- Flag cloth — attached to pole from y=88 to y=155, extending right -->
+  <!-- The Derafsh Kaviani had THREE horizontal bands (green, gold, red) per multiple sources
+       (Tabarī; Ferdowsi Shahnameh; al-Masʿūdī mentions the three coloured bands of Kāveh's apron) -->
+  <g class="flag">
+    <!-- Outer gold border frame (the jewelled border of the royal standard) -->
+    <path d="M300 88 L374 88 L380 90 L380 155 L374 157 L300 157 Z" fill="url(#gold)" opacity=".9"/>
+    <!-- Green upper third (جامۀ سبز — the green band) -->
+    <rect x="303" y="91" width="74" height="21" fill="#2a6e3a"/>
+    <!-- Horizontal arabesque lines within green band (stitching detail) -->
+    <g stroke="#1a4228" stroke-width=".6" opacity=".6" fill="none">
+      <path d="M305 96 Q320 93 335 96 Q350 99 365 96 Q372 95 376 96"/>
+      <path d="M305 101 Q320 104 335 101 Q350 98 365 101 Q372 102 376 101"/>
+    </g>
+    <!-- Yellow/golden middle third (جامۀ زرد — the golden band) -->
+    <rect x="303" y="112" width="74" height="21" fill="#c8a228"/>
+    <!-- Diamond-pattern weave lines in gold band -->
+    <g stroke="#8a6a10" stroke-width=".6" opacity=".5" fill="none">
+      <path d="M305 117L315 122L325 117L335 122L345 117L355 122L365 117L375 122"/>
+      <path d="M305 122L315 117L325 122L335 117L345 122L355 117L365 122L375 117"/>
+    </g>
+    <!-- Red lower third (جامۀ سرخ — the red band) -->
+    <rect x="303" y="133" width="74" height="21" fill="#8c1e1e"/>
+    <!-- Chevron pattern in red band -->
+    <g stroke="#5a0e0e" stroke-width=".6" opacity=".5" fill="none">
+      <path d="M305 138L315 143L325 138L335 143L345 138L355 143L365 138L375 143"/>
+      <path d="M305 143L315 138L325 143L335 138L345 143L355 138L365 143L375 138"/>
+    </g>
+    <!-- Shadow on flag (3D depth along left edge near pole) -->
+    <rect x="300" y="91" width="5" height="63" fill="rgba(0,0,0,0.35)" rx="1"/>
+    <!-- Light edge highlight on right side -->
+    <rect x="372" y="91" width="5" height="63" fill="rgba(255,255,255,0.07)" rx="1"/>
+    <!-- Central jewelled sun disc emblem — the heart of the Derafsh Kaviani -->
+    <!-- Outer decorative ring (gold with pointed projections — sun rays pattern) -->
+    <circle cx="341" cy="122" r="17" fill="#3d1a00" opacity=".8"/>
+    <!-- 16-point star burst (sun disc — traditional Iranian solar symbol) -->
+    <g class="sunr" fill="#d4920a" opacity=".9">
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(0 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(22.5 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(45 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(67.5 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(90 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(112.5 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(135 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(157.5 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(180 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(202.5 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(225 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(247.5 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(270 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(292.5 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(315 341 122)"/>
+      <polygon points="341,105 342.5,115 341,107 339.5,115" transform="rotate(337.5 341 122)"/>
+    </g>
+    <!-- Sun disc gold rim -->
+    <circle cx="341" cy="122" r="12" fill="none" stroke="#e0a03a" stroke-width="1.5"/>
+    <!-- Inner sun disc radial fill -->
+    <circle cx="341" cy="122" r="11" fill="url(#sdr)"/>
+    <!-- Winged disc (Faravahar-inspired) — simplified winged sun emblem in centre -->
+    <g fill="#c8882a" opacity=".85">
+      <!-- Left wing -->
+      <path d="M330 122 Q324 118 322 122 Q324 126 330 122Z"/>
+      <!-- Right wing -->
+      <path d="M352 122 Q358 118 360 122 Q358 126 352 122Z"/>
+      <!-- Wing feather lines -->
+      <path d="M330 122 Q325 120 323 122" fill="none" stroke="#ffd27a" stroke-width=".7" opacity=".7"/>
+      <path d="M352 122 Q357 120 359 122" fill="none" stroke="#ffd27a" stroke-width=".7" opacity=".7"/>
+    </g>
+    <!-- Central dot — navel of the sun -->
+    <circle cx="341" cy="122" r="3.5" fill="#7a3d10"/>
+    <circle cx="341" cy="122" r="2" fill="#ffd27a"/>
+    <!-- Precious gem insets at the four corners of the flag (historical: Kāveh's banner was studded with rubies, emeralds, sapphires, gold) -->
+    <!-- Top row gems -->
+    <circle class="gem" cx="310" cy="95" r="3.2" fill="#c0352a"/><!-- ruby -->
+    <path d="M307.5 95 L310 91.5 L312.5 95 L310 98.5Z" fill="#e05040" opacity=".6"/>
+    <circle class="gem2" cx="322" cy="95" r="2.8" fill="#246b3c"/><!-- emerald -->
+    <circle cx="322" cy="95" r="1.8" fill="#3aa056" opacity=".7"/>
+    <circle class="gem" cx="360" cy="95" r="3.2" fill="#3050a8"/><!-- sapphire -->
+    <path d="M357.5 95 L360 91.5 L362.5 95 L360 98.5Z" fill="#4878d0" opacity=".5"/>
+    <circle class="gem2" cx="372" cy="95" r="2.8" fill="#c8a228"/><!-- topaz/yellow -->
+    <circle cx="372" cy="95" r="1.8" fill="#ffe080" opacity=".7"/>
+    <!-- Bottom row gems -->
+    <circle class="gem2" cx="310" cy="150" r="3.2" fill="#246b3c"/><!-- emerald -->
+    <circle cx="310" cy="150" r="1.8" fill="#3aa056" opacity=".7"/>
+    <circle class="gem" cx="322" cy="150" r="2.8" fill="#c0352a"/><!-- ruby -->
+    <path d="M319.5 150 L322 146.5 L324.5 150 L322 153.5Z" fill="#e05040" opacity=".6"/>
+    <circle class="gem2" cx="360" cy="150" r="2.8" fill="#c8a228"/><!-- topaz -->
+    <circle cx="360" cy="150" r="1.8" fill="#ffe080" opacity=".7"/>
+    <circle class="gem" cx="372" cy="150" r="3.2" fill="#3050a8"/><!-- sapphire -->
+    <path d="M369.5 150 L372 146.5 L374.5 150 L372 153.5Z" fill="#4878d0" opacity=".5"/>
+    <!-- Mid gems along the gold border (top) -->
+    <circle class="gem" cx="341" cy="90" r="2.6" fill="#a02868"/><!-- amethyst/garnet -->
+    <circle cx="341" cy="90" r="1.4" fill="#e060a0" opacity=".7"/>
+    <!-- Band divider gems -->
+    <circle class="gem2" cx="304" cy="112" r="2.4" fill="#e0a03a"/>
+    <circle cx="304" cy="112" r="1.2" fill="#ffe080" opacity=".8"/>
+    <circle class="gem2" cx="378" cy="112" r="2.4" fill="#e0a03a"/>
+    <circle cx="378" cy="112" r="1.2" fill="#ffe080" opacity=".8"/>
+    <circle class="gem2" cx="304" cy="133" r="2.4" fill="#e0a03a"/>
+    <circle cx="304" cy="133" r="1.2" fill="#ffe080" opacity=".8"/>
+    <circle class="gem2" cx="378" cy="133" r="2.4" fill="#e0a03a"/>
+    <circle cx="378" cy="133" r="1.2" fill="#ffe080" opacity=".8"/>
+    <!-- Gold fringe pendant strips along bottom edge -->
+    <g class="fringe" fill="url(#gold)" opacity=".85">
+      <rect x="302" y="157" width="2.5" height="12" rx="1"/>
+      <rect x="307" y="157" width="2.5" height="10" rx="1"/>
+      <rect x="312" y="157" width="2.5" height="13" rx="1"/>
+      <rect x="317" y="157" width="2.5" height="9" rx="1"/>
+      <rect x="322" y="157" width="2.5" height="14" rx="1"/>
+      <rect x="327" y="157" width="2.5" height="10" rx="1"/>
+      <rect x="332" y="157" width="2.5" height="12" rx="1"/>
+      <rect x="337" y="157" width="2.5" height="11" rx="1"/>
+      <rect x="342" y="157" width="2.5" height="13" rx="1"/>
+      <rect x="347" y="157" width="2.5" height="9" rx="1"/>
+      <rect x="352" y="157" width="2.5" height="12" rx="1"/>
+      <rect x="357" y="157" width="2.5" height="10" rx="1"/>
+      <rect x="362" y="157" width="2.5" height="13" rx="1"/>
+      <rect x="367" y="157" width="2.5" height="11" rx="1"/>
+      <rect x="372" y="157" width="2.5" height="9" rx="1"/>
+      <rect x="377" y="157" width="2.5" height="12" rx="1"/>
+      <!-- Pendant gem tips -->
+      <circle cx="303.2" cy="170" r="2" fill="#e0a03a"/>
+      <circle cx="308.2" cy="168" r="1.8" fill="#c0352a"/>
+      <circle cx="313.2" cy="171" r="2" fill="#e0a03a"/>
+      <circle cx="318.2" cy="167" r="1.8" fill="#3050a8"/>
+      <circle cx="323.2" cy="172" r="2" fill="#e0a03a"/>
+      <circle cx="328.2" cy="168" r="1.8" fill="#246b3c"/>
+      <circle cx="333.2" cy="170" r="2" fill="#e0a03a"/>
+      <circle cx="338.2" cy="169" r="1.8" fill="#c0352a"/>
+      <circle cx="343.2" cy="171" r="2" fill="#e0a03a"/>
+      <circle cx="348.2" cy="167" r="1.8" fill="#3050a8"/>
+      <circle cx="353.2" cy="170" r="2" fill="#e0a03a"/>
+      <circle cx="358.2" cy="168" r="1.8" fill="#246b3c"/>
+      <circle cx="363.2" cy="171" r="2" fill="#e0a03a"/>
+      <circle cx="368.2" cy="169" r="1.8" fill="#c0352a"/>
+      <circle cx="373.2" cy="167" r="2" fill="#e0a03a"/>
+      <circle cx="378.2" cy="170" r="1.8" fill="#3050a8"/>
+    </g>
+    <!-- Cavalry streamers / tail ribbons — long coloured ribbons extending right from flag -->
+    <!-- (historical descriptions mention streamers or ribbon-like silk pieces) -->
+    <path d="M380 98 Q398 90 420 95 Q440 100 460 88" fill="none" stroke="#c8a228" stroke-width="1.8" opacity=".6" stroke-linecap="round"/>
+    <path d="M380 110 Q402 118 430 108 Q455 100 480 112" fill="none" stroke="#8c1e1e" stroke-width="1.6" opacity=".5" stroke-linecap="round"/>
+    <path d="M380 145 Q405 140 432 148 Q458 155 480 140" fill="none" stroke="#2a6e3a" stroke-width="1.6" opacity=".5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Hammer of Kaveh resting against the pole base — blacksmith's mark of origin -->
+  <!-- (Ferdowsi: Kaveh was a blacksmith — آهنگر — who raised the flag against Zahhak) -->
+  <g transform="translate(290 178) rotate(-22)" fill="#2a1a08" stroke="#4a3018" stroke-width=".8">
+    <!-- Handle -->
+    <rect x="-2" y="0" width="4" height="22" rx="1" fill="url(#pole)"/>
+    <!-- Head -->
+    <rect x="-6" y="-2" width="12" height="7" rx="1.5"/>
+    <!-- Peen (back of hammer head) -->
+    <rect x="4" y="-1" width="4" height="5" rx=".5" fill="#3a2a10"/>
+    <!-- Metal highlight -->
+    <rect x="-5" y="-1" width="9" height="2" rx=".5" fill="#888890" opacity=".4"/>
+  </g>
+
+  <!-- Pole foot-spike (iron) -->
+  <path d="M299 252L300.5 262L302 252Z" fill="#a0a0a8"/>
+  <rect x="298" y="248" width="5" height="5" fill="url(#gold)" rx=".5"/>
+</g>
+
+<!-- Zarathustra's fire with three sparks (good thoughts, words, deeds) -->
+<g transform="translate(770 224)">
+  <circle class="glow" cx="0" cy="0" r="22" fill="url(#g)" opacity=".3"/>
+  <path d="M-9 21L-7 9H7L9 21Z" fill="#0d0910"/>
+  <path class="fk" d="M0 9Q-7-1 0-13Q7-1 0 9Z" fill="#ffb347"/>
+  <path class="fk" d="M0 8Q-3 2 0-4Q3 2 0 8Z" fill="#fff0c0"/>
+  <!-- Three sparks for three virtues -->
+  <g fill="#ffd27a">
+    <circle class="sk" cx="-4" cy="-12" r="1"/>
+    <circle class="sk k2" cx="0" cy="-14" r="1"/>
+    <circle class="sk k3" cx="4" cy="-12" r="1"/>
+  </g>
+  <!-- Zarathustra figure (priest silhouette) -->
+  <g fill="#d9cdb8" opacity=".6">
+    <path d="M-24 21L-22 2Q-19-4-15 2L-13 21Z"/>
+    <circle cx="-18.5" cy="-7" r="2.6" stroke="none"/>
+  </g>
+  <path d="M-20 3L-12-7M-17 3L-10-6" stroke="#d9cdb8" stroke-width="1.4" opacity=".6" fill="none"/>
+</g>
+
+<!-- Cypress trees (eternal life; Iranian garden symbol) -->
+<path d="M60 300Q48 225 60 150Q72 225 60 300Z M94 300Q82 240 94 180Q106 240 94 300Z M1138 300Q1126 230 1138 160Q1150 230 1138 300Z M1108 300Q1096 246 1108 192Q1120 246 1108 300Z" fill="#0b0810"/>
+
+<!-- Ground strip -->
+<rect y="284" width="1200" height="16" fill="#0b0810"/>
+
+<!-- Ember sparks from Zarathustra's fire -->
+<g fill="#ffb347">
+  <circle class="em" cx="560" cy="276" r="2"/>
+  <circle class="em e2" cx="620" cy="282" r="1.6"/>
+  <circle class="em e3" cx="690" cy="274" r="2"/>
+  <circle class="em e2" cx="520" cy="284" r="1.5"/>
+</g>
+</svg>

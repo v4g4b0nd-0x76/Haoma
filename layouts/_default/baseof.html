@@ -4,17 +4,22 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
+<meta name="description" content="{{ if .IsHome }}{{ i18n "tagline" }}{{ else }}{{ .Summary | plainify | truncate 150 }}{{ end }}">
+<link rel="icon" href="{{ "img/brand/favicon.svg" | relURL }}" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{{ "img/brand/apple-touch-icon.png" | relURL }}">
+<meta name="theme-color" content="#14161a">
+<meta property="og:site_name" content="{{ site.Title }}"><meta property="og:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }}{{ end }}"><meta property="og:description" content="{{ i18n "tagline" }}"><meta property="og:image" content="{{ "img/brand/haoma-og.png" | absURL }}"><meta name="twitter:card" content="summary_large_image">
 <script src="{{ "js/boot.js" | relURL }}"></script>
 <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
 <style>{{ range $k, $t := site.Data.themes }}[data-culture="{{ $k }}"]{--accent:{{ $t.accent | safeCSS }};--bg:{{ $t.bg | safeCSS }};--surface:{{ $t.surface | safeCSS }};--border:{{ $t.border | safeCSS }};--text:{{ $t.text | safeCSS }};--muted:{{ $t.muted | safeCSS }};--anim:{{ $t.anim | default "none" | safeCSS }};--meander:var(--m-{{ $t.pattern | default "none" | safeCSS }});--rune:{{ printf "%q" ($t.glyphs | default "") | safeCSS }}}
 {{ end }}</style>
-<link rel="preload" href="{{ "fonts/vazirmatn.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "fonts/iransans-400.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 {{ range .AlternativeOutputFormats }}<link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink }}">{{ end }}
 </head>
 <body>
 <div class="bg"></div>
 <header class="top">
-  <a class="brand" href="{{ "/" | relLangURL }}">{{ site.Title }}</a>
+  <a class="brand" href="{{ site.Home.RelPermalink }}">{{ partial "logo.html" (dict "v" "full" "id" "h") }}</a>
   <nav>{{ range index site.Data.nav site.Language.Lang }}<a href="{{ .url | relLangURL }}">{{ .name }}</a>{{ end }}</nav>
   <div class="ctrl">
     <select id="culture-pick" aria-label="{{ i18n "pickLabel" }}"><option value="base" data-href="{{ (site.GetPage "/cultures").RelPermalink }}">{{ i18n "all" }}</option>{{ range (site.GetPage "/cultures").Sections }}<option value="{{ .Params.culture }}" data-href="{{ .RelPermalink }}">{{ .Title }}</option>{{ end }}</select>
@@ -24,7 +29,7 @@
 </header>
 <div class="motif"></div>
 {{ with .Params.culture }}{{ $b := (index site.Data.themes . | default dict).banner }}{{ if $b }}{{ $cp := site.GetPage "/cultures" }}
-<div class="hero-art{{ if and $.IsSection (eq $.Parent.RelPermalink $cp.RelPermalink) }} tall{{ end }}"><img src="{{ printf "img/%s" $b | relURL }}" alt=""></div>
+<div class="hero-art{{ if and $.IsSection (eq $.Parent.RelPermalink $cp.RelPermalink) }} tall{{ end }}"><img class="sbg" src="{{ printf "img/%s" $b | relURL }}" alt="" aria-hidden="true"><img class="sfg" src="{{ printf "img/%s" $b | relURL }}" alt="{{ $.Params.culture }} banner art"></div>
 {{ end }}{{ end }}
 <main>{{ block "main" . }}{{ end }}</main>
 <footer>Text CC BY-SA · Code MIT{{ with site.Home.OutputFormats.Get "rss" }} · <a href="{{ .RelPermalink }}">RSS</a>{{ end }} · <a href="{{ "about/" | relLangURL }}">{{ i18n "sources" }}</a></footer>

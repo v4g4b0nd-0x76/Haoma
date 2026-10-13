@@ -1,11 +1,11 @@
 {{ define "main" }}
 {{ $cs := (site.GetPage "/cultures").Sections }}
 <section class="cine" data-culture="base">
-<div class="slide on" data-culture="base">{{ with (index site.Data.themes "base").banner }}<img src="{{ printf "img/%s" . | relURL }}" alt="">{{ end }}<template><span>{{ i18n "baseQuote" }}</span></template></div>
+<div class="slide on" data-culture="base">{{ with (index site.Data.themes "base").banner }}<img class="sbg" src="{{ printf "img/%s" . | relURL }}" alt="" aria-hidden="true"><img class="sfg" src="{{ printf "img/%s" . | relURL }}" alt="">{{ end }}<template><span>{{ i18n "baseQuote" }}</span></template></div>
 {{ range $cs }}{{ $b := (index site.Data.themes .Params.culture | default dict).banner }}{{ if $b }}
-<div class="slide" data-culture="{{ .Params.culture }}"><img src="{{ printf "img/%s" $b | relURL }}" alt=""><template><span>{{ .Params.quote }}</span><cite>{{ .Params.quoteSource }}</cite></template></div>
+<div class="slide" data-culture="{{ .Params.culture }}"><img class="sbg" src="{{ printf "img/%s" $b | relURL }}" alt="" aria-hidden="true"><img class="sfg" src="{{ printf "img/%s" $b | relURL }}" alt="{{ .Title }} banner art"><template><span>{{ .Params.quote }}</span><cite>{{ .Params.quoteSource }}</cite></template></div>
 {{ end }}{{ end }}
-<div class="cine-text"><p class="eyebrow">{{ i18n "eyebrow" }}</p><h1>{{ site.Title }}</h1><p class="quote" aria-live="polite"></p>
+<div class="cine-text"><p class="eyebrow">{{ i18n "eyebrow" }}</p><h1 class="cine-logo"><span class="sr">{{ site.Title }}</span>{{ partial "logo.html" (dict "v" "full" "id" "x") }}</h1><p class="sub">{{ i18n "tagline" }}</p><p class="quote" aria-live="polite"></p>
 <div class="pills"><button type="button" data-pick="base" aria-pressed="true">{{ i18n "all" }}</button>{{ range $cs }}<button type="button" data-pick="{{ .Params.culture }}" aria-pressed="false">{{ .Title }}</button>{{ end }}</div>
 <a class="btn enter" href="#" hidden>{{ i18n "enter" }}</a></div>
 </section>

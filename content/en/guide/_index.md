@@ -60,3 +60,14 @@ Third column.
 ## GIF or video that plays when scrolled into view
 
 Use `{{</* scrollplay src="img/media/clip.gif" caption="..." */>}}`. GIFs start when at least 60% visible and restart on re-entry. MP4 and WebM videos play muted and pause when out of view.
+
+## Map with pins and a travel route
+
+Maps are drawn from real coastlines in this site's own style. Pins carry labels and hover notes; the optional route draws a dashed line joining the pins in order.
+
+{{< map id="map-guide" src="img/maps/persia.svg" height="440px" route="auto" caption="Demo map of the Iranian plateau — pins are placed as percentages of the map box" >}}
+pin x="36.9%" y="25.3%" label="Damavand" note="First pin — the route starts here" color="fire" /
+pin x="21.7%" y="32.5%" label="Ecbatana" note="Second stop" /
+pin x="20.8%" y="48.8%" label="Susa" note="Third stop" color="silver" /
+pin x="36.3%" y="62.6%" label="Persepolis" note="Route end" color="blood" /
+{{< /map >}}

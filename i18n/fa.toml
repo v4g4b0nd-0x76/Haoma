@@ -60,3 +60,18 @@
   other = "گزارش اشتباه"
 [cHistory]
   other = "تاریخچهٔ صفحه"
+
+[mapLabel]
+  other = "نقشهٔ تعاملی اسطوره"
+[mapPins]
+  other = "مکان‌های نقشه"
+[mapControls]
+  other = "کنترل‌های نقشه"
+[zoomIn]
+  other = "بزرگ‌نمایی"
+[zoomOut]
+  other = "کوچک‌نمایی"
+[zoomReset]
+  other = "بازنشانی نما"
+[tagline]
+  other = "اسطوره‌های ایران و خاور، با منبع‌هایشان"

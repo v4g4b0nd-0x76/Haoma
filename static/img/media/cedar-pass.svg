@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-label="The heroes cross a torchlit mountain pass">
+<!-- original art for this project: the road up through the passes of the Amanus -->
+<defs>
+  <linearGradient id="psky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c0f1a"/><stop offset="1" stop-color="#1c2030"/></linearGradient>
+  <radialGradient id="torch" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffd27a"/><stop offset=".5" stop-color="#e0763a"/><stop offset="1" stop-color="#e0763a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="rock" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#141218"/><stop offset="1" stop-color="#0a080e"/></linearGradient>
+</defs>
+<rect width="960" height="540" fill="url(#psky)"/>
+<g fill="#e8e2cf" opacity=".7"><circle cx="150" cy="70" r="1.6"/><circle cx="260" cy="120" r="1.2"/><circle cx="420" cy="60" r="1.4"/><circle cx="560" cy="110" r="1.2"/><circle cx="700" cy="50" r="1.8"/><circle cx="840" cy="130" r="1.2"/></g>
+<!-- eagles circling -->
+<g stroke="#0d0a10" stroke-width="3" fill="none" stroke-linecap="round"><path d="M470 150q10-8 20 0 10-8 20 0"/><path d="M600 190q8-6 16 0 8-6 16 0"/></g>
+<!-- cliff walls of the pass -->
+<path d="M0 540V120l60-30 40 60 30-20 46 90 30-16 40 120 26-10 30 90 20 4 20 100 20 20V540z" fill="url(#rock)"/>
+<path d="M960 540V90l-70-24-44 70-30-18-50 100-28-14-44 130-24-8-32 96-18 6-24 110-16 18V540z" fill="url(#rock)"/>
+<path d="M0 540h960v-60q-160-40-320-28t-320 6q-160 14-320 22z" fill="#161319"/>
+<!-- torch flames -->
+<g><circle cx="300" cy="360" r="60" fill="url(#torch)" opacity=".55"/><circle cx="690" cy="345" r="60" fill="url(#torch)" opacity=".55"/>
+<path d="M300 372l5-26q7-8 0-18 14 8 6 22l-2 4zM690 357l5-26q7-8 0-18 14 8 6 22l-2 4z" fill="#ffdf9a"/>
+<g fill="#0d0a10"><rect x="297" y="372" width="6" height="60"/><rect x="687" y="357" width="6" height="70"/></g></g>
+<!-- the two heroes, small in the pass -->
+<g fill="#0d0a10">
+  <path d="M436 470l5-44q2-12 10-12t10 12l5 44-7 2-3-20-2 34h-7l-1-34-3 20zM446 412a6 6 0 1 1 .1 0z"/>
+  <path d="M482 474l6-50q2-13 11-13t11 13l6 50-8 2-4-24-2 38h-7l-2-38-4 24zM494 408a7 7 0 1 1 .1 0z"/>
+  <rect x="512" y="396" width="4" height="80" rx="2"/>
+</g>
+</svg>

@@ -1,4 +1,4 @@
-# Mythology Notebook
+# Haoma
 Static Hugo site (English + Farsi) for GitHub Pages. Local editor: `python tools/editor.py` (Python 3.8+, git, hugo).
 
 - **Editor:** temporary drafts (survive reloads, never touch files until Save), live preview of the page you are editing, undo/rollback history, themes, navigation, review dashboard, publish and pull requests.

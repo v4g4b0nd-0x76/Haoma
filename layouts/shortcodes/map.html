@@ -1,0 +1,181 @@
+{{/*
+  Interactive myth map shortcode.
+
+  Usage:
+    {{< map id="unique-id" src="img/media/map.jpg" height="480px" >}}
+    pin x="42%" y="55%" label="Mount Damavand" note="Where Zahhak is chained" color="fire" />
+    pin x="28%" y="62%" label="Alborz" note="The mythic mountains" color="gold" />
+    {{< /map >}}
+
+  Parameters:
+    id      — unique HTML id (default: auto-generated from Unix time)
+    src     — path to map image under static/ (optional; omit for procedural SVG parchment map)
+              Ready-made artwork lives in static/img/maps/: world, middle-east, persia,
+              india, aegean, scandinavia (each also as -fa.svg with Farsi labels).
+    width   — CSS width  (default "100%")
+    height  — CSS height (default "480px")
+    theme   — "dark" (default) | "sepia"
+    caption — figure caption
+    route   — dashed travel line: "auto" joins the pins in the order given,
+              or explicit points route="58,54 54,47 28,38" (percent of the map box)
+
+  Pin lines (inside the shortcode body):
+    pin x="25%" y="60%" label="Place name" note="Hover text" color="gold|fire|blood|teal|silver" /
+    label is optional; note shows on hover/focus.
+
+  Coordinates are % from the top-left of the map image.
+  No external JS/CSS dependencies.
+*/}}
+{{- /* Every param is coerced to a string with printf: .Get returns interface{},
+       and calling string methods (TrimSpace &c.) on it is what broke older
+       builds of this shortcode on Hugo 0.123. default first, coerce after,
+       so nil params still fall back. */ -}}
+{{- $id      := .Get "id"      | default (printf "map-%d" now.Unix) | printf "%v" -}}
+{{- $src     := .Get "src"     | default ""  | printf "%v" -}}
+{{- $w       := .Get "width"   | default "100%" | printf "%v" -}}
+{{- $h       := .Get "height"  | default "480px" | printf "%v" -}}
+{{- $theme   := .Get "theme"   | default "dark" | printf "%v" -}}
+{{- $caption := .Get "caption" | default ""  | printf "%v" -}}
+{{- $route   := .Get "route"   | default ""  | printf "%v" -}}
+{{- $pts     := slice -}}
+{{- $inner   := .Inner -}}
+
+<figure class="myth-map-wrap" style="width:{{ $w }}">
+<div class="myth-map{{ if eq $theme "sepia" }} myth-map--sepia{{ end }}" id="{{ $id }}" style="height:{{ $h }}" role="region" aria-label="{{ i18n "mapLabel" | default "Interactive myth map" }}" tabindex="0">
+
+  {{- if $src }}
+  <img class="myth-map__bg" src="{{ $src | relURL }}" alt="" aria-hidden="true" draggable="false">
+  {{- else }}
+  {{/* Procedural SVG parchment map */}}
+  <svg class="myth-map__bg myth-map__svg" viewBox="0 0 800 480" preserveAspectRatio="xMidYMid slice" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <filter id="{{ $id }}-paper" x="-5%" y="-5%" width="110%" height="110%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.04 0.02" numOctaves="5" seed="3" result="t"/>
+        <feDisplacementMap in="SourceGraphic" in2="t" scale="5" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+      <radialGradient id="{{ $id }}-vign" cx="50%" cy="50%" r="70%">
+        <stop offset="0%"   stop-color="{{ if eq $theme "sepia" }}#2a1808{{ else }}#0d0a12{{ end }}" stop-opacity="0"/>
+        <stop offset="100%" stop-color="{{ if eq $theme "sepia" }}#1a0e04{{ else }}#060308{{ end }}" stop-opacity="0.72"/>
+      </radialGradient>
+      <linearGradient id="{{ $id }}-sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0"   stop-color="{{ if eq $theme "sepia" }}#d4b882{{ else }}#232d18{{ end }}"/>
+        <stop offset="1"   stop-color="{{ if eq $theme "sepia" }}#b8985a{{ else }}#1a2212{{ end }}"/>
+      </linearGradient>
+      <linearGradient id="{{ $id }}-sea" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0"   stop-color="{{ if eq $theme "sepia" }}#8aacb8{{ else }}#162230{{ end }}" stop-opacity="0.75"/>
+        <stop offset="1"   stop-color="{{ if eq $theme "sepia" }}#6090a8{{ else }}#0c1820{{ end }}" stop-opacity="0.95"/>
+      </linearGradient>
+    </defs>
+    <!-- Sea base -->
+    <rect width="800" height="480" fill="url(#{{ $id }}-sea)"/>
+    <!-- Main landmass — stylised Iranian plateau region -->
+    <path filter="url(#{{ $id }}-paper)" fill="url(#{{ $id }}-sky)" opacity="{{ if eq $theme "sepia" }}0.9{{ else }}0.85{{ end }}"
+      d="M55 345 Q85 282 138 272 Q178 242 222 202 Q262 162 312 152
+         Q352 132 402 122 Q452 112 502 132 Q562 152 612 142 Q662 132 712 152
+         Q762 172 792 202 L800 480 H0Z"/>
+    <!-- Mountain ranges (Alborz north, Zagros west) — hatched silhouettes -->
+    <g fill="{{ if eq $theme "sepia" }}#6a4a1a{{ else }}#0e1a0a{{ end }}" opacity="{{ if eq $theme "sepia" }}0.5{{ else }}0.55{{ end }}">
+      <path d="M298 150 L318 122 L338 137 L358 117 L378 132 L398 120 L418 137 L438 122 L458 140 L478 127 L498 142 L518 130 L538 147 Z"/>
+      <path d="M158 278 L178 242 L198 260 L213 227 L233 247 L248 217 L268 242 L283 222 L298 250 L303 150 Z"/>
+    </g>
+    <!-- Rivers -->
+    <g fill="none" stroke="{{ if eq $theme "sepia" }}#5a80a0{{ else }}#2a5060{{ end }}" stroke-width="1.6" stroke-linecap="round" opacity=".45">
+      <path d="M298 182 Q318 202 338 232 Q358 262 378 292 Q394 322 398 362"/>
+      <path d="M198 252 Q228 272 258 292 Q288 312 308 352"/>
+      <path d="M478 152 Q498 182 508 222 Q516 262 518 302"/>
+    </g>
+    <!-- Border frame — double cartouche -->
+    <rect x="8" y="8" width="784" height="464" fill="none"
+      stroke="{{ if eq $theme "sepia" }}#7a5a20{{ else }}#3a5820{{ end }}" stroke-width="2" rx="6" opacity=".6"/>
+    <rect x="14" y="14" width="772" height="452" fill="none"
+      stroke="{{ if eq $theme "sepia" }}#7a5a20{{ else }}#3a5820{{ end }}" stroke-width="0.8" rx="4" opacity=".35"/>
+    <!-- Corner flourishes -->
+    <g stroke="{{ if eq $theme "sepia" }}#8a6830{{ else }}#4a6820{{ end }}" stroke-width="1.2" fill="none" opacity=".5">
+      <path d="M8 30 Q20 20 30 8"/>
+      <path d="M770 8 Q780 20 792 30"/>
+      <path d="M8 450 Q20 460 30 472"/>
+      <path d="M770 472 Q780 460 792 450"/>
+    </g>
+    <!-- Compass rose (bottom-right) -->
+    <g transform="translate(742 422)">
+      <circle r="18" fill="{{ if eq $theme "sepia" }}#c8a060{{ else }}#1a2212{{ end }}" fill-opacity=".75"
+        stroke="{{ if eq $theme "sepia" }}#8a6020{{ else }}#3a5820{{ end }}" stroke-width="1"/>
+      <g fill="{{ if eq $theme "sepia" }}#5a3a10{{ else }}#98b858{{ end }}" opacity=".88">
+        <path d="M0-15 L2.5-5 L0-7 L-2.5-5Z"/>
+        <path d="M0 15 L2.5 5 L0 7 L-2.5 5Z"/>
+        <path d="M-15 0 L-5 2.5 L-7 0 L-5-2.5Z"/>
+        <path d="M15 0 L5 2.5 L7 0 L5-2.5Z"/>
+      </g>
+      <text y="-16" text-anchor="middle" font-size="7" font-family="Georgia,serif"
+        fill="{{ if eq $theme "sepia" }}#5a3a10{{ else }}#98b858{{ end }}" opacity=".85">N</text>
+    </g>
+    <!-- Scale bar (bottom-left) -->
+    <g transform="translate(28 452)" opacity=".55">
+      <rect width="60" height="3" fill="{{ if eq $theme "sepia" }}#5a3a10{{ else }}#78982a{{ end }}"/>
+      <rect x="60" width="60" height="3" fill="{{ if eq $theme "sepia" }}#c8a060{{ else }}#2a4a14{{ end }}"/>
+      <line x1="0" y1="0" x2="0" y2="-5" stroke="{{ if eq $theme "sepia" }}#5a3a10{{ else }}#78982a{{ end }}" stroke-width="1.2" fill="none"/>
+      <line x1="120" y1="0" x2="120" y2="-5" stroke="{{ if eq $theme "sepia" }}#5a3a10{{ else }}#78982a{{ end }}" stroke-width="1.2" fill="none"/>
+      <text x="60" y="-8" text-anchor="middle" font-size="8" font-family="Georgia,serif"
+        fill="{{ if eq $theme "sepia" }}#5a3a10{{ else }}#78982a{{ end }}">scale</text>
+    </g>
+    <!-- Vignette -->
+    <rect width="800" height="480" fill="url(#{{ $id }}-vign)"/>
+  </svg>
+  {{- end }}
+
+  <!-- Pins -->
+  <div class="myth-map__pins" aria-label="{{ i18n "mapPins" | default "Map locations" }}">
+    {{- range split $inner "\n" -}}
+      {{- $line := trim . " \t\r" -}}
+      {{- if hasPrefix $line "pin " -}}
+        {{- /* Parse key="value" pairs from the pin line */ -}}
+        {{- $px    := "" -}}
+        {{- $py    := "" -}}
+        {{- $label := "" -}}
+        {{- $note  := "" -}}
+        {{- $color := "gold" -}}
+        {{- range findRE `[a-z]+=".+?"` $line -}}
+          {{- $kv  := split . "=" -}}
+          {{- $key := printf "%v" (index $kv 0) -}}
+          {{- $val := trim (index $kv 1) "\"" -}}
+          {{- if eq $key "x"     -}}{{- $px    = $val -}}{{- end -}}
+          {{- if eq $key "y"     -}}{{- $py    = $val -}}{{- end -}}
+          {{- if eq $key "label" -}}{{- $label = $val -}}{{- end -}}
+          {{- if eq $key "note"  -}}{{- $note  = $val -}}{{- end -}}
+          {{- if eq $key "color" -}}{{- $color = $val -}}{{- end -}}
+        {{- end -}}
+        {{- if and $px $py -}}
+          {{- if eq $route "auto" -}}{{- $pts = $pts | append (printf "%s,%s" (replace $px "%" "") (replace $py "%" "")) -}}{{- end -}}
+<button class="myth-pin myth-pin--{{ $color }}" style="left:{{ $px }};top:{{ $py }}" aria-label="{{ with $label }}{{ . }}{{ else }}{{ $note }}{{ end }}" type="button">
+  <span class="myth-pin__dot" aria-hidden="true"></span>
+  <span class="myth-pin__ring" aria-hidden="true"></span>
+  {{- if $label }}<span class="myth-pin__label">{{ $label }}</span>{{ end }}
+  {{- if $note }}<span class="myth-pin__pop" role="tooltip">{{ $note }}</span>{{- end }}
+</button>
+        {{- end -}}
+      {{- end -}}
+    {{- end }}
+    {{- /* route: "auto" joins the pins in the order given; or explicit points
+           route="58,54 54,47 28,38" (percent, % signs optional). */ -}}
+    {{- $rline := "" -}}
+    {{- if eq $route "auto" -}}
+      {{- $rline = delimit $pts " " -}}
+    {{- else if $route -}}
+      {{- $rline = replace $route "%" "" -}}
+    {{- end -}}
+    {{- if $rline -}}
+    <svg class="myth-map__route" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <polyline points="{{ replace $rline " " "," }}"/>
+    </svg>
+    {{- end -}}
+  </div>
+
+  <!-- Zoom controls -->
+  <div class="myth-map__ctrl" aria-label="{{ i18n "mapControls" | default "Map controls" }}">
+    <button type="button" class="myth-map__zoom" data-zm="1"  aria-label="{{ i18n "zoomIn"    | default "Zoom in"    }}">+</button>
+    <button type="button" class="myth-map__zoom" data-zm="-1" aria-label="{{ i18n "zoomOut"   | default "Zoom out"   }}">−</button>
+    <button type="button" class="myth-map__zoom" data-zm="0"  aria-label="{{ i18n "zoomReset" | default "Reset view" }}">⌂</button>
+  </div>
+</div>
+{{- if $caption }}<figcaption>{{ $caption }}</figcaption>{{- end }}
+</figure>

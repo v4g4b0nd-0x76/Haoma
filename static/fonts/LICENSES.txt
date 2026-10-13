@@ -1,1 +1,5 @@
-Cinzel, Lora, Vazirmatn, Lalezar: SIL Open Font License 1.1 (via fontsource and the vazirmatn npm package).
+Cinzel, Lora, Vazirmatn, Lalezar, Noto Nastaliq Urdu: SIL Open Font License 1.1 (via fontsource and the vazirmatn npm package).
+IRANSans (iransans-400/500/700.woff2): © FontIran — a commercial font. The web package was taken from
+github.com/akiarostami/iransans; per that repo, "This source code is free to use. However, to use
+IranSans you have to obtain the rights from FontIran" (fontiran.com). Bundled here under a licence
+held by the site owner.

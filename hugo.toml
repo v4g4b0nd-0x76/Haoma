@@ -1,5 +1,5 @@
 baseURL = "/"
-title = "Mythology Notebook"
+title = "Haoma"
 defaultContentLanguage = "en"
 [markup.goldmark.renderer]
   unsafe = true
@@ -21,7 +21,7 @@ defaultContentLanguage = "en"
   languageName = "فارسی"
   languageCode = "fa"
   languageDirection = "rtl"
-  title = "یادداشت‌های اسطوره‌شناسی"
+  title = "هوم"
   weight = 2
   contentDir = "content/fa"
   [[languages.fa.menus.main]]

@@ -1,0 +1,5 @@
+{{- $lang := .Get "lang" -}}
+<figure class="verse"{{ with $lang }} lang="{{ . }}"{{ if eq . "fa" }} dir="rtl"{{ end }}{{ end }}>
+{{- range split (trim .Inner "\r\n ") "\n" -}}{{ $p := split . "|" }}{{ if gt (len $p) 1 }}<div class="vl"><span class="m1">{{ trim (index $p 0) " \r\t" }}</span><i class="vm" aria-hidden="true"></i><span class="m2">{{ trim (index $p 1) " \r\t" }}</span></div>{{ else if trim . " \r\t" }}<div class="vl one"><span>{{ trim . " \r\t" }}</span></div>{{ end }}{{ end }}
+{{ with .Get "source" }}<figcaption>{{ . }}</figcaption>{{ end }}
+</figure>

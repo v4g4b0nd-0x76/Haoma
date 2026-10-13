@@ -26,8 +26,8 @@ function setPick(p,first){
   en.hidden=p==='base';if(o)en.href=o.dataset.href}}
 if(sel)sel.onchange=function(){var v=sel.value;setPick(v);if(fixed&&v!==fixed)location.href=opt(v).dataset.href};
 Q('.pills button').forEach(function(b){b.onclick=function(){setPick(b.dataset.pick)}});
-var p0='base';try{p0=localStorage.getItem('culture')||'base'}catch(e){}
-if(!opt(p0)&&p0!=='base')p0='base';
+var p0='iranian';try{p0=localStorage.getItem('culture')||'iranian'}catch(e){}
+if(!opt(p0)&&p0!=='base')p0='iranian';
 setPick(p0,true);
 /* slider */
 Q('.slider').forEach(function(s){var r=s.querySelector('.rail'),rtl=getComputedStyle(r).direction==='rtl';
@@ -47,9 +47,61 @@ Q('.slider-md').forEach(function(s){var tr=s.querySelector('.sm-track'),sl=Q('.s
  tr.addEventListener('scroll',function(){var n=Math.round(Math.abs(tr.scrollLeft)/Math.max(1,tr.clientWidth));if(n!==i&&n<sl.length){i=n;mark()}});
  var a=+s.dataset.auto;if(a>0&&!reduced)setInterval(function(){if(!s.matches(':hover'))go(i+1)},a*1000);mark()});
 var media=Q('[data-gif],video[data-scroll]');
-if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){var m=e.target,on=e.isIntersecting&&e.intersectionRatio>=.6;
- if(m.dataset.gif){if(on&&!m.dataset.on)m.src=m.dataset.gif;if(!on&&m.dataset.on)m.src=PH;m.dataset.on=on?'1':''}
- else if(on){var p=m.play();if(p&&p.catch)p.catch(function(){})}else m.pause()})},{threshold:[0,.6,1]});media.forEach(function(m){io.observe(m)})}
+if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){var m=e.target,r=e.intersectionRatio,isIn=e.isIntersecting;
+ if(m.dataset.gif){/* hysteresis: start at 60% visible, but only stop once fully out —
+    stopping/restarting on every scroll jitter at the threshold made GIFs flicker */
+  var was=!!m.dataset.on,on=was?(isIn&&r>0.08):(isIn&&r>=.6);
+  if(on&&!was){m.src=m.dataset.gif;m.dataset.on='1'}else if(!on&&was){m.src=PH;m.dataset.on=''}}
+ else if(isIn&&r>=.6){var p=m.play();if(p&&p.catch)p.catch(function(){})}else if(!isIn)m.pause()})},{threshold:[0,.08,.6,1]});media.forEach(function(m){io.observe(m)})}
 else media.forEach(function(m){if(m.dataset.gif)m.src=m.dataset.gif});
 Q('.note').forEach(function(n){var p=n.querySelector('.note-pop');function fit(){p.style.setProperty('--nx','0px');var r=p.getBoundingClientRect(),w=document.documentElement.clientWidth,dx=0;if(r.left<8)dx=8-r.left;else if(r.right>w-8)dx=w-8-r.right;p.style.setProperty('--nx',dx+'px')}n.addEventListener('mouseenter',fit);n.addEventListener('focusin',fit)});
+})();
+
+/* ===== v5: interactive myth map — pan, zoom, pin tooltips ===== */
+(function(){
+var Q=function(s,r){return[].slice.call((r||document).querySelectorAll(s))};
+Q('.myth-map').forEach(function(map){
+  var minZ=0.5,maxZ=4,z=1,ox=0,oy=0,dragging=false,lastX=0,lastY=0,lastDist=0,inner=null;
+  /* Wrap bg + pins in a transform layer */
+  var bg=map.querySelector('.myth-map__bg')||map.querySelector('.myth-map__svg');
+  var pins=map.querySelector('.myth-map__pins');
+  inner=document.createElement('div');inner.className='myth-map__inner';
+  if(bg)inner.appendChild(bg);
+  if(pins)inner.appendChild(pins);
+  map.insertBefore(inner,map.querySelector('.myth-map__ctrl'));
+  /* Fit the layer to the artwork's own aspect ratio: the image is drawn edge-to-edge
+     inside it (object-fit:fill), so pin percentages land on true map positions and
+     zooming out reveals the whole map instead of empty letterbox. */
+  function fit(){
+    var nw=0,nh=0,tag=bg?bg.tagName.toLowerCase():'';
+    if(tag==='img'){nw=bg.naturalWidth;nh=bg.naturalHeight}
+    else if(bg){var vb=(bg.getAttribute('viewBox')||'').split(/[\s,]+/);nw=parseFloat(vb[2])||0;nh=parseFloat(vb[3])||0}
+    if(!nw||!nh){nw=800;nh=480}
+    var ar=nw/nh,cw=map.clientWidth,ch=map.clientHeight,w=cw,h=w/ar;
+    if(h>ch){h=ch;w=h*ar}
+    inner.style.width=w+'px';inner.style.height=h+'px';
+  }
+  function apply(){inner.style.transform='translate('+ox+'px,'+oy+'px) scale('+z+')'}
+  function clamp(){if(z<=1.001){ox=0;oy=0;return}var mw=map.clientWidth*(z-1)/2,mh=map.clientHeight*(z-1)/2;ox=Math.max(-mw,Math.min(mw,ox));oy=Math.max(-mh,Math.min(mh,oy))}
+  /* Zoom controls */
+  Q('[data-zm]',map).forEach(function(b){b.onclick=function(){var v=+b.dataset.zm;if(v===0){z=1;ox=0;oy=0}else{z=Math.max(minZ,Math.min(maxZ,z+v*0.4))}apply()}});
+  /* Wheel zoom */
+  map.addEventListener('wheel',function(e){e.preventDefault();z=Math.max(minZ,Math.min(maxZ,z-e.deltaY*0.001));clamp();apply()},{passive:false});
+  /* Mouse drag */
+  map.addEventListener('mousedown',function(e){if(e.target.closest('.myth-pin,.myth-map__zoom'))return;dragging=true;lastX=e.clientX;lastY=e.clientY;e.preventDefault()});
+  document.addEventListener('mousemove',function(e){if(!dragging)return;ox+=e.clientX-lastX;oy+=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;clamp();apply()});
+  document.addEventListener('mouseup',function(){dragging=false});
+  /* Touch pan + pinch-zoom */
+  map.addEventListener('touchstart',function(e){if(e.touches.length===2){lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)}else if(e.touches.length===1){lastX=e.touches[0].clientX;lastY=e.touches[0].clientY}},{passive:true});
+  map.addEventListener('touchmove',function(e){if(e.touches.length===2){var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);z=Math.max(minZ,Math.min(maxZ,z*(d/lastDist)));lastDist=d;clamp();apply()}else if(e.touches.length===1){ox+=e.touches[0].clientX-lastX;oy+=e.touches[0].clientY-lastY;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;clamp();apply()}e.preventDefault()},{passive:false});
+  /* Pin tooltip edge-fitting */
+  Q('.myth-pin',map).forEach(function(pin){var pop=pin.querySelector('.myth-pin__pop');if(!pop)return;
+   function fit(){pop.style.setProperty('--nx','0px');var r=pop.getBoundingClientRect(),mr=map.getBoundingClientRect(),dx=0;if(r.left<mr.left+8)dx=mr.left+8-r.left;else if(r.right>mr.right-8)dx=mr.right-8-r.right;pop.style.setProperty('--nx',dx+'px')}
+   pin.addEventListener('mouseenter',fit);pin.addEventListener('focusin',fit)});
+  fit();
+  if(bg&&bg.tagName.toLowerCase()==='img'){if(bg.complete&&bg.naturalWidth)fit();else bg.addEventListener('load',fit)}
+  var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(fit,120)});
+  if(window.ResizeObserver){new ResizeObserver(fit).observe(map)}/* refit if shown from a hidden tab */
+  apply();
+});
 })();

@@ -60,3 +60,18 @@
   other = "Report a correction"
 [cHistory]
   other = "Page history"
+
+[mapLabel]
+  other = "Interactive myth map"
+[mapPins]
+  other = "Map locations"
+[mapControls]
+  other = "Map controls"
+[zoomIn]
+  other = "Zoom in"
+[zoomOut]
+  other = "Zoom out"
+[zoomReset]
+  other = "Reset view"
+[tagline]
+  other = "Myths of Iran and the East, with their sources"
