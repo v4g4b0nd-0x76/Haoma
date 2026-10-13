@@ -1,5 +1,13 @@
 /* ---------- tokens ---------- */
 :root{--bg:#14161a;--surface:#1c1f25;--border:#2a2e36;--text:#c9ccd3;--muted:#8a8f9a;--accent:#9aa3b5;--head:Georgia,"Source Serif Pro",serif;--rune:"";--meander:var(--m-none);--anim:fall;--m-none:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E");--m-meander:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='14'%3E%3Cpath d='M0 13h20V3H6v6h8' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");--m-rosette:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14'%3E%3Ccircle cx='14' cy='7' r='3.5' fill='none' stroke='black' stroke-width='1.2'/%3E%3Cpath d='M14 0v14M7 7h14' stroke='black' stroke-width='.8'/%3E%3C/svg%3E");--m-zigzag:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14'%3E%3Cpath d='M0 11l7-8 7 8 7-8 7 8' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");--m-waves:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14'%3E%3Cpath d='M0 8q7-9 14 0t14 0' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");--s1:8px;--s2:16px;--s3:24px;--s4:40px;--s5:64px;
+/* one grid for the whole site: shell width, the two 210px rails and the gap
+   between them. Every container and every reading column is derived from these. */
+--shell:1320px;--aside:210px;
+/* the reading column: the shell minus its two 24px gutters, the two rails and
+   the two 40px gaps = 1320 - 48 - 420 - 80. Prose never exceeds it, whichever
+   language is being read; media blocks (maps, grids, sliders, figures) may use
+   the full width of the article they sit in. */
+--col:772px;
 /* one hero height, shared by the home hero and every page banner: always taller
    than width/4 so the 4:1 artwork fits edge to edge (max detail, never cropped),
    and never tall enough to fill the viewport */
@@ -31,11 +39,20 @@ nav a:hover{color:var(--accent);border-color:var(--accent)}
 .hero-art img{position:absolute;inset:0;display:block;width:100%;height:100%}
 .hero-art .sbg{object-fit:cover;filter:blur(22px) brightness(.5) saturate(.9);transform:scale(1.25)}
 .hero-art .sfg{object-fit:contain}
-/* ---------- layout ---------- */
-.layout{display:flex;gap:var(--s4);max-width:1180px;margin:0 auto;padding:var(--s4) var(--s3) var(--s5);align-items:flex-start}
-article{flex:1;min-width:0;max-width:72ch}
-.solo article{margin:0 auto}
-aside{width:210px;flex:none;font-size:.92rem;position:sticky;top:var(--s3)}
+/* ---------- layout ----------
+   One shell and one grid for every page:
+       [ side nav 210 ] 40 [ reading column, 1fr ] 40 [ on-page toc 210 ]  = 1272
+   The reading column starts at the same x on every page whether or not a side
+   nav or a table of contents is present — a missing slot simply stays empty —
+   so headings, paragraphs and cards line up across the whole site. --shell is
+   shared with .wrap, so the home page's full-width sections use the same box. */
+.layout{display:grid;grid-template-columns:var(--aside) minmax(0,var(--col)) var(--aside);column-gap:var(--s4);row-gap:var(--s3);max-width:var(--shell);margin:0 auto;padding:var(--s4) var(--s3) var(--s5);align-items:start}
+aside.side{grid-column:1;grid-row:1}
+article{grid-column:2;grid-row:1;min-width:0}
+aside.toc{grid-column:3;grid-row:1}
+/* a wide article uses the toc slot too, so it ends flush with the shell */
+article.wide{grid-column:2/-1;max-width:none}
+aside{width:100%;font-size:.92rem;position:sticky;top:var(--s3)}
 aside h3{margin:0 0 var(--s1);font-size:1.05rem}
 aside ul{list-style:none;margin:0;padding:0}
 aside li{margin:2px 0}
@@ -70,7 +87,7 @@ article hr{border:0;border-top:1px solid var(--border);margin:var(--s4) 0}
 .muted{color:var(--muted)}
 audio{width:100%;margin:var(--s1) 0 var(--s3)}
 /* ---------- cards ---------- */
-.wrap,.hero{max-width:1180px;margin:0 auto;padding:0 var(--s3)}
+.wrap,.hero{max-width:var(--shell);margin:0 auto;padding:0 var(--s3)}
 .hero{padding-top:var(--s5);padding-bottom:var(--s2)}
 .hero h1{font-size:2.8rem;margin:0 0 var(--s1)}
 .hero p{max-width:60ch;font-size:1.15rem;color:var(--muted)}
@@ -85,7 +102,7 @@ audio{width:100%;margin:var(--s1) 0 var(--s3)}
 .cards h3 a{text-decoration:none}
 .cards p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.55}
 footer{text-align:center;color:var(--muted);padding:var(--s4) var(--s3);font-size:.9rem;border-top:1px solid var(--border)}
-@media(max-width:900px){.layout{flex-direction:column;gap:var(--s3)}aside{width:100%;position:static}article h1{font-size:1.9rem}nav{gap:var(--s2)}}
+@media(max-width:900px){.layout{grid-template-columns:minmax(0,1fr);row-gap:var(--s3)}aside.side,aside.toc,article,article.wide{grid-column:1;grid-row:auto}aside{width:100%;position:static}nav{gap:var(--s2)}}
 @media(prefers-reduced-motion:reduce){.bg{animation:none}}
 /* ---------- cinematic home ---------- */
 .cine{position:relative;height:var(--hero-h);overflow:hidden;text-align:center;isolation:isolate;border-bottom:1px solid var(--border)}
@@ -143,6 +160,12 @@ body{font-family:var(--ui)}
 [hidden]{display:none!important}
 /* header controls */
 .ctrl{display:flex;gap:var(--s2);align-items:center}
+
+/* ---------- culture picker ----------
+   A listbox rather than a <select>: the native control cannot tint an option with
+   that culture's own colour while you hover it, which is the point of this one.
+   Every option carries --c (the culture's main colour) and --pat (its motif from
+   themes.json); the wrapper carries the colour of the culture in force. */
 .ctrl select{background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:99px;padding:6px 14px;font:inherit;font-size:.9rem;cursor:pointer}
 .ctrl select:focus-visible{outline:2px solid var(--accent)}
 .lang{border:1px solid var(--accent);border-radius:99px;padding:3px 14px;text-decoration:none;font-size:.9rem}
@@ -163,10 +186,14 @@ body{font-family:var(--ui)}
 .rail li{flex:0 0 min(380px,84%);scroll-snap-align:start}
 .rail .art{height:150px}
 /* reading */
-.layout{max-width:1320px}
-article{font-family:var(--read-font);font-size:var(--read);line-height:1.9;max-width:68ch}
+/* the grid column is the measure, so EN and FA fill an identical column */
+article{font-family:var(--read-font);font-size:var(--read);line-height:1.9;max-width:var(--col)}
+/* a wide article keeps its blocks wide but never lets a prose line run past the
+   reading measure */
+article.wide>p,article.wide>ul,article.wide>ol,article.wide>blockquote,
+article.wide>.lead,article.wide>.sources{max-width:var(--col)}
 article h1{font-family:var(--display);font-size:2em;line-height:1.3}
-article h2{font-family:var(--read-font);font-size:1.45em;margin-top:2em}
+article h2{font-family:var(--read-font);font-size:1.45em;margin-top:var(--s4)}
 article h3{font-family:var(--read-font);font-size:1.2em}
 article .lead{font-size:1.1em}
 article blockquote{border-left:0;border-inline-start:4px solid var(--accent);border-radius:6px}
@@ -179,8 +206,10 @@ html[lang=fa] article{line-height:2.1}
 .tools{display:flex;gap:6px;margin-bottom:var(--s2);flex-wrap:wrap}
 .tools button{min-width:38px;height:34px;border:1px solid var(--border);background:var(--surface);color:var(--text);border-radius:8px;cursor:pointer;font:600 .85rem var(--ui)}
 .tools button:hover{border-color:var(--accent);color:var(--accent)}
-aside.side{order:0}aside.toc{order:2}article{order:1}
-html[data-dock=end] aside.side{order:3}
+/* dock the side nav to the other edge: swap the two rails, the reading column
+   never moves (order is meaningless now that placement is explicit) */
+html[data-dock=end] aside.side{grid-column:3}
+html[data-dock=end] aside.toc{grid-column:1}
 html[data-nav=hidden] aside.side{display:none}
 html[data-focus="1"] aside.side,html[data-focus="1"] aside.toc{display:none}
 .navtab{position:fixed;top:50%;inset-inline-start:0;z-index:5;transform:translateY(-50%);width:34px;height:64px;border:1px solid var(--border);border-inline-start:0;background:var(--surface);color:var(--accent);border-radius:0 10px 10px 0;cursor:pointer;display:none}
@@ -191,7 +220,7 @@ html[data-nav=hidden] .navtab,html[data-focus="1"] .navtab{display:block}
 aside a{border-left:0;border-inline-start:2px solid var(--border);border-radius:0 4px 4px 0}
 html[dir=rtl] aside a{border-radius:4px 0 0 4px}
 aside.toc ul{border-left:0;border-inline-start:1px solid var(--border);padding-left:0;padding-inline-start:var(--s2)}
-@media(max-width:900px){aside.side{order:0}html[data-dock=end] aside.side{order:0}.navtab{display:none!important}.ctrl{width:100%}}
+@media(max-width:900px){aside.side,html[data-dock=end] aside.side,html[data-dock=end] aside.toc{grid-column:1;grid-row:auto}.navtab{display:none!important}.ctrl{width:100%}}
 
 /* data-driven theme hooks */
 .bg{animation-name:var(--anim,fall)}
@@ -202,7 +231,7 @@ aside.toc ul{border-left:0;border-inline-start:1px solid var(--border);padding-l
 article.wide{max-width:min(100%,1000px)}
 article h2,article h3{clear:both}
 article img,article video{max-width:100%;border-radius:12px}
-.fig{margin:1.6rem 0;position:relative;width:100%}
+.fig{margin:var(--s3) 0;position:relative;width:100%}
 .fig img,.fig video{display:block;width:100%;box-shadow:0 8px 28px rgba(0,0,0,.4)}
 .fig figcaption,.slider-md figcaption{font:.85rem/1.4 var(--ui);color:var(--muted);margin-top:.55rem}
 .fig.center{width:var(--w,70%);margin-inline:auto}
@@ -214,7 +243,7 @@ html[dir=rtl] .fig.start{margin:.3rem 0 1rem 1.6rem}html[dir=rtl] .fig.end{margi
 html[dir=rtl] .note-pop{inset-inline-start:auto;inset-inline-end:50%;transform:translateX(calc(50% + var(--nx,0px)))}
 .note:hover>.note-pop,.note:focus>.note-pop,.fig:hover>.note-pop{opacity:1;visibility:visible}
 .fig>.note-pop{inset-inline-start:50%;bottom:calc(100% - .4rem)}
-.grid-md{display:grid;grid-template-columns:var(--cols);grid-template-rows:var(--rows);gap:var(--gap);align-items:var(--al);margin:1.8rem 0}
+.grid-md{display:grid;grid-template-columns:var(--cols);grid-template-rows:var(--rows);gap:var(--gap);align-items:var(--al);margin:var(--s3) 0}
 .grid-md>.col{min-width:0}.grid-md .col>:first-child{margin-top:0}.grid-md .col>:last-child{margin-bottom:0}
 .grid-md .col img,.grid-md .col video{width:100%;display:block}
 .infobox{float:inline-end;width:var(--w,33%);margin:.3rem 0 1.2rem 1.6rem;padding:1rem 1.1rem;background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--accent);border-radius:12px;font:.93rem/1.6 var(--ui)}
@@ -222,7 +251,7 @@ html[dir=rtl] .note-pop{inset-inline-start:auto;inset-inline-end:50%;transform:t
 html[dir=rtl] .infobox{margin:.3rem 1.6rem 1.2rem 0}html[dir=rtl] .infobox.start{margin:.3rem 0 1.2rem 1.6rem}
 .infobox img{width:100%;border-radius:8px}.infobox>:last-child{margin-bottom:0}
 .ib-title{font:600 1rem var(--head);text-align:center;margin-bottom:.6rem;color:var(--accent)}
-.slider-md{position:relative;margin:1.8rem 0}
+.slider-md{position:relative;margin:var(--s3) 0}
 .sm-track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;border-radius:16px;aspect-ratio:var(--ratio);scrollbar-width:none;position:relative;box-shadow:0 10px 32px rgba(0,0,0,.45)}
 .sm-track::-webkit-scrollbar{display:none}
 .sm-slide{flex:0 0 100%;scroll-snap-align:center;position:relative;height:100%;background:#000}
@@ -234,12 +263,12 @@ html[dir=rtl] .sm-prev,html[dir=rtl] .sm-next{transform:scaleX(-1)}
 .slider-md:hover .sm-prev,.slider-md:hover .sm-next{opacity:1}
 .sm-dots{display:flex;gap:7px;justify-content:center;margin-top:.7rem}
 .sm-dots button{width:9px;height:9px;padding:0;border-radius:50%;border:0;background:var(--border);cursor:pointer}.sm-dots button.on{background:var(--accent);transform:scale(1.25)}
-@media(max-width:760px){.grid-md{grid-template-columns:1fr}.grid-md>.col{grid-column:auto!important;grid-row:auto!important}.infobox,.fig.start,.fig.end{float:none;width:100%;margin:1.2rem 0}.fig.center{width:100%}.sm-prev,.sm-next{opacity:1}}
+@media(max-width:760px){.grid-md{grid-template-columns:1fr}.grid-md>.col{grid-column:auto!important;grid-row:auto!important}.infobox,html[dir=rtl] .infobox,.infobox.start,html[dir=rtl] .infobox.start,.fig.start,.fig.end{float:none;width:100%;margin:1.2rem 0}.fig.center{width:100%}.sm-prev,.sm-next{opacity:1}}
 
 /* ===== v5: interactive myth map ===== */
 /* Middle-Earth vibe with our art direction: dark parchment, gold & jewel pin colours,
    handwritten-style labels, no external dependencies */
-.myth-map-wrap{margin:1.8rem 0}
+.myth-map-wrap{margin:var(--s3) 0}
 .myth-map-wrap figcaption{font:.85rem/1.4 var(--ui);color:var(--muted);margin-top:.55rem}
 .myth-map{position:relative;overflow:hidden;border-radius:14px;border:2px solid color-mix(in srgb,var(--accent) 35%,var(--border));box-shadow:0 16px 48px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.06);background:radial-gradient(130% 130% at 50% 0%,color-mix(in srgb,var(--surface) 75%,#000) 0%,var(--surface) 70%);cursor:grab;user-select:none;touch-action:none;display:flex;align-items:center;justify-content:center}
 .myth-map:active{cursor:grabbing}
@@ -339,7 +368,7 @@ article>ul:not(.cards)>li::before{content:"";position:absolute;inset-inline-star
 /* drop cap (opt in with dropcap: true) */
 html[lang=en] article.dc>p:first-of-type::first-letter{font:700 3.5em/.82 var(--display);float:inline-start;padding:.06em .12em 0 0;color:var(--accent)}
 /* couplets: two hemistichs, first on the reading start side */
-.verse{position:relative;margin:2.4rem 0;padding:1.5rem 1rem 1.1rem;text-align:center;font-family:var(--verse);font-style:italic;border-block:1px solid var(--border);background:linear-gradient(var(--surface),transparent)}
+.verse{position:relative;margin:var(--s4) 0;padding:1.5rem 1rem 1.1rem;text-align:center;font-family:var(--verse);font-style:italic;border-block:1px solid var(--border);background:linear-gradient(var(--surface),transparent)}
 .verse::before{content:"";position:absolute;top:-9px;left:50%;width:18px;height:18px;margin-left:-9px;background:var(--accent);-webkit-mask:var(--m-star) center/contain no-repeat;mask:var(--m-star) center/contain no-repeat}
 .verse .vl{display:grid;grid-template-columns:1fr 2.4rem 1fr;align-items:baseline;line-height:2.1;font-size:1.15em}
 .verse .m1{text-align:end}.verse .m2{text-align:start}
@@ -349,3 +378,17 @@ html[lang=en] article.dc>p:first-of-type::first-letter{font:700 3.5em/.82 var(--
 .verse[lang=fa]{--verse:Nastaliq,Vazirmatn,serif;font-style:normal}.verse[lang=fa] .vl{line-height:2.7;font-size:1.3em}
 html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;font-size:1.3em}
 @media(max-width:760px){.verse .vl{grid-template-columns:1fr 1.4rem 1fr;font-size:1.05em}.verse[lang=fa] .vl,html[lang=fa] .verse .vl{font-size:1.15em}}
+
+/* ---------- responsive: kept last so it beats the reading rules above ----------
+   (the h1 scale rule earlier in the file is otherwise overridden by the
+   font-size set in the reading section, which left headings at full size on phones) */
+@media(max-width:900px){
+  article h1{font-size:1.9rem}
+  .layout,.wrap,.hero{padding-inline:var(--s2)}
+  .layout{padding-block:var(--s3) var(--s4)}
+}
+@media(max-width:900px){
+  /* a Markdown table has no wrapper element, so let the table itself scroll
+     rather than let it drag the whole page sideways */
+  article table{display:block;overflow-x:auto;max-width:100%}
+}
