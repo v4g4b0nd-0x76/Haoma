@@ -189,7 +189,11 @@
           {{- if or (hasPrefix . "http://") (hasPrefix . "https://") (hasPrefix . "mailto:") (hasPrefix . "#") -}}
             {{- $rlink = . -}}
           {{- else -}}
-            {{- $rlink = relLangURL . -}}
+            {{- /* a leading slash means "already absolute from the site root", which Hugo
+                   leaves alone -- so the baseURL path would never be applied and the link
+                   would break on a site served from a subdirectory. Trim it and let
+                   relLangURL add the base path and the language prefix. */ -}}
+            {{- $rlink = relLangURL (strings.TrimPrefix "/" .) -}}
           {{- end -}}
         {{- end -}}
         {{- $rname := $rlab -}}{{- if not $rname -}}{{- $rname = $rnote -}}{{- end -}}
@@ -238,7 +242,7 @@
           {{- if or (hasPrefix . "http://") (hasPrefix . "https://") (hasPrefix . "mailto:") (hasPrefix . "#") -}}
             {{- $link = . -}}
           {{- else -}}
-            {{- $link = relLangURL . -}}
+            {{- $link = relLangURL (strings.TrimPrefix "/" .) -}}  {{- /* see the region link above */ -}}
           {{- end -}}
         {{- end -}}
         {{- if and $px $py -}}

@@ -1,2 +1,5 @@
-{{- $d := .Destination -}}{{- if hasPrefix $d "/" -}}{{- $d = $d | relLangURL -}}{{- end -}}
+{{- $d := .Destination -}}{{- if hasPrefix $d "/" -}}{{- /* a leading slash marks the path as
+absolute from the site root, which Hugo passes through untouched -- so the baseURL path would
+never be applied and the link would break when the site is served from a subdirectory. Trim it
+and let relLangURL add the base path and the language prefix. */ -}}{{- $d = relLangURL (strings.TrimPrefix "/" $d) -}}{{- end -}}
 <a href="{{ $d | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>
