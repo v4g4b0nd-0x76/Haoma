@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" width="900" height="720" role="img" aria-labelledby="title desc">
   <title id="title">Azi Dahaka - three-headed dragon-serpent</title>
-  <desc id="desc">Standalone 2D review illustration. Dark ink engraving with bone, ash, muted bronze, and crimson-ink accents. Not map-baked.</desc>
+  <desc id="desc">Standalone dark volumetric review illustration. Lit/shade mass with bone, ash, muted bronze, and crimson-ink accents. Not map-baked. Proposed lon/lat 53.30E 35.50N on persia.</desc>
 
   <defs>
     <!-- Palette: NO UI gold #c9a45c as primary -->
@@ -56,10 +56,24 @@
     <filter id="softShade" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="2.2"/>
     </filter>
+    <filter id="volBlur" x="-25%" y="-25%" width="150%" height="150%">
+      <feGaussianBlur stdDeviation="3.4"/>
+    </filter>
     <filter id="inkBleed" x="-5%" y="-5%" width="110%" height="110%">
       <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n"/>
       <feDisplacementMap in="SourceGraphic" in2="n" scale="0.6"/>
     </filter>
+    <!-- key light from upper-left → lit ridge / deep shade (no UI gold) -->
+    <linearGradient id="volLit" x1="15%" y1="5%" x2="85%" y2="95%">
+      <stop offset="0%" stop-color="#7a6e60"/>
+      <stop offset="38%" stop-color="#3a322a"/>
+      <stop offset="100%" stop-color="#0a0806"/>
+    </linearGradient>
+    <radialGradient id="specHi" cx="32%" cy="28%" r="55%">
+      <stop offset="0%" stop-color="#c8bcae" stop-opacity=".28"/>
+      <stop offset="45%" stop-color="#8a7a68" stop-opacity=".08"/>
+      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+    </radialGradient>
   </defs>
 
   <!-- parchment / ink ground -->
@@ -75,20 +89,30 @@
   <text x="450" y="90" text-anchor="middle" fill="#6a5e52" font-family="Georgia, 'Times New Roman', serif"
         font-size="11" letter-spacing="0.12em" opacity=".7">three-headed dragon-serpent - Iranian - review #1</text>
 
-  <!-- ground shadow -->
-  <ellipse cx="455" cy="610" rx="280" ry="38" fill="#000" opacity=".55" filter="url(#softShade)"/>
+  <!-- ground shadow (volumetric contact) -->
+  <ellipse cx="470" cy="618" rx="300" ry="44" fill="#000" opacity=".62" filter="url(#volBlur)"/>
+  <ellipse cx="455" cy="608" rx="240" ry="28" fill="#000" opacity=".4" filter="url(#softShade)"/>
 
   <g id="beast" transform="translate(450 390)">
 
     <!-- coiled lower body / serpentine mass -->
     <g id="coils">
+      <!-- ambient occlusion under coil mass -->
+      <ellipse cx="-40" cy="155" rx="200" ry="36" fill="#000" opacity=".35" filter="url(#softShade)"/>
       <path d="M-210 140
                C-260 80 -280 20 -240 -40
                C-200 -95 -120 -110 -40 -85
                C40 -60 90 -20 70 40
                C50 95 10 130 -40 145
                C-90 160 -150 155 -210 140Z"
-            fill="url(#bodyMass)" stroke="#0a0806" stroke-width="1.4"/>
+            fill="url(#volLit)" stroke="#0a0806" stroke-width="1.4"/>
+      <path d="M-210 140
+               C-260 80 -280 20 -240 -40
+               C-200 -95 -120 -110 -40 -85
+               C40 -60 90 -20 70 40
+               C50 95 10 130 -40 145
+               C-90 160 -150 155 -210 140Z"
+            fill="url(#bodyMass)" stroke="#0a0806" stroke-width="1.4" opacity=".85"/>
       <path d="M-210 140
                C-260 80 -280 20 -240 -40
                C-200 -95 -120 -110 -40 -85
@@ -129,9 +153,12 @@
 
     <!-- torso / chest plate where three necks meet -->
     <g id="torso">
-      <ellipse cx="0" cy="-20" rx="78" ry="62" fill="url(#bodyMass)" stroke="#080604" stroke-width="1.5"/>
+      <ellipse cx="8" cy="8" rx="88" ry="28" fill="#000" opacity=".4" filter="url(#softShade)"/>
+      <ellipse cx="0" cy="-20" rx="78" ry="62" fill="url(#volLit)" stroke="#080604" stroke-width="1.5"/>
+      <ellipse cx="0" cy="-20" rx="78" ry="62" fill="url(#bodyMass)" opacity=".8"/>
       <ellipse cx="0" cy="-20" rx="78" ry="62" fill="url(#scaleTex)" opacity=".75"/>
-      <ellipse cx="-18" cy="-35" rx="42" ry="30" fill="#6a5e50" opacity=".22"/>
+      <ellipse cx="-18" cy="-35" rx="42" ry="30" fill="url(#specHi)"/>
+      <ellipse cx="-18" cy="-35" rx="42" ry="30" fill="#6a5e50" opacity=".18"/>
       <!-- breastplate ridges -->
       <path d="M-55 -5 Q-20 -35 15 -40 Q40 -25 50 5 Q20 25 -15 28 Q-50 15 -55 -5Z"
             fill="#1a1612" opacity=".55"/>

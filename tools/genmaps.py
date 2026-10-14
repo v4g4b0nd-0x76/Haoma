@@ -482,16 +482,17 @@ MAPS = {
         box=(42, 72, 24, 40), w=1200, center=32,
         title={"en": "The Iranian Plateau", "fa": "فلات ایران"},
         labels=[
-            ("MEDIA", 48.2, 35.6, 15, "r", 0),
-            ("PERSIA", 54.2, 31.8, 17, "r", 0),
-            ("PARTHIA", 58.6, 36.4, 15, "r", 0),
-            ("ARIA", 64, 33.4, 14, "r", 0),
-            ("KAVIR DESERT", 55.8, 34.8, 11, "r", -10),
-            ("CASPIAN SEA", 51, 37.6, 13, "s", 0),
+            # region labels sit clear of content pins (Damavand/Ecbatana/Susa/Persepolis/Balkh)
+            ("MEDIA", 47.4, 35.9, 15, "r", 0),
+            ("PERSIA", 54.8, 30.6, 17, "r", 0),
+            ("PARTHIA", 59.4, 36.6, 15, "r", 0),
+            ("ARIA", 64.2, 33.2, 14, "r", 0),
+            ("KAVIR DESERT", 56.6, 33.1, 11, "r", -8),
+            ("CASPIAN SEA", 50.6, 37.7, 13, "s", 0),
             ("PERSIAN GULF", 49.8, 29.4, 13, "s", -30),
             ("GULF OF OMAN", 58.5, 25.4, 13, "s", 0),
             ("ARABIAN SEA", 65, 25.4, 13, "s", 0),
-            ("TRANSOXIANA", 64, 38.4, 13, "r", 0),
+            ("TRANSOXIANA", 64.2, 38.5, 13, "r", 0),
         ],
         ranges=[
             # Alborz — denser wall; Damavand summit drawn separately on top
@@ -503,8 +504,9 @@ MAPS = {
             [(64, 35.5), (68, 35.2), (71, 35.5)],
         ],
         # named summit mark (artwork; pin overlay still used on content pages)
+        # scale ~1.70 ≈ 33% smaller than 2.55; keeps lit/shade faces + soft shadow
         peaks=[
-            ("DAMAVAND", 53.06, 35.95, 2.55),
+            ("DAMAVAND", 53.06, 35.95, 1.70),
         ],
         rivers=[
             # Atrek

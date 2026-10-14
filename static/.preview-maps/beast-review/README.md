@@ -4,7 +4,18 @@
 
 ## What was drawn
 
-Aži Dahāka (Iranian three-headed dragon-serpent) as a **standalone 2D engraving-style illustration**: coiled serpentine body with scale texture and hatch, three distinct heads (center dominant), bone horns/teeth, crimson-ink eyes and gullet, ash/bronze body mass. Serious mythic tone — not a cute map doodle and not the old gold-wireframe/volumetric-gold style.
+Aži Dahāka (Iranian three-headed dragon-serpent) as a **standalone dark volumetric SVG**: coiled serpentine mass with scale texture, lit/shade faces and soft ground shadow, three distinct heads (center dominant), bone horns/teeth, crimson-ink eyes and gullet, ash/bronze body. Serious mythic tone — not a cute map doodle and not the old gold-wireframe/volumetric-gold style.
+
+## Proposed map placement (after approval)
+
+| Field | Value |
+|-------|--------|
+| Map | `persia` |
+| Lon / lat | **53.30°E, 35.50°N** |
+| Rationale | South flank of Damavand (Zahhak chained in the mountain). Offset from the Damavand summit pin at 53.06°E, 35.95°N so the beast mark and pin do not stack. |
+| Pin % (persia box 42–72°E / 24–40°N) | ≈ **x=37.7% y=28.1%** |
+
+Do **not** add to `MAPS["persia"]["creatures"]` or `map_creatures.CREATURE_ART` until approved.
 
 ## Palette
 
@@ -21,7 +32,7 @@ Aži Dahāka (Iranian three-headed dragon-serpent) as a **standalone 2D engravin
 ## Files
 
 - `static/.preview-maps/beast-review/dahaka.svg`
-- `static/.preview-maps/beast-review/dahaka.png` (cairosvg @1200px wide)
+- `static/.preview-maps/beast-review/dahaka.png` (Chrome headless @1200×960)
 
 ## Checkpoint
 
