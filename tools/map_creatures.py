@@ -1,8 +1,15 @@
-"""Dark atlas bestiary silhouettes for tools/genmaps.py.
-Solid ink-black fills + gold outline/teeth/eyes. Readable at world-map scale.
+"""Dense engraved bestiary silhouettes for tools/genmaps.py.
+
+Antique atlas language: ink-black fill, thin gold stroke, cross-hatch /
+scale / feather texture. Built as many small path elements so beasts read
+as etched plates, not thick outline doodles. Keep MAPS creature scales
+tiny (~0.5–0.9); these drawings are ~±18 units around the origin.
 """
+from __future__ import annotations
+
 GOLD = "#c9a45c"
 INK = "#05070a"
+
 
 def art(kind, gold=GOLD):
     raw = CREATURE_ART.get(kind) or CREATURE_ART["serpent"]
@@ -10,27 +17,675 @@ def art(kind, gold=GOLD):
         return raw
     return raw.replace(GOLD, gold)
 
+
+# ---------------------------------------------------------------- builders
+
+
+class _Engraver:
+    """Accumulate filled silhouettes + dense gold hatch texture."""
+
+    __slots__ = ("parts",)
+
+    def __init__(self):
+        self.parts: list[str] = []
+
+    def path(self, d, fill=None, stroke=GOLD, sw=0.55, opacity=None):
+        bits = [f'd="{d}"']
+        bits.append(f'fill="{fill}"' if fill else 'fill="none"')
+        if stroke:
+            bits.append(f'stroke="{stroke}"')
+        bits.append(f'stroke-width="{sw}"')
+        bits.append('stroke-linecap="round" stroke-linejoin="round"')
+        if opacity is not None:
+            bits.append(f'opacity="{opacity}"')
+        self.parts.append(f'<path {" ".join(bits)}/>')
+
+    def circle(self, cx, cy, r, fill=GOLD, stroke=None, sw=0.4):
+        bits = [f'cx="{cx}"', f'cy="{cy}"', f'r="{r}"', f'fill="{fill}"']
+        if stroke:
+            bits.append(f'stroke="{stroke}"')
+            bits.append(f'stroke-width="{sw}"')
+        self.parts.append(f'<circle {" ".join(bits)}/>')
+
+    def hatch_box(self, x0, y0, x1, y1, step=1.6, a=1, b=1, sw=0.32, op=0.78):
+        """Cross-hatch a bounding box (diagonal both ways)."""
+        w, h = x1 - x0, y1 - y0
+        # / direction
+        start = -max(w, h)
+        end = max(w, h) * 2
+        t = start
+        while t < end:
+            # line through box: y - y0 = (b/a)*(x - x0) shifted by t
+            xs, ys = [], []
+            # clip parametric line x = x0 + t + s, y = y0 + s (for a=b=1 style)
+            # Use two families: NE-SW and NW-SE
+            t += step
+        # NE-SW (/)
+        for k in range(int((w + h) / step) + 3):
+            ox = x0 - h + k * step
+            self.path(
+                f"M{ox:.1f} {y0:.1f}L{ox + h:.1f} {y1:.1f}",
+                stroke=GOLD, sw=sw, opacity=op,
+            )
+        # NW-SE (\)
+        for k in range(int((w + h) / step) + 3):
+            ox = x0 + k * step
+            self.path(
+                f"M{ox:.1f} {y0:.1f}L{ox - h:.1f} {y1:.1f}",
+                stroke=GOLD, sw=sw * 0.9, opacity=op * 0.85,
+            )
+
+    def hatch_body(self, cx, cy, rx, ry, step=1.55, sw=0.3, op=0.72):
+        """Oval cross-hatch clipped roughly to body ellipse via short segments."""
+        # parallel ribs along major axis
+        y = cy - ry + 0.8
+        while y < cy + ry:
+            # chord width at this y
+            dy = (y - cy) / ry
+            if abs(dy) < 1:
+                hw = rx * (1 - dy * dy) ** 0.5
+                self.path(
+                    f"M{cx - hw:.1f} {y:.1f}L{cx + hw:.1f} {y:.1f}",
+                    stroke=GOLD, sw=sw, opacity=op,
+                )
+                # short cross ticks
+                x = cx - hw + 0.6
+                while x < cx + hw:
+                    self.path(
+                        f"M{x:.1f} {y - 0.7:.1f}L{x + 0.9:.1f} {y + 0.7:.1f}",
+                        stroke=GOLD, sw=sw * 0.85, opacity=op * 0.9,
+                    )
+                    x += step
+            y += step
+
+    def scales(self, x0, y0, x1, y1, cols=6, rows=4, r=1.35, sw=0.35):
+        """Scale texture: overlapping gold arcs on ink."""
+        dx = (x1 - x0) / max(cols - 1, 1)
+        dy = (y1 - y0) / max(rows - 1, 1)
+        for j in range(rows):
+            for i in range(cols):
+                cx = x0 + i * dx + (0.55 if j % 2 else 0)
+                cy = y0 + j * dy
+                self.path(
+                    f"M{cx - r:.1f} {cy:.1f}A{r:.1f} {r * 0.7:.1f} 0 0 1 {cx + r:.1f} {cy:.1f}",
+                    stroke=GOLD, sw=sw, opacity=0.8,
+                )
+
+    def feathers(self, x0, y0, x1, y1, n=8, sw=0.38):
+        """Feather ribs from base toward tip."""
+        for i in range(n):
+            t = i / max(n - 1, 1)
+            bx = x0 + (x1 - x0) * 0.15
+            by = y0 + (y1 - y0) * t
+            tx = x1
+            ty = y0 + (y1 - y0) * (t * 0.85 + 0.08)
+            self.path(
+                f"M{bx:.1f} {by:.1f}L{tx:.1f} {ty:.1f}",
+                stroke=GOLD, sw=sw, opacity=0.75,
+            )
+            # vane ticks
+            for k in (0.35, 0.55, 0.75):
+                mx = bx + (tx - bx) * k
+                my = by + (ty - by) * k
+                self.path(
+                    f"M{mx:.1f} {my:.1f}l{1.2:.1f} {-0.9 + t * 0.2:.1f}",
+                    stroke=GOLD, sw=sw * 0.7, opacity=0.65,
+                )
+
+    def horn_ridges(self, pts, sw=0.4):
+        """Short ridge marks along a polyline of (x,y)."""
+        for i, (x, y) in enumerate(pts):
+            self.path(
+                f"M{x:.1f} {y:.1f}l{1.1:.1f} {0.6 if i % 2 == 0 else -0.6:.1f}",
+                stroke=GOLD, sw=sw, opacity=0.8,
+            )
+
+    def teeth(self, x, y, n=4, up=True, sw=0.45):
+        for i in range(n):
+            tx = x + i * 1.7
+            if up:
+                self.path(
+                    f"M{tx:.1f} {y:.1f}L{tx + 0.7:.1f} {y - 2.2:.1f}L{tx + 1.4:.1f} {y:.1f}Z",
+                    fill=INK, stroke=GOLD, sw=sw,
+                )
+            else:
+                self.path(
+                    f"M{tx:.1f} {y:.1f}L{tx + 0.7:.1f} {y + 2.2:.1f}L{tx + 1.4:.1f} {y:.1f}Z",
+                    fill=INK, stroke=GOLD, sw=sw,
+                )
+
+    def done(self):
+        return "".join(self.parts)
+
+
+def _serpent_body(e: _Engraver, coiled=False):
+    if coiled:
+        e.path(
+            "M-18 6C-12-8 -2-14 8-8C16-4 20 2 18 8C16 14 8 16 0 12C-6 9-12 10-18 6Z",
+            fill=INK, sw=1.05,
+        )
+    else:
+        e.path(
+            "M-26 6C-18-8 -6-14 6-6C14 0 22-2 26-10C28-14 26-16 22-14C14-8 6-2-4-6C-12-9-20-2-26 6Z",
+            fill=INK, sw=1.05,
+        )
+
+
+def build_jormungandr():
+    e = _Engraver()
+    e.path(
+        "M-28 4C-22-10 -10-16 2-10C12-6 20-2 24 4C26 8 24 4 22-2C20-8 14-12 6-10C-4-6-14-8-22-2C-26 2-28 6-28 4Z",
+        fill=INK, sw=1.1,
+    )
+    e.scales(-22, -6, 18, 6, cols=10, rows=5, r=1.2)
+    e.hatch_body(-4, 0, 18, 8, step=1.7)
+    # dorsal plates
+    for x, y in [(-16, -4), (-8, -8), (0, -7), (8, -3), (14, 0)]:
+        e.path(f"M{x} {y}L{x + 2} {y - 5}L{x + 4} {y + 0.5}Z", fill=INK, stroke=GOLD, sw=0.7)
+        e.path(f"M{x + 1.5} {y - 1}L{x + 2} {y - 3.5}", stroke=GOLD, sw=0.35, opacity=0.75)
+    # head
+    e.path("M22-2C28-8 36-12 42-10L44-6L36-4L32 0C28 3 24 2 22 0Z", fill=INK, sw=1.0)
+    e.path("M34-7L42-6L43-2L35-2.5Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.path("M33-2L41 0L40 3L32 1.5Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.teeth(34, -5.5, n=4, up=True)
+    e.teeth(33.5, -1, n=3, up=False)
+    e.circle(30, -6.5, 0.55)
+    e.path("M28-10L26-16L30-11Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.path("M32-10.5L33-17L36-11Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.horn_ridges([(27, -12), (29, -14), (32, -13.5), (34, -12)])
+    e.path("M42-5l5-1.2M42-4l5 2", stroke=GOLD, sw=0.45)
+    return e.done()
+
+
+def build_nidhogg():
+    e = _Engraver()
+    e.path(
+        "M-14 2C-16-8 -8-16 2-16C14-16 20-6 20 2C20 10 12 16 2 16C-8 16-14 10-14 2Z",
+        fill=INK, sw=1.1,
+    )
+    e.hatch_body(2, 0, 14, 12, step=1.5)
+    e.scales(-8, -8, 14, 8, cols=8, rows=5, r=1.15)
+    # wings
+    e.path("M6-10C12-20 20-28 30-32C24-22 18-14 12-10C10-9 8-9 6-10Z", fill=INK, sw=0.95)
+    e.path("M2-12C6-22 12-32 20-38C14-28 8-20 4-14C3-13 2-12 2-12Z", fill=INK, sw=0.9)
+    e.feathers(8, -30, 28, -12, n=7)
+    e.feathers(4, -34, 18, -14, n=5)
+    # head
+    e.path("M12-4C20-12 30-18 38-20L42-16L34-12L28-6C24-2 16 0 12-2Z", fill=INK, sw=1.0)
+    e.path("M32-16L40-14L41-10L33-11Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.path("M31-11L39-9L38-5L30-6.5Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.teeth(33, -13.5, n=4)
+    e.circle(28, -15, 0.55)
+    for hx, hy in [(24, -20), (29, -21), (34, -19)]:
+        e.path(f"M{hx} {hy}L{hx - 1} {hy - 8}L{hx + 3} {hy - 1}Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.horn_ridges([(25, -24), (28, -26), (32, -25), (35, -22)])
+    # legs + claws
+    e.path("M-6 12C-8 20-6 26-4 30L0 30L-1 22C-2 18-4 14-4 12Z", fill=INK, sw=0.85)
+    e.path("M8 12C10 20 12 26 14 30L18 29L15 22C14 18 11 14 9 12Z", fill=INK, sw=0.85)
+    for base in [(-4, 30), (14, 30)]:
+        e.path(f"M{base[0]} {base[1]}l-2.5 3.5M{base[0]+2} {base[1]}l0 3.8M{base[0]+4} {base[1]}l2.5 3.2",
+               stroke=GOLD, sw=0.5)
+    e.path("M-14 4C-22 10-28 18-32 26L-26 26L-22 16C-18 10-15 6-14 4Z", fill=INK, sw=0.85)
+    e.path("M-30 24L-36 26L-30 28Z", fill=INK, stroke=GOLD, sw=0.7)
+    return e.done()
+
+
+def build_fenrir():
+    e = _Engraver()
+    e.path(
+        "M-16 0C-16-10 -6-16 4-16C14-16 20-8 20 0C20 8 12 14 2 14C-8 14-16 8-16 0Z",
+        fill=INK, sw=1.1,
+    )
+    e.hatch_body(2, -1, 14, 11, step=1.55)
+    # fur strokes
+    for x, y in [(-10, -6), (-4, -10), (2, -11), (8, -8), (-8, 4), (0, 6), (8, 4)]:
+        e.path(f"M{x} {y}l{-1.5 if x < 0 else 1.2} {-2.8}", stroke=GOLD, sw=0.4, opacity=0.8)
+        e.path(f"M{x + 1.2} {y + 0.5}l{-1 if x < 0 else 1} {-2.2}", stroke=GOLD, sw=0.32, opacity=0.7)
+    # head / snout
+    e.path("M12-6C20-12 28-16 36-14L40-8L32-6L26-2C22 2 16 2 12 0Z", fill=INK, sw=1.0)
+    e.path("M32-9L40-6L41-2L33-3.5Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.path("M31-3L39 0L38 4L30 1.5Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.teeth(33, -6.5, n=4)
+    e.teeth(32, -1, n=3, up=False)
+    e.circle(27, -9, 0.6)
+    e.path("M18-12L16-22L22-14Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.path("M24-13L26-24L30-14Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.horn_ridges([(17, -16), (19, -18), (25, -18), (27, -16)])
+    # fur on neck
+    for i in range(6):
+        e.path(f"M{6 + i * 1.5} {-8 - i * 0.2}l-1 {-3.5}", stroke=GOLD, sw=0.35, opacity=0.75)
+    # legs
+    for x in (-10, -2, 8):
+        e.path(f"M{x} 10C{x - 1} 18 {x} 24 {x + 1} 28L{x + 5} 28L{x + 3} 20C{x + 2} 16 {x + 1} 12 {x} 10Z",
+               fill=INK, sw=0.8)
+        e.path(f"M{x + 1} 28l-2 3M{x + 3} 28l0 3.4M{x + 5} 28l2 2.8", stroke=GOLD, sw=0.45)
+    e.path("M-16-2C-24-8 -32-10 -38-4C-32 2-26 4-20 4C-18 4-16 2-16-2Z", fill=INK, sw=0.85)
+    for i in range(5):
+        e.path(f"M{-22 - i * 3} {-4 - i * 0.3}l-1.2 2.8", stroke=GOLD, sw=0.35, opacity=0.75)
+    return e.done()
+
+
+def build_simorgh():
+    e = _Engraver()
+    # wings
+    e.path("M-4-2C-14-10 -26-20 -34-28C-26-16 -16-8 -6-4C-5-3 -4-2 -4-2Z", fill=INK, sw=0.95)
+    e.path("M4-2C14-10 26-20 34-28C26-16 16-8 6-4C5-3 4-2 4-2Z", fill=INK, sw=0.95)
+    e.feathers(-30, -26, -6, -4, n=9)
+    e.feathers(6, -4, 30, -26, n=9)
+    # body
+    e.path(
+        "M-4-4C-8 0 -9 10 -4 16C-1 20 5 20 8 16C12 10 11 0 6-4C3-7 -1-7 -4-4Z",
+        fill=INK, sw=1.1,
+    )
+    e.hatch_body(2, 4, 7, 10, step=1.4)
+    e.scales(-2, 0, 8, 12, cols=5, rows=4, r=1.0)
+    # head
+    e.path("M2-4C1-12 4-16 10-18L18-19L15-15L11-14L13-10L8-9C4-8 2-5 2-4Z", fill=INK, sw=0.9)
+    e.circle(10, -14, 0.55)
+    for hx, hy in [(5, -16), (9, -17), (13, -16)]:
+        e.path(f"M{hx} {hy}L{hx - 1} {hy - 9}L{hx + 3} {hy - 1}Z", fill=INK, stroke=GOLD, sw=0.65)
+    e.horn_ridges([(6, -20), (8, -22), (11, -22), (14, -20)])
+    # peacock tail
+    e.path("M-2 14L-10 30L4 32L8 16Z", fill=INK, sw=0.85)
+    e.feathers(-8, 16, 6, 30, n=6)
+    e.path("M-4 20L-12 26L-2 28Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.path("M6 20L14 27L7 29Z", fill=INK, stroke=GOLD, sw=0.7)
+    for i in range(5):
+        e.path(f"M{i - 1} 16l{i * 0.3 - 1} 8", stroke=GOLD, sw=0.35, opacity=0.7)
+    return e.done()
+
+
+def build_dahaka():
+    e = _Engraver()
+    e.path(
+        "M-12 2C-14-8 -6-16 2-16C12-16 18-6 18 2C18 10 10 16 0 16C-10 16-14 10-12 2Z",
+        fill=INK, sw=1.1,
+    )
+    e.hatch_body(2, 0, 12, 12, step=1.5)
+    e.scales(-6, -8, 12, 8, cols=7, rows=5, r=1.1)
+    # three heads
+    heads = [
+        (-8, -10, -24, -26, -30, -24),
+        (2, -12, 16, -30, 24, -28),
+        (10, -6, 28, -20, 34, -16),
+    ]
+    for bx, by, mx, my, tipx, tipy in heads:
+        e.path(
+            f"M{bx} {by}C{bx + 4} {by - 8} {mx} {my} {tipx} {tipy}L{tipx + 4} {tipy + 4}"
+            f"L{mx + 2} {my + 6}C{bx + 8} {by + 2} {bx + 2} {by + 2} {bx} {by}Z",
+            fill=INK, sw=0.9,
+        )
+        e.path(
+            f"M{tipx - 2} {tipy + 2}L{tipx + 5} {tipy + 3}L{tipx + 4} {tipy + 7}L{tipx - 2} {tipy + 5}Z",
+            fill=INK, stroke=GOLD, sw=0.7,
+        )
+        e.teeth(tipx - 1, tipy + 3.5, n=3)
+        e.circle(tipx - 4, tipy + 1, 0.45)
+        for k in range(3):
+            e.path(
+                f"M{tipx - 6 + k * 2} {tipy - 2}L{tipx - 7 + k * 2} {tipy - 8}",
+                stroke=GOLD, sw=0.45,
+            )
+            e.path(
+                f"M{tipx - 6 + k * 2} {tipy - 4}L{tipx - 5.5 + k * 2} {tipy - 7}",
+                fill=INK, stroke=GOLD, sw=0.55,
+            )
+    # wing flaps
+    e.path("M-4-8C0-18 6-24 14-28C8-18 2-12 0-8Z", fill=INK, sw=0.8)
+    e.path("M6-8C12-18 20-24 28-26C20-18 12-12 8-8Z", fill=INK, sw=0.8)
+    e.feathers(-2, -24, 12, -10, n=5)
+    e.feathers(8, -24, 26, -10, n=5)
+    # legs
+    e.path("M-12 4C-20 10-26 18-30 26L-24 26L-20 16C-16 10-13 6-12 4Z", fill=INK, sw=0.8)
+    e.path("M-4 12C-5 20-4 26-2 30L2 30L1 22C0 18-2 14-2 12Z", fill=INK, sw=0.8)
+    e.path("M6 12C8 20 10 26 12 30L16 29L14 22C12 18 9 14 7 12Z", fill=INK, sw=0.8)
+    return e.done()
+
+
+def build_daeva():
+    e = _Engraver()
+    e.path("M-10 28C-9 12 -6 2 0 2C6 2 9 12 10 28L6 28C5 16 3 10 0 10C-3 10-5 16-6 28Z",
+           fill=INK, sw=1.0)
+    e.hatch_body(0, 16, 6, 12, step=1.4)
+    for y in (12, 16, 20, 24):
+        e.path(f"M-5 {y}H5", stroke=GOLD, sw=0.35, opacity=0.75)
+        e.path(f"M-3 {y - 1}L3 {y + 1}", stroke=GOLD, sw=0.28, opacity=0.65)
+    e.path("M-2 8H2V14H-2Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.path("M0-18C8-18 14-10 14-2C14 6 8 12 0 12C-8 12-14 6-14-2C-14-10-8-18 0-18Z",
+           fill=INK, sw=1.1)
+    e.hatch_body(0, -4, 10, 12, step=1.45)
+    # horns
+    e.path("M-8-12C-16-18 -20-28 -18-36C-12-28 -10-20 -6-14Z", fill=INK, sw=0.85)
+    e.path("M8-12C16-18 20-28 18-36C12-28 10-20 6-14Z", fill=INK, sw=0.85)
+    e.horn_ridges([(-16, -28), (-14, -24), (-12, -20), (-10, -16)])
+    e.horn_ridges([(16, -28), (14, -24), (12, -20), (10, -16)])
+    for y in range(-32, -14, 3):
+        e.path(f"M{-15} {y}l2.2 1", stroke=GOLD, sw=0.35, opacity=0.75)
+        e.path(f"M{15} {y}l-2.2 1", stroke=GOLD, sw=0.35, opacity=0.75)
+    # face
+    e.path("M-12-4L-18-1L-12 3Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.path("M12-4L18-1L12 3Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.path("M-8-6L-2-3M8-6L2-3", stroke=GOLD, sw=0.55)
+    e.path("M-7-2C-5-4 -3-4 -1.5-2C-3 0-5 0-7-2Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.path("M7-2C5-4 3-4 1.5-2C3 0 5 0 7-2Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.circle(-4.2, -2, 0.35, fill=GOLD)
+    e.circle(4.2, -2, 0.35, fill=GOLD)
+    e.path("M0-1V5", stroke=GOLD, sw=0.5)
+    e.path("M-5 7C-3 4 -2 5 0 8C2 5 3 4 5 7", stroke=GOLD, sw=0.55)
+    e.teeth(-3, 8, n=4, up=False)
+    e.path("M-5-14q5-3 10 0", stroke=GOLD, sw=0.4, opacity=0.75)
+    for i in range(4):
+        e.path(f"M{-6 + i * 3} {-12}l0.5 {-2}", stroke=GOLD, sw=0.3, opacity=0.7)
+    return e.done()
+
+
+def build_mushussu():
+    e = _Engraver()
+    e.path(
+        "M-16 2C-16-8 -6-14 4-14C16-14 22-4 22 4C22 12 14 18 4 18C-8 18-16 12-16 2Z",
+        fill=INK, sw=1.1,
+    )
+    e.hatch_body(2, 2, 15, 12, step=1.5)
+    e.scales(-10, -6, 16, 10, cols=9, rows=5, r=1.25)
+    # dragon head
+    e.path("M10-4C18-14 28-22 38-26L44-20L36-18L28-10C24-6 16-2 10-4Z", fill=INK, sw=1.0)
+    e.path("M34-22L42-19L43-14L35-15.5Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.path("M33-16L41-13L40-8L32-9.5Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.teeth(35, -19, n=4)
+    e.circle(30, -18, 0.55)
+    e.path("M26-26L24-34L28-27Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.path("M32-26L34-35L38-27Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.horn_ridges([(27, -28), (30, -30), (34, -29), (36, -27)])
+    # scorpion tail
+    e.path("M-16 2C-24 0 -30-6 -36-14L-38-8L-30-2C-26 2-20 4-16 4Z", fill=INK, sw=0.85)
+    e.scales(-34, -10, -18, 2, cols=5, rows=3, r=1.0)
+    e.path("M-36-12L-42-10L-38-4Z", fill=INK, stroke=GOLD, sw=0.7)
+    # legs + hind
+    e.path("M-6 14C-8 22-6 28-4 32L0 32L-1 24C-2 20-4 16-4 14Z", fill=INK, sw=0.8)
+    e.path("M8 14C10 22 12 28 14 32L18 31L15 24C14 20 11 16 9 14Z", fill=INK, sw=0.8)
+    for base in [(-4, 32), (14, 32)]:
+        e.path(f"M{base[0]} {base[1]}l-2 3M{base[0]+2} {base[1]}l0 3.4M{base[0]+4} {base[1]}l2 2.8",
+               stroke=GOLD, sw=0.45)
+    # small forewings
+    e.path("M0-10C4-20 10-26 18-30C12-22 6-14 2-10Z", fill=INK, sw=0.75)
+    e.path("M8-10C14-20 22-26 30-28C22-20 14-14 10-10Z", fill=INK, sw=0.75)
+    e.feathers(2, -28, 16, -12, n=5)
+    return e.done()
+
+
+def build_humbaba():
+    e = _Engraver()
+    e.path(
+        "M0-16C12-16 18-6 18 4C18 16 8 22 0 22C-8 22-18 16-18 4C-18-6-12-16 0-16Z",
+        fill=INK, sw=1.15,
+    )
+    e.hatch_body(0, 2, 14, 16, step=1.45)
+    # entrails / guts texture (classic Humbaba face)
+    for r in (4, 7, 10, 13):
+        e.path(
+            f"M0 {-r}A{r} {r * 0.85} 0 1 1 0 {r}A{r} {r * 0.85} 0 1 1 0 {-r}",
+            stroke=GOLD, sw=0.4, opacity=0.7,
+        )
+    import math
+    for a in range(0, 360, 30):
+        rad = math.radians(a)
+        cx = round(15.5 * math.cos(rad), 1)
+        cy = round(1 + 16.5 * math.sin(rad) * 0.95, 1)
+        e.circle(cx, cy, 2.0, fill=INK, stroke=GOLD, sw=0.7)
+        e.path(
+            f"M{cx - 1.2} {cy}L{cx + 1.2} {cy}M{cx} {cy - 1.2}L{cx} {cy + 1.2}"
+            f"M{cx - 0.8} {cy - 0.8}L{cx + 0.8} {cy + 0.8}",
+            stroke=GOLD, sw=0.28, opacity=0.75,
+        )
+    # face
+    e.path("M-8-5L-2-1M8-5L2-1", stroke=GOLD, sw=0.7)
+    e.path("M-8-1C-6-4 -3-4 -1.5-1C-3 2-6 2-8-1Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.path("M8-1C6-4 3-4 1.5-1C3 2 6 2 8-1Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.circle(-4.5, -1, 0.45)
+    e.circle(4.5, -1, 0.45)
+    e.path("M0-4V5", stroke=GOLD, sw=0.55)
+    e.path("M-7 8q3.5 5 7 0q3.5-5 7 0", stroke=GOLD, sw=0.65)
+    e.path("M-5 11q2.5 3.5 5 0q2.5-3.5 5 0", stroke=GOLD, sw=0.45)
+    e.teeth(-4, 10, n=5, up=False)
+    # beard / cheek folds
+    e.path("M-10 8C-14 14-12 20-8 22L-6 18C-8 14-8 10-8 8Z", fill=INK, sw=0.75)
+    e.path("M10 8C14 14 12 20 8 22L6 18C8 14 8 10 8 8Z", fill=INK, sw=0.75)
+    for i in range(4):
+        e.path(f"M{-9} {10 + i * 2.5}l-2.5 1.5", stroke=GOLD, sw=0.35, opacity=0.75)
+        e.path(f"M{9} {10 + i * 2.5}l2.5 1.5", stroke=GOLD, sw=0.35, opacity=0.75)
+    return e.done()
+
+
+def build_anzu():
+    e = _Engraver()
+    e.path("M-4-2C-14-10 -26-20 -34-28C-26-16 -16-8 -6-4C-5-3 -4-2 -4-2Z", fill=INK, sw=0.9)
+    e.path("M4-2C14-10 26-20 34-28C26-16 16-8 6-4C5-3 4-2 4-2Z", fill=INK, sw=0.9)
+    e.feathers(-30, -26, -6, -4, n=8)
+    e.feathers(6, -4, 30, -26, n=8)
+    e.path(
+        "M-4-4C-9 0 -10 10 -5 16C-2 20 5 20 8 16C13 10 12 0 7-4C4-7 0-7 -4-4Z",
+        fill=INK, sw=1.1,
+    )
+    e.hatch_body(2, 4, 7, 10, step=1.4)
+    e.scales(-2, 0, 8, 12, cols=5, rows=4, r=1.0)
+    # lion head
+    e.path("M1-4C0-12 4-17 10-18L18-19L16-15L12-14L14-10L8-9C4-8 2-5 1-4Z", fill=INK, sw=0.9)
+    e.circle(10, -13, 0.55)
+    e.path("M6-16L4-25L8-18Z", fill=INK, stroke=GOLD, sw=0.65)
+    e.path("M11-16.5L13-26L16-17.5Z", fill=INK, stroke=GOLD, sw=0.65)
+    for i in range(5):
+        e.path(f"M{-2 + i} {-6}l{-1.5 + i * 0.2} {-4}", stroke=GOLD, sw=0.35, opacity=0.8)
+    e.path("M-2 14L-10 28L4 30L8 16Z", fill=INK, sw=0.8)
+    e.feathers(-8, 16, 6, 28, n=5)
+    e.teeth(10, -11, n=3, up=False)
+    return e.done()
+
+
+def build_garuda():
+    e = _Engraver()
+    e.path("M-4-1C-16-10 -28-20 -36-28C-28-16 -16-7 -6-3C-5-2 -4-1 -4-1Z", fill=INK, sw=0.95)
+    e.path("M4-1C16-10 28-20 36-28C28-16 16-7 6-3C5-2 4-1 4-1Z", fill=INK, sw=0.95)
+    e.feathers(-32, -26, -6, -3, n=10)
+    e.feathers(6, -3, 32, -26, n=10)
+    e.path(
+        "M-3-4C-8 0 -9 11 -4 17C-1 21 5 21 8 17C13 11 12 0 7-4C4-7 0-7 -3-4Z",
+        fill=INK, sw=1.1,
+    )
+    e.hatch_body(2, 5, 7, 10, step=1.35)
+    e.path("M1-4C0-12 4-17 10-18L18-19L15-15L11-14L13-10L8-9C4-8 2-5 1-4Z", fill=INK, sw=0.9)
+    e.circle(10, -13, 0.55)
+    for hx, hy in [(5, -16), (9, -17.5), (13, -16)]:
+        e.path(f"M{hx} {hy}L{hx - 1} {hy - 10}L{hx + 3} {hy - 1}Z", fill=INK, stroke=GOLD, sw=0.65)
+    e.horn_ridges([(6, -20), (9, -23), (12, -22), (15, -19)])
+    e.path("M-6 4L-16 12M6 4L16 12", stroke=GOLD, sw=0.7)
+    e.path("M-2 14L-8 28L4 30L7 16Z", fill=INK, sw=0.8)
+    e.feathers(-6, 16, 5, 28, n=5)
+    return e.done()
+
+
+def build_naga():
+    e = _Engraver()
+    e.path(
+        "M-6 18C-16 8 -18-4 -10-14C-2-24 8-26 16-16C24-6 22 6 14 16C8 22 0 24-6 18Z",
+        fill=INK, sw=1.1,
+    )
+    e.scales(-10, -8, 14, 16, cols=8, rows=8, r=1.3)
+    e.hatch_body(2, 2, 12, 14, step=1.6)
+    # hooded heads
+    e.path("M-2-14C-8-24 -2-34 6-36C14-38 20-30 20-20C20-12 12-10 4-10C0-10-2-12-2-14Z",
+           fill=INK, sw=0.95)
+    e.path("M0-22C-2-30 2-36 8-38C12-39 16-34 16-28C16-22 12-20 8-20Z", fill=INK, sw=0.8)
+    e.path("M10-18C14-28 20-32 26-30C28-28 28-22 24-18C20-15 14-15 10-16Z", fill=INK, sw=0.75)
+    e.circle(7, -24, 0.5)
+    e.circle(18, -22, 0.4)
+    for i in range(5):
+        e.path(f"M{4 + i * 2} {-30}L{3 + i * 2} {-38}", stroke=GOLD, sw=0.45)
+    e.path("M10-16l5 2.5M10-15.5l5-2", stroke=GOLD, sw=0.4)
+    e.path("M8 16C2 26 -6 32-16 34L-12 38C0 36 12 26 16 18Z", fill=INK, sw=0.85)
+    e.scales(-12, 20, 10, 34, cols=5, rows=3, r=1.1)
+    return e.done()
+
+
+def build_makara():
+    e = _Engraver()
+    e.path(
+        "M-20 2C-14-12 0-18 12-12C24-6 30 2 30 10C30 18 22 24 8 24C-6 24-20 14-20 2Z",
+        fill=INK, sw=1.1,
+    )
+    e.hatch_body(4, 4, 18, 12, step=1.5)
+    e.scales(-12, -4, 22, 14, cols=10, rows=5, r=1.3)
+    # crocodile snout
+    e.path("M22 2C30-6 40-10 48-6L50-1L40 1L34 6C30 8 26 6 22 4Z", fill=INK, sw=1.0)
+    e.path("M38-3L48-1L49 4L39 2.5Z", fill=INK, stroke=GOLD, sw=0.75)
+    e.teeth(39, -1, n=5)
+    e.teeth(39, 2.5, n=4, up=False)
+    e.circle(32, -2, 0.55)
+    e.path("M46-4C50-10 54-6 52 0C50 4 46 2 46-4Z", fill=INK, stroke=GOLD, sw=0.7)
+    # trunk curl
+    e.path("M-20 4C-28 10-36 18-40 28L-34 28L-30 16C-26 10-22 6-20 4Z", fill=INK, sw=0.85)
+    e.path("M-38 26L-46 22L-40 32Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.scales(-38, 8, -24, 24, cols=4, rows=4, r=1.0)
+    # crest horns
+    for x in (-2, 6, 14):
+        e.path(f"M{x} -10L{x + 2} {-18}L{x + 4} {-10.5}Z", fill=INK, stroke=GOLD, sw=0.65)
+    e.horn_ridges([(-1, -14), (2, -16), (8, -16), (12, -14), (16, -12)])
+    # flippers
+    e.path("M-4 20C-8 28-4 34 2 36L6 32L2 26C0 23-2 21-2 20Z", fill=INK, sw=0.8)
+    e.path("M12 20C16 28 20 34 26 36L30 32L24 26C20 23 16 21 14 20Z", fill=INK, sw=0.8)
+    return e.done()
+
+
+def build_scylla():
+    e = _Engraver()
+    e.path(
+        "M-10 6C-14-4 -6-14 2-14C12-14 18-2 16 6C14 14 4 18-4 18C-10 18-12 12-10 6Z",
+        fill=INK, sw=1.05,
+    )
+    e.hatch_body(2, 2, 10, 12, step=1.45)
+    # three dog heads
+    for bx, by, hx, hy in [(-8, -8, -26, -28), (0, -10, 14, -32), (10, -4, 30, -20)]:
+        e.path(
+            f"M{bx} {by}C{bx - 2} {by - 10} {hx + 4} {hy + 4} {hx} {hy}L{hx - 4} {hy + 6}"
+            f"L{bx + 4} {by + 2}Z",
+            fill=INK, sw=0.85,
+        )
+        e.path(
+            f"M{hx - 2} {hy + 2}L{hx + 6} {hy + 4}L{hx + 5} {hy + 8}L{hx - 2} {hy + 5}Z",
+            fill=INK, stroke=GOLD, sw=0.7,
+        )
+        e.teeth(hx - 1, hy + 3.5, n=3)
+        e.circle(hx - 3, hy + 1, 0.4)
+        e.path(f"M{hx - 4} {hy - 2}L{hx - 6} {hy - 8}L{hx - 1} {hy - 3}Z", fill=INK, stroke=GOLD, sw=0.6)
+    # tentacles
+    for i, (sx, ex, ey) in enumerate([(-8, -22, 34), (-2, -4, 38), (6, 14, 36), (10, 26, 30)]):
+        e.path(
+            f"M{sx} 14C{sx - 4} 22 {ex} {ey - 8} {ex} {ey}L{ex + 4} {ey - 2}"
+            f"C{ex + 2} {ey - 10} {sx + 4} 20 {sx + 2} 14Z",
+            fill=INK, sw=0.75,
+        )
+        e.scales(min(sx, ex), 16, max(sx, ex) + 4, ey - 2, cols=3, rows=4, r=0.9)
+    return e.done()
+
+
+def build_python():
+    e = _Engraver()
+    e.path(
+        "M-26 8C-16-10 -2-16 10-6C18 0 26-2 30-12C32-16 28-18 24-14C16-6 6 0-4-4C-12-7-20 0-26 8Z",
+        fill=INK, sw=1.1,
+    )
+    e.scales(-20, -6, 22, 8, cols=12, rows=5, r=1.2)
+    e.hatch_body(0, 0, 20, 8, step=1.7)
+    for x, y in [(-14, -2), (-4, -6), (6, -2), (16, -6)]:
+        e.path(f"M{x} {y}L{x + 2} {y - 5}L{x + 4} {y + 0.5}Z", fill=INK, stroke=GOLD, sw=0.65)
+    e.path("M24-10C30-18 40-22 48-18L50-12L40-10L34-6C30-4 26-6 24-10Z", fill=INK, sw=0.95)
+    e.path("M40-15L48-13L49-8L41-9Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.path("M39-9L47-7L46-2L38-4Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.teeth(41, -12, n=4)
+    e.circle(36, -13, 0.55)
+    e.path("M48-10l6-1.5M48-9l6 2.2", stroke=GOLD, sw=0.4)
+    return e.done()
+
+
+def build_minotaur():
+    e = _Engraver()
+    e.path("M-10-10C-20-18 -24-30 -18-38C-22-28 -16-18 -6-12Z", fill=INK, sw=0.9)
+    e.path("M10-10C20-18 24-30 18-38C22-28 16-18 6-12Z", fill=INK, sw=0.9)
+    e.horn_ridges([(-18, -32), (-16, -28), (-14, -24), (-12, -20), (-10, -16)])
+    e.horn_ridges([(18, -32), (16, -28), (14, -24), (12, -20), (10, -16)])
+    for y in range(-34, -14, 3):
+        e.path(f"M{-17} {y}l2.4 1.1", stroke=GOLD, sw=0.35, opacity=0.75)
+        e.path(f"M{17} {y}l-2.4 1.1", stroke=GOLD, sw=0.35, opacity=0.75)
+    e.path("M-10-12C-10 0 -6 8 0 10C6 8 10 0 10-12C6-18 -6-18 -10-12Z", fill=INK, sw=1.1)
+    e.hatch_body(0, -4, 8, 10, step=1.4)
+    e.path("M-7-8C-4-11 0-11 0-8.5M7-8C4-11 0-11 0-8.5", stroke=GOLD, sw=0.45)
+    e.path("M-6-4C-4-6 -2-6 -.5-4C-2-2-4-2-6-4Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.path("M6-4C4-6 2-6 .5-4C2-2 4-2 6-4Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.circle(-3.2, -4, 0.4)
+    e.circle(3.2, -4, 0.4)
+    e.path("M-6 4C-6 12 -2 16 0 16C2 16 6 12 6 4", stroke=GOLD, sw=0.7)
+    e.teeth(-3, 12, n=4, up=False)
+    e.path("M-12 10C-10 24 -4 32 0 34C4 32 10 24 12 10C8 14 4 16 0 16C-4 16-8 14-12 10Z",
+           fill=INK, sw=0.95)
+    e.hatch_body(0, 20, 9, 10, step=1.4)
+    for y in (14, 18, 22, 26):
+        e.path(f"M-7 {y}H7", stroke=GOLD, sw=0.32, opacity=0.7)
+    return e.done()
+
+
+def build_chimera():
+    e = _Engraver()
+    e.path(
+        "M-14 2C-14-8 -4-14 6-14C16-14 22-4 22 4C22 12 14 18 4 18C-6 18-14 12-14 2Z",
+        fill=INK, sw=1.1,
+    )
+    e.hatch_body(4, 2, 14, 12, step=1.5)
+    e.scales(-8, -6, 16, 10, cols=8, rows=5, r=1.15)
+    # lion head
+    e.path("M10-4C18-14 28-20 38-22L44-16L36-14L28-6C24-2 16 0 10-4Z", fill=INK, sw=0.95)
+    e.path("M34-18L42-15L43-10L35-11.5Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.teeth(35, -15, n=4)
+    e.circle(30, -16, 0.5)
+    e.path("M26-22L24-30L28-23Z", fill=INK, stroke=GOLD, sw=0.65)
+    e.path("M32-22L34-31L38-23Z", fill=INK, stroke=GOLD, sw=0.65)
+    # goat head
+    e.path("M0-10C-2-20 4-28 12-30L18-24L12-22L6-14C4-12 2-10 0-10Z", fill=INK, sw=0.85)
+    e.circle(10, -24, 0.4)
+    e.path("M8-28L6-36L10-30Z", fill=INK, stroke=GOLD, sw=0.6)
+    e.path("M12-28L16-36L16-29Z", fill=INK, stroke=GOLD, sw=0.6)
+    e.horn_ridges([(8, -32), (10, -34), (14, -33)])
+    # serpent tail
+    e.path("M-14 4C-22 10-30 18-34 28L-28 28L-24 16C-20 10-16 6-14 4Z", fill=INK, sw=0.85)
+    e.path("M-32 26C-38 30-42 26-44 20L-38 20C-37 24-34 28-32 26Z", fill=INK, stroke=GOLD, sw=0.7)
+    e.circle(-40, 22, 0.4)
+    e.scales(-34, 8, -18, 24, cols=4, rows=4, r=1.0)
+    e.path("M-4 14C-6 22-4 28-2 32L2 32L1 24C0 20-2 16-2 14Z", fill=INK, sw=0.8)
+    e.path("M8 14C10 22 12 28 14 32L18 31L15 24C14 20 11 16 9 14Z", fill=INK, sw=0.8)
+    return e.done()
+
+
+# ---------------------------------------------------------------- registry
+
 CREATURE_ART = {
-    'jormungandr': '<path d="M-28 4C-22-8 -12-14 -2-10C8-6 16-2 22 2C26 5 28 2 27-4C26-10 22-14 16-12C8-8 0-12 -8-6C-14-2 -20 4 -24 10C-26 13 -28 10 -28 4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-24 2C-18-4 -10-8 0-5C10-2 18 2 23 4" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-22-1l1.2 2.8M-16-5l1.3 2.9M-10-7l1.2 2.8M-4-6l1.2 2.7M2-3l1.1 2.6M8 0l1.1 2.5M14 2l1 2.4M20 3l.9 2.2" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-18-6L-16-12L-12-7Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-6-9L-4-15L0-9.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M8-3L10-9L14-2.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M24-2C28-6 34-10 40-9L42-7L36-5L34-1C32 2 28 3 24 1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.45" stroke-linejoin="round" stroke-linecap="round"/><path d="M34-5L40-4L41-2L35-2.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M33-1L39 0L38.5 2L32.5 1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M35-4.2l.2 1.4M37-3.8l.2 1.3M39-3.5l.15 1.2M34.5-.2l.2 1.2M36.5.2l.2 1.1" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><circle cx="31" cy="-5.5" r="0.7" fill="#c9a45c"/><path d="M28-8L26-14L30-9Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M32-8.5L33-14.5L35-9Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M41-3.5l4-1.5M41-3l4 1.8" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>',
-    'nidhogg': '<path d="M-14 2C-16-6 -10-14 0-14C12-14 18-6 18 2C18 8 12 14 2 14C-8 14-14 9-14 2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-8 0q2 2 .8 4.5M-2-2q2 2 .8 4.5M5-1q1.8 1.8 .7 4M11 1q1.5 1.5 .6 3.5" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M8-10C12-18 18-24 26-28C22-20 18-14 14-10C12-9 10-9 8-10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M4-12C6-20 10-28 16-34C12-26 8-20 5-14C4-13 4-12 4-12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round"/><path d="M10-14L18-24M8-16L14-26M12-12L20-20" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M12-4C18-10 26-16 34-18L38-16L32-12L28-6C24-2 18 0 12-1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M32-14L38-13L39-10L33-10.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M31-10L37-9L36.5-6.5L30.5-7.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M33.5-12.5l.25 1.6M35.5-12l.25 1.5M37.5-11.5l.2 1.4M32.5-8.5l.25 1.4M34.5-8l.25 1.3" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="-13.5" r="0.65" fill="#c9a45c"/><path d="M26-18L24-26L28-19Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M30-18.5L31-27L34-19Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M34-17L37-25L38-17.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-6 12C-7 18-6 24-4 28L0 28L-1 22C-2 18-3 14-4 12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M8 12C9 18 10 24 12 28L16 27.5L14 21C13 17 11 14 9 12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-4 28l-2.5 3M-2 28l0 3.5M0 28l2 3M12 28l-2 3M14 27.8l.5 3.5M16 27.5l2.5 2.8" fill="none" stroke="0.75" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-14 4C-20 8-26 14-30 22L-26 23L-22 16C-18 10-15 6-14 4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-28 20L-34 22L-28 24Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/>',
-    'fenrir': '<path d="M-16 0C-16-8 -8-14 2-14C12-14 18-8 18-1C18 6 12 12 2 12C-8 12-16 8-16 0Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M12-6C18-10 26-14 34-12L38-8L32-6L28-2C24 1 18 2 12 0Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.45" stroke-linejoin="round" stroke-linecap="round"/><path d="M32-8L40-6L41-3L33-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M31-3L39-1L38 3L30 1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M34-5.5l.3 1.8M36.5-5l.3 1.7M39-4.5l.25 1.5M33-.5l.3 1.6M35.5 0l.3 1.5M38 .5l.25 1.4" fill="none" stroke="0.75" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><circle cx="28" cy="-8.5" r="0.7" fill="#c9a45c"/><path d="M18-12L16-22L22-14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M24-13L26-23L30-14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M17.5-16l2 4M25.5-17l2 4" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M8-10l-2-4M6-8l-3-3M4-6l-3-2M10-11l1-4" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-10 10C-11 16-10 22-9 26L-5 26L-6 20C-7 16-8 12-9 10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-2 11C-1 17 0 22 1 26L5 26L4 20C3 16 1 13 0 11Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M8 10C9 16 10 21 11 25L15 25L13.5 19C12.5 15 11 12 9 10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-9 26l-2 3M-7 26l0 3.2M-5 26l2 2.8M1 26l-1.5 3M3 26l.5 3.2M5 26l2 2.8" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-16-2C-22-6 -28-8 -34-4C-30 0-26 2-22 4C-20 5-17 3-16-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-22-4l-2 3M-26-5l-1.5 3.5M-30-3l-1 3" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>',
-    'wolf': '<path d="M-16 0C-16-8 -8-14 2-14C12-14 18-8 18-1C18 6 12 12 2 12C-8 12-16 8-16 0Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M12-6C18-10 26-14 34-12L38-8L32-6L28-2C24 1 18 2 12 0Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.45" stroke-linejoin="round" stroke-linecap="round"/><path d="M32-8L40-6L41-3L33-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M31-3L39-1L38 3L30 1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M34-5.5l.3 1.8M36.5-5l.3 1.7M39-4.5l.25 1.5M33-.5l.3 1.6M35.5 0l.3 1.5M38 .5l.25 1.4" fill="none" stroke="0.75" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><circle cx="28" cy="-8.5" r="0.7" fill="#c9a45c"/><path d="M18-12L16-22L22-14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M24-13L26-23L30-14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M17.5-16l2 4M25.5-17l2 4" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M8-10l-2-4M6-8l-3-3M4-6l-3-2M10-11l1-4" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-10 10C-11 16-10 22-9 26L-5 26L-6 20C-7 16-8 12-9 10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-2 11C-1 17 0 22 1 26L5 26L4 20C3 16 1 13 0 11Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M8 10C9 16 10 21 11 25L15 25L13.5 19C12.5 15 11 12 9 10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-9 26l-2 3M-7 26l0 3.2M-5 26l2 2.8M1 26l-1.5 3M3 26l.5 3.2M5 26l2 2.8" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-16-2C-22-6 -28-8 -34-4C-30 0-26 2-22 4C-20 5-17 3-16-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-22-4l-2 3M-26-5l-1.5 3.5M-30-3l-1 3" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>',
-    'simorgh': '<path d="M-4-2C-12-8 -22-16 -30-22C-24-14 -16-8 -8-4C-6-3 -5-2 -4-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M4-2C12-8 22-16 30-22C24-14 16-8 8-4C6-3 5-2 4-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M-10-5C-16-10 -22-15 -27-19M-14-6C-19-11 -24-16 -28-20M-18-7C-22-12 -26-16 -29-19" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M10-5C16-10 22-15 27-19M14-6C19-11 24-16 28-20M18-7C22-12 26-16 29-19" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-3-4C-7 0 -8 8 -4 14C-1 18 4 18 7 14C11 8 10 0 6-4C4-6 0-6 -3-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M0 2q1.5 2 .6 5M3 3q1.4 1.8 .55 4.5" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M2-4C1-10 4-14 9-15L16-16L14-13L11-12L13-9L8-8C5-7 3-5 2-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="9.5" cy="-12" r="0.65" fill="#c9a45c"/><path d="M5-14L3-24L7-16Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M8-15L9-26L12-16Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M11-14.5L14-24L15-15Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-2 12L-8 26L2 28L6 14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round"/><path d="M0 14L-3 26.5M3 15L2 27.5M5 14.5L7 25" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-4 18L-10 22L-3 24Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M5 18L11 23L6 25Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-1 14l-2 5l-3 1M4 14.5l2 4.5l3 1" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>',
-    'bird': '<path d="M-4-2C-12-8 -22-16 -30-22C-24-14 -16-8 -8-4C-6-3 -5-2 -4-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M4-2C12-8 22-16 30-22C24-14 16-8 8-4C6-3 5-2 4-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M-10-5C-16-10 -22-15 -27-19M-14-6C-19-11 -24-16 -28-20M-18-7C-22-12 -26-16 -29-19" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M10-5C16-10 22-15 27-19M14-6C19-11 24-16 28-20M18-7C22-12 26-16 29-19" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-3-4C-7 0 -8 8 -4 14C-1 18 4 18 7 14C11 8 10 0 6-4C4-6 0-6 -3-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M0 2q1.5 2 .6 5M3 3q1.4 1.8 .55 4.5" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M2-4C1-10 4-14 9-15L16-16L14-13L11-12L13-9L8-8C5-7 3-5 2-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="9.5" cy="-12" r="0.65" fill="#c9a45c"/><path d="M5-14L3-24L7-16Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M8-15L9-26L12-16Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M11-14.5L14-24L15-15Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-2 12L-8 26L2 28L6 14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round"/><path d="M0 14L-3 26.5M3 15L2 27.5M5 14.5L7 25" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-4 18L-10 22L-3 24Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M5 18L11 23L6 25Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-1 14l-2 5l-3 1M4 14.5l2 4.5l3 1" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>',
-    'dahaka': '<path d="M-12 2C-14-6 -8-14 0-14C10-14 16-6 16 2C16 8 10 14 0 14C-10 14-14 9-12 2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-6 0q1.8 1.8 .7 4M0-2q1.8 1.8 .7 4M6 0q1.6 1.6 .6 3.5" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-8-10C-12-16 -18-22 -24-26L-30-24L-26-20L-20-16C-16-13 -11-11 -8-10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M-24-24L-30-22L-29-19L-24-20.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-23-20L-28-18L-27-15L-22-16.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="-21" cy="-22" r="0.55" fill="#c9a45c"/><path d="M-26-21.5l.2 1.3M-28-20.5l.2 1.2" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M2-12C6-20 14-28 24-30L30-26L24-24L18-18C14-14 8-12 2-12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.45" stroke-linejoin="round" stroke-linecap="round"/><path d="M22-27L29-25L30-21L23-22.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M21-22L28-20L27-16L20-17.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="17" cy="-24" r="0.7" fill="#c9a45c"/><path d="M14-28L12-36L16-29Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M20-29L22-38L25-30Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M25-27L29-35L30-27.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M24-24.5l.25 1.7M26.5-23.5l.25 1.6M29-22.5l.2 1.4" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M10-6C16-12 24-18 32-20L36-16L30-14L24-10C20-7 14-5 10-6Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M30-17L36-15L35-12L30-13.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="26" cy="-15.5" r="0.55" fill="#c9a45c"/><path d="M-4-8C-2-16 2-22 8-26C4-18 0-12 -2-8Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M6-8C10-16 16-22 24-24C18-18 12-12 8-8Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-12 4C-18 8 -24 14 -28 22L-24 23L-20 16C-16 10 -13 6 -12 4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-4 12C-5 18 -4 24 -2 28L2 28L1 22C0 18 -1 14 -2 12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M6 12C7 18 8 24 10 28L14 27.5L12 21C11 17 9 14 7 12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/>',
-    'daeva': '<path d="M-12 28C-11 12 -8 2 0 2C8 2 11 12 12 28L8 28C7 16 4 8 0 8C-4 8-7 16-8 28Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.45" stroke-linejoin="round" stroke-linecap="round"/><path d="M-6 14H6M-4 20H4" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-2 10H2V16H-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M0-16C7-16 12-10 12-2C12 6 7 12 0 12C-7 12-12 6-12-2C-12-10-7-16 0-16Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-8-12C-14-16 -18-24 -18-32C-12-26 -10-20 -6-14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M8-12C14-16 18-24 18-32C12-26 10-20 6-14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M-15-26l2.5 1.2M-13-22l2.3 1.1M-11-18l2 1M15-26l-2.5 1.2M13-22l-2.3 1.1M11-18l-2 1" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-12-4L-18-2L-12 2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M12-4L18-2L12 2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-8-6L-2-4M8-6L2-4" fill="none" stroke="0.9" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-7-2C-5.5-4 -3-4 -1.5-2C-3 0-5.5 0-7-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M7-2C5.5-4 3-4 1.5-2C3 0 5.5 0 7-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M0-1V4" fill="none" stroke="0.85" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-5 6C-3 4 -3 5 -1.5 7C0 5 0 4 1.5 7C3 5 3 4 5 6" fill="none" stroke="0.9" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-3.5 7.2l.3 2M3.5 7.2l-.3 2" fill="none" stroke="0.75" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-4-14q4-2.5 8 0" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>',
-    'demon': '<path d="M-12 28C-11 12 -8 2 0 2C8 2 11 12 12 28L8 28C7 16 4 8 0 8C-4 8-7 16-8 28Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.45" stroke-linejoin="round" stroke-linecap="round"/><path d="M-6 14H6M-4 20H4" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-2 10H2V16H-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M0-16C7-16 12-10 12-2C12 6 7 12 0 12C-7 12-12 6-12-2C-12-10-7-16 0-16Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-8-12C-14-16 -18-24 -18-32C-12-26 -10-20 -6-14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M8-12C14-16 18-24 18-32C12-26 10-20 6-14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M-15-26l2.5 1.2M-13-22l2.3 1.1M-11-18l2 1M15-26l-2.5 1.2M13-22l-2.3 1.1M11-18l-2 1" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-12-4L-18-2L-12 2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M12-4L18-2L12 2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-8-6L-2-4M8-6L2-4" fill="none" stroke="0.9" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-7-2C-5.5-4 -3-4 -1.5-2C-3 0-5.5 0-7-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M7-2C5.5-4 3-4 1.5-2C3 0 5.5 0 7-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M0-1V4" fill="none" stroke="0.85" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-5 6C-3 4 -3 5 -1.5 7C0 5 0 4 1.5 7C3 5 3 4 5 6" fill="none" stroke="0.9" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-3.5 7.2l.3 2M3.5 7.2l-.3 2" fill="none" stroke="0.75" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-4-14q4-2.5 8 0" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>',
-    'mushussu': '<path d="M-16 2C-16-6 -8-12 2-12C14-12 20-4 20 4C20 10 14 16 4 16C-8 16-16 10-16 2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-8 1q1.8 1.8 .7 4M0-1q1.8 1.8 .7 4M8 1q1.5 1.5 .6 3.5" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M10-4C16-12 24-20 34-24L40-20L34-18L28-12C24-8 16-4 10-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M32-21L39-19L40-15L33-16.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M31-16L38-14L37-10L30-11.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="28" cy="-18.5" r="0.65" fill="#c9a45c"/><path d="M26-24L24-32L28-25Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M32-24L34-33L37-25Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M34-18l.25 1.5M36.5-17l.25 1.4M39-16l.2 1.3" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-6 14C-7 20 -6 26 -4 30L0 30L-1 24C-2 20-3 16-4 14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M6 14C7 20 8 26 10 30L14 29.5L12 23C11 19 9 16 7 14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-4 30l-2 3M-2 30l0 3.2M0 30l2 2.8" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M0-10C2-18 6-24 12-28C8-20 4-14 2-10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M6-10C10-18 16-24 24-26C18-20 12-14 8-10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-16 2C-22 0 -28-4 -34-10L-36-6L-30 0C-26 3-20 4-16 4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/>',
-    'humbaba': '<path d="M0-14C10-14 16-6 16 4C16 14 8 20 0 20C-8 20-16 14-16 4C-16-6-10-14 0-14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M0-10C7-10 11-4 11 3C11 10 6 15 0 15C-6 15-11 10-11 3C-11-4-7-10 0-10" fill="none" stroke="0.7" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="-18.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="9.0" cy="-14.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="15.0" cy="-5.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="15.0" cy="6.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="9.0" cy="15.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="0.0" cy="18.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="-9.0" cy="15.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="-15.0" cy="6.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="-15.0" cy="-5.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="-9.0" cy="-14.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><path d="M-8-4L-2-1M8-4L2-1" fill="none" stroke="1.0" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-8-1C-6.5-3 -3.5-3 -2-1C-3.5 1-6.5 1-8-1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M8-1C6.5-3 3.5-3 2-1C3.5 1 6.5 1 8-1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M0-3V4" fill="none" stroke="0.85" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-6 7q3 4 6 0q3-4 6 0" fill="none" stroke="1.0" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-4 9.5q2 3 4 0q2-3 4 0" fill="none" stroke="0.75" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-10 8C-12 14 -10 18 -8 20L-6 18C-7 15-8 11-8 8Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M10 8C12 14 10 18 8 20L6 18C7 15 8 11 8 8Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/>',
-    'guardian': '<path d="M0-14C10-14 16-6 16 4C16 14 8 20 0 20C-8 20-16 14-16 4C-16-6-10-14 0-14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M0-10C7-10 11-4 11 3C11 10 6 15 0 15C-6 15-11 10-11 3C-11-4-7-10 0-10" fill="none" stroke="0.7" stroke-width="0.85" stroke-linecap="round" stroke-linejoin="round"/><circle cx="0.0" cy="-18.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="9.0" cy="-14.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="15.0" cy="-5.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="15.0" cy="6.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="9.0" cy="15.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="0.0" cy="18.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="-9.0" cy="15.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="-15.0" cy="6.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="-15.0" cy="-5.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><circle cx="-9.0" cy="-14.0" r="2.1" fill="#05070a" stroke="#c9a45c" stroke-width="1.1"/><path d="M-8-4L-2-1M8-4L2-1" fill="none" stroke="1.0" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-8-1C-6.5-3 -3.5-3 -2-1C-3.5 1-6.5 1-8-1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M8-1C6.5-3 3.5-3 2-1C3.5 1 6.5 1 8-1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M0-3V4" fill="none" stroke="0.85" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-6 7q3 4 6 0q3-4 6 0" fill="none" stroke="1.0" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-4 9.5q2 3 4 0q2-3 4 0" fill="none" stroke="0.75" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-10 8C-12 14 -10 18 -8 20L-6 18C-7 15-8 11-8 8Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M10 8C12 14 10 18 8 20L6 18C7 15 8 11 8 8Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/>',
-    'anzu': '<path d="M-4-2C-12-8 -22-16 -30-22C-24-14 -16-8 -8-4C-6-3 -5-2 -4-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M4-2C12-8 22-16 30-22C24-14 16-8 8-4C6-3 5-2 4-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-10-5C-17-11 -23-16 -28-20M-15-6C-21-12 -26-17 -29-20" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M10-5C17-11 23-16 28-20M15-6C21-12 26-17 29-20" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-4-4C-8 0 -9 8 -5 14C-2 18 4 18 7 14C11 8 10 0 6-4C3-6 0-6 -4-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M1-4C0-10 3-15 9-16L17-17L15-14L12-13L14-10L8-9C5-8 2-5 1-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="10" cy="-12.5" r="0.65" fill="#c9a45c"/><path d="M6-15L4-24L8-17Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M11-15.5L13-25L16-16.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-2-6l-3-5M0-8l-1-5M3-9l1-5" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-2 12L-8 24L2 26L6 14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><path d="M0 14L-3 24.5M3 15L2 25.5" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>',
-    'garuda': '<path d="M-4-1C-14-8 -24-16 -32-22C-26-14 -16-7 -8-3C-6-2 -5-1 -4-1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M4-1C14-8 24-16 32-22C26-14 16-7 8-3C6-2 5-1 4-1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M-12-4C-18-10 -25-15 -30-19M-17-5C-23-11 -28-16 -31-19M-21-5C-26-11 -29-15 -31.5-18" fill="none" stroke="0.55" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M12-4C18-10 25-15 30-19M17-5C23-11 28-16 31-19M21-5C26-11 29-15 31.5-18" fill="none" stroke="0.55" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-3-4C-7 0 -8 9 -4 15C-1 19 4 19 7 15C11 9 10 0 6-4C4-6 0-6 -3-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M1-4C0-10 3-15 9-16L17-17L15-14L11-13L13-10L8-9C5-8 2-5 1-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="10" cy="-12.5" r="0.65" fill="#c9a45c"/><path d="M5-15L3-26L7-17Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M9-15.5L10-27L13-16.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M12-14.5L16-25L17-15Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-6 4L-14 10M6 4L14 10" fill="none" stroke="0.95" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-2 13L-6 26L3 27L6 15Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><path d="M0 15L-2 26M3 16L2.5 26.5" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>',
-    'naga': '<path d="M-6 18C-14 10 -16-2 -10-12C-4-22 6-24 14-16C22-8 20 4 14 14C10 20 2 22 -6 18Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-6 8q2 2.2 .8 5M0 2q2 2.2 .8 5M6-2q1.8 2 .7 4.5M10 4q1.6 1.8 .6 4" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-2-14C-6-22 -2-30 4-32C10-34 16-28 16-20C16-14 10-12 4-12C2-12 0-13 -2-14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M0-20C-2-26 0-32 4-34C7-35 10-32 10-28C10-24 7-22 4-22Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/><path d="M8-18C10-24 14-28 18-28C21-28 22-24 20-20C18-17 14-16 10-16Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.15" stroke-linejoin="round" stroke-linecap="round"/><circle cx="6" cy="-22" r="0.6" fill="#c9a45c"/><path d="M4-28L2-36M8-28L10-36M12-26L16-34" fill="none" stroke="0.75" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M8-18l4 2M8-17.5l4-1.5" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 16C4 24 -4 30 -12 32L-10 36C0 34 10 26 14 18Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/>',
-    'makara': '<path d="M-20 2C-16-10 -4-16 8-12C20-8 28 0 28 8C28 16 20 22 8 22C-6 22-20 14-20 2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-10 1q2 2 .8 4.5M0-2q2 2 .8 4.5M10 1q1.8 1.8 .7 4M18 4q1.5 1.5 .6 3.5" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M22 2C28-4 36-8 44-6L46-2L38 0L34 4C30 6 26 5 22 4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M36-3L44-2L45 2L37 1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M38-1.5l.2 1.5M40.5-1l.2 1.4M43-.5l.2 1.3M38.5 1.5l.2 1.3M41 2l.2 1.2" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><circle cx="32" cy="-2" r="0.6" fill="#c9a45c"/><path d="M42-4C46-8 48-6 46-2C44 1 42 0 42-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-4 20C-6 26 -4 32 0 34L4 32L2 26C1 23 0 21 -1 20Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M12 20C14 26 16 32 20 34L24 32L21 26C19 23 17 21 15 20Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-2-10L0-18L4-11Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M6-11L8-19L12-11.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M14-9L16-16L20-9Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-20 4C-26 8 -32 14 -36 22L-32 24L-28 16C-24 10-21 6-20 4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-34 20L-42 18L-36 26Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/>',
-    'scylla': '<path d="M-10 6C-14-2 -8-12 0-12C10-12 16-2 14 6C13 12 6 16 -2 16C-8 16-11 12-10 6Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.45" stroke-linejoin="round" stroke-linecap="round"/><path d="M-8-8C-12-16 -18-24 -26-28L-32-24L-26-22L-18-16C-14-12 -10-9 -8-8Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="-22" cy="-24" r="0.5" fill="#c9a45c"/><path d="M-26-26L-32-24L-30-21L-25-22.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M0-10C2-20 8-28 16-32L22-28L16-26L10-18C6-14 2-11 0-10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><circle cx="12" cy="-26" r="0.6" fill="#c9a45c"/><path d="M14-29L21-27L22-23L15-24.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M10-4C16-12 24-18 32-20L36-16L30-14L24-10C20-7 14-4 10-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="28" cy="-15" r="0.5" fill="#c9a45c"/><path d="M30-17L36-15L35-12L30-13.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-8 14C-14 18 -18 26 -20 34L-16 35L-14 26C-12 20-10 16-8 14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-2 16C-4 22 -4 30 -2 36L2 36L1 28C0 22-1 18-2 16Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M6 15C10 20 14 28 16 34L20 33L17 26C15 20 11 16 8 15Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M10 12C16 16 22 22 26 30L30 28L24 22C20 17 14 13 10 12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/>',
-    'python': '<path d="M-26 8C-18-6 -6-12 6-4C16 2 24 0 28-8C30-12 28-16 24-14C16-8 8-2 -2-6C-10-9 -18-2 -24 8C-25 11-27 11-26 8Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-20 4l1.3 2.8M-14 0l1.3 2.8M-8-2l1.2 2.7M-2-3l1.2 2.6M4-1l1.1 2.5M10 0l1.1 2.4M16-2l1 2.3M22-6l.9 2.1" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-16-2L-14-8L-10-3Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-4-5L-2-11L2-5.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M8-2L10-8L14-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M24-10C28-16 36-20 44-18L46-14L38-12L34-8C30-5 26-6 24-10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M38-15L45-14L46-10L39-10.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M37-10L44-9L43-5L36-6.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="34" cy="-13.5" r="0.65" fill="#c9a45c"/><path d="M40-12.5l.25 1.6M42.5-12l.25 1.5M45-11.5l.2 1.4" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M46-12l5-1.5M46-11l5 2" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>',
-    'serpent': '<path d="M-26 8C-18-6 -6-12 6-4C16 2 24 0 28-8C30-12 28-16 24-14C16-8 8-2 -2-6C-10-9 -18-2 -24 8C-25 11-27 11-26 8Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-20 4l1.3 2.8M-14 0l1.3 2.8M-8-2l1.2 2.7M-2-3l1.2 2.6M4-1l1.1 2.5M10 0l1.1 2.4M16-2l1 2.3M22-6l.9 2.1" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-16-2L-14-8L-10-3Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-4-5L-2-11L2-5.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M8-2L10-8L14-2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M24-10C28-16 36-20 44-18L46-14L38-12L34-8C30-5 26-6 24-10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M38-15L45-14L46-10L39-10.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M37-10L44-9L43-5L36-6.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="34" cy="-13.5" r="0.65" fill="#c9a45c"/><path d="M40-12.5l.25 1.6M42.5-12l.25 1.5M45-11.5l.2 1.4" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M46-12l5-1.5M46-11l5 2" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/>',
-    'dragon': '<path d="M-14 2C-16-6 -10-14 0-14C12-14 18-6 18 2C18 8 12 14 2 14C-8 14-14 9-14 2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-8 0q2 2 .8 4.5M-2-2q2 2 .8 4.5M5-1q1.8 1.8 .7 4M11 1q1.5 1.5 .6 3.5" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M8-10C12-18 18-24 26-28C22-20 18-14 14-10C12-9 10-9 8-10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M4-12C6-20 10-28 16-34C12-26 8-20 5-14C4-13 4-12 4-12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.25" stroke-linejoin="round" stroke-linecap="round"/><path d="M10-14L18-24M8-16L14-26M12-12L20-20" fill="none" stroke="0.6" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M12-4C18-10 26-16 34-18L38-16L32-12L28-6C24-2 18 0 12-1Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M32-14L38-13L39-10L33-10.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M31-10L37-9L36.5-6.5L30.5-7.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M33.5-12.5l.25 1.6M35.5-12l.25 1.5M37.5-11.5l.2 1.4M32.5-8.5l.25 1.4M34.5-8l.25 1.3" fill="none" stroke="0.7" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><circle cx="29" cy="-13.5" r="0.65" fill="#c9a45c"/><path d="M26-18L24-26L28-19Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M30-18.5L31-27L34-19Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M34-17L37-25L38-17.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-6 12C-7 18-6 24-4 28L0 28L-1 22C-2 18-3 14-4 12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M8 12C9 18 10 24 12 28L16 27.5L14 21C13 17 11 14 9 12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-4 28l-2.5 3M-2 28l0 3.5M0 28l2 3M12 28l-2 3M14 27.8l.5 3.5M16 27.5l2.5 2.8" fill="none" stroke="0.75" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-14 4C-20 8-26 14-30 22L-26 23L-22 16C-18 10-15 6-14 4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-28 20L-34 22L-28 24Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/>',
-    'minotaur': '<path d="M-10-10C-18-16 -22-26 -18-34C-20-26 -16-18 -8-12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M10-10C18-16 22-26 18-34C20-26 16-18 8-12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M-18-28l3 1.5M-16-24l2.8 1.4M-14-20l2.5 1.2M18-28l-3 1.5M16-24l-2.8 1.4M14-20l-2.5 1.2" fill="none" stroke="0.65" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-10-12C-10-2 -6 6 0 8C6 6 10-2 10-12C6-16 -6-16 -10-12Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M-7-8C-5-10 -2-10 0-8.5M7-8C5-10 2-10 0-8.5" fill="none" stroke="0.75" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-6-4C-4.5-6 -2-6 -.8-4C-2-2-4.5-2-6-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M6-4C4.5-6 2-6 .8-4C2-2 4.5-2 6-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-6 4C-6 10 -3 14 0 14C3 14 6 10 6 4" fill="none" stroke="1.2" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-3 10C-2 8 -.5 8 0 10C.5 8 2 8 3 10" fill="none" stroke="0.9" stroke-width="0.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M-12 10C-10 22 -6 30 0 32C6 30 10 22 12 10C8 12 4 14 0 14C-4 14-8 12-12 10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>',
-    'chimera': '<path d="M-14 2C-14-6 -6-12 4-12C14-12 20-4 20 4C20 10 14 16 4 16C-6 16-14 10-14 2Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"/><path d="M10-4C16-12 24-18 34-20L40-16L34-14L28-8C24-4 16-2 10-4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/><path d="M32-17L39-15L40-11L33-12.5Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="28" cy="-15" r="0.6" fill="#c9a45c"/><path d="M26-20L24-28L28-21Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M32-20L34-29L37-21Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M0-10C-2-18 2-26 8-28L14-24L10-22L6-16C4-13 2-11 0-10Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><circle cx="8" cy="-22" r="0.5" fill="#c9a45c"/><path d="M6-26L4-34L8-28Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M10-26L13-34L14-27Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M-14 4C-20 8 -26 14 -30 22L-26 24L-22 16C-18 10-15 6-14 4Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round"/><path d="M-28 20C-32 22 -36 20 -38 16L-34 16C-33 18-31 20-28 20Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><circle cx="-35" cy="17" r="0.45" fill="#c9a45c"/><path d="M-4 14C-5 20 -4 26 -2 30L2 30L1 24C0 20-1 16-2 14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/><path d="M8 14C9 20 10 26 12 30L16 29.5L14 23C13 19 11 16 9 14Z" fill="#05070a" stroke="#c9a45c" stroke-width="1.35" stroke-linejoin="round" stroke-linecap="round"/>',
+    "jormungandr": build_jormungandr(),
+    "nidhogg": build_nidhogg(),
+    "fenrir": build_fenrir(),
+    "wolf": build_fenrir(),
+    "simorgh": build_simorgh(),
+    "bird": build_simorgh(),
+    "dahaka": build_dahaka(),
+    "daeva": build_daeva(),
+    "demon": build_daeva(),
+    "mushussu": build_mushussu(),
+    "humbaba": build_humbaba(),
+    "guardian": build_humbaba(),
+    "anzu": build_anzu(),
+    "garuda": build_garuda(),
+    "naga": build_naga(),
+    "makara": build_makara(),
+    "scylla": build_scylla(),
+    "python": build_python(),
+    "serpent": build_python(),
+    "dragon": build_nidhogg(),
+    "minotaur": build_minotaur(),
+    "chimera": build_chimera(),
 }

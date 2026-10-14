@@ -107,19 +107,19 @@ def chevrons(points, box, w, h, pad, step=8):
                 x = prev[0] + dx * acc
                 y = prev[1] + dy * acc
                 nx, ny = -dy, dx
-                s = 6.4
-                # main peak triangle
+                s = 5.6
+                # main peak triangle (filled hachure ridge)
                 out.append("M%.1f %.1fL%.1f %.1fL%.1f %.1fZ" % (
                     x - nx * s * .15 + dx * .2, y - ny * s * .15 + dy * .2,
                     x + nx * s * .05 - dx * s, y + ny * s * .05 - dy * s,
                     x + nx * s + dx * .2, y + ny * s + dy * .2))
-                # shade ticks on the "south" face
-                for k in (.35, .55, .75):
+                # denser shade ticks on the "south" face (atlas hachure)
+                for k in (.25, .4, .55, .7, .85):
                     bx = x + nx * s * k * .55 + dx * .15
                     by = y + ny * s * k * .55 + dy * .15
                     out.append("M%.1f %.1fL%.1f %.1f" % (
-                        bx, by, bx + nx * s * .35, by + ny * s * .35))
-                acc += step
+                        bx, by, bx + nx * s * (.28 + k * .08), by + ny * s * (.28 + k * .08)))
+                acc += step * 0.85
             acc -= seg
         prev = pt
     return "".join(out)
@@ -220,12 +220,8 @@ MAPS = {
             # Murray
             [(147, -36), (144, -34), (141, -33), (139, -34), (137, -35)],
         ],
-        # mythical beasts (decorative - the world sheet stays unlabelled)
-        creatures=[
-            ("jormungandr", -28, 8, 3.4, 0),   # Atlantic
-            ("nidhogg", 100, 58, 3.1, 1),      # Siberia margin
-            ("simorgh", 68, -22, 3.0, 0),      # Indian Ocean
-        ],
+        # world sheet: no beasts (atlas-scale doodles read as continents; culture maps carry the bestiary)
+        creatures=[],
         forests=[
             (-65, -2, 1.05, "palm"), (-60, -5, 1.0, "palm"), (-55, -1, .95, "palm"),
             (-50, 2, 1.0, "palm"), (-62, -8, .9, "palm"), (-48, -6, .9, "palm"),
@@ -274,9 +270,10 @@ MAPS = {
             [(47, 32.5), (48.5, 31.6), (49.5, 30.5)],
         ],
         creatures=[
-            ("humbaba", 36.05, 36.25, 2.15, 0, "HUMBABA"),
-            ("mushussu", 45.6, 32.9, 2.1, 0, "MUSHUSSU"),
-            ("anzu", 47.6, 31.0, 2.05, 0, "ANZU"),
+            # tiny margin marks — away from Cedar Forest / Uruk / pins
+            ("humbaba", 29.2, 37.8, 0.72, 0, "HUMBABA"),      # Anatolia NW margin
+            ("mushussu", 51.8, 26.6, 0.68, 0, "MUSHUSSU"),    # Persian Gulf empty water
+            ("anzu", 55.4, 34.2, 0.65, 0, "ANZU"),            # Persia NW empty land
         ],
         forests=[
             (35.8, 34.2, .95, "pine"), (36.4, 35.0, .85, "pine"),  # cedar belt
@@ -319,9 +316,9 @@ MAPS = {
             [(49.6, 33.4), (51.6, 32.4), (53, 32.2)],
         ],
         creatures=[
-            ("simorgh", 52.6, 36.7, 2.55, 0, "SIMORGH"),
-            ("dahaka", 46.3, 33.6, 2.35, 1, "DAHAKA"),
-            ("daeva", 63.5, 30.6, 2.15, 1, "DAEVA"),
+            ("simorgh", 56.8, 26.2, 0.78, 0, "SIMORGH"),   # Gulf of Oman margin
+            ("dahaka", 44.2, 37.2, 0.72, 1, "DAHAKA"),     # NW Caspian margin
+            ("daeva", 68.5, 27.8, 0.68, 1, "DAEVA"),       # SE desert margin
         ],
         forests=[
             (49.5, 36.0, .85, "pine"), (51.0, 36.2, .8, "pine"), (52.2, 36.4, .8, "pine"),
@@ -366,9 +363,9 @@ MAPS = {
             [(74.4, 17), (77.6, 16.4), (80.6, 15.6), (83.4, 15.6)],
         ],
         creatures=[
-            ("garuda", 80.2, 28.2, 2.4, 0, "GARUDA"),
-            ("naga", 86.8, 23.6, 2.3, 0, "NAGA"),
-            ("makara", 73.5, 9.5, 2.2, 1, "MAKARA"),
+            ("garuda", 92.5, 28.8, 0.75, 0, "GARUDA"),     # Himalaya east margin
+            ("naga", 95.2, 18.5, 0.70, 0, "NAGA"),         # Bay of Bengal margin
+            ("makara", 68.8, 8.2, 0.68, 1, "MAKARA"),      # Arabian Sea SW
         ],
         forests=[
             (77, 22, .85, "deciduous"), (78.5, 21, .8, "deciduous"), (79, 20, .8, "deciduous"),
@@ -409,10 +406,10 @@ MAPS = {
             [(21.6, 42.6), (21.4, 41.4), (21.6, 40.6)],
         ],
         creatures=[
-            ("scylla", 16.4, 38.3, 1.95, 0, "SCYLLA"),
-            ("python", 22.1, 39.1, 1.9, 1, "PYTHON"),
-            ("minotaur", 25.9, 35.3, 1.85, 0, "MINOTAUR"),
-            ("chimera", 29.9, 36.9, 1.8, 1, "CHIMERA"),
+            ("scylla", 17.2, 36.2, 0.70, 0, "SCYLLA"),     # Ionian empty water
+            ("python", 19.6, 43.2, 0.68, 1, "PYTHON"),     # N Adriatic/Thrace margin
+            ("minotaur", 26.8, 34.0, 0.65, 0, "MINOTAUR"), # south of Crete sea
+            ("chimera", 35.5, 35.6, 0.65, 1, "CHIMERA"),   # Cyprus/Anatolia SE sea
         ],
         forests=[
             (21.5, 39.5, .75, "pine"), (22.2, 40.2, .7, "pine"), (30.5, 37.8, .7, "pine"),
@@ -451,9 +448,9 @@ MAPS = {
             [(30, 60.6), (28.6, 60.4), (27.4, 60.4)],
         ],
         creatures=[
-            ("jormungandr", 3.6, 58.6, 2.55, 0, "JORMUNGANDR"),
-            ("fenrir", 14.5, 60.3, 2.3, 1, "FENRIR"),
-            ("nidhogg", 23, 66.5, 2.35, 0, "NIDHOGG"),
+            ("jormungandr", -8.5, 60.5, 0.82, 0, "JORMUNGANDR"),  # Norwegian Sea
+            ("fenrir", 4.2, 68.2, 0.75, 1, "FENRIR"),             # far N margin
+            ("nidhogg", 28.5, 68.8, 0.78, 0, "NIDHOGG"),          # Karelia/Arctic margin
         ],
         forests=[
             (10, 61, .9, "pine"), (11.5, 62, .85, "pine"), (12, 63, .85, "pine"),
@@ -628,17 +625,18 @@ def build(name, spec, lang):
         kind, clon, clat, s, flip = c[:5]
         label = c[5] if len(c) > 5 else None
         x, y = project(clon, clat, box, w, h, pad)
-        S = s * 1.75                      # atlas-scale bestiary presence
+        # decorative margin marks only — never amplify (old *1.75 made continent beasts)
+        S = s
         sx = -S if flip else S
         A('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="url(#halo)"/>'
-          % (x, y, 26 * S, 20 * S))
-        A('<g transform="translate(%.1f %.1f) scale(%.2f %.2f)" opacity=".88">%s</g>'
+          % (x, y, 14 * S, 11 * S))
+        A('<g transform="translate(%.1f %.1f) scale(%.2f %.2f)" opacity=".9">%s</g>'
           % (x, y, sx, S, map_creatures.art(kind, GOLD)))
         if label:
             lab = label if lang == "en" else FA.get(label, label)
-            A('<text class="lb" x="%.0f" y="%.0f" font-size="12" text-anchor="middle" '
-              'stroke="#05070b" stroke-width="3" stroke-opacity=".6" paint-order="stroke" opacity=".95">%s</text>'
-              % (x, y + 13 * S + 12, esc(lab)))
+            A('<text class="lb" x="%.0f" y="%.0f" font-size="10" text-anchor="middle" '
+              'stroke="#05070b" stroke-width="2.5" stroke-opacity=".55" paint-order="stroke" opacity=".92">%s</text>'
+              % (x, y + 11 * S + 10, esc(lab)))
 
     # frame
     A('<rect x="7" y="7" width="%d" height="%d" fill="none" stroke="%s" stroke-width="2" rx="7" opacity=".7"/>' % (w - 14, h - 14, GOLD))
