@@ -93,7 +93,7 @@ def poly_path(points, box, w, h, pad, close=False):
     return d + ("Z" if close else "")
 
 
-def chevrons(points, box, w, h, pad, step=11):
+def chevrons(points, box, w, h, pad, step=8):
     """Fantasy-atlas mountains: peaked ridges with one-sided shade hatch."""
     out = []
     acc = 0.0
@@ -107,7 +107,7 @@ def chevrons(points, box, w, h, pad, step=11):
                 x = prev[0] + dx * acc
                 y = prev[1] + dy * acc
                 nx, ny = -dy, dx
-                s = 5.8
+                s = 6.4
                 # main peak triangle
                 out.append("M%.1f %.1fL%.1f %.1fL%.1f %.1fZ" % (
                     x - nx * s * .15 + dx * .2, y - ny * s * .15 + dy * .2,
@@ -176,7 +176,16 @@ MAPS = {
             ("MEDITERRANEAN SEA", 17, 34.5, 13, "s", 0),
             ("AMAZONIA", -62, -5, 13, "r", 0),
         ],
-        ranges=[],
+        ranges=[
+            # Andes
+            [(-74, 8), (-72, 0), (-70, -10), (-70, -20), (-71, -30), (-72, -40)],
+            # Rockies
+            [(-120, 50), (-118, 45), (-115, 40), (-112, 35), (-110, 32)],
+            # Alps / Caucasus / Himalaya sketch
+            [(6, 46), (10, 46), (14, 46)],
+            [(42, 42), (46, 41), (50, 40)],
+            [(72, 34), (78, 30), (84, 28), (90, 28), (95, 28)],
+        ],
         rivers=[
             # Nile
             [(31, 30.5), (31.5, 27), (32.5, 23), (33.5, 18), (34, 13), (33, 8), (32, 2), (30, -1)],
@@ -213,19 +222,21 @@ MAPS = {
         ],
         # mythical beasts (decorative - the world sheet stays unlabelled)
         creatures=[
-            ("jormungandr", -32, 5, 2.6, 0),
-            ("nidhogg", 95, 55, 2.4, 1),
-            ("simorgh", 72, -18, 2.3, 0),
+            ("jormungandr", -28, 8, 3.4, 0),   # Atlantic
+            ("nidhogg", 100, 58, 3.1, 1),      # Siberia margin
+            ("simorgh", 68, -22, 3.0, 0),      # Indian Ocean
         ],
         forests=[
-            # Amazonia palms
-            (-62, -2, 1.1, "palm"), (-58, -4, 1.0, "palm"), (-55, -1, .95, "palm"),
-            (-50, 2, 1.0, "palm"), (-65, -8, .9, "palm"),
-            # northern pines
-            (-100, 55, 1.0, "pine"), (-90, 52, .95, "pine"), (25, 60, 1.0, "pine"),
-            (40, 58, .9, "pine"), (90, 58, .95, "pine"),
-            # India / SE Asia
-            (78, 18, .9, "deciduous"), (100, 15, .95, "palm"), (110, 20, .9, "palm"),
+            (-65, -2, 1.05, "palm"), (-60, -5, 1.0, "palm"), (-55, -1, .95, "palm"),
+            (-50, 2, 1.0, "palm"), (-62, -8, .9, "palm"), (-48, -6, .9, "palm"),
+            (-58, 2, .95, "palm"), (-70, -4, .85, "palm"),
+            (-110, 52, .95, "pine"), (-100, 55, 1.0, "pine"), (-90, 52, .95, "pine"),
+            (-85, 48, .9, "pine"), (15, 58, .95, "pine"), (25, 60, 1.0, "pine"),
+            (35, 58, .9, "pine"), (45, 56, .9, "pine"), (80, 56, .95, "pine"),
+            (95, 58, .9, "pine"), (105, 52, .85, "pine"),
+            (78, 18, .9, "deciduous"), (82, 22, .85, "deciduous"), (100, 15, .95, "palm"),
+            (108, 18, .9, "palm"), (115, 22, .85, "palm"), (10, 5, .85, "deciduous"),
+            (20, 8, .8, "deciduous"), (-5, 45, .85, "deciduous"),
         ],
         graticule=30,
     ),
@@ -263,9 +274,9 @@ MAPS = {
             [(47, 32.5), (48.5, 31.6), (49.5, 30.5)],
         ],
         creatures=[
-            ("humbaba", 36.05, 36.25, 1.85, 0, "HUMBABA"),
-            ("mushussu", 45.6, 32.9, 1.8, 0, "MUSHUSSU"),
-            ("anzu", 47.6, 31.0, 1.75, 0, "ANZU"),
+            ("humbaba", 36.05, 36.25, 2.15, 0, "HUMBABA"),
+            ("mushussu", 45.6, 32.9, 2.1, 0, "MUSHUSSU"),
+            ("anzu", 47.6, 31.0, 2.05, 0, "ANZU"),
         ],
         forests=[
             (35.8, 34.2, .95, "pine"), (36.4, 35.0, .85, "pine"),  # cedar belt
@@ -308,14 +319,16 @@ MAPS = {
             [(49.6, 33.4), (51.6, 32.4), (53, 32.2)],
         ],
         creatures=[
-            ("simorgh", 52.6, 36.7, 2.25, 0, "SIMORGH"),
-            ("dahaka", 46.3, 33.6, 2.05, 1, "DAHAKA"),
-            ("daeva", 63.5, 30.6, 1.85, 1, "DAEVA"),
+            ("simorgh", 52.6, 36.7, 2.55, 0, "SIMORGH"),
+            ("dahaka", 46.3, 33.6, 2.35, 1, "DAHAKA"),
+            ("daeva", 63.5, 30.6, 2.15, 1, "DAEVA"),
         ],
         forests=[
-            (49.5, 36.0, .85, "pine"), (51.0, 36.2, .8, "pine"), (53.5, 36.3, .9, "pine"),
-            (46.0, 34.5, .75, "deciduous"), (47.5, 33.5, .7, "deciduous"),
-            (65.5, 34.5, .8, "deciduous"), (67.0, 35.0, .75, "deciduous"),
+            (49.5, 36.0, .85, "pine"), (51.0, 36.2, .8, "pine"), (52.2, 36.4, .8, "pine"),
+            (53.5, 36.3, .9, "pine"), (54.5, 36.1, .75, "pine"),
+            (46.0, 34.5, .75, "deciduous"), (47.5, 33.5, .7, "deciduous"), (48.2, 34.0, .7, "deciduous"),
+            (65.5, 34.5, .8, "deciduous"), (66.2, 34.8, .75, "deciduous"), (67.0, 35.0, .75, "deciduous"),
+            (45.5, 35.5, .7, "pine"), (50.0, 33.0, .65, "deciduous"),
         ],
         graticule=5,
     ),
@@ -353,14 +366,16 @@ MAPS = {
             [(74.4, 17), (77.6, 16.4), (80.6, 15.6), (83.4, 15.6)],
         ],
         creatures=[
-            ("garuda", 80.2, 28.2, 2.1, 0, "GARUDA"),
-            ("naga", 86.8, 23.6, 2.0, 0, "NAGA"),
-            ("makara", 73.5, 9.5, 1.9, 1, "MAKARA"),
+            ("garuda", 80.2, 28.2, 2.4, 0, "GARUDA"),
+            ("naga", 86.8, 23.6, 2.3, 0, "NAGA"),
+            ("makara", 73.5, 9.5, 2.2, 1, "MAKARA"),
         ],
         forests=[
-            (77, 22, .85, "deciduous"), (79, 20, .8, "deciduous"), (82, 21, .9, "deciduous"),
-            (88, 23, .85, "palm"), (90, 22, .8, "palm"), (74, 15, .75, "palm"),
-            (76, 12, .7, "palm"), (85, 18, .8, "deciduous"),
+            (77, 22, .85, "deciduous"), (78.5, 21, .8, "deciduous"), (79, 20, .8, "deciduous"),
+            (80.5, 20.5, .85, "deciduous"), (82, 21, .9, "deciduous"), (84, 20, .8, "deciduous"),
+            (88, 23, .85, "palm"), (89, 22.5, .8, "palm"), (90, 22, .8, "palm"),
+            (91.5, 21, .75, "palm"), (74, 15, .75, "palm"), (75, 13.5, .7, "palm"),
+            (76, 12, .7, "palm"), (85, 18, .8, "deciduous"), (86.5, 19, .75, "deciduous"),
         ],
         graticule=5,
     ),
@@ -394,10 +409,10 @@ MAPS = {
             [(21.6, 42.6), (21.4, 41.4), (21.6, 40.6)],
         ],
         creatures=[
-            ("scylla", 16.4, 38.3, 1.65, 0, "SCYLLA"),
-            ("python", 22.1, 39.1, 1.6, 1, "PYTHON"),
-            ("minotaur", 25.9, 35.3, 1.55, 0, "MINOTAUR"),
-            ("chimera", 29.9, 36.9, 1.5, 1, "CHIMERA"),
+            ("scylla", 16.4, 38.3, 1.95, 0, "SCYLLA"),
+            ("python", 22.1, 39.1, 1.9, 1, "PYTHON"),
+            ("minotaur", 25.9, 35.3, 1.85, 0, "MINOTAUR"),
+            ("chimera", 29.9, 36.9, 1.8, 1, "CHIMERA"),
         ],
         forests=[
             (21.5, 39.5, .75, "pine"), (22.2, 40.2, .7, "pine"), (30.5, 37.8, .7, "pine"),
@@ -436,14 +451,17 @@ MAPS = {
             [(30, 60.6), (28.6, 60.4), (27.4, 60.4)],
         ],
         creatures=[
-            ("jormungandr", 3.6, 58.6, 2.15, 0, "JORMUNGANDR"),
-            ("fenrir", 14.5, 60.3, 1.9, 1, "FENRIR"),
-            ("nidhogg", 23, 66.5, 1.95, 0, "NIDHOGG"),
+            ("jormungandr", 3.6, 58.6, 2.55, 0, "JORMUNGANDR"),
+            ("fenrir", 14.5, 60.3, 2.3, 1, "FENRIR"),
+            ("nidhogg", 23, 66.5, 2.35, 0, "NIDHOGG"),
         ],
         forests=[
-            (10, 61, .9, "pine"), (12, 63, .85, "pine"), (15, 64.5, .9, "pine"),
-            (18, 62, .8, "pine"), (25, 65, .85, "pine"), (27, 63, .8, "pine"),
-            (8, 58, .75, "deciduous"), (-18, 64.5, .7, "pine"),
+            (10, 61, .9, "pine"), (11.5, 62, .85, "pine"), (12, 63, .85, "pine"),
+            (13.5, 64, .85, "pine"), (15, 64.5, .9, "pine"), (16.5, 65, .85, "pine"),
+            (18, 62, .8, "pine"), (20, 63.5, .8, "pine"), (25, 65, .85, "pine"),
+            (26.5, 64, .8, "pine"), (27, 63, .8, "pine"), (8, 58, .75, "deciduous"),
+            (9.5, 59.5, .75, "pine"), (-18, 64.5, .75, "pine"), (-16, 65, .7, "pine"),
+            (-19.5, 64, .7, "pine"),
         ],
         graticule=5,
     ),
@@ -517,9 +535,10 @@ def build(name, spec, lang):
     A('<linearGradient id="land" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>' % (LAND, LAND2))
     A('<radialGradient id="vign" cx="50%" cy="50%" r="72%"><stop offset="0" stop-color="#02040a" stop-opacity="0"/><stop offset="100%" stop-color="#02040a" stop-opacity=".78"/></radialGradient>')
     A('<pattern id="wav" width="22" height="12" patternUnits="userSpaceOnUse"><path d="M0 7q5.5-6 11 0t11 0" fill="none" stroke="#3a6a88" stroke-width=".9" opacity=".22"/><path d="M0 3q5.5-4 11 0t11 0" fill="none" stroke="#2f5570" stroke-width=".7" opacity=".12"/></pattern>')
-    A('<pattern id="swell" width="48" height="28" patternUnits="userSpaceOnUse"><path d="M4 18c3-2 6-2 9 0M20 12c3-2 6-2 9 0M32 20c3-2 6-2 9 0" fill="none" stroke="#4a7a96" stroke-width=".8" opacity=".16"/></pattern>')
+    A('<pattern id="swell" width="40" height="24" patternUnits="userSpaceOnUse"><path d="M2 16c4-3 8-3 12 0M18 10c4-3 8-3 12 0M10 20c3-2 6-2 9 0" fill="none" stroke="#4a7a96" stroke-width=".85" opacity=".2"/><path d="M0 8c5-2 10-2 15 0M20 4c5-2 10-2 15 0" fill="none" stroke="#3a6580" stroke-width=".65" opacity=".12"/></pattern>')
+    A('<pattern id="surf" width="14" height="10" patternUnits="userSpaceOnUse"><path d="M1 7q3-4 6 0M8 4q2.5-3 5 0" fill="none" stroke="#5a8aa8" stroke-width=".7" opacity=".18"/></pattern>')
     # soft dark patch behind a beast
-    A('<radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#02040a" stop-opacity=".62"/><stop offset="100%" stop-color="#02040a" stop-opacity="0"/></radialGradient>')
+    A('<radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="55%" stop-color="#000" stop-opacity=".22"/><stop offset="100%" stop-color="#000" stop-opacity="0"/></radialGradient>')
     A('<clipPath id="inner"><rect x="%d" y="%d" width="%d" height="%d" rx="4"/></clipPath>' % (pad, pad, w - 2 * pad, h - 2 * pad))
     A('</defs>')
 
@@ -527,6 +546,7 @@ def build(name, spec, lang):
     A('<rect width="%d" height="%d" fill="url(#sea)"/>' % (w, h))
     A('<rect x="%d" y="%d" width="%d" height="%d" fill="url(#wav)"/>' % (pad, pad, w - 2 * pad, h - 2 * pad))
     A('<rect x="%d" y="%d" width="%d" height="%d" fill="url(#swell)"/>' % (pad, pad, w - 2 * pad, h - 2 * pad))
+    A('<rect x="%d" y="%d" width="%d" height="%d" fill="url(#surf)" opacity=".7"/>' % (pad, pad, w - 2 * pad, h - 2 * pad))
 
     # land — world sheet stays on 110m (file size); regional sheets use 50m coasts
     use_hi = (box[1] - box[0]) < 80 and os.path.exists(GEO)
@@ -608,10 +628,10 @@ def build(name, spec, lang):
         kind, clon, clat, s, flip = c[:5]
         label = c[5] if len(c) > 5 else None
         x, y = project(clon, clat, box, w, h, pad)
-        S = s * 1.45                      # larger for filled bestiary presence
+        S = s * 1.75                      # atlas-scale bestiary presence
         sx = -S if flip else S
         A('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="url(#halo)"/>'
-          % (x, y, 19 * S, 15 * S))
+          % (x, y, 26 * S, 20 * S))
         A('<g transform="translate(%.1f %.1f) scale(%.2f %.2f)" opacity=".88">%s</g>'
           % (x, y, sx, S, map_creatures.art(kind, GOLD)))
         if label:
