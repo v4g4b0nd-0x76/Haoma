@@ -24,12 +24,14 @@ GEO = os.path.join(ROOT, "tools", "geo", "ne_110m_land.geojson")
 OUT = os.path.join(ROOT, "static", "img", "maps")
 
 GOLD = "#c9a45c"
-LAND = "#26331f"
-LAND2 = "#171d12"
-SEA = "#101c28"
-SEA2 = "#070d15"
+LAND = "#1a2416"
+LAND2 = "#0c110b"
+SEA = "#0a1420"
+SEA2 = "#04080e"
 TEXT = "#d8c9a8"
-SEA_TEXT = "#7fa3bd"
+SEA_TEXT = "#6a8fa8"
+
+import map_creatures  # noqa: E402 — dense engraving silhouettes
 
 # ---------------------------------------------------------------- projections
 
@@ -168,9 +170,9 @@ MAPS = {
         ],
         # mythical beasts (decorative - the world sheet stays unlabelled)
         creatures=[
-            ("serpent", -38, 8, 2.1, 0),
-            ("dragon", 76, 59, 1.9, 1),
-            ("bird", 80, -10, 1.8, 0),
+            ("jormungandr", -38, 8, 2.0, 0),
+            ("nidhogg", 76, 59, 1.85, 1),
+            ("simorgh", 80, -10, 1.75, 0),
         ],
         graticule=30,
     ),
@@ -208,9 +210,9 @@ MAPS = {
             [(47, 32.5), (48.5, 31.6), (49.5, 30.5)],
         ],
         creatures=[
-            ("guardian", 36.05, 36.25, 1.55, 0, "HUMBABA"),   # the Amanus cedar belt
-            ("dragon", 45.6, 32.9, 1.5, 0, "MUSHUSSU"),       # Babylon's gate-dragon
-            ("bird", 47.6, 31.0, 1.45, 0, "ANZU"),
+            ("humbaba", 36.05, 36.25, 1.65, 0, "HUMBABA"),
+            ("mushussu", 45.6, 32.9, 1.6, 0, "MUSHUSSU"),
+            ("anzu", 47.6, 31.0, 1.55, 0, "ANZU"),
         ],
         graticule=5,
     ),
@@ -218,11 +220,11 @@ MAPS = {
         box=(42, 72, 24, 40), w=1200, center=32,
         title={"en": "The Iranian Plateau", "fa": "فلات ایران"},
         labels=[
-            ("MEDIA", 48.6, 35.2, 15, "r", 0),
-            ("PERSIA", 54, 32.6, 17, "r", 0),
+            ("MEDIA", 48.2, 35.6, 15, "r", 0),
+            ("PERSIA", 54.2, 31.8, 17, "r", 0),
             ("PARTHIA", 58.6, 36.4, 15, "r", 0),
             ("ARIA", 64, 33.4, 14, "r", 0),
-            ("KAVIR DESERT", 55.5, 34.4, 12, "r", -12),
+            ("KAVIR DESERT", 55.8, 34.8, 11, "r", -10),
             ("CASPIAN SEA", 51, 37.6, 13, "s", 0),
             ("PERSIAN GULF", 49.8, 29.4, 13, "s", -30),
             ("GULF OF OMAN", 58.5, 25.4, 13, "s", 0),
@@ -248,9 +250,9 @@ MAPS = {
             [(49.6, 33.4), (51.6, 32.4), (53, 32.2)],
         ],
         creatures=[
-            ("bird", 52.6, 36.7, 1.9, 0, "SIMORGH"),          # over the Alborz
-            ("dragon", 46.3, 33.6, 1.7, 1, "DAHAKA"),          # the Zagros worm
-            ("demon", 63.5, 30.6, 1.5, 1, "DAEVA"),
+            ("simorgh", 52.6, 36.7, 2.05, 0, "SIMORGH"),
+            ("dahaka", 46.3, 33.6, 1.85, 1, "DAHAKA"),
+            ("daeva", 63.5, 30.6, 1.65, 1, "DAEVA"),
         ],
         graticule=5,
     ),
@@ -288,9 +290,9 @@ MAPS = {
             [(74.4, 17), (77.6, 16.4), (80.6, 15.6), (83.4, 15.6)],
         ],
         creatures=[
-            ("bird", 80.2, 28.2, 1.8, 0, "GARUDA"),
-            ("serpent", 86.8, 23.6, 1.7, 0, "NAGA"),           # the Ganges delta
-            ("serpent", 73.5, 9.5, 1.6, 1, "MAKARA"),          # Arabian Sea
+            ("garuda", 80.2, 28.2, 1.9, 0, "GARUDA"),
+            ("naga", 86.8, 23.6, 1.8, 0, "NAGA"),
+            ("makara", 73.5, 9.5, 1.7, 1, "MAKARA"),
         ],
         graticule=5,
     ),
@@ -324,10 +326,10 @@ MAPS = {
             [(21.6, 42.6), (21.4, 41.4), (21.6, 40.6)],
         ],
         creatures=[
-            ("serpent", 16.4, 38.3, 1.35, 0, "SCYLLA"),        # the Messina strait
-            ("serpent", 22.1, 39.1, 1.3, 1, "PYTHON"),         # Delphi's dragon
-            ("minotaur", 25.9, 35.3, 1.3, 0, "MINOTAUR"),     # Knossos
-            ("dragon", 29.9, 36.9, 1.25, 1, "CHIMERA"),        # Lycia
+            ("scylla", 16.4, 38.3, 1.45, 0, "SCYLLA"),
+            ("python", 22.1, 39.1, 1.4, 1, "PYTHON"),
+            ("minotaur", 25.9, 35.3, 1.4, 0, "MINOTAUR"),
+            ("chimera", 29.9, 36.9, 1.35, 1, "CHIMERA"),
         ],
         graticule=5,
     ),
@@ -362,9 +364,9 @@ MAPS = {
             [(30, 60.6), (28.6, 60.4), (27.4, 60.4)],
         ],
         creatures=[
-            ("serpent", 3.6, 58.6, 1.75, 0, "JORMUNGANDR"),    # the Skagerrak
-            ("wolf", 14.5, 60.3, 1.55, 1, "FENRIR"),
-            ("dragon", 23, 66.5, 1.6, 0, "NIDHOGG"),
+            ("jormungandr", 3.6, 58.6, 1.85, 0, "JORMUNGANDR"),
+            ("fenrir", 14.5, 60.3, 1.65, 1, "FENRIR"),
+            ("nidhogg", 23, 66.5, 1.7, 0, "NIDHOGG"),
         ],
         graticule=5,
     ),
@@ -399,128 +401,8 @@ FA = {
 }
 
 # ---------------------------------------------------------------- creature art
-# "Here be monsters": thin antique-engraving line art, centred on the origin and
-# facing +x, drawn in a ~28-unit box; placed per MAPS["creatures"] entry.
-# Fine strokes (0.7-1.35 units) over open outlines with interior detail — belly
-# scutes, feather ribs, horn ridges, facial lines — so the beasts read crisply
-# against both sea and land at map scale.
-CREATURE_ART = {
-    "serpent": "".join([
-        # coiling body: outer then inner edge converging into a fluked tail
-        '<path d="M-13.8 4.4C-11.6 -2 -7 -4.4 -4.4 .6C-1.8 -4 2.6 -5 5 -.8C7 -4 9.6 -7.4 12 -10" fill="none" stroke="%s" stroke-width="1.35" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-13.8 4.4C-12.2 -.4 -7.8 -2.6 -5 1.8C-2.4 -2.4 1.8 -3.2 4.2 1C6.2 -1.8 9 -5.2 11.2 -8.2" fill="none" stroke="%s" stroke-width="1.05" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-13.8 4.4L-16 2.4L-15.8 5.8Z" fill="none" stroke="%s" stroke-width=".9" stroke-linejoin="round"/>' % GOLD,
-        # belly scutes across the ribbon
-        '<path d="M-12.2 2.6l.8 2.2M-9.4 -.6l.7 2.1M-6.2 -1.8l.7 2.2M-2.6 1.6l.8 2.2M.8 -1l.7 2.2M4 1l.7 2M7.2 -3.4l.6 2.1M10 -7.6l.5 2" fill="none" stroke="%s" stroke-width=".7" stroke-linecap="round"/>' % GOLD,
-        # dorsal fins on the wave crests
-        '<path d="M-9.6 -1.7L-8.5 -5.1L-6.5 -3.2ZM-2.2 -3.5L-1.1 -6.9L.9 -4.9ZM4.5 -3.4L5.7 -6.2L7.4 -4.5Z" fill="none" stroke="%s" stroke-width=".8" stroke-linejoin="round"/>' % GOLD,
-        # raised head: open jaws, teeth, forked tongue, eye
-        '<path d="M11.4 -9.6C12.6 -11.6 14.4 -13 16.2 -13L16.6 -12.3L13.8 -11.5" fill="none" stroke="%s" stroke-width="1.2" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M11.2 -8.2C12 -9.4 12.8 -10.4 13.8 -11.5L16.4 -11.9" fill="none" stroke="%s" stroke-width="1.2" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M15.4 -12.4l.1 .9M14.4 -12l.1 .8" fill="none" stroke="%s" stroke-width=".6" stroke-linecap="round"/>' % GOLD,
-        '<path d="M16.5 -12.2l1.9 -.7m-1.9 .7l2 .8" fill="none" stroke="%s" stroke-width=".65" stroke-linecap="round"/>' % GOLD,
-        '<circle cx="13.3" cy="-11.9" r=".6" fill="%s"/>' % GOLD,
-    ]),
-    "dragon": "".join([
-        # far wing, near wing, body, legs, neck, head, tail
-        '<path d="M4.2 -5C4 -8.2 2.6 -11.4 0 -14.2C.6 -12.2 1 -11 1.6 -10C.6 -9.8 -.2 -9.4 -.8 -8.8C.2 -7.6 1 -6 1.4 -4.6C2.2 -4.6 3.4 -4.7 4.2 -5Z" fill="none" stroke="%s" stroke-width="1" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M1.6 -5.2C.4 -8.8 -2 -12.4 -5.4 -15C-4.6 -13 -4 -11.8 -3.4 -10.6C-4.6 -10.6 -5.6 -10.2 -6.4 -9.6C-5 -8.4 -3.8 -6.8 -3 -5C-2.6 -4.4 -2.2 -4 -1.6 -3.6C-.4 -4 .6 -4.6 1.6 -5.2Z" fill="none" stroke="%s" stroke-width="1.15" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M.6 -5.4C-1.2 -7.6 -2.6 -9.6 -3.4 -10.6M.2 -5.8C-1.4 -6.6 -2.6 -7.2 -3.6 -7.6" fill="none" stroke="%s" stroke-width=".7" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-4.4 -1.8C-4.4 -4 -1.6 -5.4 1.8 -5.4C5.2 -5.4 7.6 -4 7.6 -1.8C7.6 .4 5.2 1.8 1.8 1.8C-1.6 1.8 -4.4 .4 -4.4 -1.8Z" fill="none" stroke="%s" stroke-width="1.25"/>' % GOLD,
-        '<path d="M-2 -.6q1 .9 .6 2M.4 -1q1 .9 .6 2M2.8 -.8q1 .9 .6 2" fill="none" stroke="%s" stroke-width=".7" stroke-linecap="round"/>' % GOLD,
-        '<path d="M4.4 1.6C4.6 3.4 4.8 4.8 4.8 6.2L4.4 7.2L6.2 7.2L6.2 6C6.2 4.6 6 3.2 5.6 1.8" fill="none" stroke="%s" stroke-width="1" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M5.6 1.4C6.2 3.6 6.4 5.4 6.4 6.8L6 7.9L8 7.9L8 6.6C8 5 7.8 3.2 7.2 1.6" fill="none" stroke="%s" stroke-width="1.15" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M-4.4 1.2C-4.2 3 -4 4.4 -4 5.8L-4.4 6.9L-2.6 6.9L-2.6 5.8C-2.6 4.4 -2.8 3 -3.2 1.4" fill="none" stroke="%s" stroke-width="1" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M-3.2 1.2C-2.8 3.4 -2.6 5.2 -2.6 6.8L-3 7.9L-1 7.9L-1 6.6C-1 5 -1.2 3.2 -1.6 1.4" fill="none" stroke="%s" stroke-width="1.15" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M6.8 -4.2C8 -6.6 9.6 -8.8 11.4 -10.6" fill="none" stroke="%s" stroke-width="1.3" stroke-linecap="round"/>' % GOLD,
-        '<path d="M7.5 -2.6C8.6 -4.6 9.8 -6.4 11.4 -7.8" fill="none" stroke="%s" stroke-width="1.1" stroke-linecap="round"/>' % GOLD,
-        '<path d="M11.4 -10.6C12.5 -12 14.2 -12.9 15.8 -12.6L16.3 -11.7L13 -10.8" fill="none" stroke="%s" stroke-width="1.15" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M11.4 -7.8C12 -9 12.4 -10 13 -10.8L15.9 -11.2" fill="none" stroke="%s" stroke-width="1.1" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M15.1 -11.5l.1 .8M14 -11.2l.1 .7" fill="none" stroke="%s" stroke-width=".6" stroke-linecap="round"/>' % GOLD,
-        '<path d="M12.6 -12.3C12.2 -13.4 11.6 -14.2 10.8 -14.8M14.2 -12.4C14.2 -13.5 14 -14.3 13.6 -15" fill="none" stroke="%s" stroke-width=".85" stroke-linecap="round"/>' % GOLD,
-        '<circle cx="13.2" cy="-11.5" r=".55" fill="%s"/>' % GOLD,
-        '<path d="M-4.4 -.6C-7 0 -9.6 1.6 -11.6 4M-4 .8C-6.4 1.6 -8.6 3 -10.4 5.6" fill="none" stroke="%s" stroke-width="1.15" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-11.6 4L-14.6 4.8L-10.4 5.6Z" fill="none" stroke="%s" stroke-width="1" stroke-linejoin="round"/>' % GOLD,
-    ]),
-    "bird": "".join([
-        # feathered wings swept up in a V, drawn as blades with feather ribs
-        '<path d="M-2.6 -3.6C-6 -6 -9.8 -8.6 -13.4 -10.8C-11.8 -7.6 -8.8 -5 -5.4 -3.8C-4.6 -3.6 -3.4 -3.5 -2.6 -3.6Z" fill="none" stroke="%s" stroke-width="1.15" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M-4.2 -4.4C-7 -6.3 -10 -8.4 -12.5 -10.3M-5.6 -4.6C-8 -6.2 -10.4 -8 -12.4 -9.6" fill="none" stroke="%s" stroke-width=".7" stroke-linecap="round"/>' % GOLD,
-        '<path d="M2.4 -3.8C5.8 -6.2 9.6 -8.8 13.4 -11C11.8 -7.8 8.8 -5.2 5.4 -4C4.6 -3.8 3.4 -3.7 2.4 -3.8Z" fill="none" stroke="%s" stroke-width="1.15" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M4 -4.6C6.8 -6.5 9.8 -8.6 12.5 -10.5M5.4 -4.8C7.8 -6.4 10.2 -8.2 12.4 -9.8" fill="none" stroke="%s" stroke-width=".7" stroke-linecap="round"/>' % GOLD,
-        # body with turned head and hooked beak
-        '<path d="M-.8 -4.6C-3 -3 -3.8 .4 -2.8 3.6C-2 6 .4 6.8 2.2 5.2C4.2 3.4 4.4 -.4 3 -3.2C2.2 -4.6 .2 -5.6 -.8 -4.6Z" fill="none" stroke="%s" stroke-width="1.25" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M.4 -5C.2 -6.8 1.4 -8.2 3.2 -8.4L6.6 -8.8L5.9 -7.9L5.2 -7.6L5.8 -6.7L3.8 -6.3C2.6 -6 1.4 -5.6 .6 -5Z" fill="none" stroke="%s" stroke-width="1.1" stroke-linejoin="round"/>' % GOLD,
-        '<circle cx="3.5" cy="-7.3" r=".55" fill="%s"/>' % GOLD,
-        '<path d="M1.6 -8.6C1.2 -9.8 .6 -10.6 -.2 -11.3M2.4 -8.3C2.4 -9.6 2.3 -10.5 2 -11.4" fill="none" stroke="%s" stroke-width=".75" stroke-linecap="round"/>' % GOLD,
-        # tail fan and talons
-        '<path d="M-2 4.4L-5 10.6L.4 11.2L1.6 5.4Z" fill="none" stroke="%s" stroke-width="1.05" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M-.8 5L-2.6 10.8M.4 5.4L-.4 11.1" fill="none" stroke="%s" stroke-width=".7" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-1.4 5.6l-.6 2l-1.5 .6M.8 6l.5 2l1.6 .5" fill="none" stroke="%s" stroke-width=".7" stroke-linecap="round"/>' % GOLD,
-    ]),
-    "wolf": "".join([
-        # far legs sit behind the body
-        '<path d="M-9 -3C-8.8 -.6 -8.7 1.6 -8.7 3.8L-8.9 6.6L-7 6.6L-7.1 4.2C-7.1 2.2 -7.3 .2 -7.6 -1.8" fill="none" stroke="%s" stroke-width="1" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M1.5 2.1C1.8 3.8 2 5.2 2 6.6L3.9 6.6L3.8 5.2C3.8 4 3.7 3 3.5 2.1" fill="none" stroke="%s" stroke-width="1" stroke-linejoin="round"/>' % GOLD,
-        # body outline: nose, ears, ruff, back, tail, hind leg, belly, front leg, chest, jaw
-        '<path d="M13.4 -3.6C13.9 -4.6 13.4 -5.5 12.6 -5.8L10.9 -6.2C9.9 -6.5 9.1 -6.9 8.6 -7.4L8.3 -10.6L7.1 -7.5L5.8 -10.2L5.3 -7.2C4.2 -7 3.2 -6.9 2.2 -7L1.4 -8.3L.7 -6.9L-.5 -7.9L-1 -6.7C-3.4 -6.3 -6 -5.9 -8 -5.2C-9.4 -4.8 -10.2 -4.3 -10.6 -3.7C-12.4 -4.4 -14 -5.8 -14.8 -7.8C-13.6 -7.1 -12.5 -6.6 -11.4 -6.4C-11.5 -5.5 -11.2 -4.6 -10.6 -3.9C-9.2 -3.4 -8.4 -2 -8 -.4C-7.6 2 -7.4 4.6 -7.4 6.6L-7.6 7.8L-5.4 7.8L-5.7 6.4C-5.6 4.6 -5.3 3 -4.8 1.6C-3.6 1.9 -2.4 2.1 -1.2 2.2C0 2.3 1.4 2.3 2.4 2.1C2.9 3.8 3.1 5.4 3.1 6.5L2.9 7.8L5.1 7.8L5.2 6.4C5.2 4.6 5.4 3 5.8 1.6C6.8 .6 7.8 -.8 8.6 -2.2C9.2 -2.9 9.9 -3.4 10.7 -3.7C11.6 -3.9 12.5 -3.9 13.2 -3.8Z" fill="none" stroke="%s" stroke-width="1.2" stroke-linejoin="round"/>' % GOLD,
-        # snarling mouth with fangs
-        '<path d="M12.8 -4.2C11.6 -4.6 10.6 -4.8 9.8 -4.7" fill="none" stroke="%s" stroke-width=".7" stroke-linecap="round"/>' % GOLD,
-        '<path d="M12.1 -4.5l.1 1.2M11 -4.8l.1 .9" fill="none" stroke="%s" stroke-width=".65" stroke-linecap="round"/>' % GOLD,
-        # eye, nostril, inner ears, fur
-        '<circle cx="11.2" cy="-5.3" r=".56" fill="%s"/>' % GOLD,
-        '<circle cx="13" cy="-4.4" r=".4" fill="%s"/>' % GOLD,
-        '<path d="M8.1 -9.6l-1 2M5.7 -9.3l-.9 1.9" fill="none" stroke="%s" stroke-width=".65" stroke-linecap="round"/>' % GOLD,
-        '<path d="M3.6 -6.1l-.5 1.4M2.4 -6.5l-.4 1.4M-5.6 -3q1 1.4 .6 3M-4.2 -2.6q1 1.4 .6 2.8M-13.4 -7l1 .6M-12.4 -6.2l1 .5" fill="none" stroke="%s" stroke-width=".65" stroke-linecap="round"/>' % GOLD,
-    ]),
-    "demon": "".join([
-        # horned bust: shoulders, collar, neck
-        '<path d="M-8.6 10.6C-7.8 3.4 -4.6 .8 0 .8C4.6 .8 7.8 3.4 8.6 10.6" fill="none" stroke="%s" stroke-width="1.3" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-2.4 1L-2.6 -1.6M2.4 1L2.6 -1.6" fill="none" stroke="%s" stroke-width="1.1" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-5 4.8C-3.2 4 3.2 4 5 4.8" fill="none" stroke="%s" stroke-width=".75" stroke-linecap="round"/>' % GOLD,
-        '<circle cx="0" cy="6.6" r="1.15" fill="none" stroke="%s" stroke-width=".9"/>' % GOLD,
-        # swept horns with ridge ticks
-        '<path d="M-4.6 -8.8C-6.8 -10.2 -8.3 -12.8 -8.5 -15.2C-6.6 -13.2 -5 -11.6 -3.2 -10.5Z" fill="none" stroke="%s" stroke-width="1.1" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M-7.7 -13.6l1.6 .7M-6.6 -12.3l1.5 .6M-5.4 -11.2l1.4 .6" fill="none" stroke="%s" stroke-width=".65" stroke-linecap="round"/>' % GOLD,
-        '<path d="M4.6 -8.8C6.8 -10.2 8.3 -12.8 8.5 -15.2C6.6 -13.2 5 -11.6 3.2 -10.5Z" fill="none" stroke="%s" stroke-width="1.1" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M7.7 -13.6l-1.6 .7M6.6 -12.3l-1.5 .6M5.4 -11.2l-1.4 .6" fill="none" stroke="%s" stroke-width=".65" stroke-linecap="round"/>' % GOLD,
-        # pointed ears
-        '<path d="M-6 -4.6L-8.6 -3.8L-6.4 -2.6ZM6 -4.6L8.6 -3.8L6.4 -2.6Z" fill="none" stroke="%s" stroke-width=".9" stroke-linejoin="round"/>' % GOLD,
-        # head with heavy brow and fanged snarl
-        '<path d="M0 -10.8C3.7 -10.8 6.2 -8.2 6.2 -4.7C6.2 -1.2 3.7 1.4 0 1.4C-3.7 1.4 -6.2 -1.2 -6.2 -4.7C-6.2 -8.2 -3.7 -10.8 0 -10.8Z" fill="none" stroke="%s" stroke-width="1.25"/>' % GOLD,
-        '<path d="M-4.3 -6.8L-1.1 -6M4.3 -6.8L1.1 -6" fill="none" stroke="%s" stroke-width=".8" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-3.4 -5C-2.7 -5.9 -1.2 -5.9 -.5 -5C-1.2 -4.2 -2.7 -4.2 -3.4 -5ZM3.4 -5C2.7 -5.9 1.2 -5.9 .5 -5C1.2 -4.2 2.7 -4.2 3.4 -5Z" fill="%s"/>' % GOLD,
-        '<path d="M0 -3.8L0 -.8" fill="none" stroke="%s" stroke-width=".8" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-3 -.2C-2 -.8 -2 -.4 -1.3 .3C-.6 -.4 .6 -.4 1.3 .3C2 -.4 2 -.8 3 -.2" fill="none" stroke="%s" stroke-width=".85" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-2 0l.2 1.3M2 0l-.2 1.3" fill="none" stroke="%s" stroke-width=".7" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-2.4 -8.8q2.4 -1.2 4.8 0" fill="none" stroke="%s" stroke-width=".7" stroke-linecap="round"/>' % GOLD,
-    ]),
-    "minotaur": "".join([
-        # horns with ridge ticks
-        '<path d="M-6.4 -7.6C-10.4 -10.2 -12 -13.6 -10 -15.2C-10.6 -12 -9 -9.6 -5.4 -7.8Z" fill="none" stroke="%s" stroke-width="1.15" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M6.4 -7.6C10.4 -10.2 12 -13.6 10 -15.2C10.6 -12 9 -9.6 5.4 -7.8Z" fill="none" stroke="%s" stroke-width="1.15" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M-10.6 -13.4l1.7 .8M-9.3 -11.7l1.6 .7M-8 -10.2l1.5 .7M10.6 -13.4l-1.7 .8M9.3 -11.7l-1.6 .7M8 -10.2l-1.5 .7" fill="none" stroke="%s" stroke-width=".65" stroke-linecap="round"/>' % GOLD,
-        # skull + muzzle
-        '<path d="M-6 -8.2C-6 -3 -3.4 1.6 0 2.2C3.4 1.6 6 -3 6 -8.2C4 -10.2 -4 -10.2 -6 -8.2Z" fill="none" stroke="%s" stroke-width="1.2" stroke-linejoin="round"/>' % GOLD,
-        '<path d="M-4.6 -6C-3.4 -6.8 -1.8 -7 -.6 -6.7M4.6 -6C3.4 -6.8 1.8 -7 .6 -6.7" fill="none" stroke="%s" stroke-width=".75" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-3.3 -4.6C-2.6 -5.4 -1.2 -5.4 -.6 -4.6C-1.2 -3.9 -2.6 -3.9 -3.3 -4.6ZM3.3 -4.6C2.6 -5.4 1.2 -5.4 .6 -4.6C1.2 -3.9 2.6 -3.9 3.3 -4.6Z" fill="%s"/>' % GOLD,
-        '<path d="M-3.8 .2C-3.8 2.4 -2.1 3.9 0 3.9C2.1 3.9 3.8 2.4 3.8 .2" fill="none" stroke="%s" stroke-width="1" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-1.8 2.5C-1.3 1.9 -.4 1.9 0 2.5C.4 1.9 1.3 1.9 1.8 2.5" fill="none" stroke="%s" stroke-width=".85" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-2.4 4.6C-1.2 5.2 1.2 5.2 2.4 4.6" fill="none" stroke="%s" stroke-width=".7" stroke-linecap="round"/>' % GOLD,
-    ]),
-    "guardian": "".join([
-        # ringed face of the dread guardian
-        '<path d="M0 -8.6C5.5 -8.6 8.6 -4.6 8.6 0.4C8.6 6 4.6 9.6 0 9.6C-4.6 9.6 -8.6 6 -8.6 0.4C-8.6 -4.6 -5.5 -8.6 0 -8.6Z" fill="none" stroke="%s" stroke-width="1.2"/>' % GOLD,
-        '<path d="M0 -6.6C4.3 -6.6 6.6 -3.5 6.6 .3C6.6 4.5 3.6 7.4 0 7.4C-3.6 7.4 -6.6 4.5 -6.6 .3C-6.6 -3.5 -4.3 -6.6 0 -6.6Z" fill="none" stroke="%s" stroke-width=".7" opacity=".8"/>' % GOLD,
-        ('<circle cx="0" cy="-10.4" r="1.85" fill="none" stroke="%s" stroke-width="1"/>' % GOLD) +
-        '<circle cx="5.4" cy="-7.6" r="1.85" fill="none" stroke="%s" stroke-width="1"/><circle cx="9.2" cy="-3.2" r="1.85" fill="none" stroke="%s" stroke-width="1"/><circle cx="9.2" cy="3.2" r="1.85" fill="none" stroke="%s" stroke-width="1"/><circle cx="5.4" cy="7.6" r="1.85" fill="none" stroke="%s" stroke-width="1"/><circle cx="0" cy="9.4" r="1.85" fill="none" stroke="%s" stroke-width="1"/><circle cx="-5.4" cy="7.6" r="1.85" fill="none" stroke="%s" stroke-width="1"/><circle cx="-9.2" cy="3.2" r="1.85" fill="none" stroke="%s" stroke-width="1"/><circle cx="-9.2" cy="-3.2" r="1.85" fill="none" stroke="%s" stroke-width="1"/><circle cx="-5.4" cy="-7.6" r="1.85" fill="none" stroke="%s" stroke-width="1"/>' % ((GOLD,) * 9),
-        '<path d="M-4.6 -3.4l3 1.2m1.6 -1.2l3 1.2" fill="none" stroke="%s" stroke-width=".9" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-4.2 -1.4C-3.6 -2.4 -1.7 -2.4 -1.2 -1.4C-1.7 -.5 -3.6 -.5 -4.2 -1.4ZM4.2 -1.4C3.6 -2.4 1.7 -2.4 1.2 -1.4C1.7 -.5 3.6 -.5 4.2 -1.4Z" fill="%s"/>' % GOLD,
-        '<path d="M0 -2.4L0 1.6" fill="none" stroke="%s" stroke-width=".8" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-3.4 3.6q1.7 1.8 3.4 0q1.7 -1.8 3.4 0" fill="none" stroke="%s" stroke-width=".9" stroke-linecap="round"/>' % GOLD,
-        '<path d="M-2.6 5.6q1.3 1.4 2.6 0q1.3 -1.4 2.6 0M-7 1.4q-1 1.6 -.4 3.4M7 1.4q1 1.6 .4 3.4" fill="none" stroke="%s" stroke-width=".7" stroke-linecap="round"/>' % GOLD,
-    ]),
-}
+# Dense engraving silhouettes live in tools/map_creatures.py (culture-specific kinds).
+CREATURE_ART = map_creatures.CREATURE_ART
 
 
 def esc(s):
@@ -550,13 +432,13 @@ def build(name, spec, lang):
 
     A('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" preserveAspectRatio="xMidYMid slice" role="img" aria-label="%s">' % (w, h, esc(lang_title)))
     A('<!-- %s - generated by tools/genmaps.py from Natural Earth 1:110m land (public domain). Dark sea, olive land, gold coast; compass, cartouche and scale bar for the house art direction. No scripts, no external assets. -->' % lang_title)
-    A('<style>.lb{font-family:Georgia,"Times New Roman",serif;letter-spacing:.14em;fill:%s}.sea-lb{font-family:Georgia,"Times New Roman",serif;letter-spacing:.14em;fill:%s;font-style:italic}@media (prefers-reduced-motion:reduce){*{animation:none}}</style>' % (GOLD, SEA_TEXT))
+    A('<style>.lb{font-family:Georgia,"Times New Roman",serif;letter-spacing:.06em;fill:%s}.sea-lb{font-family:Georgia,"Times New Roman",serif;letter-spacing:.05em;fill:%s;font-style:italic}@media (prefers-reduced-motion:reduce){*{animation:none}}</style>' % (GOLD, SEA_TEXT))
     if lang == "fa":
         A('<style>.lb,.sea-lb{font-family:Vazirmatn,"Segoe UI",Tahoma,sans-serif;letter-spacing:0;direction:rtl}</style>')
     A('<defs>')
     A('<linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>' % (SEA, SEA2))
     A('<linearGradient id="land" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>' % (LAND, LAND2))
-    A('<radialGradient id="vign" cx="50%" cy="50%" r="72%"><stop offset="0" stop-color="#04060a" stop-opacity="0"/><stop offset="100%" stop-color="#04060a" stop-opacity=".66"/></radialGradient>')
+    A('<radialGradient id="vign" cx="50%" cy="50%" r="72%"><stop offset="0" stop-color="#02040a" stop-opacity="0"/><stop offset="100%" stop-color="#02040a" stop-opacity=".78"/></radialGradient>')
     A('<pattern id="wav" width="30" height="16" patternUnits="userSpaceOnUse"><path d="M0 9q7.5-9 15 0t15 0" fill="none" stroke="#3d6480" stroke-width="1" opacity=".13"/></pattern>')
     # a gentler coast wobble: the old 3.4-unit displacement at 0.03 frequency
     # chewed up small islands, so the displacement is smaller and its wavelength
@@ -564,7 +446,7 @@ def build(name, spec, lang):
     A('<filter id="rough" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>')
     # soft dark patch behind a beast, so its gold line art still reads where it
     # crosses olive land instead of drowning in it
-    A('<radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#04060a" stop-opacity=".5"/><stop offset="100%" stop-color="#04060a" stop-opacity="0"/></radialGradient>')
+    A('<radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#02040a" stop-opacity=".62"/><stop offset="100%" stop-color="#02040a" stop-opacity="0"/></radialGradient>')
     A('<clipPath id="inner"><rect x="%d" y="%d" width="%d" height="%d" rx="4"/></clipPath>' % (pad, pad, w - 2 * pad, h - 2 * pad))
     A('</defs>')
 
@@ -647,8 +529,8 @@ def build(name, spec, lang):
         sx = -S if flip else S
         A('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="url(#halo)"/>'
           % (x, y, 19 * S, 15 * S))
-        A('<g transform="translate(%.1f %.1f) scale(%.2f %.2f)" opacity=".92">%s</g>'
-          % (x, y, sx, S, CREATURE_ART[kind]))
+        A('<g transform="translate(%.1f %.1f) scale(%.2f %.2f)" opacity=".88">%s</g>'
+          % (x, y, sx, S, map_creatures.art(kind, GOLD)))
         if label:
             lab = label if lang == "en" else FA.get(label, label)
             A('<text class="lb" x="%.0f" y="%.0f" font-size="12" text-anchor="middle" '

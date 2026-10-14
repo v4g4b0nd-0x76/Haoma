@@ -103,7 +103,7 @@ Q('.note').forEach(function(n){var p=n.querySelector('.note-pop');function fit()
 (function(){
 var Q=function(s,r){return[].slice.call((r||document).querySelectorAll(s))};
 Q('.myth-map').forEach(function(map){
-  var minZ=0.5,maxZ=4,z=1,ox=0,oy=0,dragging=false,lastX=0,lastY=0,lastDist=0,inner=null,moved=false,sx=0,sy=0;
+  var minZ=0.4,maxZ=4,z=1,ox=0,oy=0,dragging=false,lastX=0,lastY=0,lastDist=0,inner=null,moved=false,sx=0,sy=0;
   /* Wrap bg + regions + pins in one transform layer: everything that carries a
      position on the artwork (background, country borders, pins, route) has to
      pan and zoom together, and each one's % coordinates are measured against
@@ -130,7 +130,7 @@ Q('.myth-map').forEach(function(map){
   }
   /* --iz carries the current zoom to CSS so the hover cards can cancel it and
      stay the same on-screen size no matter how far the map is zoomed */
-  function apply(){inner.style.transform='translate('+ox+'px,'+oy+'px) scale('+z+')';map.style.setProperty('--iz',z);map.style.setProperty('--izr',1/z)}
+  function band(){map.setAttribute('data-zband',z<0.85?'far':(z>1.6?'near':'mid'))}function apply(){inner.style.transform='translate('+ox+'px,'+oy+'px) scale('+z+')';map.style.setProperty('--iz',z);map.style.setProperty('--izr',1/z);band()}
   function clamp(){if(z<=1.001){ox=0;oy=0;return}var mw=map.clientWidth*(z-1)/2,mh=map.clientHeight*(z-1)/2;ox=Math.max(-mw,Math.min(mw,ox));oy=Math.max(-mh,Math.min(mh,oy))}
   /* Zoom controls */
   Q('[data-zm]',map).forEach(function(b){b.onclick=function(){var v=+b.dataset.zm;if(v===0){z=1;ox=0;oy=0}else{z=Math.max(minZ,Math.min(maxZ,z+v*0.4))}apply()}});
