@@ -100,14 +100,37 @@ SCREEN = r"""
 })()
 """
 
-# Press the control with window.print stubbed, so the call can be counted.
+# Press the control with window.print stubbed, so the call can be counted.  The
+# call is asynchronous: the button first waits for haomaPrintPrep() to decode
+# lazy images and GIF stills, so the count is polled rather than read at once.
 PRESS = r"""
 (function(){
-  var n=0, real=window.print;
-  window.print=function(){n++};
+  window.__pn=0; window.__realPrint=window.print;
+  window.print=function(){window.__pn++};
   document.querySelector('[data-act="pdf"]').click();
-  window.print=real;
-  return n;
+  return 1;
+})()
+"""
+PRESS_DONE = "(function(){var n=window.__pn;if(n)window.print=window.__realPrint;return n})()"
+
+# What the sheet carries once the PDF button's preparation has run: every
+# image decoded (a lazy slide never loads by itself before the snapshot), and
+# each GIF printed as its decoded first-frame still instead of the live file.
+MEDIA = r"""
+(function(){
+  var o={imgs:0,blank:[],gifs:0,stills:0,gifHidden:0,slides:0,flatSlides:0};
+  var root=document.querySelector('article')||document.querySelector('main')||document.body;
+  [].slice.call(root.querySelectorAll('img')).forEach(function(m){
+    if(!m.getClientRects().length)return;o.imgs++;
+    var r=m.getBoundingClientRect();
+    if(!m.complete||!m.naturalWidth||r.height<4)o.blank.push((m.getAttribute('src')||'').slice(0,40))});
+  [].slice.call(document.querySelectorAll('img[data-gif]')).forEach(function(m){o.gifs++;
+    var s=m.nextElementSibling;
+    if(s&&s.classList.contains('gif-still')&&/^data:image\/png/.test(s.src)&&s.getBoundingClientRect().height>20)o.stills++;
+    if(getComputedStyle(m).display==='none')o.gifHidden++});
+  [].slice.call(document.querySelectorAll('.sm-slide')).forEach(function(e){o.slides++;
+    if(e.getBoundingClientRect().height>20)o.flatSlides++});
+  return o;
 })()
 """
 
@@ -188,7 +211,15 @@ def main():
         check(bool(s.get("title")), "%s: the control explains itself" % name, s.get("title"))
         check(s.get("visible") and not s.get("hidden"),
               "%s: the control is visible on screen" % name, s.get("named"))
-        n = p.js(PRESS)
+        p.js(PRESS)
+        n = 0
+        for _ in range(80):
+            n = p.js(PRESS_DONE)
+            if n:
+                break
+            time.sleep(0.1)
+        time.sleep(0.3)
+        n = p.js("window.__pn")
         check(n == 1, "%s: pressing it calls window.print() once" % name, n)
 
     print("sheet (print media)")
@@ -255,22 +286,22 @@ def main():
             check(mp.get("popsHidden"),
                   "%s: on-map hover pops stay off the sheet (notes list is canonical)" % name,
                   mp.get("popsHidden"))
-        if m.get("gifCount"):
-            # Mirror site.js gifPrintOn: swap stub → data-gif so the sheet paints
-            # the asset's static first frame (browsers don't animate in print).
-            p.js(r"""
-            (function(){document.querySelectorAll('[data-gif]').forEach(function(m){
-              if(m.dataset.gif) m.src=m.dataset.gif;});})()""")
-            time.sleep(0.15)
-            gf2 = p.js(r"""
-            (function(){var o={stub:0,ok:0,n:0};
-              document.querySelectorAll('[data-gif]').forEach(function(m){
-                o.n++; var s=m.getAttribute('src')||'';
-                if(/R0lGODlhAQAB/i.test(s)) o.stub++; else o.ok++;});
-              return o;})()""")
-            check(gf2.get("stub", 1) == 0 and gf2.get("ok", 0) == gf2.get("n", -1),
-                  "%s: GIFs show the real asset (static first frame), not the 1x1 stub" % name,
-                  gf2)
+        # run the PDF button's preparation, then look at the sheet again
+        p.js("window.__prep=0;window.haomaPrintPrep().then(function(){window.__prep=1})")
+        for _ in range(80):
+            if p.js("window.__prep"):
+                break
+            time.sleep(0.1)
+        p.call("Emulation.setEmulatedMedia", media="print")
+        time.sleep(0.3)
+        md = p.js(MEDIA)
+        p.call("Emulation.setEmulatedMedia", media="screen")
+        check(not md["blank"], "%s: every printed image is loaded and has height" % name, md["blank"])
+        if md["gifs"]:
+            check(md["stills"] == md["gifs"] and md["gifHidden"] == md["gifs"],
+                  "%s: each GIF prints its decoded first frame" % name, md)
+        if md["slides"]:
+            check(md["flatSlides"] == md["slides"], "%s: every slide prints with its image" % name, md)
 
     print()
     if fails:

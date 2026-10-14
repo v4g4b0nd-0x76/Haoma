@@ -318,7 +318,7 @@ html[dir=rtl] .sm-prev,html[dir=rtl] .sm-next{transform:scaleX(-1)}
 .slider-md:hover .sm-prev,.slider-md:hover .sm-next{opacity:1}
 .sm-dots{display:flex;gap:7px;justify-content:center;margin-top:.7rem}
 .sm-dots button{width:9px;height:9px;padding:0;border-radius:50%;border:0;background:var(--border);cursor:pointer}.sm-dots button.on{background:var(--accent);transform:scale(1.25)}
-@media(max-width:760px){.grid-md{grid-template-columns:1fr}.grid-md>.col{grid-column:auto!important;grid-row:auto!important}.infobox,html[dir=rtl] .infobox,.infobox.start,html[dir=rtl] .infobox.start,.fig.start,.fig.end{float:none;width:100%;margin:1.2rem 0}.fig.center{width:100%}.sm-prev,.sm-next{opacity:1}}
+@media screen and (max-width:760px){.grid-md{grid-template-columns:1fr}.grid-md>.col{grid-column:auto!important;grid-row:auto!important}.infobox,html[dir=rtl] .infobox,.infobox.start,html[dir=rtl] .infobox.start,.fig.start,.fig.end{float:none;width:100%;margin:1.2rem 0}.fig.center{width:100%}.sm-prev,.sm-next{opacity:1}}
 
 /* ===== v5: interactive myth map ===== */
 /* Middle-Earth vibe with our art direction: dark parchment, gold & jewel pin colours,
@@ -371,8 +371,12 @@ a.myth-pin:hover .myth-pin__label,a.myth-pin:focus-visible .myth-pin__label{text
 .myth-pin__pop::after{content:"";position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:var(--accent)}
 .myth-pin:hover .myth-pin__pop,.myth-pin:focus-visible .myth-pin__pop{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
 /* Make sure popup doesn't clip out of the map container */
-.myth-pin__pop{--nx:0px;transform:translateX(calc(-50% + var(--nx))) translateY(4px)}
-.myth-pin:hover .myth-pin__pop,.myth-pin:focus-visible .myth-pin__pop{transform:translateX(calc(-50% + var(--nx))) translateY(0)}
+.myth-pin__pop{--nx:0px;transform:translateX(calc(-50% + var(--nx))) translateY(4px) scale(var(--izr,1))}
+.myth-pin:hover .myth-pin__pop,.myth-pin:focus-visible .myth-pin__pop{transform:translateX(calc(-50% + var(--nx))) translateY(0) scale(var(--izr,1))}
+/* near the top edge the card opens below the pin (site.js sets the class) */
+.myth-pin--below .myth-pin__pop{bottom:auto;top:calc(100% + 14px);transform-origin:50% 0}
+.myth-pin--below .myth-pin__pop::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:var(--accent)}
+.myth-map--sepia .myth-pin--below .myth-pin__pop::after{border-top-color:transparent;border-bottom-color:#a0702a}
 /* Zoom controls */
 /* ---- region borders: countries and civilizations (see AI.md 4, map) ---- */
 .myth-region{position:absolute;inset:0;display:block;pointer-events:none;z-index:1;--pc:#e0a03a;text-decoration:none;color:inherit}
@@ -384,6 +388,10 @@ a.myth-pin:hover .myth-pin__label,a.myth-pin:focus-visible .myth-pin__label{text
 .myth-region__pop b{display:block;font:600 .8rem/1.3 var(--head);letter-spacing:.06em;color:var(--accent);margin-bottom:2px}
 html[lang=fa] .myth-region__pop b{letter-spacing:0;font-family:var(--ui)}
 .myth-region:hover .myth-region__pop,.myth-region:focus-within .myth-region__pop{opacity:1;visibility:visible}
+/* with site.js running, region text shows in one shared card above every border and pin */
+.myth-map--tip .myth-region .myth-region__pop{display:none}
+.myth-map__tip{z-index:50}
+.myth-map__tip.on{opacity:1;visibility:visible}
 .myth-map--sepia .myth-region__pop{background:#f0e0c0;border-color:#a0702a;color:#2a1808}
 .myth-map--sepia .myth-region__pop b{color:#7a4a10}
 
@@ -405,12 +413,12 @@ html[lang=fa] .myth-region__pop b{letter-spacing:0;font-family:var(--ui)}
 .myth-map[data-zband=near] .myth-region__line path{opacity:.28}
 .myth-map[data-zband=mid] .myth-pin__label{opacity:1}
 
-@media(max-width:1100px){
+@media screen and (max-width:1100px){
   .myth-map{min-height:320px}
   .myth-map__zoom{width:40px;height:40px}
   .myth-pin__label{font-size:.7rem}
 }
-@media(max-width:760px){
+@media screen and (max-width:760px){
   .myth-map{min-height:280px;border-radius:10px}
   .myth-pin__label{font-size:.65rem;max-width:9rem;white-space:normal;text-align:center}
   .myth-map__ctrl{inset-inline-end:6px;gap:8px}
@@ -419,7 +427,7 @@ html[lang=fa] .myth-region__pop b{letter-spacing:0;font-family:var(--ui)}
   .myth-map[data-zband=mid] .myth-pin__label,.myth-map[data-zband=far] .myth-pin__label{opacity:0}
   .myth-map[data-zband=near] .myth-pin__label{opacity:1}
 }
-@media(max-width:420px){
+@media screen and (max-width:420px){
   .myth-map{min-height:240px}
   .myth-map__ctrl{top:auto;bottom:12px;transform:none}
 }
@@ -458,7 +466,7 @@ html[lang=en] article.dc>p:first-of-type::first-letter{font:700 3.5em/.82 var(--
 .verse figcaption{margin-top:.9rem;font:.85rem var(--ui);font-style:normal;color:var(--muted)}
 .verse[lang=fa]{--verse:Nastaliq,Vazirmatn,serif;font-style:normal}.verse[lang=fa] .vl{line-height:2.7;font-size:1.3em}
 html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;font-size:1.3em}
-@media(max-width:760px){.verse .vl{grid-template-columns:1fr 1.4rem 1fr;font-size:1.05em}.verse[lang=fa] .vl,html[lang=fa] .verse .vl{font-size:1.15em}}
+@media screen and (max-width:760px){.verse .vl{grid-template-columns:1fr 1.4rem 1fr;font-size:1.05em}.verse[lang=fa] .vl,html[lang=fa] .verse .vl{font-size:1.15em}}
 
 /* ---------- responsive: kept last so it beats the reading rules above ----------
    (the h1 scale rule earlier in the file is otherwise overridden by the
@@ -468,7 +476,7 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
   .layout,.wrap,.hero{padding-inline:var(--s2)}
   .layout{padding-block:var(--s3) var(--s4)}
 }
-@media(max-width:900px){
+@media screen and (max-width:900px){
   /* a Markdown table has no wrapper element, so let the table itself scroll
      rather than let it drag the whole page sideways */
   article table{display:block;overflow-x:auto;max-width:100%}
@@ -493,7 +501,10 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
 @media print{
   html,body{background:var(--bg)!important;color:var(--text)!important;
     -webkit-print-color-adjust:exact;print-color-adjust:exact}
-  body{padding:12mm 14mm}
+  /* no bottom inset: padding is never cut at a page break, so on a full last
+     page it alone would start an empty dark sheet */
+  body{padding:12mm 14mm 0}
+  article>:last-child,.layout>:last-child{margin-bottom:0!important;padding-bottom:0!important}
   /* interactive-only furniture: none of it means anything on paper */
   .bg,.top,.motif,.tools,.ctrl,.navtab,aside.side,aside.toc,footer,
   .contribute,.myth-map__ctrl,.myth-pin__ring,[data-act],.arrows,.sm-dots,
@@ -515,7 +526,7 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
      an error, not as a deliberate break */
   h1,h2,h3{break-after:avoid}
   figure,table,pre,blockquote,.sources,.verse,.infobox,.fig,.grid-md,
-  .slider-md,.myth-map-wrap,.cards li{break-inside:avoid}
+  .slider-md,.myth-map,.cards li{break-inside:avoid}
   img,svg,video{max-width:100%!important}
   /* a tab strip hides two thirds of the page from a printer, and a scroll rail
      hides whatever is past the fold: flatten both so the PDF carries every list
@@ -524,11 +535,19 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
   .tabs button{border:0!important;padding:0;background:none!important;color:var(--accent)!important;cursor:auto}
   .tabpanel[hidden]{display:block!important}
   .cards.rail{overflow:visible!important;flex-wrap:wrap;scroll-snap-type:none}
-  .sm-track{overflow:visible!important;flex-wrap:wrap;scroll-snap-type:none;aspect-ratio:auto;box-shadow:none}
-  .sm-slide{flex:0 0 100%}
+  .sm-track{overflow:visible!important;flex-wrap:wrap;gap:4mm;scroll-snap-type:none;aspect-ratio:auto;
+    box-shadow:none;border-radius:0;transform:none!important}
+  /* every slide on the sheet, two abreast, each at the slider's own ratio */
+  .sm-slide{flex:0 0 calc(50% - 2mm);height:auto;aspect-ratio:var(--ratio);border-radius:10px;overflow:hidden;break-inside:avoid}
+  .sm-slide:only-child{flex-basis:100%}
+  .sm-slide img,.sm-slide video{height:100%}
   /* the cinematic hero is sized in clamp(vw), which resolves to its 500px floor
      on paper -- half a page for a cover image -- so it gets a fixed height */
   .cine{height:120mm;break-inside:avoid;break-after:avoid}
+  /* the blurred backdrop layer does not survive print, so the sharp banner
+     fills the box itself; the culture picker is a control, not content */
+  .cine .slide .sfg{object-fit:cover}
+  .cine .pills,.cine .enter,#culture-pick{display:none!important}
 
   /* --- myth map: always print at identity (fit) view, never a mid-pan zoom --- */
   .myth-map{overflow:visible!important;height:auto!important;min-height:0!important}
@@ -543,7 +562,7 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
     position:static!important;transform:none!important;display:none!important;
     box-shadow:none;max-width:none;min-width:0;padding:0;border:0;background:none}
   .myth-map__print-notes{display:block!important;list-style:none;margin:.75rem 0 0;padding:0;
-    font:.9rem/1.45 var(--ui);color:var(--text);columns:2;column-gap:1.25rem;break-inside:avoid}
+    font:.9rem/1.45 var(--ui);color:var(--text);columns:2;column-gap:1.25rem}
   .myth-map__print-notes li{break-inside:avoid;margin:0 0 .35rem;padding:.35rem .55rem;
     background:color-mix(in srgb,var(--surface) 92%,var(--accent));
     border:1px solid color-mix(in srgb,var(--accent) 55%,transparent);border-radius:6px}
@@ -551,6 +570,20 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
   html[lang=fa] .myth-map__print-notes{columns:1}
   html[lang=fa] .myth-map__print-notes b{letter-spacing:0;font-family:var(--ui)}
 
-  /* GIFs: show the loaded frame (JS sets src to data-gif before print); never the 1x1 stub */
+  /* pin names stay on the printed map, on a dark chip so borders and terrain
+     behind them never make a name unreadable; the notes are in the list below */
+  .myth-pin__label{opacity:1!important;white-space:nowrap!important;max-width:none!important;
+    font-size:7.5pt!important;padding:1px 5px;border-radius:4px;
+    background:rgba(8,10,6,.78);text-shadow:none;color:#f0ead8}
+  .myth-map--sepia .myth-pin__label{background:rgba(240,224,192,.9);color:#2a1808}
+  .myth-map__tip{display:none!important}
+  .myth-map__route polyline{animation:none}
+
+  /* GIFs print their first frame: site.js keeps a decoded still next to each GIF.
+     Without one (never played, and printed without the PDF button) the GIF
+     itself prints whatever it holds -- never the 1x1 stub at zero height */
+  .gif-still{display:block!important;width:100%;height:auto;border-radius:inherit}
+  img[data-gif]:has(+ .gif-still){display:none!important}
   img[data-gif]{max-width:100%!important;height:auto!important}
 }
+.gif-still{display:none}

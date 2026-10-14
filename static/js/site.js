@@ -10,7 +10,7 @@ var act={
  /* PDF export = the browser's own print dialog: nothing leaves the page, and the
     print block in style.css keeps the theme. Safari and older FDMs print on the
     first call, so no re-entrancy guard is needed here. */
- pdf:function(){window.print()}};
+ pdf:function(){var go=function(){window.print()};window.haomaPrintPrep?window.haomaPrintPrep().then(go,go):go()}};
 function size(d){P.size=Math.min(1.7,Math.max(1,Math.round(((P.size||1.2)+d)*100)/100));D.style.setProperty('--read',P.size+'rem')}
 var hasSide=!!document.querySelector('aside.side');
 Q('[data-act]').forEach(function(b){if(!hasSide&&/nav|dock/.test(b.dataset.act))b.hidden=true;b.onclick=function(){act[b.dataset.act]();save()}});
@@ -97,9 +97,27 @@ if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es
  else if(isIn&&r>=.6){var p=m.play();if(p&&p.catch)p.catch(function(){})}else if(!isIn)m.pause()})},{threshold:[0,.08,.6,1]});media.forEach(function(m){io.observe(m)})}
 else media.forEach(function(m){if(m.dataset.gif)m.src=m.dataset.gif});
 Q('.note').forEach(function(n){var p=n.querySelector('.note-pop');function fit(){p.style.setProperty('--nx','0px');var r=p.getBoundingClientRect(),w=document.documentElement.clientWidth,dx=0;if(r.left<8)dx=8-r.left;else if(r.right>w-8)dx=w-8-r.right;p.style.setProperty('--nx',dx+'px')}n.addEventListener('mouseenter',fit);n.addEventListener('focusin',fit)});
- /* PDF/print: load every GIF so the sheet shows the static first frame, not the
-    1x1 placeholder used while off-screen. afterprint restores prior src state. */
- function gifPrintOn(){Q('[data-gif]').forEach(function(m){if(!m.dataset.gif)return;
+ /* PDF/print. A browser snapshots the page the moment print starts and never
+    waits for an image that only begins loading then, so anything print needs
+    has to be decoded beforehand: the PDF button awaits haomaPrintPrep(), and a
+    GIF that has played once already carries its still. The still is the first
+    frame painted to a canvas (drawImage uses the default frame of an animated
+    image), sitting next to the live GIF as a print-only img. */
+ function gifStill(m){if(m.dataset.still)return Promise.resolve();
+  return new Promise(function(ok){var im=new Image();im.onload=function(){try{
+    var c=document.createElement('canvas');c.width=im.naturalWidth;c.height=im.naturalHeight;
+    c.getContext('2d').drawImage(im,0,0);var s=document.createElement('img');
+    s.className='gif-still';s.alt='';s.setAttribute('aria-hidden','true');s.src=c.toDataURL('image/png');
+    m.dataset.still='1';m.insertAdjacentElement('afterend',s);
+    if(s.decode)s.decode().then(ok,ok);else ok()}catch(e){ok()}};im.onerror=function(){ok()};im.src=m.dataset.gif})}
+ Q('[data-gif]').forEach(function(m){m.addEventListener('load',function(){if(m.dataset.on)gifStill(m)})});
+ function ready(m){return m.complete?Promise.resolve():new Promise(function(ok){m.addEventListener('load',ok,{once:true});m.addEventListener('error',ok,{once:true})})}
+ window.haomaPrintPrep=function(){
+  var lazy=Q('img[loading=lazy]');lazy.forEach(function(m){m.loading='eager'});
+  var w=lazy.map(ready).concat(Q('[data-gif]').map(gifStill));
+  Q('video[preload=metadata]').forEach(function(v){v.preload='auto'});
+  return Promise.race([Promise.all(w),new Promise(function(ok){setTimeout(ok,6000)})])};
+ function gifPrintOn(){window.haomaPrintPrep();Q('[data-gif]').forEach(function(m){if(!m.dataset.gif)return;
   m.dataset.printPrev=m.getAttribute('src')||'';m.dataset.printWas=m.dataset.on||'';
   m.src=m.dataset.gif;m.dataset.on='1'})}
  function gifPrintOff(){Q('[data-gif]').forEach(function(m){if(!('printPrev' in m.dataset))return;
@@ -166,18 +184,31 @@ Q('.myth-map').forEach(function(map){
   /* Touch pan + pinch-zoom */
   map.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;moved=false;if(e.touches.length===2){lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)}else if(e.touches.length===1){lastX=e.touches[0].clientX;lastY=e.touches[0].clientY}},{passive:true});
   map.addEventListener('touchmove',function(e){if(Math.abs(e.touches[0].clientX-sx)+Math.abs(e.touches[0].clientY-sy)>8)moved=true;if(e.touches.length===2){var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);z=Math.max(minZ,Math.min(maxZ,z*(d/lastDist)));lastDist=d;clamp();apply()}else if(e.touches.length===1){ox+=e.touches[0].clientX-lastX;oy+=e.touches[0].clientY-lastY;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;clamp();apply()}e.preventDefault()},{passive:false});
-  /* Pin tooltip edge-fitting */
+  /* Pin tooltip edge-fitting: slide sideways to stay in the frame, and open below
+     the pin when the frame's top edge would cut the card off */
   Q('.myth-pin',map).forEach(function(pin){var pop=pin.querySelector('.myth-pin__pop');if(!pop)return;
-   function fit(){pop.style.setProperty('--nx','0px');var r=pop.getBoundingClientRect(),mr=map.getBoundingClientRect(),dx=0;if(r.left<mr.left+8)dx=mr.left+8-r.left;else if(r.right>mr.right-8)dx=mr.right-8-r.right;pop.style.setProperty('--nx',dx+'px')}
+   function fit(){pop.style.setProperty('--nx','0px');pin.classList.remove('myth-pin--below');
+    var mr=map.getBoundingClientRect(),r=pop.getBoundingClientRect(),dx=0;
+    if(r.top<mr.top+8){pin.classList.add('myth-pin--below');r=pop.getBoundingClientRect()}
+    if(r.left<mr.left+8)dx=mr.left+8-r.left;else if(r.right>mr.right-8)dx=mr.right-8-r.right;pop.style.setProperty('--nx',dx/z+'px')}
    pin.addEventListener('mouseenter',fit);pin.addEventListener('focusin',fit)});
-  /* Region descriptions: keep the tooltip inside the frame, horizontally and vertically */
+  /* Region descriptions. Each region is its own stacking layer, so a card drawn
+     inside one sits under every border painted after it. One shared card above
+     all regions and pins carries the hovered region's text instead; it takes no
+     pointer events, so the pins under it stay hoverable. */
+  var tip=document.createElement('div');tip.className='myth-region__pop myth-map__tip';tip.setAttribute('aria-hidden','true');
+  inner.appendChild(tip);map.classList.add('myth-map--tip');
   Q('.myth-region',map).forEach(function(rg){var pop=rg.querySelector('.myth-region__pop'),hit=rg.querySelector('.myth-region__hit');if(!pop||!hit)return;
-   function fit(){pop.style.setProperty('--nx','0px');pop.style.setProperty('--ny','0px');
-    var r=pop.getBoundingClientRect(),mr=map.getBoundingClientRect(),dx=0,dy=0;
+   function show(){tip.innerHTML=pop.innerHTML;tip.style.setProperty('--hx',rg.style.getPropertyValue('--hx'));
+    tip.style.setProperty('--hy',rg.style.getPropertyValue('--hy'));tip.style.setProperty('--pc',getComputedStyle(rg).getPropertyValue('--pc'));
+    tip.style.setProperty('--nx','0px');tip.style.setProperty('--ny','0px');tip.classList.add('on');
+    var r=tip.getBoundingClientRect(),mr=map.getBoundingClientRect(),dx=0,dy=0;
     if(r.left<mr.left+8)dx=mr.left+8-r.left;else if(r.right>mr.right-8)dx=mr.right-8-r.right;
     if(r.top<mr.top+8)dy=mr.top+8-r.top;else if(r.bottom>mr.bottom-8)dy=mr.bottom-8-r.bottom;
-    pop.style.setProperty('--nx',dx+'px');pop.style.setProperty('--ny',dy+'px')}
-   hit.addEventListener('mouseenter',fit);rg.addEventListener('focusin',fit)});
+    tip.style.setProperty('--nx',dx/z+'px');tip.style.setProperty('--ny',dy/z+'px')}
+   function hide(){tip.classList.remove('on')}
+   hit.addEventListener('mouseenter',show);hit.addEventListener('mouseleave',hide);
+   rg.addEventListener('focusin',show);rg.addEventListener('focusout',hide)});
   fit();
   if(bg&&bg.tagName.toLowerCase()==='img'){if(bg.complete&&bg.naturalWidth)fit();else bg.addEventListener('load',fit)}
   var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(fit,120)});
