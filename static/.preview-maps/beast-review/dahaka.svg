@@ -1,361 +1,164 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720" width="900" height="720" role="img" aria-labelledby="title desc">
-  <title id="title">Azi Dahaka - three-headed dragon-serpent</title>
-  <desc id="desc">Standalone dark volumetric review illustration. Lit/shade mass with bone, ash, muted bronze, and crimson-ink accents. Not map-baked. Proposed lon/lat 53.30E 35.50N on persia.</desc>
-
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 400" width="320" height="400" role="img" aria-label="Zahhak — Shahnameh">
   <defs>
-    <!-- Palette: NO UI gold #c9a45c as primary -->
-    <linearGradient id="ground" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#0a0908"/>
-      <stop offset="55%" stop-color="#12100e"/>
-      <stop offset="100%" stop-color="#080706"/>
-    </linearGradient>
-    <radialGradient id="bodyMass" cx="42%" cy="48%" r="62%">
-      <stop offset="0%" stop-color="#5a4e42"/>
-      <stop offset="35%" stop-color="#3a322a"/>
-      <stop offset="70%" stop-color="#1c1814"/>
-      <stop offset="100%" stop-color="#0a0806"/>
+    <radialGradient id="gnd" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#141210"/><stop offset="100%" stop-color="#0a0908"/>
     </radialGradient>
-    <linearGradient id="bone" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#c8bcae"/>
-      <stop offset="45%" stop-color="#9a8c7c"/>
-      <stop offset="100%" stop-color="#4a4036"/>
+    <linearGradient id="skinL" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4a3c32"/><stop offset="55%" stop-color="#2e261f"/><stop offset="100%" stop-color="#1a1410"/>
     </linearGradient>
-    <linearGradient id="bronzeMuted" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#8a6e52"/>
-      <stop offset="50%" stop-color="#5c4a38"/>
-      <stop offset="100%" stop-color="#2e2418"/>
+    <linearGradient id="skinR" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5c4a3e"/><stop offset="100%" stop-color="#2e261f"/>
     </linearGradient>
-    <linearGradient id="headL" x1="20%" y1="10%" x2="90%" y2="90%">
-      <stop offset="0%" stop-color="#6e6256"/>
-      <stop offset="40%" stop-color="#3e362e"/>
-      <stop offset="100%" stop-color="#12100c"/>
+    <linearGradient id="robe" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#3d342c"/><stop offset="40%" stop-color="#2a2420"/><stop offset="100%" stop-color="#1a1614"/>
     </linearGradient>
-    <linearGradient id="headC" x1="10%" y1="0%" x2="80%" y2="100%">
-      <stop offset="0%" stop-color="#7a6e60"/>
-      <stop offset="35%" stop-color="#4a4036"/>
-      <stop offset="100%" stop-color="#0e0c0a"/>
+    <linearGradient id="snL" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#3a3028"/><stop offset="50%" stop-color="#1c1814"/><stop offset="100%" stop-color="#0e0c0a"/>
     </linearGradient>
-    <linearGradient id="headR" x1="0%" y1="15%" x2="100%" y2="85%">
-      <stop offset="0%" stop-color="#665a4e"/>
-      <stop offset="45%" stop-color="#3a3228"/>
-      <stop offset="100%" stop-color="#100e0c"/>
+    <linearGradient id="snR" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#423830"/><stop offset="50%" stop-color="#221c18"/><stop offset="100%" stop-color="#100e0c"/>
     </linearGradient>
-    <radialGradient id="eyeGlow" cx="40%" cy="35%" r="65%">
-      <stop offset="0%" stop-color="#8a1c1c"/>
-      <stop offset="55%" stop-color="#4a0c0c"/>
-      <stop offset="100%" stop-color="#1a0606"/>
-    </radialGradient>
-    <pattern id="scaleTex" width="14" height="10" patternUnits="userSpaceOnUse">
-      <path d="M0 5 Q3.5 0 7 5 Q10.5 10 14 5" fill="none" stroke="#1a1612" stroke-width="0.9" opacity=".85"/>
-      <path d="M0 5 Q3.5 1.2 7 5" fill="none" stroke="#6a5e50" stroke-width="0.45" opacity=".35"/>
-    </pattern>
-    <pattern id="hatchFine" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(28)">
-      <line x1="0" y1="0" x2="0" y2="6" stroke="#0c0a08" stroke-width="1.1" opacity=".55"/>
-    </pattern>
-    <filter id="softShade" x="-20%" y="-20%" width="140%" height="140%">
+    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
       <feGaussianBlur stdDeviation="2.2"/>
     </filter>
-    <filter id="volBlur" x="-25%" y="-25%" width="150%" height="150%">
-      <feGaussianBlur stdDeviation="3.4"/>
-    </filter>
-    <filter id="inkBleed" x="-5%" y="-5%" width="110%" height="110%">
-      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="n"/>
-      <feDisplacementMap in="SourceGraphic" in2="n" scale="0.6"/>
-    </filter>
-    <!-- key light from upper-left → lit ridge / deep shade (no UI gold) -->
-    <linearGradient id="volLit" x1="15%" y1="5%" x2="85%" y2="95%">
-      <stop offset="0%" stop-color="#7a6e60"/>
-      <stop offset="38%" stop-color="#3a322a"/>
-      <stop offset="100%" stop-color="#0a0806"/>
-    </linearGradient>
-    <radialGradient id="specHi" cx="32%" cy="28%" r="55%">
-      <stop offset="0%" stop-color="#c8bcae" stop-opacity=".28"/>
-      <stop offset="45%" stop-color="#8a7a68" stop-opacity=".08"/>
-      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
-    </radialGradient>
   </defs>
+  <rect width="320" height="400" fill="url(#gnd)"/>
+  <text x="160" y="28" text-anchor="middle" fill="#8a8074" font-family="Georgia,serif" font-size="11" letter-spacing=".12em">ZAHHAK</text>
+  <text x="160" y="44" text-anchor="middle" fill="#5a5248" font-family="Georgia,serif" font-size="8">Shahnameh — man with two snakes</text>
 
-  <!-- parchment / ink ground -->
-  <rect width="900" height="720" fill="url(#ground)"/>
-  <rect width="900" height="720" fill="#0a0908" opacity=".35"/>
-  <!-- faint plate border -->
-  <rect x="28" y="28" width="844" height="664" fill="none" stroke="#3a342c" stroke-width="1.2" opacity=".55"/>
-  <rect x="36" y="36" width="828" height="648" fill="none" stroke="#2a241e" stroke-width="0.6" opacity=".4"/>
+  <!-- ground shadow -->
+  <ellipse cx="160" cy="368" rx="58" ry="10" fill="#000" opacity=".55" filter="url(#soft)"/>
 
-  <!-- caption -->
-  <text x="450" y="68" text-anchor="middle" fill="#a89880" font-family="Georgia, 'Times New Roman', serif"
-        font-size="15" letter-spacing="0.28em" opacity=".85">AZI DAHAKA</text>
-  <text x="450" y="90" text-anchor="middle" fill="#6a5e52" font-family="Georgia, 'Times New Roman', serif"
-        font-size="11" letter-spacing="0.12em" opacity=".7">three-headed dragon-serpent - Iranian - review #1</text>
+  <!-- lower robe / legs suggestion -->
+  <path d="M118 300 C120 340 130 358 148 362 L172 362 C190 358 200 340 202 300 Z" fill="url(#robe)" stroke="#0a0908" stroke-width=".8"/>
+  <path d="M130 310 L136 355 M190 310 L184 355" fill="none" stroke="#0a0908" stroke-width=".5" opacity=".5"/>
+  <path d="M140 320 Q160 328 180 320" fill="none" stroke="#8a8074" stroke-width=".4" opacity=".35"/>
 
-  <!-- ground shadow (volumetric contact) -->
-  <ellipse cx="470" cy="618" rx="300" ry="44" fill="#000" opacity=".62" filter="url(#volBlur)"/>
-  <ellipse cx="455" cy="608" rx="240" ry="28" fill="#000" opacity=".4" filter="url(#softShade)"/>
+  <!-- torso -->
+  <path d="M122 168 C118 200 120 250 128 298 L192 298 C200 250 202 200 198 168
+           C188 158 172 154 160 154 C148 154 132 158 122 168 Z" fill="url(#robe)" stroke="#0a0908" stroke-width=".9"/>
+  <!-- robe folds -->
+  <path d="M140 175 Q145 230 142 290 M160 170 Q158 240 160 295 M180 175 Q175 230 178 290"
+        fill="none" stroke="#0a0908" stroke-width=".55" opacity=".65"/>
+  <path d="M134 200 Q160 210 186 200" fill="none" stroke="#8a8074" stroke-width=".35" opacity=".3"/>
+  <!-- belt -->
+  <path d="M126 248 H194" fill="none" stroke="#0a0908" stroke-width="2.2"/>
+  <path d="M126 248 H194" fill="none" stroke="#8a8074" stroke-width=".6" opacity=".45"/>
+  <circle cx="160" cy="248" r="3.2" fill="#1a1614" stroke="#8a8074" stroke-width=".5"/>
 
-  <g id="beast" transform="translate(450 390)">
+  <!-- arms -->
+  <path d="M122 175 C100 190 92 220 98 255 C100 268 110 272 118 260 C112 240 114 210 124 188 Z"
+        fill="url(#skinL)" stroke="#0a0908" stroke-width=".75"/>
+  <path d="M198 175 C220 190 228 220 222 255 C220 268 210 272 202 260 C208 240 206 210 196 188 Z"
+        fill="url(#skinR)" stroke="#0a0908" stroke-width=".75"/>
+  <!-- arm muscle lines -->
+  <path d="M108 200 Q105 230 110 250 M212 200 Q215 230 210 250" fill="none" stroke="#0a0908" stroke-width=".45" opacity=".5"/>
+  <!-- hands -->
+  <path d="M100 255 C96 262 100 270 108 268 L116 262 C112 256 106 254 100 255 Z" fill="#2e261f" stroke="#0a0908" stroke-width=".6"/>
+  <path d="M220 255 C224 262 220 270 212 268 L204 262 C208 256 214 254 220 255 Z" fill="#4a3c32" stroke="#0a0908" stroke-width=".6"/>
 
-    <!-- coiled lower body / serpentine mass -->
-    <g id="coils">
-      <!-- ambient occlusion under coil mass -->
-      <ellipse cx="-40" cy="155" rx="200" ry="36" fill="#000" opacity=".35" filter="url(#softShade)"/>
-      <path d="M-210 140
-               C-260 80 -280 20 -240 -40
-               C-200 -95 -120 -110 -40 -85
-               C40 -60 90 -20 70 40
-               C50 95 10 130 -40 145
-               C-90 160 -150 155 -210 140Z"
-            fill="url(#volLit)" stroke="#0a0806" stroke-width="1.4"/>
-      <path d="M-210 140
-               C-260 80 -280 20 -240 -40
-               C-200 -95 -120 -110 -40 -85
-               C40 -60 90 -20 70 40
-               C50 95 10 130 -40 145
-               C-90 160 -150 155 -210 140Z"
-            fill="url(#bodyMass)" stroke="#0a0806" stroke-width="1.4" opacity=".85"/>
-      <path d="M-210 140
-               C-260 80 -280 20 -240 -40
-               C-200 -95 -120 -110 -40 -85
-               C40 -60 90 -20 70 40
-               C50 95 10 130 -40 145
-               C-90 160 -150 155 -210 140Z"
-            fill="url(#scaleTex)" opacity=".7"/>
-      <path d="M-210 140
-               C-260 80 -280 20 -240 -40
-               C-200 -95 -120 -110 -40 -85
-               C40 -60 90 -20 70 40
-               C50 95 10 130 -40 145
-               C-90 160 -150 155 -210 140Z"
-            fill="url(#hatchFine)" opacity=".4"/>
-      <!-- shade undercoil -->
-      <path d="M-180 120 C-220 70 -230 20 -200 -20 C-160 10 -120 70 -100 110 C-120 130 -150 135 -180 120Z"
-            fill="#050402" opacity=".55"/>
-      <!-- lit ridge of coil -->
-      <path d="M-200 -20 C-160 -70 -90 -80 -30 -55 C-70 -20 -120 30 -150 70"
-            fill="none" stroke="#8a7a68" stroke-width="2.2" opacity=".45" stroke-linecap="round"/>
-      <!-- second coil loop forward -->
-      <path d="M40 90 C100 70 160 40 190 -10 C210 -50 190 -90 150 -105
-               C110 -120 70 -95 55 -55 C40 -15 50 40 40 90Z"
-            fill="url(#bronzeMuted)" stroke="#0c0a08" stroke-width="1.2"/>
-      <path d="M40 90 C100 70 160 40 190 -10 C210 -50 190 -90 150 -105
-               C110 -120 70 -95 55 -55 C40 -15 50 40 40 90Z"
-            fill="url(#scaleTex)" opacity=".65"/>
-      <path d="M55 -55 C90 -90 140 -95 170 -60" fill="none" stroke="#b0a090" stroke-width="1.6" opacity=".35"/>
-      <!-- tail tip -->
-      <path d="M150 -105 C175 -125 210 -130 235 -115 C250 -105 248 -85 230 -80
-               C200 -72 170 -85 150 -105Z"
-            fill="#2a241c" stroke="#0a0806" stroke-width="1"/>
-      <path d="M160 -100 C190 -115 220 -112 235 -100" fill="none" stroke="#7a6a58" stroke-width="1.1" opacity=".5"/>
-      <!-- bone-white underside flash on forward coil -->
-      <path d="M70 50 C110 25 155 5 175 -25 C160 5 120 40 85 65Z"
-            fill="#c4b6a4" opacity=".18"/>
-    </g>
+  <!-- neck -->
+  <path d="M148 138 L148 158 L172 158 L172 138 Q160 142 148 138 Z" fill="url(#skinL)" stroke="#0a0908" stroke-width=".7"/>
+  <path d="M152 145 H168" fill="none" stroke="#0a0908" stroke-width=".4" opacity=".4"/>
 
-    <!-- torso / chest plate where three necks meet -->
-    <g id="torso">
-      <ellipse cx="8" cy="8" rx="88" ry="28" fill="#000" opacity=".4" filter="url(#softShade)"/>
-      <ellipse cx="0" cy="-20" rx="78" ry="62" fill="url(#volLit)" stroke="#080604" stroke-width="1.5"/>
-      <ellipse cx="0" cy="-20" rx="78" ry="62" fill="url(#bodyMass)" opacity=".8"/>
-      <ellipse cx="0" cy="-20" rx="78" ry="62" fill="url(#scaleTex)" opacity=".75"/>
-      <ellipse cx="-18" cy="-35" rx="42" ry="30" fill="url(#specHi)"/>
-      <ellipse cx="-18" cy="-35" rx="42" ry="30" fill="#6a5e50" opacity=".18"/>
-      <!-- breastplate ridges -->
-      <path d="M-55 -5 Q-20 -35 15 -40 Q40 -25 50 5 Q20 25 -15 28 Q-50 15 -55 -5Z"
-            fill="#1a1612" opacity=".55"/>
-      <path d="M-40 -15 Q-5 -30 25 -28" fill="none" stroke="#8a7860" stroke-width="1.4" opacity=".4"/>
-      <path d="M-45 5 Q-5 -5 30 0" fill="none" stroke="#5a4a38" stroke-width="1.1" opacity=".5"/>
-      <!-- crimson wound/mark at heart - mythic stain, not shiny UI -->
-      <ellipse cx="5" cy="0" rx="10" ry="14" fill="#3a0e0e" opacity=".7"/>
-      <path d="M5 -10 C8 -2 8 6 5 12 C2 6 2 -2 5 -10Z" fill="#6a1818" opacity=".55"/>
-    </g>
+  <!-- head -->
+  <ellipse cx="160" cy="112" rx="28" ry="32" fill="url(#skinL)" stroke="#0a0908" stroke-width=".9"/>
+  <!-- face shade -->
+  <path d="M160 88 C175 90 186 105 184 122 C182 135 172 142 160 144 Z" fill="#1a1410" opacity=".35"/>
+  <!-- brow / nose / mouth -->
+  <path d="M142 105 Q160 100 178 105" fill="none" stroke="#0a0908" stroke-width="1.1" stroke-linecap="round"/>
+  <path d="M160 108 L158 122 Q160 126 162 122 Z" fill="#2e261f" stroke="#0a0908" stroke-width=".45"/>
+  <path d="M148 132 Q160 138 172 132" fill="none" stroke="#0a0908" stroke-width=".7" stroke-linecap="round"/>
+  <path d="M152 133 Q160 136 168 133" fill="none" stroke="#6a1414" stroke-width=".45" opacity=".7"/>
+  <!-- eyes -->
+  <ellipse cx="148" cy="112" rx="4.2" ry="3.2" fill="#0a0908"/>
+  <ellipse cx="172" cy="112" rx="4.2" ry="3.2" fill="#0a0908"/>
+  <circle cx="149.2" cy="111.5" r="1.3" fill="#6a1414"/>
+  <circle cx="173.2" cy="111.5" r="1.3" fill="#6a1414"/>
+  <circle cx="148.6" cy="110.8" r=".45" fill="#b8aea0" opacity=".7"/>
+  <circle cx="172.6" cy="110.8" r=".45" fill="#b8aea0" opacity=".7"/>
+  <!-- crown / diadem (simple, bone, not gold) -->
+  <path d="M136 92 Q160 78 184 92 L180 98 Q160 88 140 98 Z" fill="#1a1614" stroke="#8a8074" stroke-width=".7"/>
+  <path d="M148 86 L150 78 L152 86 M160 84 L160 74 L160 84 M168 86 L170 78 L172 86"
+        fill="none" stroke="#b8aea0" stroke-width=".7" stroke-linejoin="round"/>
+  <!-- hair / beard hint -->
+  <path d="M134 100 C128 120 130 140 142 148 M186 100 C192 120 190 140 178 148"
+        fill="none" stroke="#0a0908" stroke-width="1.2" opacity=".5"/>
+  <path d="M150 140 Q160 148 170 140" fill="none" stroke="#2a2420" stroke-width="1.4" stroke-linecap="round" opacity=".8"/>
 
-    <!-- three necks -->
-    <g id="necks">
-      <!-- left neck -->
-      <path d="M-45 -55 C-85 -90 -115 -130 -130 -175 C-100 -155 -70 -125 -45 -95 C-35 -80 -35 -65 -45 -55Z"
-            fill="url(#headL)" stroke="#0a0806" stroke-width="1.2"/>
-      <path d="M-45 -55 C-85 -90 -115 -130 -130 -175 C-100 -155 -70 -125 -45 -95 C-35 -80 -35 -65 -45 -55Z"
-            fill="url(#scaleTex)" opacity=".55"/>
-      <path d="M-70 -100 C-95 -130 -115 -155 -125 -170" fill="none" stroke="#9a8a78" stroke-width="1.5" opacity=".35"/>
-      <!-- center neck -->
-      <path d="M-20 -70 C-15 -120 -5 -170 5 -215 C25 -175 35 -125 30 -80 C15 -70 -5 -68 -20 -70Z"
-            fill="url(#headC)" stroke="#0a0806" stroke-width="1.3"/>
-      <path d="M-20 -70 C-15 -120 -5 -170 5 -215 C25 -175 35 -125 30 -80 C15 -70 -5 -68 -20 -70Z"
-            fill="url(#scaleTex)" opacity=".6"/>
-      <path d="M-5 -100 C0 -145 5 -185 8 -205" fill="none" stroke="#b0a090" stroke-width="1.6" opacity=".4"/>
-      <!-- right neck -->
-      <path d="M35 -50 C70 -85 105 -125 130 -165 C100 -145 70 -115 45 -85 C30 -70 28 -55 35 -50Z"
-            fill="url(#headR)" stroke="#0a0806" stroke-width="1.2"/>
-      <path d="M35 -50 C70 -85 105 -125 130 -165 C100 -145 70 -115 45 -85 C30 -70 28 -55 35 -50Z"
-            fill="url(#scaleTex)" opacity=".55"/>
-      <path d="M60 -95 C85 -125 110 -150 122 -160" fill="none" stroke="#8a7a68" stroke-width="1.4" opacity=".35"/>
-    </g>
-
-    <!-- ========== LEFT HEAD ========== -->
-    <g id="head-left" transform="translate(-145 -195) rotate(-18)">
-      <!-- skull mass -->
-      <path d="M-8 20 C-25 5 -35 -20 -28 -45 C-20 -70 5 -82 28 -72
-               C48 -62 55 -38 48 -15 C40 8 20 28 -8 20Z"
-            fill="url(#headL)" stroke="#080604" stroke-width="1.3"/>
-      <path d="M-8 20 C-25 5 -35 -20 -28 -45 C-20 -70 5 -82 28 -72
-               C48 -62 55 -38 48 -15 C40 8 20 28 -8 20Z"
-            fill="url(#hatchFine)" opacity=".35"/>
-      <!-- snout -->
-      <path d="M28 -72 C45 -78 70 -70 85 -52 C92 -40 88 -25 75 -18
-               C55 -10 35 -25 28 -45 C30 -58 28 -68 28 -72Z"
-            fill="#2e2820" stroke="#0a0806" stroke-width="1.1"/>
-      <path d="M35 -60 C55 -65 72 -55 80 -42" fill="none" stroke="#8a7a68" stroke-width="1.2" opacity=".4"/>
-      <!-- jaw open -->
-      <path d="M20 5 C35 15 55 18 72 8 C78 2 75 -8 65 -12 C45 -18 28 -5 20 5Z"
-            fill="#1a0c0c" stroke="#0a0606" stroke-width="1"/>
-      <!-- teeth bone -->
-      <path d="M28 -8 L32 -18 L36 -8Z M38 -6 L42 -17 L46 -6Z M48 -5 L52 -15 L56 -5Z M58 -4 L61 -13 L65 -4Z"
-            fill="url(#bone)" stroke="#3a342c" stroke-width="0.4"/>
-      <path d="M30 2 L33 12 L37 2Z M40 4 L44 13 L48 4Z M50 5 L54 13 L58 5Z"
-            fill="#b8aa98" opacity=".85"/>
-      <!-- tongue / crimson ink -->
-      <path d="M48 -2 C55 8 62 6 58 -4" fill="#5a1212" opacity=".75"/>
-      <!-- horns -->
-      <path d="M-15 -48 C-28 -70 -25 -95 -12 -108 C-8 -95 -5 -75 -2 -58Z" fill="#c8bcae" stroke="#3a3428" stroke-width="0.7"/>
-      <path d="M5 -68 C0 -95 8 -115 22 -125 C18 -105 15 -85 12 -70Z" fill="#a89880" stroke="#3a3428" stroke-width="0.6"/>
-      <path d="M-12 -90 C-18 -100 -14 -108 -8 -105" fill="none" stroke="#5a4a38" stroke-width="0.8" opacity=".5"/>
-      <!-- eye -->
-      <ellipse cx="18" cy="-42" rx="9" ry="7" fill="url(#eyeGlow)" stroke="#2a0a0a" stroke-width="0.8"/>
-      <ellipse cx="20" cy="-43" rx="3.2" ry="4.5" fill="#0a0404"/>
-      <ellipse cx="21.5" cy="-45" rx="1.2" ry="1.4" fill="#c8a090" opacity=".45"/>
-      <!-- brow ridge -->
-      <path d="M5 -52 C15 -58 28 -55 35 -48" fill="none" stroke="#1a1612" stroke-width="2.2" stroke-linecap="round"/>
-      <!-- nostril -->
-      <ellipse cx="78" cy="-42" rx="3" ry="2.2" fill="#0a0604"/>
-      <!-- scale cluster on cheek -->
-      <g fill="none" stroke="#4a4036" stroke-width="0.7" opacity=".7">
-        <path d="M-5 -20 Q0 -25 5 -20"/><path d="M5 -15 Q10 -20 15 -15"/>
-        <path d="M-8 -10 Q-2 -15 4 -10"/><path d="M8 -8 Q14 -13 18 -8"/>
-      </g>
-    </g>
-
-    <!-- ========== CENTER HEAD (dominant) ========== -->
-    <g id="head-center" transform="translate(8 -230)">
-      <path d="M-35 35 C-55 10 -62 -25 -48 -60 C-32 -95 5 -112 40 -100
-               C70 -88 85 -55 78 -20 C70 15 40 45 -35 35Z"
-            fill="url(#headC)" stroke="#080604" stroke-width="1.5"/>
-      <path d="M-35 35 C-55 10 -62 -25 -48 -60 C-32 -95 5 -112 40 -100
-               C70 -88 85 -55 78 -20 C70 15 40 45 -35 35Z"
-            fill="url(#hatchFine)" opacity=".4"/>
-      <!-- crown ridge / crest -->
-      <path d="M-20 -75 C-25 -105 -10 -125 10 -132 C25 -125 30 -105 28 -85
-               C15 -95 0 -95 -10 -85Z"
-            fill="url(#bone)" stroke="#3a3428" stroke-width="0.8"/>
-      <path d="M15 -90 C20 -115 35 -128 52 -125 C48 -108 42 -95 35 -85Z"
-            fill="#9a8a78" stroke="#3a3428" stroke-width="0.7"/>
-      <path d="M-5 -100 C0 -118 12 -125 20 -120" fill="none" stroke="#5c4a38" stroke-width="1" opacity=".55"/>
-      <!-- snout elongated -->
-      <path d="M40 -100 C65 -110 100 -95 118 -70 C128 -52 122 -30 105 -20
-               C80 -8 50 -25 40 -55 C42 -75 40 -92 40 -100Z"
-            fill="#2a241c" stroke="#0a0806" stroke-width="1.2"/>
-      <path d="M50 -85 C75 -92 100 -78 112 -58" fill="none" stroke="#9a8a78" stroke-width="1.5" opacity=".4"/>
-      <!-- upper fangs -->
-      <path d="M55 -25 L60 -48 L66 -25Z M70 -22 L76 -46 L82 -22Z M85 -20 L90 -40 L96 -20Z"
-            fill="url(#bone)" stroke="#2a2418" stroke-width="0.45"/>
-      <!-- open maw -->
-      <path d="M35 15 C55 30 85 32 108 18 C115 10 110 -5 98 -12 C70 -22 45 -5 35 15Z"
-            fill="#140808" stroke="#0a0404" stroke-width="1"/>
-      <path d="M50 8 L54 22 L60 8Z M65 10 L70 24 L76 10Z M80 11 L85 22 L90 11Z M94 10 L98 18 L102 10Z"
-            fill="#b0a090"/>
-      <!-- crimson gullet -->
-      <ellipse cx="75" cy="5" rx="18" ry="10" fill="#4a1010" opacity=".7"/>
-      <path d="M70 0 C78 12 88 8 82 -2" fill="#6a1818" opacity=".6"/>
-      <!-- twin eyes -->
-      <ellipse cx="8" cy="-48" rx="11" ry="8.5" fill="url(#eyeGlow)" stroke="#2a0a0a" stroke-width="0.9"/>
-      <ellipse cx="10" cy="-49" rx="3.8" ry="5.2" fill="#080404"/>
-      <ellipse cx="12" cy="-51.5" rx="1.4" ry="1.6" fill="#d0b0a0" opacity=".4"/>
-      <ellipse cx="32" cy="-52" rx="9" ry="7" fill="url(#eyeGlow)" stroke="#2a0a0a" stroke-width="0.8" opacity=".9"/>
-      <ellipse cx="33.5" cy="-53" rx="3" ry="4.2" fill="#080404"/>
-      <!-- brows -->
-      <path d="M-10 -58 C5 -68 22 -66 38 -58" fill="none" stroke="#12100c" stroke-width="2.6" stroke-linecap="round"/>
-      <path d="M-8 -55 C5 -62 20 -60 35 -55" fill="none" stroke="#5a4a38" stroke-width="0.8" opacity=".45"/>
-      <!-- nostril -->
-      <ellipse cx="108" cy="-55" rx="3.5" ry="2.5" fill="#080604"/>
-      <!-- cheek scales + wrinkles -->
-      <g fill="none" stroke="#3a342c" stroke-width="0.75" opacity=".75">
-        <path d="M-25 -10 Q-15 -18 -5 -10"/><path d="M-20 0 Q-8 -8 4 0"/>
-        <path d="M-15 12 Q-2 4 10 12"/><path d="M5 -15 Q15 -22 25 -15"/>
-        <path d="M10 -5 Q22 -12 32 -5"/>
-      </g>
-      <!-- small serpent sprouting from neck base (mythic detail) -->
-      <path d="M-40 25 C-55 20 -65 5 -58 -10 C-50 -5 -45 8 -42 18Z"
-            fill="#3a3228" stroke="#0a0806" stroke-width="0.8"/>
-      <circle cx="-58" cy="-12" r="3.2" fill="#2a2018" stroke="#0a0806" stroke-width="0.6"/>
-      <circle cx="-57" cy="-13" r="1.1" fill="#5a1212"/>
-    </g>
-
-    <!-- ========== RIGHT HEAD ========== -->
-    <g id="head-right" transform="translate(145 -175) rotate(16)">
-      <path d="M10 22 C-10 8 -22 -18 -14 -45 C-5 -72 22 -82 45 -70
-               C65 -58 70 -32 60 -8 C50 16 30 32 10 22Z"
-            fill="url(#headR)" stroke="#080604" stroke-width="1.3"/>
-      <path d="M10 22 C-10 8 -22 -18 -14 -45 C-5 -72 22 -82 45 -70
-               C65 -58 70 -32 60 -8 C50 16 30 32 10 22Z"
-            fill="url(#hatchFine)" opacity=".35"/>
-      <path d="M45 -70 C62 -78 88 -68 100 -48 C106 -36 100 -20 86 -14
-               C65 -6 48 -22 42 -45 C44 -58 45 -66 45 -70Z"
-            fill="#2e2820" stroke="#0a0806" stroke-width="1.1"/>
-      <path d="M52 -58 C70 -65 88 -55 95 -40" fill="none" stroke="#8a7a68" stroke-width="1.2" opacity=".4"/>
-      <!-- jaw -->
-      <path d="M25 8 C40 20 62 22 80 10 C86 4 82 -8 70 -12 C50 -18 32 -2 25 8Z"
-            fill="#1a0c0c" stroke="#0a0606" stroke-width="1"/>
-      <path d="M35 -5 L39 -16 L43 -5Z M45 -4 L49 -15 L53 -4Z M55 -3 L59 -13 L63 -3Z"
-            fill="url(#bone)"/>
-      <path d="M38 5 L42 14 L46 5Z M48 6 L52 15 L56 6Z M58 7 L62 14 L66 7Z"
-            fill="#b0a090" opacity=".9"/>
-      <path d="M55 0 C62 10 70 8 66 -2" fill="#5a1212" opacity=".7"/>
-      <!-- horns swept back -->
-      <path d="M5 -55 C-5 -80 5 -100 22 -108 C18 -90 15 -72 12 -58Z" fill="#c0b0a0" stroke="#3a3428" stroke-width="0.7"/>
-      <path d="M25 -68 C28 -92 40 -108 55 -112 C48 -95 40 -78 35 -68Z" fill="#9a8a78" stroke="#3a3428" stroke-width="0.6"/>
-      <!-- eye -->
-      <ellipse cx="32" cy="-40" rx="9" ry="7" fill="url(#eyeGlow)" stroke="#2a0a0a" stroke-width="0.8"/>
-      <ellipse cx="34" cy="-41" rx="3.2" ry="4.5" fill="#0a0404"/>
-      <ellipse cx="35.5" cy="-43" rx="1.2" ry="1.4" fill="#c8a090" opacity=".4"/>
-      <path d="M18 -50 C28 -56 42 -54 50 -46" fill="none" stroke="#12100c" stroke-width="2.2" stroke-linecap="round"/>
-      <ellipse cx="92" cy="-40" rx="2.8" ry="2" fill="#080604"/>
-      <g fill="none" stroke="#4a4036" stroke-width="0.7" opacity=".7">
-        <path d="M8 -15 Q15 -22 22 -15"/><path d="M5 -5 Q14 -12 22 -5"/>
-        <path d="M10 5 Q18 -2 26 5"/>
-      </g>
-    </g>
-
-    <!-- connecting sinews / tendons between necks -->
-    <g fill="none" stroke="#1a1612" stroke-width="1.4" opacity=".55">
-      <path d="M-70 -110 C-40 -95 -10 -100 5 -130"/>
-      <path d="M40 -100 C20 -90 0 -95 -15 -120"/>
-    </g>
-    <g fill="none" stroke="#6a5a48" stroke-width="0.7" opacity=".3">
-      <path d="M-65 -105 C-35 -92 -5 -98 8 -125"/>
-      <path d="M45 -95 C25 -88 5 -92 -10 -115"/>
-    </g>
-
-    <!-- floating ash particles / engraving grit -->
-    <g fill="#8a7a68" opacity=".25">
-      <circle cx="-220" cy="-40" r="1.2"/><circle cx="-195" cy="60" r="0.9"/>
-      <circle cx="210" cy="-80" r="1.1"/><circle cx="240" cy="40" r="0.8"/>
-      <circle cx="-100" cy="160" r="1"/><circle cx="120" cy="150" r="0.9"/>
-      <circle cx="0" cy="-280" r="0.7"/><circle cx="-160" cy="-220" r="0.8"/>
-    </g>
+  <!-- ===== LEFT SNAKE (shoulder) ===== -->
+  <!-- shoulder join -->
+  <ellipse cx="118" cy="168" rx="14" ry="10" fill="#2e261f" stroke="#0a0908" stroke-width=".6"/>
+  <!-- coiled body from shoulder -->
+  <path d="M118 162
+           C100 150 88 138 82 120
+           C76 100 84 88 98 92
+           C110 96 112 110 104 118
+           C96 126 86 122 84 112
+           C82 100 92 94 102 100
+           C112 106 108 120 96 128
+           C84 136 78 148 88 158
+           C96 166 110 168 118 162 Z"
+        fill="url(#snL)" stroke="#0a0908" stroke-width=".85" stroke-linejoin="round"/>
+  <!-- scale rows left -->
+  <g fill="none" stroke="#8a8074" stroke-width=".35" opacity=".45">
+    <path d="M90 156 Q100 150 108 146"/>
+    <path d="M86 148 Q96 142 104 138"/>
+    <path d="M84 138 Q94 132 102 128"/>
+    <path d="M88 120 Q98 116 106 114"/>
+    <path d="M92 108 Q100 106 108 108"/>
+    <path d="M96 98 Q102 100 106 104"/>
   </g>
-
-  <!-- palette key for review -->
-  <g transform="translate(56 640)" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="10">
-    <text fill="#6a5e52" x="0" y="0">palette</text>
-    <rect x="0" y="8" width="18" height="12" fill="#12100e" stroke="#3a342c" stroke-width="0.5"/>
-    <text fill="#8a7e70" x="24" y="18">ink</text>
-    <rect x="55" y="8" width="18" height="12" fill="#9a8c7c" stroke="#3a342c" stroke-width="0.5"/>
-    <text fill="#8a7e70" x="79" y="18">bone</text>
-    <rect x="118" y="8" width="18" height="12" fill="#5c4a38" stroke="#3a342c" stroke-width="0.5"/>
-    <text fill="#8a7e70" x="142" y="18">muted bronze</text>
-    <rect x="240" y="8" width="18" height="12" fill="#4a1010" stroke="#3a342c" stroke-width="0.5"/>
-    <text fill="#8a7e70" x="264" y="18">crimson ink</text>
-    <rect x="350" y="8" width="18" height="12" fill="#3a322a" stroke="#3a342c" stroke-width="0.5"/>
-    <text fill="#8a7e70" x="374" y="18">ash body</text>
-    <text fill="#5a5048" x="450" y="18">- no #c9a45c gold</text>
+  <g fill="none" stroke="#0a0908" stroke-width=".4" opacity=".55">
+    <path d="M94 152 L98 148 M90 144 L96 138 M88 132 L94 126 M92 118 L98 114"/>
   </g>
+  <!-- left snake head -->
+  <path d="M96 96 C90 88 92 78 102 74 C110 72 116 78 114 88 C112 96 104 100 96 96 Z"
+        fill="url(#snL)" stroke="#0a0908" stroke-width=".8"/>
+  <path d="M102 78 L108 70 M108 80 L116 74" fill="none" stroke="#b8aea0" stroke-width=".7" stroke-linecap="round"/>
+  <circle cx="106" cy="84" r="1.8" fill="#6a1414"/>
+  <circle cx="106.5" cy="83.5" r=".5" fill="#b8aea0" opacity=".8"/>
+  <path d="M100 90 L114 88" fill="none" stroke="#0a0908" stroke-width=".55"/>
+  <path d="M112 86 L120 84 M112 90 L120 92" fill="none" stroke="#3a0c0c" stroke-width=".5" stroke-linecap="round"/>
+  <!-- tongue -->
+  <path d="M114 88 L122 86 M114 88 L122 90" fill="none" stroke="#6a1414" stroke-width=".45"/>
+
+  <!-- ===== RIGHT SNAKE ===== -->
+  <ellipse cx="202" cy="168" rx="14" ry="10" fill="#4a3c32" stroke="#0a0908" stroke-width=".6"/>
+  <path d="M202 162
+           C220 150 232 138 238 120
+           C244 100 236 88 222 92
+           C210 96 208 110 216 118
+           C224 126 234 122 236 112
+           C238 100 228 94 218 100
+           C208 106 212 120 224 128
+           C236 136 242 148 232 158
+           C224 166 210 168 202 162 Z"
+        fill="url(#snR)" stroke="#0a0908" stroke-width=".85" stroke-linejoin="round"/>
+  <g fill="none" stroke="#8a8074" stroke-width=".35" opacity=".45">
+    <path d="M230 156 Q220 150 212 146"/>
+    <path d="M234 148 Q224 142 216 138"/>
+    <path d="M236 138 Q226 132 218 128"/>
+    <path d="M232 120 Q222 116 214 114"/>
+    <path d="M228 108 Q220 106 212 108"/>
+    <path d="M224 98 Q218 100 214 104"/>
+  </g>
+  <g fill="none" stroke="#0a0908" stroke-width=".4" opacity=".55">
+    <path d="M226 152 L222 148 M230 144 L224 138 M232 132 L226 126 M228 118 L222 114"/>
+  </g>
+  <path d="M224 96 C230 88 228 78 218 74 C210 72 204 78 206 88 C208 96 216 100 224 96 Z"
+        fill="url(#snR)" stroke="#0a0908" stroke-width=".8"/>
+  <path d="M218 78 L212 70 M212 80 L204 74" fill="none" stroke="#b8aea0" stroke-width=".7" stroke-linecap="round"/>
+  <circle cx="214" cy="84" r="1.8" fill="#6a1414"/>
+  <circle cx="214.5" cy="83.5" r=".5" fill="#b8aea0" opacity=".8"/>
+  <path d="M220 90 L206 88" fill="none" stroke="#0a0908" stroke-width=".55"/>
+  <path d="M208 86 L200 84 M208 90 L200 92" fill="none" stroke="#3a0c0c" stroke-width=".5" stroke-linecap="round"/>
+  <path d="M206 88 L198 86 M206 88 L198 90" fill="none" stroke="#6a1414" stroke-width=".45"/>
+
+  <!-- blood / wound marks at snake roots (Shahnameh: snakes grew from kisses) -->
+  <path d="M112 164 Q118 160 124 164" fill="none" stroke="#3a0c0c" stroke-width="1.2" opacity=".75"/>
+  <path d="M196 164 Q202 160 208 164" fill="none" stroke="#3a0c0c" stroke-width="1.2" opacity=".75"/>
+
+  <text x="160" y="392" text-anchor="middle" fill="#4a4440" font-family="Georgia,serif" font-size="7">review #1 — not on map until approved · no UI gold</text>
 </svg>
