@@ -34,6 +34,7 @@ The name _Haoma_ is the Avestan word for the sacred plant pressed in the Yasna r
 | **Library** | PDFs and Markdown files in `static/library/` are listed automatically. |
 | **Static only** | No database, no server at runtime. Only Hugo builds it; no other build step. |
 | **Local editor** | `python tools/editor.py` — a local web app that edits content with draft/preview/rollback, no IDE needed. |
+| **Web editor** | Open the repo in a **Codespace** to run that same editor in the browser, no local install. See §5. |
 | **Rich layouts** | Sliders, grids, infoboxes, hover notes, figures, maps, play-on-scroll GIFs, Farsi verse couplets — all via shortcodes. |
 | **PDF export** | Every page offers an export that prints to PDF from the browser, keeping the page's own background and theme. See §8. |
 
@@ -227,6 +228,14 @@ python tools/editor.py
 
 The editor binds to `127.0.0.1` only. Every API call requires the per-run token (`X-Token` header or `?t=` query param). Only the paths `content data i18n layouts static assets hugo.toml` are writable.
 
+### Edit in the browser (GitHub Codespaces)
+
+GitHub Pages serves static files only, so it cannot run `editor.py` — the panel published at `/tools/` has no backend (§10). To get the **real editor** without a local clone, open the repository in a Codespace: **Code → Codespaces → Create codespace on `<branch>`**. The `.devcontainer/devcontainer.json` in this repo installs Hugo (extended) and Python, forwards ports 8765 and 1313, and starts `python tools/editor.py` for you when the editor attaches.
+
+Open the forwarded URL for port 8765 (the editor also prints it — `https://<codespace>-8765.app.github.dev/`) and you get the same editor: drafts, rollback, the map studio, the live Hugo preview, and **Publish & PR** — the codespace carries git credentials, so the branch push works. If the preview pane stays blank, open port 1313's URL directly from the **Ports** tab (forwarded ports are private to your account by default).
+
+Codespaces gives personal accounts a monthly free allowance (compute core-hours + storage) and simply stops when it is used up, with no payment method on file. It also sleeps after a period of inactivity; drafts live on disk in `tools/.drafts/`, so they survive.
+
 ---
 
 ## 6. Writing components (shortcodes)
@@ -353,6 +362,8 @@ Nothing on the public site links to it. Its `<head>` carries `<meta name="robots
 
 Since there is no `editor.py` behind it, `/api/` does not exist. The panel therefore boots into **static mode**: it disables the write controls, hides the empty file panel, and shows one notice saying what this copy is and how to run a real editor (`python tools/editor.py`). It cannot read or change the project — the token it ships with is the literal `__TOKEN__` placeholder, so even a running backend would refuse it.
 
+GitHub Pages cannot run the Python backend at all — it is a static file host. For a working editor without a local clone, use a Codespace (§5).
+
 The build step in `.github/workflows/hugo.yml` does the copy:
 
 ```yaml
@@ -442,11 +453,12 @@ UICHECK_URL=http://127.0.0.1:8123/ python3 tools/uicheck_pdf.py
 
 The **local editor** (§5) does steps 1–3 for you — it has a builder for every component, a live preview, and a **Publish & PR** button.
 
-### Three easy ways to contribute
+### Four easy ways to contribute
 
 1. **On any page** — click **Edit this page on GitHub** and propose a change as a pull request.
 2. **Issue** — click **Report a correction** to open a prefilled issue.
-3. **Full editor** — clone the repo, run `python tools/editor.py`, use **Publish & PR** to create a branch and open a pull request.
+3. **Full editor, locally** — clone the repo, run `python tools/editor.py`, use **Publish & PR** to create a branch and open a pull request.
+4. **Full editor, in the browser** — open the repo in a Codespace (§5) to run the same editor with no local install.
 
 **Rules:**
 - Every factual claim needs a `sources:` entry. If you cannot source it, set `grade: draft`.

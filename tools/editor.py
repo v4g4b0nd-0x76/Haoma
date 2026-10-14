@@ -10,6 +10,11 @@ from urllib.parse import urlparse, parse_qs
 ROOT = Path(__file__).resolve().parent.parent
 PORT = int(os.environ.get("EDITOR_PORT", "8765"))
 HUGO_PORT = int(os.environ.get("HUGO_PORT", "1313"))
+# A GitHub codespace reaches every port through its own forwarded https
+# hostname (<codespace>-<port>.<domain>), so a localhost URL would point at the
+# reader's own machine. The codespace sets both variables.
+CODESPACE = os.environ.get("CODESPACE_NAME")
+FWD_DOMAIN = os.environ.get("GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN", "app.github.dev")
 TOKEN = secrets.token_urlsafe(16)
 DIRS = ("content", "data", "i18n", "layouts", "static", "assets")
 TEXT = {".md", ".json", ".toml", ".yaml", ".yml", ".html", ".css", ".js", ".svg", ".txt", ".xml"}
@@ -286,11 +291,19 @@ def free_port(start):
     raise RuntimeError("no free port found")
 
 
+def forward_url(port):
+    """URL a browser can use to reach `port`. Local runs get http://localhost:PORT/;
+    inside a codespace, the hostname the codespace forwards that port on."""
+    if CODESPACE:
+        return f"https://{CODESPACE}-{port}.{FWD_DOMAIN}/"
+    return f"http://localhost:{port}/"
+
+
 def preview_status():
     proc = preview["proc"]
     running = proc is not None and proc.poll() is None
     tail = LOG.read_text(errors="replace").splitlines()[-12:] if LOG.exists() else []
-    url = f"http://localhost:{preview['port']}/" if running else ""
+    url = forward_url(preview["port"]) if running else ""
     return {"running": running, "url": url, "log": "\n".join(tail)}
 
 
@@ -304,10 +317,13 @@ def preview_start():
         ws_sync()
     port = free_port(HUGO_PORT)
     preview["port"] = port
+    cmd = ["hugo", "server", "--source", str(WS), "--port", str(port), "--bind", "127.0.0.1", "--disableFastRender"]
+    if CODESPACE:
+        # Otherwise Hugo writes http://localhost:PORT/ into every link, which in a
+        # codespace resolves to the reader's machine, not the preview server.
+        cmd += ["--baseURL", forward_url(port), "--appendPort=false"]
     log = open(LOG, "w")
-    preview["proc"] = subprocess.Popen(
-        ["hugo", "server", "--source", str(WS), "--port", str(port), "--bind", "127.0.0.1", "--disableFastRender"],
-        cwd=WS, stdout=log, stderr=subprocess.STDOUT)
+    preview["proc"] = subprocess.Popen(cmd, cwd=WS, stdout=log, stderr=subprocess.STDOUT)
 
 
 def preview_stop():
@@ -550,11 +566,19 @@ class H(BaseHTTPRequestHandler):
 
 if __name__ == "__main__":
     ws_sync()
-    srv = ThreadingHTTPServer(("127.0.0.1", PORT), H)
-    url = f"http://localhost:{PORT}/"
-    print(f"Site editor: {url}  (project: {ROOT})\nCtrl+C to stop.")
+    url = forward_url(PORT)
+    print(f"Site editor: {url}  (project: {ROOT})\nCtrl+C to stop.", flush=True)
     try:
-        webbrowser.open(url)
+        srv = ThreadingHTTPServer(("127.0.0.1", PORT), H)
+    except OSError:
+        print(f"Port {PORT} is already in use — the editor is probably already running.")
+        sys.exit(0)
+    if not CODESPACE:
+        try:
+            webbrowser.open(url)
+        except Exception as e:
+            print(f"(could not open a browser: {e})")
+    try:
         srv.serve_forever()
     except KeyboardInterrupt:
         pass

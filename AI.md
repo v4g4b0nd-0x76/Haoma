@@ -35,6 +35,7 @@ tools/genmaps.py          map artwork generator (Natural Earth data in tools/geo
 tools/regions.py          prints `region` lines for a map (lon/lat rings -> % points)
 tools/editor.py           local editor server (Python standard library only)
 tools/admin.html          the editor UI (single file, vanilla JS)
+.devcontainer/            Codespace: Hugo (extended) + Python, forwards 8765/1313, starts the editor
 tools/uicheck.py          headless-Chrome (CDP) driver (+ `nocache`, see 10)
 tools/uicheck_map.py      the editor's map studio, driven without clicking
 tools/uicheck_layout.py   the page grid: one shell, one reading column, no overflow
@@ -177,6 +178,8 @@ A third block closes the file: `@page{margin:0}` and `@media print` are the PDF 
 
 ## 9. The editor (`python tools/editor.py`)
 Needs Python 3.8+, git, hugo. Binds to 127.0.0.1; every API call needs the per-run token (`X-Token` header or `t` query parameter); only `content data i18n layouts static assets hugo.toml` are writable.
+
+**In a GitHub codespace** the editor is reached through a forwarded https hostname, not localhost, so `forward_url()` builds every URL it hands out from `CODESPACE_NAME` + `GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN`. That covers the editor's own printed URL and `GET preview` (the UI takes its iframe base from `url`), and `preview_start()` passes `--baseURL <forwarded>/ --appendPort=false` so the preview's own links point back at the forwarded host instead of the reader's machine. A codespace has no browser, so it skips `webbrowser.open`, and a bind failure (the editor already running — `postAttachCommand` re-runs on every attach) prints a line and exits instead of a traceback.
 
 ### 9.1 Safety model - keep these invariants
 1. **Nothing reaches the project until Save.** Edits are *temporary drafts* stored in `tools/.drafts/` (survive page switches and reloads). `POST /api/apply` moves drafts into real files.
