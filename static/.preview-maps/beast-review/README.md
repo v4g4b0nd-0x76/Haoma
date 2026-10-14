@@ -2,20 +2,19 @@
 
 **Status:** awaiting approval. Not on any map.
 
-## What this is
+## Correction
 
-Shahnameh **Zahhak**: a **human king** with **two snakes growing from his shoulders** (the figure Iranians know) — **not** a three-headed dragon.
+- **Not** a three-headed dragon blob
+- **Not** a smiling cartoon stick-figure
+- Shahnameh Zahhak: **cruel human tyrant** with **two snakes on his shoulders**
+- Tone inspired by serious **Smaug**-style dark fantasy fanart: grim, predatory, adult proportions
+- **No smile.** Mouth closed / cruel. Dark palette, no map-UI gold.
 
-Dark ash/skin/bone palette, crimson only for eyes/wounds/tongues. No map-UI gold. Smaller figure, finer line work, human proportions (head ~1/7 of height), legs/hands/robe folds/scale rows.
+## Review file
 
-## Proposed placement (only after you approve)
+- `dahaka.png` (and `dahaka-ref.jpg`) — current candidate for your approve/reject
+- If approved, we will vectorize into map-ready SVG (still non-gold, small decorative scale) and place on `persia` near **46.5°E, 33.8°N** (Zagros margin), clear of Damavand
 
-| Map | Lon/lat | Note |
-|-----|---------|------|
-| `persia` | **46.5°E, 33.8°N** | Zagros margin (tyranny lands); keep clear of Damavand pin |
+## Next
 
-## Files
-
-- `dahaka.svg` / `dahaka.png`
-
-Reply **approve** / **reject** (+ notes). Next beast only after this one.
+Reply **approve** / **reject** (+ notes). Only then Simorgh.
