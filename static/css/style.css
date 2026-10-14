@@ -152,11 +152,13 @@ footer{text-align:center;color:var(--muted);padding:var(--s4) var(--s3);font-siz
 @font-face{font-family:Lora;src:url(../fonts/lora-latin-wght-italic.woff2) format("woff2");font-weight:400 700;font-style:italic;font-display:swap}
 @font-face{font-family:Vazirmatn;src:url(../fonts/vazirmatn.woff2) format("woff2");font-weight:100 900;font-display:swap}
 @font-face{font-family:Lalezar;src:url(../fonts/lalezar-arabic-400-normal.woff2) format("woff2");font-display:swap}
-@font-face{font-family:IRANSans;src:url(../fonts/iransans-400.woff2) format("woff2");font-weight:400;font-display:swap}
-@font-face{font-family:IRANSans;src:url(../fonts/iransans-500.woff2) format("woff2");font-weight:500;font-display:swap}
-@font-face{font-family:IRANSans;src:url(../fonts/iransans-700.woff2) format("woff2");font-weight:700;font-display:swap}
+/* Markazi Text — Google Font (OFL), self-hosted; designed for continuous Arabic/Persian reading */
+@font-face{font-family:MarkaziText;src:url(../fonts/markazi-text-arabic-400-normal.woff2) format("woff2");font-weight:400;font-display:swap}
+@font-face{font-family:MarkaziText;src:url(../fonts/markazi-text-arabic-500-normal.woff2) format("woff2");font-weight:500;font-display:swap}
+@font-face{font-family:MarkaziText;src:url(../fonts/markazi-text-arabic-600-normal.woff2) format("woff2");font-weight:600;font-display:swap}
+@font-face{font-family:MarkaziText;src:url(../fonts/markazi-text-arabic-700-normal.woff2) format("woff2");font-weight:700;font-display:swap}
 :root{--ui:system-ui,-apple-system,"Segoe UI",sans-serif;--display:Cinzel,Georgia,serif;--head:Cinzel,Georgia,serif;--read-font:Lora,Georgia,serif;--read:1.2rem}
-html[lang=fa]{--ui:IRANSans,Vazirmatn,system-ui,sans-serif;--display:Lalezar,IRANSans,Vazirmatn,sans-serif;--head:IRANSans,Vazirmatn,sans-serif;--read-font:IRANSans,Vazirmatn,sans-serif}
+html[lang=fa]{--ui:Vazirmatn,system-ui,sans-serif;--display:Lalezar,MarkaziText,Vazirmatn,sans-serif;--head:MarkaziText,Vazirmatn,sans-serif;--read-font:MarkaziText,Vazirmatn,sans-serif;--read:1.28rem;--verse:Nastaliq,MarkaziText,Vazirmatn,serif}
 html[lang=fa] *{letter-spacing:0!important;text-transform:none!important}
 body{font-family:var(--ui)}
 .brand,.cine h1{font-family:var(--display)}
@@ -438,7 +440,6 @@ html[lang=fa] .myth-region__pop b{letter-spacing:0;font-family:var(--ui)}
 /* ===== Haoma brand and typography (manuscript-inspired) ===== */
 @font-face{font-family:Nastaliq;src:url(../fonts/nastaliq.woff2) format("woff2");font-display:swap}
 :root{--logo:#e0a03a;--rubric:#c0503a;--verse:Lora,Georgia,serif;--m-star:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpolygon points='12.0,1.0 13.8,7.8 19.8,4.2 16.2,10.2 23.0,12.0 16.2,13.8 19.8,19.8 13.8,16.2 12.0,23.0 10.2,16.2 4.2,19.8 7.8,13.8 1.0,12.0 7.8,10.2 4.2,4.2 10.2,7.8'/%3E%3C/svg%3E");--m-orn:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 260 14'%3E%3Cpolygon points='0,7 100,4.4 100,9.6'/%3E%3Cpolygon points='260,7 160,4.4 160,9.6'/%3E%3Cpolygon points='130.0,0.6 131.0,4.5 134.5,2.5 132.5,6.0 136.4,7.0 132.5,8.0 134.5,11.5 131.0,9.5 130.0,13.4 129.0,9.5 125.5,11.5 127.5,8.0 123.6,7.0 127.5,6.0 125.5,2.5 129.0,4.5'/%3E%3Ccircle cx='108' cy='7' r='1.4'/%3E%3Ccircle cx='116' cy='7' r='1.1'/%3E%3Ccircle cx='144' cy='7' r='1.1'/%3E%3Ccircle cx='152' cy='7' r='1.4'/%3E%3C/svg%3E")}
-html[lang=fa]{--verse:Nastaliq,Vazirmatn,serif}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .brand{display:flex;align-items:center;line-height:0}
 .logo{display:block;height:36px;width:auto;overflow:visible}
@@ -467,7 +468,7 @@ html[lang=en] article.dc>p:first-of-type::first-letter{font:700 3.5em/.82 var(--
 .verse .vm{justify-self:center;align-self:center;width:6px;height:6px;background:var(--accent);transform:rotate(45deg);opacity:.85}
 .verse .vl.one{display:block}
 .verse figcaption{margin-top:.9rem;font:.85rem var(--ui);font-style:normal;color:var(--muted)}
-.verse[lang=fa]{--verse:Nastaliq,Vazirmatn,serif;font-style:normal}.verse[lang=fa] .vl{line-height:2.7;font-size:1.3em}
+.verse[lang=fa]{--verse:Nastaliq,MarkaziText,Vazirmatn,serif;font-style:normal}.verse[lang=fa] .vl{line-height:2.7;font-size:1.3em}
 html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;font-size:1.3em}
 @media screen and (max-width:760px){.verse .vl{grid-template-columns:1fr 1.4rem 1fr;font-size:1.05em}.verse[lang=fa] .vl,html[lang=fa] .verse .vl{font-size:1.15em}}
 
@@ -585,8 +586,11 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
   /* GIFs print their first frame: site.js keeps a decoded still next to each GIF.
      Without one (never played, and printed without the PDF button) the GIF
      itself prints whatever it holds -- never the 1x1 stub at zero height */
-  .gif-still{display:block!important;width:100%;height:auto;border-radius:inherit}
+  img.gif-still,.fig .gif-still{display:block!important;width:100%;height:auto;border-radius:inherit}
   img[data-gif]:has(+ .gif-still){display:none!important}
   img[data-gif]{max-width:100%!important;height:auto!important}
 }
-.gif-still{display:none}
+/* screen only: must beat .fig img {display:block} or the print still sits under the live GIF */
+@media screen{
+  img.gif-still,.fig .gif-still{display:none!important}
+}

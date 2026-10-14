@@ -154,7 +154,7 @@ New culture checklist: folder + `_index.md` files in both languages (3.1), theme
 |---|---|---|
 | Wordmark | custom wedge letters (SVG) | Nastaliq outlines (SVG) |
 | Display / titles | Cinzel (inscriptional capitals) | Lalezar |
-| Reading text | Lora | Vazirmatn |
+| Reading / section heads | Lora | Markazi Text (Google Font, self-hosted in `static/fonts/`) |
 | Interface | system-ui | Vazirmatn |
 | Couplets / poetry | Lora italic | Noto Nastaliq Urdu (`static/fonts/nastaliq.woff2`), couplets only, never body text |
 
