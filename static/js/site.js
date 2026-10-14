@@ -97,6 +97,18 @@ if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es
  else if(isIn&&r>=.6){var p=m.play();if(p&&p.catch)p.catch(function(){})}else if(!isIn)m.pause()})},{threshold:[0,.08,.6,1]});media.forEach(function(m){io.observe(m)})}
 else media.forEach(function(m){if(m.dataset.gif)m.src=m.dataset.gif});
 Q('.note').forEach(function(n){var p=n.querySelector('.note-pop');function fit(){p.style.setProperty('--nx','0px');var r=p.getBoundingClientRect(),w=document.documentElement.clientWidth,dx=0;if(r.left<8)dx=8-r.left;else if(r.right>w-8)dx=w-8-r.right;p.style.setProperty('--nx',dx+'px')}n.addEventListener('mouseenter',fit);n.addEventListener('focusin',fit)});
+ /* PDF/print: load every GIF so the sheet shows the static first frame, not the
+    1x1 placeholder used while off-screen. afterprint restores prior src state. */
+ function gifPrintOn(){Q('[data-gif]').forEach(function(m){if(!m.dataset.gif)return;
+  m.dataset.printPrev=m.getAttribute('src')||'';m.dataset.printWas=m.dataset.on||'';
+  m.src=m.dataset.gif;m.dataset.on='1'})}
+ function gifPrintOff(){Q('[data-gif]').forEach(function(m){if(!('printPrev' in m.dataset))return;
+  m.src=m.dataset.printPrev;m.dataset.on=m.dataset.printWas;
+  delete m.dataset.printPrev;delete m.dataset.printWas})}
+ window.addEventListener('beforeprint',gifPrintOn);window.addEventListener('afterprint',gifPrintOff);
+ if(window.matchMedia){var pm=matchMedia('print');
+  if(pm.addEventListener)pm.addEventListener('change',function(e){e.matches?gifPrintOn():gifPrintOff()});
+  else if(pm.addListener)pm.addListener(function(e){e.matches?gifPrintOn():gifPrintOff()})}
 })();
 
 /* ===== v5: interactive myth map — pan, zoom, pin tooltips ===== */
@@ -132,6 +144,14 @@ Q('.myth-map').forEach(function(map){
      stay the same on-screen size no matter how far the map is zoomed */
   function band(){map.setAttribute('data-zband',z<0.85?'far':(z>1.6?'near':'mid'))}function apply(){inner.style.transform='translate('+ox+'px,'+oy+'px) scale('+z+')';map.style.setProperty('--iz',z);map.style.setProperty('--izr',1/z);band()}
   function clamp(){if(z<=1.001){ox=0;oy=0;return}var mw=map.clientWidth*(z-1)/2,mh=map.clientHeight*(z-1)/2;ox=Math.max(-mw,Math.min(mw,ox));oy=Math.max(-mh,Math.min(mh,oy))}
+  /* Print/PDF: snap to identity fit view (CSS also forces transform:none) */
+  var prePrint={z:1,ox:0,oy:0};
+  function mapPrintOn(){prePrint={z:z,ox:ox,oy:oy};z=1;ox=0;oy=0;apply()}
+  function mapPrintOff(){z=prePrint.z;ox=prePrint.ox;oy=prePrint.oy;apply()}
+  window.addEventListener('beforeprint',mapPrintOn);window.addEventListener('afterprint',mapPrintOff);
+  if(window.matchMedia){var mpm=matchMedia('print');
+   if(mpm.addEventListener)mpm.addEventListener('change',function(e){e.matches?mapPrintOn():mapPrintOff()});
+   else if(mpm.addListener)mpm.addListener(function(e){e.matches?mapPrintOn():mapPrintOff()})}
   /* Zoom controls */
   Q('[data-zm]',map).forEach(function(b){b.onclick=function(){var v=+b.dataset.zm;if(v===0){z=1;ox=0;oy=0}else{z=Math.max(minZ,Math.min(maxZ,z+v*0.4))}apply()}});
   /* Wheel zoom */

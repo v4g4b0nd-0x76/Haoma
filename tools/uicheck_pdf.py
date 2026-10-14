@@ -151,6 +151,21 @@ SHEET = r"""
     });
   });
   out.overflowX=de.scrollWidth-de.clientWidth;
+  // myth map: must print at identity fit (no mid-pan zoom); notes readable
+  var map=document.querySelector('.myth-map');
+  if(map){
+    var inner=map.querySelector('.myth-map__inner');
+    var notes=map.closest('figure')?map.closest('figure').querySelector('.myth-map__print-notes'):null;
+    out.map={
+      present:true,
+      transform:inner?getComputedStyle(inner).transform:'',
+      notesDisplay:notes?getComputedStyle(notes).display:null,
+      notesShown:notes?!!notes.getClientRects().length:null,
+      popsHidden:[].slice.call(map.querySelectorAll('.myth-pin__pop,.myth-region__pop'))
+        .every(function(e){return getComputedStyle(e).display==='none'})
+    };
+  } else { out.map={present:false}; }
+  out.gifCount=document.querySelectorAll('[data-gif]').length;
   return out;
 })()
 """.replace("GONE", repr(GONE)).replace("KEPT", repr(KEPT))
@@ -226,6 +241,36 @@ def main():
         if m["cineH"]:
             check(m["cineH"] < 470, "%s: the hero cover is page-sized, not half a page" % name,
                   round(m["cineH"]))
+
+        # map + GIF print behaviour (only asserted when the page carries them)
+        mp = m.get("map") or {}
+        if mp.get("present"):
+            tr = (mp.get("transform") or "").replace(" ", "")
+            check(tr in ("none", "matrix(1,0,0,1,0,0)", ""),
+                  "%s: myth map prints unzoomed (identity transform)" % name, mp.get("transform"))
+            if mp.get("notesDisplay") is not None:
+                check(mp.get("notesDisplay") != "none" and mp.get("notesShown"),
+                      "%s: pin/region print notes are visible" % name,
+                      "%s shown=%s" % (mp.get("notesDisplay"), mp.get("notesShown")))
+            check(mp.get("popsHidden"),
+                  "%s: on-map hover pops stay off the sheet (notes list is canonical)" % name,
+                  mp.get("popsHidden"))
+        if m.get("gifCount"):
+            # Mirror site.js gifPrintOn: swap stub → data-gif so the sheet paints
+            # the asset's static first frame (browsers don't animate in print).
+            p.js(r"""
+            (function(){document.querySelectorAll('[data-gif]').forEach(function(m){
+              if(m.dataset.gif) m.src=m.dataset.gif;});})()""")
+            time.sleep(0.15)
+            gf2 = p.js(r"""
+            (function(){var o={stub:0,ok:0,n:0};
+              document.querySelectorAll('[data-gif]').forEach(function(m){
+                o.n++; var s=m.getAttribute('src')||'';
+                if(/R0lGODlhAQAB/i.test(s)) o.stub++; else o.ok++;});
+              return o;})()""")
+            check(gf2.get("stub", 1) == 0 and gf2.get("ok", 0) == gf2.get("n", -1),
+                  "%s: GIFs show the real asset (static first frame), not the 1x1 stub" % name,
+                  gf2)
 
     print()
     if fails:

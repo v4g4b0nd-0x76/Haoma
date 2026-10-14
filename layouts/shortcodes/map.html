@@ -287,5 +287,30 @@
     <button type="button" class="myth-map__zoom" data-zm="0"  aria-label="{{ i18n "zoomReset" | default "Reset view" }}">⌂</button>
   </div>
 </div>
+{{- /* Print-only note list: pin/region descriptions readable without hover */ -}}
+{{- $printNotes := slice -}}
+{{- range split $inner "\n" -}}
+  {{- $line := trim . " \t\r" -}}
+  {{- if or (hasPrefix $line "pin ") (hasPrefix $line "region ") -}}
+    {{- $plabel := "" -}}{{- $pnote := "" -}}
+    {{- range findRE `[a-z]+=".+?"` $line -}}
+      {{- $kv := split . "=" -}}
+      {{- $key := printf "%v" (index $kv 0) -}}
+      {{- $val := trim (index $kv 1) "\"" -}}
+      {{- if eq $key "label" -}}{{- $plabel = $val -}}{{- end -}}
+      {{- if eq $key "note"  -}}{{- $pnote  = $val -}}{{- end -}}
+    {{- end -}}
+    {{- if or $plabel $pnote -}}
+      {{- $printNotes = $printNotes | append (dict "label" $plabel "note" $pnote) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if gt (len $printNotes) 0 -}}
+<ul class="myth-map__print-notes" aria-hidden="true">
+  {{- range $printNotes -}}
+  <li>{{ with .label }}<b>{{ . }}</b>{{ end }}{{ if and .label .note }} — {{ end }}{{ with .note }}{{ . }}{{ end }}</li>
+  {{- end -}}
+</ul>
+{{- end -}}
 {{- if $caption }}<figcaption>{{ $caption }}</figcaption>{{- end }}
 </figure>
