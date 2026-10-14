@@ -558,7 +558,13 @@ def build(name, spec, lang):
     A('<linearGradient id="land" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>' % (LAND, LAND2))
     A('<radialGradient id="vign" cx="50%" cy="50%" r="72%"><stop offset="0" stop-color="#04060a" stop-opacity="0"/><stop offset="100%" stop-color="#04060a" stop-opacity=".66"/></radialGradient>')
     A('<pattern id="wav" width="30" height="16" patternUnits="userSpaceOnUse"><path d="M0 9q7.5-9 15 0t15 0" fill="none" stroke="#3d6480" stroke-width="1" opacity=".13"/></pattern>')
-    A('<filter id="rough" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="3.4" xChannelSelector="R" yChannelSelector="G"/></filter>')
+    # a gentler coast wobble: the old 3.4-unit displacement at 0.03 frequency
+    # chewed up small islands, so the displacement is smaller and its wavelength
+    # longer (islands survive, and the coast reads as drawn rather than noisy)
+    A('<filter id="rough" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>')
+    # soft dark patch behind a beast, so its gold line art still reads where it
+    # crosses olive land instead of drowning in it
+    A('<radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#04060a" stop-opacity=".5"/><stop offset="100%" stop-color="#04060a" stop-opacity="0"/></radialGradient>')
     A('<clipPath id="inner"><rect x="%d" y="%d" width="%d" height="%d" rx="4"/></clipPath>' % (pad, pad, w - 2 * pad, h - 2 * pad))
     A('</defs>')
 
@@ -577,11 +583,11 @@ def build(name, spec, lang):
                 if max(p[1] for p in ring) < box[2] - 2 or min(p[1] for p in ring) > box[3] + 2:
                     continue
                 paths.append(ring_path(ring, box, w, h, pad))
-    A('<g clip-path="url(#inner)"><g filter="url(#rough)">')
-    A('<path fill="url(#land)" fill-rule="evenodd" stroke="%s" stroke-width="1.2" stroke-linejoin="round" d="%s"/>' % (GOLD, "".join(paths)))
-    A('</g>')
+    A('<g clip-path="url(#inner)">')
 
-    # graticule
+    # graticule and rhumb lines go UNDER the land: a grid drawn across the coast
+    # cuts the outline into segments and turns it into noise, so the grid belongs
+    # to the sea; rivers and mountain hatches stay on top of the land below
     g = spec["graticule"]
     lines = []
     lon = math.ceil(box[0] / g) * g
@@ -604,13 +610,22 @@ def build(name, spec, lang):
         rays.append("M%d %dl%.0f %.0f" % (cx, cy, math.cos(a) * w, math.sin(a) * w))
     A('<path d="%s" fill="none" stroke="%s" stroke-width=".8" opacity=".16"/>' % ("".join(rays), GOLD))
 
-    # rivers
+    # land
+    A('<g filter="url(#rough)">')
+    A('<path fill="url(#land)" fill-rule="evenodd" stroke="%s" stroke-width="1.2" stroke-linejoin="round" d="%s"/>' % (GOLD, "".join(paths)))
+    A('</g>')
+
+    # rivers and mountain hatches sit ON the land
     for riv in spec["rivers"]:
         A('<path d="%s" fill="none" stroke="#41789b" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>' % poly_path(riv, box, w, h, pad))
-    # mountain hatches
     for rng in spec["ranges"]:
         A('<path d="%s" fill="none" stroke="#0c120a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>' % chevrons(rng, box, w, h, pad))
     A('</g>')
+
+    # vignette: it darkens the geography towards the frame, so it must be painted
+    # before the labels and beasts — drawn after them it dimmed exactly what the
+    # reader is meant to read
+    A('<rect width="%d" height="%d" fill="url(#vign)"/>' % (w, h))
 
     # labels
     for text, lon, lat, size, kind, rot in spec["labels"]:
@@ -620,30 +635,37 @@ def build(name, spec, lang):
         r = ' transform="rotate(%d %.0f %.0f)"' % (rot, x, y) if rot else ""
         A('<text class="%s" x="%.0f" y="%.0f" font-size="%d" text-anchor="middle"%s opacity=".92">%s</text>' % (cls, x, y, size, r, esc(label)))
 
-    # mythical creatures ("here be monsters": thin engraved line art)
+    # mythical creatures ("here be monsters": thin engraved line art). A soft dark
+    # halo sits behind each beast so the gold lines still read where the beast
+    # crosses olive land, and a dark rim behind its caption does the same for the
+    # name; the art runs from about -16..+17 x and -15..+11 y around the origin
     for c in spec.get("creatures", []):
         kind, clon, clat, s, flip = c[:5]
         label = c[5] if len(c) > 5 else None
         x, y = project(clon, clat, box, w, h, pad)
-        S = s * 1.15                      # a touch larger for presence
+        S = s * 1.28                      # a touch larger for presence
         sx = -S if flip else S
-        A('<g transform="translate(%.1f %.1f) scale(%.2f %.2f)" opacity=".8">%s</g>'
+        A('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="url(#halo)"/>'
+          % (x, y, 19 * S, 15 * S))
+        A('<g transform="translate(%.1f %.1f) scale(%.2f %.2f)" opacity=".92">%s</g>'
           % (x, y, sx, S, CREATURE_ART[kind]))
         if label:
             lab = label if lang == "en" else FA.get(label, label)
-            A('<text class="lb" x="%.0f" y="%.0f" font-size="12" text-anchor="middle" opacity=".85">%s</text>'
-              % (x, y + 11 * S + 10, esc(lab)))
+            A('<text class="lb" x="%.0f" y="%.0f" font-size="12" text-anchor="middle" '
+              'stroke="#05070b" stroke-width="3" stroke-opacity=".6" paint-order="stroke" opacity=".95">%s</text>'
+              % (x, y + 13 * S + 12, esc(lab)))
 
-    # vignette + frame
-    A('<rect width="%d" height="%d" fill="url(#vign)"/>' % (w, h))
+    # frame
     A('<rect x="7" y="7" width="%d" height="%d" fill="none" stroke="%s" stroke-width="2" rx="7" opacity=".7"/>' % (w - 14, h - 14, GOLD))
     A('<rect x="13" y="13" width="%d" height="%d" fill="none" stroke="%s" stroke-width=".8" rx="4" opacity=".4"/>' % (w - 26, h - 26, GOLD))
     A('<g stroke="%s" stroke-width="1.3" fill="none" opacity=".55"><path d="M13 34q4-14 18-18"/><path d="M%d 13q14 4 18 18"/><path d="M13 %dq4 14 18 18"/><path d="M%d %d q14-4 18-18"/></g>' % (GOLD, w - 31, h - 31, w - 31, h - 31))
 
-    # title cartouche (top-left)
+    # title cartouche (top-left). The caption is centred in its box: it used to be
+    # anchored "start" at the box's own centre, so a long English title began
+    # halfway across and ran out past the right edge of the cartouche
     tw = max(150, int(len(lang_title) * (11 if lang == "fa" else 9.4)) + 34)
     A('<g><rect x="%d" y="%d" width="%d" height="34" rx="7" fill="#070b11" fill-opacity=".82" stroke="%s" stroke-width="1" opacity=".92"/>' % (pad + 14, pad + 14, tw, GOLD))
-    A('<text class="lb" x="%d" y="%d" font-size="15" text-anchor="start" letter-spacing=".1em">%s</text></g>' % (pad + 14 + tw // 2, pad + 36, esc(lang_title)))
+    A('<text class="lb" x="%d" y="%d" font-size="15" text-anchor="middle" letter-spacing=".1em">%s</text></g>' % (pad + 14 + tw // 2, pad + 36, esc(lang_title)))
 
     # compass rose (bottom-right)
     A('<g transform="translate(%d %d)"><circle r="24" fill="#070b11" fill-opacity=".8" stroke="%s" stroke-width="1"/>' % (w - pad - 52, h - pad - 52, GOLD))
