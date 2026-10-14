@@ -15,11 +15,12 @@ The name _Haoma_ is the Avestan word for the sacred plant pressed in the Yasna r
 5. [The local editor](#5-the-local-editor)
 6. [Writing components (shortcodes)](#6-writing-components-shortcodes)
 7. [Themes and visuals](#7-themes-and-visuals)
-8. [Deploying to GitHub Pages](#8-deploying-to-github-pages)
-9. [Tools live demo (editor on GitHub Pages)](#9-tools-live-demo-editor-on-github-pages)
-10. [Verification checklist](#10-verification-checklist)
-11. [Contributing](#11-contributing)
-12. [Licences](#12-licences)
+8. [Exporting a page as PDF](#8-exporting-a-page-as-pdf)
+9. [Deploying to GitHub Pages](#9-deploying-to-github-pages)
+10. [The published editor panel](#10-the-published-editor-panel)
+11. [Verification checklist](#11-verification-checklist)
+12. [Editing and contributing](#12-editing-and-contributing)
+13. [Licences](#13-licences)
 
 ---
 
@@ -34,6 +35,27 @@ The name _Haoma_ is the Avestan word for the sacred plant pressed in the Yasna r
 | **Static only** | No database, no server at runtime. Only Hugo builds it; no other build step. |
 | **Local editor** | `python tools/editor.py` — a local web app that edits content with draft/preview/rollback, no IDE needed. |
 | **Rich layouts** | Sliders, grids, infoboxes, hover notes, figures, maps, play-on-scroll GIFs, Farsi verse couplets — all via shortcodes. |
+| **PDF export** | Every page offers an export that prints to PDF from the browser, keeping the page's own background and theme. See §8. |
+
+### The sections of the site
+
+Every route below exists in both languages (`/fa/…` mirrors `/…`); Farsi is RTL throughout.
+
+| Section | Path | What it is |
+|---|---|---|
+| **Home** | `/` | The cinematic landing page: culture banners, the latest episodes, and one tab per culture listing its characters, stories and history. |
+| **Cultures** | `/cultures/` | Index of every culture. |
+| **Culture** | `/cultures/<culture>/` | A culture's landing page: its quote and tagline, then cards for its sections. |
+| **Characters** | `/cultures/<culture>/characters/` | Profiles of gods, heroes and beings. |
+| **Stories** | `/cultures/<culture>/stories/` | Myth summaries and retellings. |
+| **History** | `/cultures/<culture>/history/` | Historical context and scholarship. |
+| **Episodes** | `/episodes/` | The podcast: numbered episodes with audio, show notes, script and media credits. |
+| **Library** | `/library/` | Everything in `static/library/` — downloadable PDFs and Markdown. |
+| **Guide** | `/guide/` | A live demo of every writing component. Read it before editing content. |
+| **About** | `/about/` | What the project is and how it is sourced. |
+| **Editor panel** | `/tools/` | The editor's interface published as a static file. Not linked from the site; see §10. |
+
+> **Read next.** This README is the human guide. `AI.md` is the complete technical reference — every shortcode attribute, the editor's API and safety model, the page grid, the brand rules and the exact verification commands. When the two overlap, `AI.md` is the detailed one.
 
 ---
 
@@ -58,7 +80,7 @@ hugo server
 
 ```bash
 python tools/editor.py
-# Open http://localhost:3000/ (or whatever port it prints)
+# Open http://localhost:8765/ (the port is printed, and usually opened for you)
 ```
 
 The editor gives you: live preview of the page you are editing, draft saves (nothing touches real files until **Save**), undo/rollback history, theme editor, navigation editor, review dashboard, and a **Publish & PR** button.
@@ -105,6 +127,7 @@ tools/
   uicheck_layout.py       Page-grid assertions
   uicheck_map.py          Map studio assertions
   uicheck_pick.py         Culture-picker assertions
+  uicheck_pdf.py          PDF-export and print-sheet assertions
   brand/build.py          Logo regenerator
 .github/workflows/hugo.yml  Pages build and deploy on push to master/main
 ```
@@ -208,7 +231,7 @@ The editor binds to `127.0.0.1` only. Every API call requires the per-run token 
 
 ## 6. Writing components (shortcodes)
 
-Open `content/en/guide/_index.md` (or visit `/en/guide/` in the running site) for a **live demo** of every component.
+Open `content/en/guide/_index.md` (or visit `/guide/` in the running site) for a **live demo** of every component.
 
 | Component | Syntax |
 |---|---|
@@ -263,6 +286,7 @@ Each culture has a theme entry in `data/themes.json`:
 - `anim`: `fall` (snow), `drift`, `rise` (embers), `none`
 - `pattern`: `none | meander | rosette | zigzag | waves` (decorative top strip)
 - Banner SVGs live in `static/img/`. Rules: `viewBox="0 0 1200 300"`, CSS-only animation, under ~20 KB, dark palette, no external resources.
+- **Never overwrite an existing banner.** Add a new file and point `themes.json` at it.
 - Regenerate the brand (logo, favicon, cover) with `python tools/brand/build.py` (requires `fonttools brotli uharfbuzz`).
 - Regenerate map artwork with `python3 tools/genmaps.py`.
 
@@ -277,7 +301,30 @@ Each culture has a theme entry in `data/themes.json`:
 
 ---
 
-## 8. Deploying to GitHub Pages
+## 8. Exporting a page as PDF
+
+Every page that carries content offers an **Export PDF** control, in both languages: the toolbar button on articles, section lists and the library, and an outline button in the home page's intro (the home page has no toolbar).
+
+It calls the browser's own `window.print()`, so **you** pick *Save as PDF*. There is no renderer, no service, no extra copy of the page and no request anywhere — the export stays as static as the rest of the site, works offline, and cannot drift from what the page shows.
+
+What makes the PDF look like the page is the `@media print` block at the end of `static/css/style.css`:
+
+| What | How |
+|---|---|
+| **Same background and theme** | `print-color-adjust: exact` plus the page's own `--bg`/`--text`, so the culture's colours survive instead of printing a dark site onto white paper. |
+| **Full bleed** | `@page { margin: 0 }`; the inset comes from the body padding instead. A browser clips the background to the page box, so a real page margin would be a white frame around a dark article. |
+| **Chrome dropped** | Header, nav, rails, toolbar, controls, footer and the animated background are hidden. Breadcrumbs stay, so a loose sheet says where it came from. |
+| **Nothing hidden by a control** | Tab strips are flattened — every panel prints, not just the selected one — and scroll rails unclip. A tab or a rail cannot silently drop content. |
+| **Paper-sized art** | The banner prints at its 4:1 ratio, and the home hero gets a fixed cover height instead of its on-paper `clamp()` floor. |
+| **Useful links** | Prose links print their target in parentheses. |
+
+Sources, figures, tables, maps, verse and infoboxes are kept whole, and headings are not left stranded at the foot of a page.
+
+`tools/uicheck_pdf.py` verifies all of it without producing a file: the control must appear once per page and call `window.print()` exactly once, and under `Emulation.setEmulatedMedia(media="print")` the body must still carry the page's own `--bg`, the chrome must be gone, and the hidden panels must be back.
+
+---
+
+## 9. Deploying to GitHub Pages
 
 ### Automatic (recommended)
 
@@ -294,19 +341,19 @@ hugo --gc --minify --baseURL "https://<user>.github.io/<repo>/"
 
 ---
 
-## 9. Tools live demo (editor on GitHub Pages)
+## 10. The published editor panel
 
-The editor (`tools/admin.html`) is a self-contained single-file HTML/JS app. It can be served as a **static page** on GitHub Pages at a separate path (e.g. `/tools/`) for demonstration and UI review purposes — without the Python backend it runs in a read-only preview mode, letting anyone browse the admin UI.
-
-The workflow file `.github/workflows/hugo.yml` copies `tools/admin.html` into the Hugo output under `public/tools/index.html` at build time, so it is automatically deployed alongside the main site at:
+The editor UI (`tools/admin.html`) is one self-contained HTML file with no build step, so it can be published as a plain page alongside the site. The Pages workflow copies it into the Hugo output, so it is automatically deployed at:
 
 ```
 https://<user>.github.io/<repo>/tools/
 ```
 
-> **Note:** In this static-hosted mode the editor has no backend (no `editor.py`), so saves, commits, and preview do not work. It is a UI demo and style reference only.
+Nothing on the public site links to it. Its `<head>` carries `<meta name="robots" content="noindex,nofollow">` and it is kept out of the sitemap, so it is reachable only by typing the URL.
 
-To enable this, the build step in `.github/workflows/hugo.yml` includes:
+Since there is no `editor.py` behind it, `/api/` does not exist. The panel therefore boots into **static mode**: it disables the write controls, hides the empty file panel, and shows one notice saying what this copy is and how to run a real editor (`python tools/editor.py`). It cannot read or change the project — the token it ships with is the literal `__TOKEN__` placeholder, so even a running backend would refuse it.
+
+The build step in `.github/workflows/hugo.yml` does the copy:
 
 ```yaml
 - name: Copy editor UI to /tools/
@@ -315,31 +362,36 @@ To enable this, the build step in `.github/workflows/hugo.yml` includes:
     cp tools/admin.html public/tools/index.html
 ```
 
+> To edit the panel itself, change `tools/admin.html` and run `python tools/editor.py` — the server substitutes a fresh token and the panel boots normally. A local `hugo` build never contains `/tools/`; only the workflow adds it.
+
 ---
 
-## 10. Verification checklist
+## 11. Verification checklist
 
 Run these before opening a pull request:
 
 ```bash
+```bash
 # 1. Hugo builds cleanly
 hugo --quiet --destination /tmp/out
-# Also test with a subdirectory baseURL:
-hugo --quiet --destination /tmp/out --baseURL https://x.github.io/repo/
+# Also test with a subdirectory baseURL (same output tree, different links):
+hugo --quiet --destination /tmp/out-repo --baseURL "https://x.github.io/repo/"
 
 # 2. EN/FA structural parity (must print "0 difference(s)")
 python3 tools/parity.py
 
 # 3. No broken internal links (must print "0 broken")
 python3 tools/linkcheck.py
-# And with subdirectory baseURL:
-python3 tools/linkcheck.py --baseURL=/repo/
+# And against the subdirectory build, with --baseURL= (the "=" form is required):
+python3 tools/linkcheck.py /tmp/out-repo --baseURL=/repo/
 
 # 4. Python syntax check
 python3 -c "import ast; ast.parse(open('tools/editor.py').read())"
 
-# 5. JS syntax check
-node --check tools/admin.html   # (extracts and checks the <script> block)
+# 5. JS syntax check (the editor UI is HTML, so extract its one <script> first:
+#    `node --check` cannot read .html)
+python3 -c "import re;print(re.findall(r'<script>(.*?)</script>',open('tools/admin.html',encoding='utf-8').read(),re.S)[0])" > /tmp/admin.js && node --check /tmp/admin.js
+node --check static/js/site.js && node --check static/js/boot.js
 
 # 6. Page grid (try 1440×980 and 390×844)
 python3 tools/uicheck_layout.py 1440 980
@@ -350,13 +402,47 @@ python3 tools/uicheck_map.py
 
 # 8. Culture picker (needs headless Chrome)
 python3 tools/uicheck_pick.py
+
+# 9. PDF export and print sheet (needs headless Chrome)
+python3 tools/uicheck_pdf.py
+```
+
+The `uicheck_*` scripts drive a real browser, so start a server and point them at it first:
+
+```bash
+hugo --quiet --destination /tmp/out
+python3 -m http.server 8123 --directory /tmp/out &
+UICHECK_URL=http://127.0.0.1:8123/ python3 tools/uicheck_pdf.py
 ```
 
 ---
 
-## 11. Contributing
+## 12. Editing and contributing
 
-Three easy ways:
+### Where to edit what
+
+| To change | Edit |
+|---|---|
+| A page's text | `content/<lang>/…` — the same relative path in `en` and `fa` |
+| A culture's colours, animation, strip pattern or banner | `data/themes.json` |
+| The top navigation | `data/nav.json` |
+| Any interface string (buttons, breadcrumbs, footer) | `i18n/en.toml` **and** `i18n/fa.toml` — never inline text in a template |
+| Styling | `static/css/style.css` |
+| Interaction (slider, notes, culture picker, tabs) | `static/js/site.js` / `boot.js` |
+| Layout, or a new component | `layouts/` |
+| Banners, maps, images, audio | `static/img/…`, `static/audio/…` — banners and maps are generated, see §7 |
+
+### Add a page
+
+1. Create the file in **both** languages with the same relative path, e.g. `content/en/cultures/norse/stories/yggdrasil.md` and `content/fa/cultures/norse/stories/yggdrasil.md`.
+2. Give it front matter: `title`, `tagline`, `grade`, `sources` (at least one), and `reviewed` set to today. Add `wide: true` if it uses a grid or a floated infobox. See §4.
+3. Write the body with the shortcodes in §6; the live demo is `/guide/`.
+4. Run the checks in §11. `python3 tools/parity.py` must print `0 difference(s)`.
+5. Commit one logical change with an imperative message, on a `fix/<topic>` branch.
+
+The **local editor** (§5) does steps 1–3 for you — it has a builder for every component, a live preview, and a **Publish & PR** button.
+
+### Three easy ways to contribute
 
 1. **On any page** — click **Edit this page on GitHub** and propose a change as a pull request.
 2. **Issue** — click **Report a correction** to open a prefilled issue.
@@ -372,7 +458,7 @@ See `CONTRIBUTING.md` for the full guide and `AI.md` for agent-specific instruct
 
 ---
 
-## 12. Licences
+## 13. Licences
 
 | Asset | Licence |
 |---|---|
