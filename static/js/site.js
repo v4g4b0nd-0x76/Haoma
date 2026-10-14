@@ -133,22 +133,21 @@ Q('.note').forEach(function(n){var p=n.querySelector('.note-pop');function fit()
 (function(){
 var Q=function(s,r){return[].slice.call((r||document).querySelectorAll(s))};
 Q('.myth-map').forEach(function(map){
-  var minZ=0.4,maxZ=4,z=1,ox=0,oy=0,dragging=false,lastX=0,lastY=0,lastDist=0,inner=null,moved=false,sx=0,sy=0;
-  /* Wrap bg + regions + pins in one transform layer: everything that carries a
-     position on the artwork (background, country borders, pins, route) has to
-     pan and zoom together, and each one's % coordinates are measured against
-     this box rather than the outer frame. */
+  /* Regional / small maps must not zoom out past fit: that only letterboxes and
+     breaks the engraved frame. The world overview may still go below 1 via
+     data-minzoom (default 1). Pan only when zoomed in enough that there is room. */
+  var minZ=parseFloat(map.getAttribute('data-minzoom'));if(!(minZ>0))minZ=1;
+  var maxZ=4,z=1,ox=0,oy=0,dragging=false,lastX=0,lastY=0,lastDist=0,inner=null,moved=false,sx=0,sy=0;
   var bg=map.querySelector('.myth-map__bg')||map.querySelector('.myth-map__svg');
   var pins=map.querySelector('.myth-map__pins');
   var regions=Q('.myth-region',map);
+  var zooms=Q('[data-zm]',map);
   inner=document.createElement('div');inner.className='myth-map__inner';
   if(bg)inner.appendChild(bg);
   regions.forEach(function(rg){inner.appendChild(rg)});
   if(pins)inner.appendChild(pins);
   map.insertBefore(inner,map.querySelector('.myth-map__ctrl'));
-  /* Fit the layer to the artwork's own aspect ratio: the image is drawn edge-to-edge
-     inside it (object-fit:fill), so pin percentages land on true map positions and
-     zooming out reveals the whole map instead of empty letterbox. */
+  function canPan(){return z>1.001}
   function fit(){
     var nw=0,nh=0,tag=bg?bg.tagName.toLowerCase():'';
     if(tag==='img'){nw=bg.naturalWidth;nh=bg.naturalHeight}
@@ -158,11 +157,15 @@ Q('.myth-map').forEach(function(map){
     if(h>ch){h=ch;w=h*ar}
     inner.style.width=w+'px';inner.style.height=h+'px';
   }
-  /* --iz carries the current zoom to CSS so the hover cards can cancel it and
-     stay the same on-screen size no matter how far the map is zoomed */
-  function band(){map.setAttribute('data-zband',z<0.85?'far':(z>1.6?'near':'mid'))}function apply(){inner.style.transform='translate('+ox+'px,'+oy+'px) scale('+z+')';map.style.setProperty('--iz',z);map.style.setProperty('--izr',1/z);band()}
-  function clamp(){if(z<=1.001){ox=0;oy=0;return}var mw=map.clientWidth*(z-1)/2,mh=map.clientHeight*(z-1)/2;ox=Math.max(-mw,Math.min(mw,ox));oy=Math.max(-mh,Math.min(mh,oy))}
-  /* Print/PDF: snap to identity fit view (CSS also forces transform:none) */
+  /* --izr keeps hover cards the same on-screen size at every zoom */
+  function band(){map.setAttribute('data-zband',z<0.85?'far':(z>1.6?'near':'mid'))}
+  function syncCtrl(){zooms.forEach(function(b){var v=+b.dataset.zm;
+    b.disabled=v===0?z<=1.001&&ox===0&&oy===0:(v<0?z<=minZ+0.001:z>=maxZ-0.001)})}
+  function apply(){clamp();inner.style.transform='translate('+ox+'px,'+oy+'px) scale('+z+')';
+    map.style.setProperty('--iz',z);map.style.setProperty('--izr',1/z);band();
+    map.classList.toggle('myth-map--fixed',!canPan());syncCtrl()}
+  function clamp(){if(!canPan()){ox=0;oy=0;return}var mw=map.clientWidth*(z-1)/2,mh=map.clientHeight*(z-1)/2;
+    ox=Math.max(-mw,Math.min(mw,ox));oy=Math.max(-mh,Math.min(mh,oy))}
   var prePrint={z:1,ox:0,oy:0};
   function mapPrintOn(){prePrint={z:z,ox:ox,oy:oy};z=1;ox=0;oy=0;apply()}
   function mapPrintOff(){z=prePrint.z;ox=prePrint.ox;oy=prePrint.oy;apply()}
@@ -170,20 +173,17 @@ Q('.myth-map').forEach(function(map){
   if(window.matchMedia){var mpm=matchMedia('print');
    if(mpm.addEventListener)mpm.addEventListener('change',function(e){e.matches?mapPrintOn():mapPrintOff()});
    else if(mpm.addListener)mpm.addListener(function(e){e.matches?mapPrintOn():mapPrintOff()})}
-  /* Zoom controls */
-  Q('[data-zm]',map).forEach(function(b){b.onclick=function(){var v=+b.dataset.zm;if(v===0){z=1;ox=0;oy=0}else{z=Math.max(minZ,Math.min(maxZ,z+v*0.4))}apply()}});
-  /* Wheel zoom */
-  map.addEventListener('wheel',function(e){e.preventDefault();z=Math.max(minZ,Math.min(maxZ,z-e.deltaY*0.001));clamp();apply()},{passive:false});
-  /* Mouse drag — you can start a drag on a region border or a pin, so remember where
-     the pointer went down and swallow the click that follows a real drag: panning the
-     map must never follow a link. */
-  map.addEventListener('mousedown',function(e){sx=e.clientX;sy=e.clientY;moved=false;if(e.target.closest('.myth-pin,.myth-map__zoom'))return;dragging=true;lastX=e.clientX;lastY=e.clientY;e.preventDefault()});
-  document.addEventListener('mousemove',function(e){if(!dragging)return;if(Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)>6)moved=true;ox+=e.clientX-lastX;oy+=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;clamp();apply()});
+  zooms.forEach(function(b){b.onclick=function(){var v=+b.dataset.zm;if(v===0){z=1;ox=0;oy=0}else{z=Math.max(minZ,Math.min(maxZ,z+v*0.4))}apply()}});
+  map.addEventListener('wheel',function(e){e.preventDefault();z=Math.max(minZ,Math.min(maxZ,z-e.deltaY*0.001));apply()},{passive:false});
+  map.addEventListener('mousedown',function(e){if(!canPan())return;sx=e.clientX;sy=e.clientY;moved=false;if(e.target.closest('.myth-pin,.myth-map__zoom'))return;dragging=true;lastX=e.clientX;lastY=e.clientY;e.preventDefault()});
+  document.addEventListener('mousemove',function(e){if(!dragging)return;if(Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)>6)moved=true;ox+=e.clientX-lastX;oy+=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;apply()});
   document.addEventListener('mouseup',function(){dragging=false});
   map.addEventListener('click',function(e){if(moved){e.preventDefault();e.stopPropagation();moved=false}},true);
-  /* Touch pan + pinch-zoom */
   map.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;moved=false;if(e.touches.length===2){lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)}else if(e.touches.length===1){lastX=e.touches[0].clientX;lastY=e.touches[0].clientY}},{passive:true});
-  map.addEventListener('touchmove',function(e){if(Math.abs(e.touches[0].clientX-sx)+Math.abs(e.touches[0].clientY-sy)>8)moved=true;if(e.touches.length===2){var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);z=Math.max(minZ,Math.min(maxZ,z*(d/lastDist)));lastDist=d;clamp();apply()}else if(e.touches.length===1){ox+=e.touches[0].clientX-lastX;oy+=e.touches[0].clientY-lastY;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;clamp();apply()}e.preventDefault()},{passive:false});
+  map.addEventListener('touchmove',function(e){if(Math.abs(e.touches[0].clientX-sx)+Math.abs(e.touches[0].clientY-sy)>8)moved=true;
+    if(e.touches.length===2){var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);z=Math.max(minZ,Math.min(maxZ,z*(d/lastDist)));lastDist=d;apply()}
+    else if(e.touches.length===1&&canPan()){ox+=e.touches[0].clientX-lastX;oy+=e.touches[0].clientY-lastY;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;apply()}
+    e.preventDefault()},{passive:false});
   /* Pin tooltip edge-fitting: slide sideways to stay in the frame, and open below
      the pin when the frame's top edge would cut the card off */
   Q('.myth-pin',map).forEach(function(pin){var pop=pin.querySelector('.myth-pin__pop');if(!pop)return;

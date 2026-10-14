@@ -20,6 +20,9 @@
               or explicit points route="58,54 54,47 28,38" (percent of the map box)
     pulse   — "true" (default) makes every pin ring pulse; pulse="false" draws the
               pins still (used on the overview map, where points are places, not events)
+    minzoom — lowest zoom (default "1"). At 1 the map cannot zoom out past fit, which
+              keeps regional maps from letterboxing; pass a value below 1 only when the
+              overview should pull farther back. Pan is off until the view is zoomed in.
 
   Pin lines (inside the shortcode body):
     pin x="25%" y="60%" label="Place name" note="Hover text" color="gold|fire|blood|teal|silver" href="/optional/page/" /
@@ -54,11 +57,15 @@
 {{- $caption := .Get "caption" | default ""  | printf "%v" -}}
 {{- $route   := .Get "route"   | default ""  | printf "%v" -}}
 {{- $pulse   := .Get "pulse"   | default "true" | printf "%v" -}}
+{{- $minzoom := .Get "minzoom" | default "1" | printf "%v" -}}
+{{- /* Regional maps stay at fit: zooming out only letterboxes. The world overview
+       may pass minzoom="0.4" if a wider pull-back is wanted. */ -}}
+{{- if not (findRE `^[0-9]+(\.[0-9]+)?$` $minzoom) }}{{ $minzoom = "1" }}{{ end -}}
 {{- $pts     := slice -}}
 {{- $inner   := .Inner -}}
 
 <figure class="myth-map-wrap" style="width:{{ $w }}">
-<div class="myth-map{{ if eq $theme "sepia" }} myth-map--sepia{{ end }}{{ if eq $pulse "false" }} myth-map--still{{ end }}" id="{{ $id }}" style="height:{{ $h }}" role="region" aria-label="{{ i18n "mapLabel" | default "Interactive myth map" }}" tabindex="0">
+<div class="myth-map myth-map--fixed{{ if eq $theme "sepia" }} myth-map--sepia{{ end }}{{ if eq $pulse "false" }} myth-map--still{{ end }}" id="{{ $id }}" style="height:{{ $h }}" data-minzoom="{{ $minzoom }}" role="region" aria-label="{{ i18n "mapLabel" | default "Interactive myth map" }}" tabindex="0">
 
   {{- if $src }}
   <img class="myth-map__bg" src="{{ $src | relURL }}" alt="" aria-hidden="true" draggable="false">

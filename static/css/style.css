@@ -329,6 +329,8 @@ html[dir=rtl] .sm-prev,html[dir=rtl] .sm-next{transform:scaleX(-1)}
 .myth-map__print-notes{display:none}
 .myth-map{position:relative;overflow:hidden;border-radius:14px;border:2px solid color-mix(in srgb,var(--accent) 35%,var(--border));box-shadow:0 16px 48px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.06);background:radial-gradient(130% 130% at 50% 0%,color-mix(in srgb,var(--surface) 75%,#000) 0%,var(--surface) 70%);cursor:grab;user-select:none;touch-action:none;display:flex;align-items:center;justify-content:center}
 .myth-map:active{cursor:grabbing}
+/* at fit (or when there is nowhere to pan) the map is fixed: no grab cursor */
+.myth-map--fixed,.myth-map--fixed:active{cursor:default}
 .myth-map__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;pointer-events:none;display:block;border-radius:2px}
 .myth-map__svg{position:absolute;inset:0;width:100%;height:100%}
 /* transform wrapper for pan/zoom — JS sizes it to the artwork's aspect ratio and
@@ -398,6 +400,7 @@ html[lang=fa] .myth-region__pop b{letter-spacing:0;font-family:var(--ui)}
 .myth-map__ctrl{position:absolute;inset-inline-end:14px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:6px;z-index:5}
 .myth-map__zoom{width:36px;height:36px;border-radius:8px;border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));background:color-mix(in srgb,var(--surface) 85%,transparent);color:var(--text);font-size:1.3rem;cursor:pointer;line-height:1;display:flex;align-items:center;justify-content:center;transition:border-color .15s,background .15s;backdrop-filter:blur(4px)}
 .myth-map__zoom:hover{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 20%,var(--surface));color:var(--accent)}
+.myth-map__zoom:disabled{opacity:.35;cursor:default;pointer-events:none}
 /* sepia theme overrides */
 .myth-map--sepia{--accent:#a0702a;border-color:color-mix(in srgb,#a0702a 40%,var(--border))}
 .myth-map--sepia .myth-pin__label{color:#2a1808;text-shadow:0 1px 3px rgba(255,220,160,.7)}
