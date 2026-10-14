@@ -382,7 +382,6 @@ The build step in `.github/workflows/hugo.yml` does the copy:
 Run these before opening a pull request:
 
 ```bash
-```bash
 # 1. Hugo builds cleanly
 hugo --quiet --destination /tmp/out
 # Also test with a subdirectory baseURL (same output tree, different links):
