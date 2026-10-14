@@ -20,7 +20,8 @@ import os
 import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-GEO = os.path.join(ROOT, "tools", "geo", "ne_110m_land.geojson")
+GEO = os.path.join(ROOT, "tools", "geo", "ne_50m_land.geojson")
+GEO_LO = os.path.join(ROOT, "tools", "geo", "ne_110m_land.geojson")  # fallback
 OUT = os.path.join(ROOT, "static", "img", "maps")
 
 GOLD = "#c9a45c"
@@ -52,8 +53,29 @@ def pct(lon, lat, box):
 # ---------------------------------------------------------------- geometry
 
 
-def ring_path(ring, box, w, h, pad, copies=(-360, 0, 360)):
+def simplify_ring(ring, tol_deg=0.12):
+    """Drop nearly-collinear vertices so 50m coasts stay detailed but SVG-sized."""
+    if len(ring) < 8:
+        return ring
+    out = [ring[0]]
+    for i in range(1, len(ring) - 1):
+        ax, ay = out[-1]
+        bx, by = ring[i]
+        cx, cy = ring[i + 1]
+        # perpendicular distance of B from AC in degrees
+        dx, dy = cx - ax, cy - ay
+        L2 = dx * dx + dy * dy or 1.0
+        t = max(0.0, min(1.0, ((bx - ax) * dx + (by - ay) * dy) / L2))
+        px, py = ax + t * dx, ay + t * dy
+        if (bx - px) ** 2 + (by - py) ** 2 > tol_deg * tol_deg:
+            out.append(ring[i])
+    out.append(ring[-1])
+    return out if len(out) >= 4 else ring
+
+
+def ring_path(ring, box, w, h, pad, copies=(-360, 0, 360), tol_deg=0.12):
     """Path for one ring; drawn 3x so anything crossing the antimeridian stays joined."""
+    ring = simplify_ring(ring, tol_deg=tol_deg)
     d = []
     for shift in copies:
         pts = []
@@ -71,38 +93,59 @@ def poly_path(points, box, w, h, pad, close=False):
     return d + ("Z" if close else "")
 
 
-def chevrons(points, box, w, h, pad, step=16):
-    """Mountain hatch: little peaks walked along a lon/lat line."""
+def chevrons(points, box, w, h, pad, step=11):
+    """Fantasy-atlas mountains: peaked ridges with one-sided shade hatch."""
     out = []
-    total = 0.0
     acc = 0.0
     prev = None
     for lon, lat in points:
-        p = project(lon, lat, box, w, h, pad)
+        pt = project(lon, lat, box, w, h, pad)
         if prev:
-            seg = math.hypot(p[0] - prev[0], p[1] - prev[1])
-            total += seg
-        prev = p
-    prev = None
-    for lon, lat in points:
-        p = project(lon, lat, box, w, h, pad)
-        if prev:
-            seg = math.hypot(p[0] - prev[0], p[1] - prev[1])
-            dx, dy = (p[0] - prev[0]) / (seg or 1), (p[1] - prev[1]) / (seg or 1)
+            seg = math.hypot(pt[0] - prev[0], pt[1] - prev[1])
+            dx, dy = (pt[0] - prev[0]) / (seg or 1), (pt[1] - prev[1]) / (seg or 1)
             while acc < seg:
-                t = acc / (seg or 1)
                 x = prev[0] + dx * acc
                 y = prev[1] + dy * acc
-                nx, ny = -dy, dx  # perpendicular
-                s = 4.6
-                out.append("M%.1f %.1fL%.1f %.1fL%.1f %.1f" % (
-                    x - nx * s + dx * 0.5, y - ny * s + dy * 0.5,
-                    x + dx * s, y + dy * s,
-                    x + nx * s + dx * 0.5, y + ny * s + dy * 0.5))
+                nx, ny = -dy, dx
+                s = 5.8
+                # main peak triangle
+                out.append("M%.1f %.1fL%.1f %.1fL%.1f %.1fZ" % (
+                    x - nx * s * .15 + dx * .2, y - ny * s * .15 + dy * .2,
+                    x + nx * s * .05 - dx * s, y + ny * s * .05 - dy * s,
+                    x + nx * s + dx * .2, y + ny * s + dy * .2))
+                # shade ticks on the "south" face
+                for k in (.35, .55, .75):
+                    bx = x + nx * s * k * .55 + dx * .15
+                    by = y + ny * s * k * .55 + dy * .15
+                    out.append("M%.1f %.1fL%.1f %.1f" % (
+                        bx, by, bx + nx * s * .35, by + ny * s * .35))
                 acc += step
             acc -= seg
-        prev = p
+        prev = pt
     return "".join(out)
+
+
+def tree_mark(kind="pine"):
+    """Small biome tree stamp centred at origin (~10 unit box)."""
+    g = GOLD
+    if kind == "palm":
+        return (
+            '<path d="M0 5V-2" fill="none" stroke="%s" stroke-width="1.1" stroke-linecap="round"/>'
+            '<path d="M0-2C-3-4-5-3.5-6.5-2.5M0-2C3-4 5-3.5 6.5-2.5M0-2C-2-5.5 0-7 0-7M0-2C2-5.5 0-7 0-7M0-2C-4-5-2.5-6.5-1-7M0-2C4-5 2.5-6.5 1-7" fill="none" stroke="%s" stroke-width=".85" stroke-linecap="round"/>'
+        ) % (g, g)
+    if kind == "deciduous":
+        return (
+            '<path d="M0 5V0" fill="none" stroke="%s" stroke-width="1.05" stroke-linecap="round"/>'
+            '<path d="M0-4.5C2.8-4.5 4.2-2.6 4.2-.6C4.2 1.4 2.4 2.6 0 2.6C-2.4 2.6-4.2 1.4-4.2-.6C-4.2-2.6-2.8-4.5 0-4.5Z" fill="#0a0e12" stroke="%s" stroke-width=".9"/>'
+            '<path d="M-1.5-.2h3M0-2.2v2.2" fill="none" stroke="%s" stroke-width=".55" opacity=".7"/>'
+        ) % (g, g, g)
+    # pine (default)
+    return (
+        '<path d="M0 5.2V1" fill="none" stroke="%s" stroke-width="1.05" stroke-linecap="round"/>'
+        '<path d="M0-5.5L3.6-1.2H-3.6Z" fill="#0a0e12" stroke="%s" stroke-width=".9" stroke-linejoin="round"/>'
+        '<path d="M0-3.2L4.2.8H-4.2Z" fill="#0a0e12" stroke="%s" stroke-width=".9" stroke-linejoin="round"/>'
+        '<path d="M0-1L4.6 2.8H-4.6Z" fill="#0a0e12" stroke="%s" stroke-width=".9" stroke-linejoin="round"/>'
+    ) % (g, g, g, g)
 
 
 # ---------------------------------------------------------------- the maps
@@ -170,9 +213,19 @@ MAPS = {
         ],
         # mythical beasts (decorative - the world sheet stays unlabelled)
         creatures=[
-            ("jormungandr", -38, 8, 2.0, 0),
-            ("nidhogg", 76, 59, 1.85, 1),
-            ("simorgh", 80, -10, 1.75, 0),
+            ("jormungandr", -32, 5, 2.6, 0),
+            ("nidhogg", 95, 55, 2.4, 1),
+            ("simorgh", 72, -18, 2.3, 0),
+        ],
+        forests=[
+            # Amazonia palms
+            (-62, -2, 1.1, "palm"), (-58, -4, 1.0, "palm"), (-55, -1, .95, "palm"),
+            (-50, 2, 1.0, "palm"), (-65, -8, .9, "palm"),
+            # northern pines
+            (-100, 55, 1.0, "pine"), (-90, 52, .95, "pine"), (25, 60, 1.0, "pine"),
+            (40, 58, .9, "pine"), (90, 58, .95, "pine"),
+            # India / SE Asia
+            (78, 18, .9, "deciduous"), (100, 15, .95, "palm"), (110, 20, .9, "palm"),
         ],
         graticule=30,
     ),
@@ -210,9 +263,14 @@ MAPS = {
             [(47, 32.5), (48.5, 31.6), (49.5, 30.5)],
         ],
         creatures=[
-            ("humbaba", 36.05, 36.25, 1.65, 0, "HUMBABA"),
-            ("mushussu", 45.6, 32.9, 1.6, 0, "MUSHUSSU"),
-            ("anzu", 47.6, 31.0, 1.55, 0, "ANZU"),
+            ("humbaba", 36.05, 36.25, 1.85, 0, "HUMBABA"),
+            ("mushussu", 45.6, 32.9, 1.8, 0, "MUSHUSSU"),
+            ("anzu", 47.6, 31.0, 1.75, 0, "ANZU"),
+        ],
+        forests=[
+            (35.8, 34.2, .95, "pine"), (36.4, 35.0, .85, "pine"),  # cedar belt
+            (37.2, 34.6, .9, "pine"), (46.5, 35.5, .8, "deciduous"),
+            (42.5, 36.2, .75, "deciduous"),
         ],
         graticule=5,
     ),
@@ -250,9 +308,14 @@ MAPS = {
             [(49.6, 33.4), (51.6, 32.4), (53, 32.2)],
         ],
         creatures=[
-            ("simorgh", 52.6, 36.7, 2.05, 0, "SIMORGH"),
-            ("dahaka", 46.3, 33.6, 1.85, 1, "DAHAKA"),
-            ("daeva", 63.5, 30.6, 1.65, 1, "DAEVA"),
+            ("simorgh", 52.6, 36.7, 2.25, 0, "SIMORGH"),
+            ("dahaka", 46.3, 33.6, 2.05, 1, "DAHAKA"),
+            ("daeva", 63.5, 30.6, 1.85, 1, "DAEVA"),
+        ],
+        forests=[
+            (49.5, 36.0, .85, "pine"), (51.0, 36.2, .8, "pine"), (53.5, 36.3, .9, "pine"),
+            (46.0, 34.5, .75, "deciduous"), (47.5, 33.5, .7, "deciduous"),
+            (65.5, 34.5, .8, "deciduous"), (67.0, 35.0, .75, "deciduous"),
         ],
         graticule=5,
     ),
@@ -290,9 +353,14 @@ MAPS = {
             [(74.4, 17), (77.6, 16.4), (80.6, 15.6), (83.4, 15.6)],
         ],
         creatures=[
-            ("garuda", 80.2, 28.2, 1.9, 0, "GARUDA"),
-            ("naga", 86.8, 23.6, 1.8, 0, "NAGA"),
-            ("makara", 73.5, 9.5, 1.7, 1, "MAKARA"),
+            ("garuda", 80.2, 28.2, 2.1, 0, "GARUDA"),
+            ("naga", 86.8, 23.6, 2.0, 0, "NAGA"),
+            ("makara", 73.5, 9.5, 1.9, 1, "MAKARA"),
+        ],
+        forests=[
+            (77, 22, .85, "deciduous"), (79, 20, .8, "deciduous"), (82, 21, .9, "deciduous"),
+            (88, 23, .85, "palm"), (90, 22, .8, "palm"), (74, 15, .75, "palm"),
+            (76, 12, .7, "palm"), (85, 18, .8, "deciduous"),
         ],
         graticule=5,
     ),
@@ -326,10 +394,14 @@ MAPS = {
             [(21.6, 42.6), (21.4, 41.4), (21.6, 40.6)],
         ],
         creatures=[
-            ("scylla", 16.4, 38.3, 1.45, 0, "SCYLLA"),
-            ("python", 22.1, 39.1, 1.4, 1, "PYTHON"),
-            ("minotaur", 25.9, 35.3, 1.4, 0, "MINOTAUR"),
-            ("chimera", 29.9, 36.9, 1.35, 1, "CHIMERA"),
+            ("scylla", 16.4, 38.3, 1.65, 0, "SCYLLA"),
+            ("python", 22.1, 39.1, 1.6, 1, "PYTHON"),
+            ("minotaur", 25.9, 35.3, 1.55, 0, "MINOTAUR"),
+            ("chimera", 29.9, 36.9, 1.5, 1, "CHIMERA"),
+        ],
+        forests=[
+            (21.5, 39.5, .75, "pine"), (22.2, 40.2, .7, "pine"), (30.5, 37.8, .7, "pine"),
+            (22.8, 38.2, .65, "deciduous"), (27.5, 38.5, .65, "deciduous"),
         ],
         graticule=5,
     ),
@@ -364,9 +436,14 @@ MAPS = {
             [(30, 60.6), (28.6, 60.4), (27.4, 60.4)],
         ],
         creatures=[
-            ("jormungandr", 3.6, 58.6, 1.85, 0, "JORMUNGANDR"),
-            ("fenrir", 14.5, 60.3, 1.65, 1, "FENRIR"),
-            ("nidhogg", 23, 66.5, 1.7, 0, "NIDHOGG"),
+            ("jormungandr", 3.6, 58.6, 2.15, 0, "JORMUNGANDR"),
+            ("fenrir", 14.5, 60.3, 1.9, 1, "FENRIR"),
+            ("nidhogg", 23, 66.5, 1.95, 0, "NIDHOGG"),
+        ],
+        forests=[
+            (10, 61, .9, "pine"), (12, 63, .85, "pine"), (15, 64.5, .9, "pine"),
+            (18, 62, .8, "pine"), (25, 65, .85, "pine"), (27, 63, .8, "pine"),
+            (8, 58, .75, "deciduous"), (-18, 64.5, .7, "pine"),
         ],
         graticule=5,
     ),
@@ -431,7 +508,7 @@ def build(name, spec, lang):
     A = o.append
 
     A('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 %d %d" preserveAspectRatio="xMidYMid slice" role="img" aria-label="%s">' % (w, h, esc(lang_title)))
-    A('<!-- %s - generated by tools/genmaps.py from Natural Earth 1:110m land (public domain). Dark sea, olive land, gold coast; compass, cartouche and scale bar for the house art direction. No scripts, no external assets. -->' % lang_title)
+    A('<!-- %s - generated by tools/genmaps.py from Natural Earth 1:50m land (public domain). Dark sea, olive land, gold coast; compass, cartouche and scale bar for the house art direction. No scripts, no external assets. -->' % lang_title)
     A('<style>.lb{font-family:Georgia,"Times New Roman",serif;letter-spacing:.06em;fill:%s}.sea-lb{font-family:Georgia,"Times New Roman",serif;letter-spacing:.05em;fill:%s;font-style:italic}@media (prefers-reduced-motion:reduce){*{animation:none}}</style>' % (GOLD, SEA_TEXT))
     if lang == "fa":
         A('<style>.lb,.sea-lb{font-family:Vazirmatn,"Segoe UI",Tahoma,sans-serif;letter-spacing:0;direction:rtl}</style>')
@@ -439,13 +516,9 @@ def build(name, spec, lang):
     A('<linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>' % (SEA, SEA2))
     A('<linearGradient id="land" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>' % (LAND, LAND2))
     A('<radialGradient id="vign" cx="50%" cy="50%" r="72%"><stop offset="0" stop-color="#02040a" stop-opacity="0"/><stop offset="100%" stop-color="#02040a" stop-opacity=".78"/></radialGradient>')
-    A('<pattern id="wav" width="30" height="16" patternUnits="userSpaceOnUse"><path d="M0 9q7.5-9 15 0t15 0" fill="none" stroke="#3d6480" stroke-width="1" opacity=".13"/></pattern>')
-    # a gentler coast wobble: the old 3.4-unit displacement at 0.03 frequency
-    # chewed up small islands, so the displacement is smaller and its wavelength
-    # longer (islands survive, and the coast reads as drawn rather than noisy)
-    A('<filter id="rough" x="-4%" y="-4%" width="108%" height="108%"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="2" seed="7" result="n"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G"/></filter>')
-    # soft dark patch behind a beast, so its gold line art still reads where it
-    # crosses olive land instead of drowning in it
+    A('<pattern id="wav" width="22" height="12" patternUnits="userSpaceOnUse"><path d="M0 7q5.5-6 11 0t11 0" fill="none" stroke="#3a6a88" stroke-width=".9" opacity=".22"/><path d="M0 3q5.5-4 11 0t11 0" fill="none" stroke="#2f5570" stroke-width=".7" opacity=".12"/></pattern>')
+    A('<pattern id="swell" width="48" height="28" patternUnits="userSpaceOnUse"><path d="M4 18c3-2 6-2 9 0M20 12c3-2 6-2 9 0M32 20c3-2 6-2 9 0" fill="none" stroke="#4a7a96" stroke-width=".8" opacity=".16"/></pattern>')
+    # soft dark patch behind a beast
     A('<radialGradient id="halo" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#02040a" stop-opacity=".62"/><stop offset="100%" stop-color="#02040a" stop-opacity="0"/></radialGradient>')
     A('<clipPath id="inner"><rect x="%d" y="%d" width="%d" height="%d" rx="4"/></clipPath>' % (pad, pad, w - 2 * pad, h - 2 * pad))
     A('</defs>')
@@ -453,9 +526,14 @@ def build(name, spec, lang):
     # sea
     A('<rect width="%d" height="%d" fill="url(#sea)"/>' % (w, h))
     A('<rect x="%d" y="%d" width="%d" height="%d" fill="url(#wav)"/>' % (pad, pad, w - 2 * pad, h - 2 * pad))
+    A('<rect x="%d" y="%d" width="%d" height="%d" fill="url(#swell)"/>' % (pad, pad, w - 2 * pad, h - 2 * pad))
 
-    # land
-    geo = json.load(open(GEO))
+    # land — world sheet stays on 110m (file size); regional sheets use 50m coasts
+    use_hi = (box[1] - box[0]) < 80 and os.path.exists(GEO)
+    geo = json.load(open(GEO if use_hi else (GEO_LO if os.path.exists(GEO_LO) else GEO)))
+    # tighter simplify on wide sheets
+    _span = box[1] - box[0]
+    tol = 0.25 if _span >= 80 else (0.1 if _span >= 30 else 0.06)
     paths = []
     for feat in geo["features"]:
         geom = feat["geometry"]
@@ -464,7 +542,7 @@ def build(name, spec, lang):
             for ring in poly:
                 if max(p[1] for p in ring) < box[2] - 2 or min(p[1] for p in ring) > box[3] + 2:
                     continue
-                paths.append(ring_path(ring, box, w, h, pad))
+                paths.append(ring_path(ring, box, w, h, pad, tol_deg=tol))
     A('<g clip-path="url(#inner)">')
 
     # graticule and rhumb lines go UNDER the land: a grid drawn across the coast
@@ -492,16 +570,21 @@ def build(name, spec, lang):
         rays.append("M%d %dl%.0f %.0f" % (cx, cy, math.cos(a) * w, math.sin(a) * w))
     A('<path d="%s" fill="none" stroke="%s" stroke-width=".8" opacity=".16"/>' % ("".join(rays), GOLD))
 
-    # land
-    A('<g filter="url(#rough)">')
-    A('<path fill="url(#land)" fill-rule="evenodd" stroke="%s" stroke-width="1.2" stroke-linejoin="round" d="%s"/>' % (GOLD, "".join(paths)))
-    A('</g>')
+    # land + coastal echo (atlas double-coast)
+    A('<path fill="url(#land)" fill-rule="evenodd" stroke="%s" stroke-width="1.55" stroke-linejoin="round" d="%s"/>' % (GOLD, "".join(paths)))
+    A('<path fill="none" fill-rule="evenodd" stroke="%s" stroke-width=".55" stroke-linejoin="round" opacity=".35" d="%s"/>' % (GOLD, "".join(paths)))
 
     # rivers and mountain hatches sit ON the land
     for riv in spec["rivers"]:
-        A('<path d="%s" fill="none" stroke="#41789b" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>' % poly_path(riv, box, w, h, pad))
+        A('<path d="%s" fill="none" stroke="#3d7a9c" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>' % poly_path(riv, box, w, h, pad))
     for rng in spec["ranges"]:
-        A('<path d="%s" fill="none" stroke="#0c120a" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity=".85"/>' % chevrons(rng, box, w, h, pad))
+        A('<path d="%s" fill="#0a0e12" fill-opacity=".55" stroke="#0a0e12" stroke-width="1.05" stroke-linejoin="round" opacity=".92"/>' % chevrons(rng, box, w, h, pad))
+    # biome trees
+    for fr in spec.get("forests", []):
+        flon, flat, fs = fr[0], fr[1], fr[2]
+        fkind = fr[3] if len(fr) > 3 else "pine"
+        fx, fy = project(flon, flat, box, w, h, pad)
+        A('<g transform="translate(%.1f %.1f) scale(%.2f)" opacity=".82">%s</g>' % (fx, fy, fs * 1.15, tree_mark(fkind)))
     A('</g>')
 
     # vignette: it darkens the geography towards the frame, so it must be painted
@@ -525,7 +608,7 @@ def build(name, spec, lang):
         kind, clon, clat, s, flip = c[:5]
         label = c[5] if len(c) > 5 else None
         x, y = project(clon, clat, box, w, h, pad)
-        S = s * 1.28                      # a touch larger for presence
+        S = s * 1.45                      # larger for filled bestiary presence
         sx = -S if flip else S
         A('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="url(#halo)"/>'
           % (x, y, 19 * S, 15 * S))
