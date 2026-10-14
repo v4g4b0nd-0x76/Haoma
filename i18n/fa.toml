@@ -60,6 +60,10 @@
   other = "گزارش اشتباه"
 [cHistory]
   other = "تاریخچهٔ صفحه"
+[exportPdf]
+  other = "خروجی PDF"
+[exportPdfHint]
+  other = "خروجی این صفحه به‌صورت PDF (پنجرهٔ چاپ مرورگر باز می‌شود؛ «ذخیره به‌عنوان PDF» را برگزینید)"
 
 [mapLabel]
   other = "نقشهٔ تعاملی اسطوره"

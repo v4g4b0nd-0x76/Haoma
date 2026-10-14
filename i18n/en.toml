@@ -60,6 +60,10 @@
   other = "Report a correction"
 [cHistory]
   other = "Page history"
+[exportPdf]
+  other = "Export PDF"
+[exportPdfHint]
+  other = "Export this page as a PDF (opens your browser's print dialog; choose Save as PDF)"
 
 [mapLabel]
   other = "Interactive myth map"

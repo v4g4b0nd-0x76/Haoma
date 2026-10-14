@@ -6,7 +6,11 @@ var act={
  nav:function(){P.nav=D.dataset.nav==='hidden'?'shown':'hidden';D.dataset.nav=P.nav;if(P.nav==='shown'){P.focus=false;D.dataset.focus='0'}},
  dock:function(){P.dock=D.dataset.dock==='end'?'start':'end';D.dataset.dock=P.dock},
  minus:function(){size(-.1)},plus:function(){size(.1)},
- focus:function(){P.focus=D.dataset.focus!=='1';D.dataset.focus=P.focus?'1':'0'}};
+ focus:function(){P.focus=D.dataset.focus!=='1';D.dataset.focus=P.focus?'1':'0'},
+ /* PDF export = the browser's own print dialog: nothing leaves the page, and the
+    print block in style.css keeps the theme. Safari and older FDMs print on the
+    first call, so no re-entrancy guard is needed here. */
+ pdf:function(){window.print()}};
 function size(d){P.size=Math.min(1.7,Math.max(1,Math.round(((P.size||1.2)+d)*100)/100));D.style.setProperty('--read',P.size+'rem')}
 var hasSide=!!document.querySelector('aside.side');
 Q('[data-act]').forEach(function(b){if(!hasSide&&/nav|dock/.test(b.dataset.act))b.hidden=true;b.onclick=function(){act[b.dataset.act]();save()}});

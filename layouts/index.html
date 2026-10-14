@@ -12,7 +12,7 @@
 </section>
 <section class="wrap slider"><div class="slider-head"><h2>{{ i18n "latest" }}</h2><div class="arrows"><button type="button" data-dir="-1" aria-label="{{ i18n "prev" }}">‹</button><button type="button" data-dir="1" aria-label="{{ i18n "next" }}">›</button></div></div>
 <ul class="cards rail">{{ range first 8 (where site.RegularPages "Section" "episodes") }}{{ partial "card.html" . }}{{ end }}</ul></section>
-<section class="wrap intro"><h2>{{ i18n "introTitle" }}</h2><p>{{ i18n "introText" }}</p></section>
+<section class="wrap intro"><h2>{{ i18n "introTitle" }}</h2><p>{{ i18n "introText" }}</p><button type="button" class="btn intro__pdf" data-act="pdf" title="{{ i18n "exportPdfHint" }}" aria-label="{{ i18n "exportPdf" }}">{{ i18n "exportPdf" }}</button></section>
 <section class="wrap"><h2>{{ i18n "choose" }}</h2>
 <div class="panels">{{ range $cs }}<a class="panel" data-culture="{{ .Params.culture }}" href="{{ .RelPermalink }}">{{ with .Params.culture }}{{ $b := (index site.Data.themes . | default dict).banner }}{{ if $b }}<img src="{{ printf "img/%s" $b | relURL }}" alt="" loading="lazy">{{ end }}{{ end }}<div><h3>{{ .Title }}</h3><p>{{ .Params.tagline }}</p></div></a>{{ end }}</div></section>
 <section class="wrap"><h2>{{ i18n "explore" }}</h2>

@@ -130,6 +130,9 @@ footer{text-align:center;color:var(--muted);padding:var(--s4) var(--s3);font-siz
 .btn{border:1px solid var(--accent);padding:6px 20px;border-radius:99px;text-decoration:none;font-size:.85rem;text-transform:uppercase;letter-spacing:.08em}
 .btn:hover{background:var(--accent);color:#111}
 .intro{padding-top:var(--s5);text-align:center}.intro p{max-width:60ch;margin:0 auto;font-size:1.15rem;color:var(--muted)}
+/* the home page has no toolbar, so its export control is the .btn outline; a
+   <button> needs the bits .btn leaves to the <a> defaults spelled out */
+.intro__pdf{margin-top:var(--s3);background:transparent;color:var(--accent);font-family:var(--ui);cursor:pointer}
 .panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--s3)}
 .panel{position:relative;min-height:320px;display:flex;align-items:flex-end;border-radius:12px;overflow:hidden;border:1px solid var(--border);text-decoration:none;color:var(--text);background:var(--surface)}
 .panel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s}
@@ -443,4 +446,61 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
   /* a Markdown table has no wrapper element, so let the table itself scroll
      rather than let it drag the whole page sideways */
   article table{display:block;overflow-x:auto;max-width:100%}
+}
+
+/* ---------- print / PDF export ----------
+   The export button calls window.print(); the reader's own "Save as PDF" makes
+   the file. That keeps the promise of "same background and theme" without a
+   renderer, a service or a second copy of the site: print-color-adjust forces
+   the themed backgrounds and colours to survive, and only the interactive
+   chrome (header, rails, toolbar, controls, footer, animated background) is
+   dropped, so what prints is the article on the culture's own backdrop.
+
+   The page margin is zeroed and the inset comes from the body padding instead.
+   That is not a style choice: a browser clips the canvas background to the page
+   box, so a real @page margin is a white frame around a dark article (measured
+   at 14mm: the margin rasterises 255,255,255 while the content is 20,22,26).
+   With margin 0 the culture's --bg covers the whole sheet. The horizontal inset
+   repeats on every page; a vertical one cannot, because no CSS repeats padding
+   across pages, so page breaks are steered by the break rules at the end. */
+@page{margin:0}
+@media print{
+  html,body{background:var(--bg)!important;color:var(--text)!important;
+    -webkit-print-color-adjust:exact;print-color-adjust:exact}
+  body{padding:12mm 14mm}
+  /* interactive-only furniture: none of it means anything on paper */
+  .bg,.top,.motif,.tools,.ctrl,.navtab,aside.side,aside.toc,footer,
+  .contribute,.myth-map__ctrl,.myth-pin__ring,[data-act],.arrows,.sm-dots,
+  .sm-prev,.sm-next{display:none!important}
+  /* the rails are gone, so the grid collapses to one full-measure column */
+  .layout{display:block;max-width:none;margin:0;padding:0}
+  article,article.wide{max-width:none;grid-column:auto;font-size:11.5pt;line-height:1.62}
+  article h1{font-size:20pt;line-height:1.2}
+  article h2{font-size:14pt}
+  article h3{font-size:12pt}
+  /* keep the page's own banner art whole: every banner is 1200x300, so a 4:1
+     ratio fills the printed width exactly instead of a fixed height that crops */
+  .hero-art{height:auto;aspect-ratio:4/1;break-inside:avoid;break-after:avoid}
+  /* a bare URL is useless on paper, so prose links carry their target */
+  article p a[href^="http"]::after,article li a[href^="http"]::after,
+  article td a[href^="http"]::after{content:" (" attr(href) ")";font-size:.8em;
+    color:var(--muted);word-break:break-all}
+  /* never split these across pages: a half table or a beheaded heading reads as
+     an error, not as a deliberate break */
+  h1,h2,h3{break-after:avoid}
+  figure,table,pre,blockquote,.sources,.verse,.infobox,.fig,.grid-md,
+  .slider-md,.myth-map-wrap,.cards li{break-inside:avoid}
+  img,svg,video{max-width:100%!important}
+  /* a tab strip hides two thirds of the page from a printer, and a scroll rail
+     hides whatever is past the fold: flatten both so the PDF carries every list
+     and every slide, with the tab names kept as plain accent labels */
+  .tabs{display:flex!important;flex-wrap:wrap;gap:1.2rem;overflow:visible!important;border-bottom:0!important}
+  .tabs button{border:0!important;padding:0;background:none!important;color:var(--accent)!important;cursor:auto}
+  .tabpanel[hidden]{display:block!important}
+  .cards.rail{overflow:visible!important;flex-wrap:wrap;scroll-snap-type:none}
+  .sm-track{overflow:visible!important;flex-wrap:wrap;scroll-snap-type:none;aspect-ratio:auto;box-shadow:none}
+  .sm-slide{flex:0 0 100%}
+  /* the cinematic hero is sized in clamp(vw), which resolves to its 500px floor
+     on paper -- half a page for a cover image -- so it gets a fixed height */
+  .cine{height:120mm;break-inside:avoid;break-after:avoid}
 }
