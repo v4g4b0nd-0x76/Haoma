@@ -1,12 +1,7 @@
 {
-  "name": "Haoma — Hugo + site editor",
+  "name": "Haoma - Hugo + site editor",
   "image": "mcr.microsoft.com/devcontainers/python:3.12",
-  "features": {
-    "ghcr.io/devcontainers/features/hugo:1": {
-      "version": "latest",
-      "extended": true
-    }
-  },
+  "postCreateCommand": "sh .devcontainer/setup-hugo.sh",
   "forwardPorts": [8765, 1313],
   "portsAttributes": {
     "8765": { "label": "Haoma editor", "onAutoForward": "notify" },

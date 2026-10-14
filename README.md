@@ -234,6 +234,8 @@ GitHub Pages serves static files only, so it cannot run `editor.py` — the pane
 
 Open the forwarded URL for port 8765 (the editor also prints it — `https://<codespace>-8765.app.github.dev/`) and you get the same editor: drafts, rollback, the map studio, the live Hugo preview, and **Publish & PR** — the codespace carries git credentials, so the branch push works. If the preview pane stays blank, open port 1313's URL directly from the **Ports** tab (forwarded ports are private to your account by default).
 
+The devcontainer installs Hugo with `.devcontainer/setup-hugo.sh` (run once at creation, pinned to the same version as the Pages workflow) rather than with a devcontainer *feature*. A feature is pulled from `ghcr.io` while the image is built, and if that pull fails Codespaces does not report an error — it quietly starts a bare **recovery container** with no language tooling, no forwarded ports and no attach command. If the preview reports that Hugo is missing, check the codespace's creation log, then rebuild the container.
+
 Codespaces gives personal accounts a monthly free allowance (compute core-hours + storage) and simply stops when it is used up, with no payment method on file. It also sleeps after a period of inactivity; drafts live on disk in `tools/.drafts/`, so they survive.
 
 ---
