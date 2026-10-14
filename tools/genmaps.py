@@ -93,59 +93,168 @@ def poly_path(points, box, w, h, pad, close=False):
     return d + ("Z" if close else "")
 
 
-def chevrons(points, box, w, h, pad, step=8):
-    """Fantasy-atlas mountains: peaked ridges with one-sided shade hatch."""
-    out = []
+def mountain_range(points, box, w, h, pad, step=7.4):
+    """Painterly sculpted ridge: FILL-dominant peaks (snow + shade), not gold strokes.
+
+    Ref-1 relief in SVG — cream snow face, near-black shade face, overlapping
+    ridges. Avoid stroke-heavy hatch (reads as flat chevrons at map scale).
+    """
+    shade, rock, snow = "#05070a", "#2a2014", "#e4d4a0"
+    lit_rock = "#5a4a30"
+    parts = []
     acc = 0.0
     prev = None
+    peak_i = 0
     for lon, lat in points:
         pt = project(lon, lat, box, w, h, pad)
         if prev:
             seg = math.hypot(pt[0] - prev[0], pt[1] - prev[1])
-            dx, dy = (pt[0] - prev[0]) / (seg or 1), (pt[1] - prev[1]) / (seg or 1)
+            dx = (pt[0] - prev[0]) / (seg or 1)
+            dy = (pt[1] - prev[1]) / (seg or 1)
+            nx, ny = -dy, dx
             while acc < seg:
                 x = prev[0] + dx * acc
                 y = prev[1] + dy * acc
-                nx, ny = -dy, dx
-                s = 5.6
-                # main peak triangle (filled hachure ridge)
-                out.append("M%.1f %.1fL%.1f %.1fL%.1f %.1fZ" % (
-                    x - nx * s * .15 + dx * .2, y - ny * s * .15 + dy * .2,
-                    x + nx * s * .05 - dx * s, y + ny * s * .05 - dy * s,
-                    x + nx * s + dx * .2, y + ny * s + dy * .2))
-                # denser shade ticks on the "south" face (atlas hachure)
-                for k in (.25, .4, .55, .7, .85):
-                    bx = x + nx * s * k * .55 + dx * .15
-                    by = y + ny * s * k * .55 + dy * .15
-                    out.append("M%.1f %.1fL%.1f %.1f" % (
-                        bx, by, bx + nx * s * (.28 + k * .08), by + ny * s * (.28 + k * .08)))
-                acc += step * 0.85
+                jitter = 0.9 + 0.4 * ((peak_i * 37) % 5) / 4.0
+                s = 10.5 * jitter
+                tip_pull = 1.2 + 0.3 * ((peak_i * 17) % 3)
+                tip = (x - dx * s * tip_pull + nx * s * 0.02,
+                       y - dy * s * tip_pull + ny * s * 0.02)
+                lit_b = (x - nx * s * 0.85 + dx * 0.4,
+                         y - ny * s * 0.85 + dy * 0.4)
+                shd_b = (x + nx * s * 1.05 + dx * 0.3,
+                         y + ny * s * 1.05 + dy * 0.3)
+                ridge = (x + nx * s * 0.08 + dx * 0.15,
+                         y + ny * s * 0.08 + dy * 0.15)
+                # under-mass
+                parts.append(
+                    '<path d="M%.1f %.1fL%.1f %.1fL%.1f %.1fZ" fill="%s" opacity=".85"/>'
+                    % (lit_b[0], lit_b[1], tip[0] + dx * s * 0.15, tip[1] + dy * s * 0.15,
+                       shd_b[0], shd_b[1], shade))
+                # shade face — large near-black plane
+                parts.append(
+                    '<path d="M%.1f %.1fL%.1f %.1fL%.1f %.1fZ" fill="%s" opacity=".98"/>'
+                    % (tip[0], tip[1], ridge[0], ridge[1], shd_b[0], shd_b[1], shade))
+                # rock midtone on lit face
+                parts.append(
+                    '<path d="M%.1f %.1fL%.1f %.1fL%.1f %.1fZ" fill="%s" opacity=".95"/>'
+                    % (tip[0], tip[1], lit_b[0], lit_b[1], ridge[0], ridge[1], rock))
+                # snow cap — cream FILL (main highlight signal, not a gold stroke)
+                snow_base = (
+                    tip[0] * 0.45 + lit_b[0] * 0.35 + ridge[0] * 0.2,
+                    tip[1] * 0.45 + lit_b[1] * 0.35 + ridge[1] * 0.2,
+                )
+                snow_tip = (
+                    tip[0] - nx * s * 0.06 - dx * s * 0.18,
+                    tip[1] - ny * s * 0.06 - dy * s * 0.18,
+                )
+                parts.append(
+                    '<path d="M%.1f %.1fL%.1f %.1fL%.1f %.1fZ" fill="%s" opacity=".92"/>'
+                    % (snow_tip[0], snow_tip[1], tip[0], tip[1],
+                       snow_base[0], snow_base[1], snow))
+                # thin rock highlight band under snow
+                parts.append(
+                    '<path d="M%.1f %.1fL%.1f %.1fL%.1f %.1fZ" fill="%s" opacity=".7"/>'
+                    % (tip[0], tip[1],
+                       lit_b[0] * 0.55 + tip[0] * 0.45,
+                       lit_b[1] * 0.55 + tip[1] * 0.45,
+                       ridge[0], ridge[1], lit_rock))
+                # secondary overlapping peak (fill only)
+                if peak_i % 2 == 0:
+                    t2 = (tip[0] + dx * s * 0.42 + nx * s * 0.22,
+                          tip[1] + dy * s * 0.42 + ny * s * 0.22)
+                    l2 = (x - nx * s * 0.4 + dx * 0.7,
+                          y - ny * s * 0.4 + dy * 0.7)
+                    s2 = (x + nx * s * 0.6 + dx * 0.55,
+                          y + ny * s * 0.6 + dy * 0.55)
+                    parts.append(
+                        '<path d="M%.1f %.1fL%.1f %.1fL%.1f %.1fZ" fill="%s" opacity=".9"/>'
+                        % (t2[0], t2[1], s2[0], s2[1],
+                           (t2[0] + s2[0]) * 0.5, (t2[1] + s2[1]) * 0.5 + 0.5, shade))
+                    parts.append(
+                        '<path d="M%.1f %.1fL%.1f %.1fL%.1f %.1fZ" fill="%s" opacity=".88"/>'
+                        % (t2[0], t2[1], l2[0], l2[1],
+                           (t2[0] + l2[0]) * 0.5, (t2[1] + l2[1]) * 0.5, rock))
+                    parts.append(
+                        '<path d="M%.1f %.1fL%.1f %.1fL%.1f %.1fZ" fill="%s" opacity=".85"/>'
+                        % (t2[0] - dx * s * 0.08, t2[1] - dy * s * 0.08,
+                           t2[0], t2[1],
+                           l2[0] * 0.4 + t2[0] * 0.6, l2[1] * 0.4 + t2[1] * 0.6, snow))
+                acc += step * (0.78 + 0.16 * ((peak_i * 11) % 3) / 2.0)
+                peak_i += 1
             acc -= seg
         prev = pt
-    return "".join(out)
+    return "".join(parts)
 
 
 def tree_mark(kind="pine"):
-    """Small biome tree stamp centred at origin (~10 unit box)."""
+    """Dense canopy-carpet stamp: overlapping dark-olive fills + lit rims."""
+    # forest greens (visible on dark land) + warm rim
+    dark, mid, rim, trunk = "#0d1a0c", "#1e3318", "#6a8a3e", "#1a140c"
     g = GOLD
+    parts = []
     if kind == "palm":
-        return (
-            '<path d="M0 5V-2" fill="none" stroke="%s" stroke-width="1.1" stroke-linecap="round"/>'
-            '<path d="M0-2C-3-4-5-3.5-6.5-2.5M0-2C3-4 5-3.5 6.5-2.5M0-2C-2-5.5 0-7 0-7M0-2C2-5.5 0-7 0-7M0-2C-4-5-2.5-6.5-1-7M0-2C4-5 2.5-6.5 1-7" fill="none" stroke="%s" stroke-width=".85" stroke-linecap="round"/>'
-        ) % (g, g)
+        # clustered palms — several crowns, not a lone pin
+        for ox, oy, sc in [(-5.5, 1.2, 0.85), (5.2, 0.8, 0.9), (0, 0, 1.05),
+                           (-2.8, 3.5, 0.7), (3.2, 3.2, 0.72)]:
+            parts.append(
+                '<g transform="translate(%.1f %.1f) scale(%.2f)">'
+                '<path d="M0 7V-1" fill="none" stroke="%s" stroke-width="1.2" stroke-linecap="round"/>'
+                '<ellipse cx="0" cy="-3.2" rx="5.2" ry="3.4" fill="%s" opacity=".92"/>'
+                '<ellipse cx="-1.2" cy="-4.2" rx="3.4" ry="2.2" fill="%s" opacity=".75"/>'
+                '<path d="M-5.5-2.5Q-2.5-7 0-3.5Q2.5-7 5.5-2.5" fill="none" stroke="%s" '
+                'stroke-width="1.05" stroke-linecap="round" opacity=".85"/>'
+                '<path d="M-4-1.5Q0-6 0-6Q4-1.5 4-1.5" fill="none" stroke="%s" '
+                'stroke-width=".7" opacity=".55"/>'
+                '</g>' % (ox, oy, sc, trunk, dark, mid, rim, g)
+            )
+        return "".join(parts)
     if kind == "deciduous":
-        return (
-            '<path d="M0 5V0" fill="none" stroke="%s" stroke-width="1.05" stroke-linecap="round"/>'
-            '<path d="M0-4.5C2.8-4.5 4.2-2.6 4.2-.6C4.2 1.4 2.4 2.6 0 2.6C-2.4 2.6-4.2 1.4-4.2-.6C-4.2-2.6-2.8-4.5 0-4.5Z" fill="#0a0e12" stroke="%s" stroke-width=".9"/>'
-            '<path d="M-1.5-.2h3M0-2.2v2.2" fill="none" stroke="%s" stroke-width=".55" opacity=".7"/>'
-        ) % (g, g, g)
-    # pine (default)
-    return (
-        '<path d="M0 5.2V1" fill="none" stroke="%s" stroke-width="1.05" stroke-linecap="round"/>'
-        '<path d="M0-5.5L3.6-1.2H-3.6Z" fill="#0a0e12" stroke="%s" stroke-width=".9" stroke-linejoin="round"/>'
-        '<path d="M0-3.2L4.2.8H-4.2Z" fill="#0a0e12" stroke="%s" stroke-width=".9" stroke-linejoin="round"/>'
-        '<path d="M0-1L4.6 2.8H-4.6Z" fill="#0a0e12" stroke="%s" stroke-width=".9" stroke-linejoin="round"/>'
-    ) % (g, g, g, g)
+        # overlapping rounded canopy masses (carpet, not single ball)
+        canopy = [
+            (-6.5, -1.0, 5.2, 4.0), (6.0, -0.5, 5.0, 3.8), (0, -3.5, 6.2, 4.6),
+            (-3.5, 2.0, 4.4, 3.4), (3.8, 2.2, 4.2, 3.2), (-1.5, -6.0, 3.6, 2.8),
+            (2.0, -5.5, 3.4, 2.6), (0.5, 4.0, 3.8, 2.8),
+        ]
+        parts.append('<ellipse cx="0" cy="6.5" rx="9" ry="2.2" fill="%s" opacity=".35"/>' % trunk)
+        for cx, cy, rx, ry in canopy:
+            parts.append(
+                '<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="%s" opacity=".9"/>'
+                % (cx, cy, rx, ry, dark))
+            # lit upper rim
+            parts.append(
+                '<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="%s" opacity=".55"/>'
+                % (cx - rx * 0.15, cy - ry * 0.35, rx * 0.55, ry * 0.4, mid))
+            parts.append(
+                '<path d="M%.1f %.1fQ%.1f %.1f %.1f %.1f" fill="none" stroke="%s" '
+                'stroke-width=".7" opacity=".65"/>'
+                % (cx - rx * 0.7, cy - ry * 0.15,
+                   cx - rx * 0.1, cy - ry * 0.95,
+                   cx + rx * 0.55, cy - ry * 0.25, rim))
+        return "".join(parts)
+    # pine / fir carpet — stacked overlapping crowns with volume
+    clumps = [
+        (-6.2, 1.5, 0.82), (6.0, 1.2, 0.85), (-2.5, -1.5, 0.95),
+        (2.8, -1.2, 0.92), (0, -4.0, 1.1), (-4.5, 4.0, 0.7),
+        (4.2, 4.2, 0.72), (0.5, 3.5, 0.78), (-1.0, 6.0, 0.65),
+    ]
+    parts.append('<ellipse cx="0" cy="7.5" rx="10" ry="2.4" fill="%s" opacity=".4"/>' % trunk)
+    for ox, oy, sc in clumps:
+        parts.append(
+            '<g transform="translate(%.1f %.1f) scale(%.2f)">'
+            # shade mass
+            '<path d="M0-7.5L5.2-1.5H-5.2Z" fill="%s" opacity=".95"/>'
+            '<path d="M0-4.8L6.0 1.2H-6.0Z" fill="%s" opacity=".92"/>'
+            '<path d="M0-2.0L6.8 4.2H-6.8Z" fill="%s" opacity=".9"/>'
+            # lit NW faces
+            '<path d="M0-7.5L-5.2-1.5L0-2.8Z" fill="%s" opacity=".7"/>'
+            '<path d="M0-4.8L-6.0 1.2L0-.5Z" fill="%s" opacity=".55"/>'
+            # gold-green rim on lit edge
+            '<path d="M0-7.5L-5.2-1.5" fill="none" stroke="%s" stroke-width=".85" opacity=".75"/>'
+            '<path d="M0-4.8L-6.0 1.2" fill="none" stroke="%s" stroke-width=".7" opacity=".55"/>'
+            '</g>' % (ox, oy, sc, dark, dark, dark, mid, mid, rim, rim)
+        )
+    return "".join(parts)
 
 
 # ---------------------------------------------------------------- the maps
@@ -223,16 +332,22 @@ MAPS = {
         # world sheet: no beasts (atlas-scale doodles read as continents; culture maps carry the bestiary)
         creatures=[],
         forests=[
-            (-65, -2, 1.05, "palm"), (-60, -5, 1.0, "palm"), (-55, -1, .95, "palm"),
-            (-50, 2, 1.0, "palm"), (-62, -8, .9, "palm"), (-48, -6, .9, "palm"),
-            (-58, 2, .95, "palm"), (-70, -4, .85, "palm"),
-            (-110, 52, .95, "pine"), (-100, 55, 1.0, "pine"), (-90, 52, .95, "pine"),
-            (-85, 48, .9, "pine"), (15, 58, .95, "pine"), (25, 60, 1.0, "pine"),
-            (35, 58, .9, "pine"), (45, 56, .9, "pine"), (80, 56, .95, "pine"),
-            (95, 58, .9, "pine"), (105, 52, .85, "pine"),
-            (78, 18, .9, "deciduous"), (82, 22, .85, "deciduous"), (100, 15, .95, "palm"),
-            (108, 18, .9, "palm"), (115, 22, .85, "palm"), (10, 5, .85, "deciduous"),
-            (20, 8, .8, "deciduous"), (-5, 45, .85, "deciduous"),
+            # Amazonia carpet
+            (-65, -2, 1.15, "palm"), (-60, -5, 1.1, "palm"), (-55, -1, 1.05, "palm"),
+            (-50, 2, 1.1, "palm"), (-62, -8, 1.0, "palm"), (-48, -6, 1.0, "palm"),
+            (-58, 2, 1.05, "palm"), (-70, -4, .95, "palm"), (-52, -3, 1.0, "palm"),
+            (-67, -6, .95, "palm"), (-45, 0, .9, "palm"),
+            # boreal belts
+            (-110, 52, 1.05, "pine"), (-100, 55, 1.1, "pine"), (-90, 52, 1.05, "pine"),
+            (-85, 48, 1.0, "pine"), (-95, 50, .95, "pine"), (15, 58, 1.05, "pine"),
+            (25, 60, 1.1, "pine"), (35, 58, 1.0, "pine"), (45, 56, 1.0, "pine"),
+            (80, 56, 1.05, "pine"), (95, 58, 1.0, "pine"), (105, 52, .95, "pine"),
+            (20, 55, .95, "pine"), (55, 58, .9, "pine"),
+            # monsoon / equatorial
+            (78, 18, 1.0, "deciduous"), (82, 22, .95, "deciduous"), (100, 15, 1.05, "palm"),
+            (108, 18, 1.0, "palm"), (115, 22, .95, "palm"), (10, 5, .95, "deciduous"),
+            (20, 8, .9, "deciduous"), (-5, 45, .95, "deciduous"), (12, 3, .9, "palm"),
+            (105, 12, .9, "palm"),
         ],
         graticule=30,
     ),
@@ -270,15 +385,21 @@ MAPS = {
             [(47, 32.5), (48.5, 31.6), (49.5, 30.5)],
         ],
         creatures=[
-            # tiny margin marks — away from Cedar Forest / Uruk / pins
-            ("humbaba", 29.2, 37.8, 0.72, 0, "HUMBABA"),      # Anatolia NW margin
-            ("mushussu", 51.8, 26.6, 0.68, 0, "MUSHUSSU"),    # Persian Gulf empty water
-            ("anzu", 55.4, 34.2, 0.65, 0, "ANZU"),            # Persia NW empty land
+            # decorative margin marks — volumetric, still small
+            ("humbaba", 29.2, 37.8, 0.88, 0, "HUMBABA"),      # Anatolia NW margin
+            ("mushussu", 51.8, 26.6, 0.82, 0, "MUSHUSSU"),    # Persian Gulf empty water
+            ("anzu", 55.4, 34.2, 0.80, 0, "ANZU"),            # Persia NW empty land
         ],
         forests=[
-            (35.8, 34.2, .95, "pine"), (36.4, 35.0, .85, "pine"),  # cedar belt
-            (37.2, 34.6, .9, "pine"), (46.5, 35.5, .8, "deciduous"),
-            (42.5, 36.2, .75, "deciduous"),
+            # Levant cedar belt — dense carpet
+            (35.5, 33.8, 1.05, "pine"), (35.8, 34.2, 1.1, "pine"), (36.2, 34.6, 1.0, "pine"),
+            (36.4, 35.0, .95, "pine"), (36.8, 34.4, 1.0, "pine"), (37.2, 34.6, 1.05, "pine"),
+            (37.6, 35.0, .9, "pine"), (35.2, 34.5, .9, "pine"),
+            # Zagros foothills / N Mesopotamia
+            (46.5, 35.5, .95, "deciduous"), (45.8, 35.8, .9, "deciduous"),
+            (47.2, 34.8, .85, "deciduous"), (42.5, 36.2, .9, "deciduous"),
+            (43.2, 36.5, .85, "deciduous"), (41.8, 36.0, .8, "pine"),
+            (48.5, 34.2, .8, "deciduous"), (33.5, 37.2, .85, "pine"),
         ],
         graticule=5,
     ),
@@ -316,16 +437,23 @@ MAPS = {
             [(49.6, 33.4), (51.6, 32.4), (53, 32.2)],
         ],
         creatures=[
-            ("simorgh", 56.8, 26.2, 0.78, 0, "SIMORGH"),   # Gulf of Oman margin
-            ("dahaka", 44.2, 37.2, 0.72, 1, "DAHAKA"),     # NW Caspian margin
-            ("daeva", 68.5, 27.8, 0.68, 1, "DAEVA"),       # SE desert margin
+            ("simorgh", 56.8, 26.2, 0.88, 0, "SIMORGH"),   # Gulf of Oman margin
+            ("dahaka", 44.2, 37.2, 0.88, 0, "DAHAKA"),     # NW Caspian margin
+            ("daeva", 68.5, 27.8, 0.82, 0, "DAEVA"),       # SE desert margin
         ],
         forests=[
-            (49.5, 36.0, .85, "pine"), (51.0, 36.2, .8, "pine"), (52.2, 36.4, .8, "pine"),
-            (53.5, 36.3, .9, "pine"), (54.5, 36.1, .75, "pine"),
-            (46.0, 34.5, .75, "deciduous"), (47.5, 33.5, .7, "deciduous"), (48.2, 34.0, .7, "deciduous"),
-            (65.5, 34.5, .8, "deciduous"), (66.2, 34.8, .75, "deciduous"), (67.0, 35.0, .75, "deciduous"),
-            (45.5, 35.5, .7, "pine"), (50.0, 33.0, .65, "deciduous"),
+            # Caspian / Alborz forest carpet
+            (49.0, 36.2, 1.0, "pine"), (49.5, 36.0, 1.05, "pine"), (50.2, 36.1, 1.0, "pine"),
+            (51.0, 36.2, .95, "pine"), (51.8, 36.3, 1.0, "pine"), (52.2, 36.4, .95, "pine"),
+            (53.0, 36.35, 1.0, "pine"), (53.5, 36.3, 1.05, "pine"), (54.5, 36.1, .9, "pine"),
+            (55.2, 36.2, .85, "pine"),
+            # Zagros woodlands
+            (45.5, 35.5, .9, "pine"), (46.0, 34.5, .95, "deciduous"), (46.8, 34.0, .9, "deciduous"),
+            (47.5, 33.5, .9, "deciduous"), (48.2, 34.0, .85, "deciduous"), (48.8, 32.8, .8, "deciduous"),
+            (50.0, 33.0, .8, "deciduous"), (45.2, 36.0, .85, "pine"),
+            # Hindu Kush foothills
+            (65.5, 34.5, .95, "deciduous"), (66.2, 34.8, .9, "deciduous"), (67.0, 35.0, .9, "deciduous"),
+            (67.8, 34.6, .85, "deciduous"), (64.8, 35.0, .85, "pine"),
         ],
         graticule=5,
     ),
@@ -363,16 +491,20 @@ MAPS = {
             [(74.4, 17), (77.6, 16.4), (80.6, 15.6), (83.4, 15.6)],
         ],
         creatures=[
-            ("garuda", 92.5, 28.8, 0.75, 0, "GARUDA"),     # Himalaya east margin
-            ("naga", 95.2, 18.5, 0.70, 0, "NAGA"),         # Bay of Bengal margin
-            ("makara", 68.8, 8.2, 0.68, 1, "MAKARA"),      # Arabian Sea SW
+            ("garuda", 92.5, 28.8, 0.88, 0, "GARUDA"),     # Himalaya east margin
+            ("naga", 95.2, 18.5, 0.85, 0, "NAGA"),         # Bay of Bengal margin
+            ("makara", 68.8, 8.2, 0.82, 1, "MAKARA"),      # Arabian Sea SW
         ],
         forests=[
-            (77, 22, .85, "deciduous"), (78.5, 21, .8, "deciduous"), (79, 20, .8, "deciduous"),
-            (80.5, 20.5, .85, "deciduous"), (82, 21, .9, "deciduous"), (84, 20, .8, "deciduous"),
-            (88, 23, .85, "palm"), (89, 22.5, .8, "palm"), (90, 22, .8, "palm"),
-            (91.5, 21, .75, "palm"), (74, 15, .75, "palm"), (75, 13.5, .7, "palm"),
-            (76, 12, .7, "palm"), (85, 18, .8, "deciduous"), (86.5, 19, .75, "deciduous"),
+            # Gangetic / Deccan woodlands
+            (77, 22, 1.0, "deciduous"), (78.5, 21, .95, "deciduous"), (79, 20, .95, "deciduous"),
+            (80.5, 20.5, 1.0, "deciduous"), (82, 21, 1.05, "deciduous"), (84, 20, .95, "deciduous"),
+            (81, 23, .9, "deciduous"), (76, 24, .85, "deciduous"), (83, 22, .9, "deciduous"),
+            # Bengal / coastal
+            (88, 23, 1.0, "palm"), (89, 22.5, .95, "palm"), (90, 22, .95, "palm"),
+            (91.5, 21, .9, "palm"), (87, 24, .9, "palm"), (92, 22, .85, "palm"),
+            (74, 15, .9, "palm"), (75, 13.5, .85, "palm"), (76, 12, .85, "palm"),
+            (85, 18, .95, "deciduous"), (86.5, 19, .9, "deciduous"), (73, 18, .8, "palm"),
         ],
         graticule=5,
     ),
@@ -406,14 +538,16 @@ MAPS = {
             [(21.6, 42.6), (21.4, 41.4), (21.6, 40.6)],
         ],
         creatures=[
-            ("scylla", 17.2, 36.2, 0.70, 0, "SCYLLA"),     # Ionian empty water
-            ("python", 19.6, 43.2, 0.68, 1, "PYTHON"),     # N Adriatic/Thrace margin
-            ("minotaur", 26.8, 34.0, 0.65, 0, "MINOTAUR"), # south of Crete sea
-            ("chimera", 35.5, 35.6, 0.65, 1, "CHIMERA"),   # Cyprus/Anatolia SE sea
+            ("scylla", 17.2, 36.2, 0.85, 0, "SCYLLA"),     # Ionian empty water
+            ("python", 19.6, 43.2, 0.82, 1, "PYTHON"),     # N Adriatic/Thrace margin
+            ("minotaur", 26.8, 34.0, 0.80, 0, "MINOTAUR"), # south of Crete sea
+            ("chimera", 35.5, 35.6, 0.80, 1, "CHIMERA"),   # Cyprus/Anatolia SE sea
         ],
         forests=[
-            (21.5, 39.5, .75, "pine"), (22.2, 40.2, .7, "pine"), (30.5, 37.8, .7, "pine"),
-            (22.8, 38.2, .65, "deciduous"), (27.5, 38.5, .65, "deciduous"),
+            (21.2, 39.8, .9, "pine"), (21.5, 39.5, .95, "pine"), (22.2, 40.2, .9, "pine"),
+            (22.8, 38.2, .85, "deciduous"), (23.2, 39.0, .8, "pine"), (30.5, 37.8, .9, "pine"),
+            (31.2, 38.0, .85, "pine"), (29.8, 37.5, .8, "pine"), (27.5, 38.5, .85, "deciduous"),
+            (26.8, 39.2, .8, "deciduous"), (18.5, 40.5, .75, "pine"), (33.5, 36.8, .8, "pine"),
         ],
         graticule=5,
     ),
@@ -448,17 +582,20 @@ MAPS = {
             [(30, 60.6), (28.6, 60.4), (27.4, 60.4)],
         ],
         creatures=[
-            ("jormungandr", -8.5, 60.5, 0.82, 0, "JORMUNGANDR"),  # Norwegian Sea
-            ("fenrir", 4.2, 68.2, 0.75, 1, "FENRIR"),             # far N margin
-            ("nidhogg", 28.5, 68.8, 0.78, 0, "NIDHOGG"),          # Karelia/Arctic margin
+            ("jormungandr", -8.5, 60.5, 0.90, 0, "JORMUNGANDR"),  # Norwegian Sea
+            ("fenrir", 4.2, 68.2, 0.88, 1, "FENRIR"),             # far N margin
+            ("nidhogg", 28.5, 68.8, 0.88, 0, "NIDHOGG"),          # Karelia/Arctic margin
         ],
         forests=[
-            (10, 61, .9, "pine"), (11.5, 62, .85, "pine"), (12, 63, .85, "pine"),
-            (13.5, 64, .85, "pine"), (15, 64.5, .9, "pine"), (16.5, 65, .85, "pine"),
-            (18, 62, .8, "pine"), (20, 63.5, .8, "pine"), (25, 65, .85, "pine"),
-            (26.5, 64, .8, "pine"), (27, 63, .8, "pine"), (8, 58, .75, "deciduous"),
-            (9.5, 59.5, .75, "pine"), (-18, 64.5, .75, "pine"), (-16, 65, .7, "pine"),
-            (-19.5, 64, .7, "pine"),
+            # Scandinavian taiga carpet
+            (10, 61, 1.05, "pine"), (11.5, 62, 1.0, "pine"), (12, 63, 1.0, "pine"),
+            (13.5, 64, 1.0, "pine"), (15, 64.5, 1.05, "pine"), (16.5, 65, 1.0, "pine"),
+            (14, 62.5, .95, "pine"), (17, 63, .95, "pine"), (18, 62, .95, "pine"),
+            (20, 63.5, .95, "pine"), (25, 65, 1.0, "pine"), (26.5, 64, .95, "pine"),
+            (27, 63, .95, "pine"), (22, 64, .9, "pine"), (8, 58, .9, "deciduous"),
+            (9.5, 59.5, .9, "pine"), (7.5, 60.5, .85, "pine"), (11, 59.5, .85, "pine"),
+            (-18, 64.5, .9, "pine"), (-16, 65, .85, "pine"), (-19.5, 64, .85, "pine"),
+            (-17, 63.5, .8, "pine"),
         ],
         graticule=5,
     ),
@@ -595,13 +732,14 @@ def build(name, spec, lang):
     for riv in spec["rivers"]:
         A('<path d="%s" fill="none" stroke="#3d7a9c" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" opacity=".9"/>' % poly_path(riv, box, w, h, pad))
     for rng in spec["ranges"]:
-        A('<path d="%s" fill="#0a0e12" fill-opacity=".55" stroke="#0a0e12" stroke-width="1.05" stroke-linejoin="round" opacity=".92"/>' % chevrons(rng, box, w, h, pad))
-    # biome trees
+        A('<g opacity=".94">%s</g>' % mountain_range(rng, box, w, h, pad))
+    # biome forests — canopy carpets (dense overlapping stamps)
     for fr in spec.get("forests", []):
         flon, flat, fs = fr[0], fr[1], fr[2]
         fkind = fr[3] if len(fr) > 3 else "pine"
         fx, fy = project(flon, flat, box, w, h, pad)
-        A('<g transform="translate(%.1f %.1f) scale(%.2f)" opacity=".82">%s</g>' % (fx, fy, fs * 1.15, tree_mark(fkind)))
+        A('<g transform="translate(%.1f %.1f) scale(%.2f)" opacity=".88">%s</g>'
+          % (fx, fy, fs * 1.35, tree_mark(fkind)))
     A('</g>')
 
     # vignette: it darkens the geography towards the frame, so it must be painted
@@ -617,26 +755,23 @@ def build(name, spec, lang):
         r = ' transform="rotate(%d %.0f %.0f)"' % (rot, x, y) if rot else ""
         A('<text class="%s" x="%.0f" y="%.0f" font-size="%d" text-anchor="middle"%s opacity=".92">%s</text>' % (cls, x, y, size, r, esc(label)))
 
-    # mythical creatures ("here be monsters": thin engraved line art). A soft dark
-    # halo sits behind each beast so the gold lines still read where the beast
-    # crosses olive land, and a dark rim behind its caption does the same for the
-    # name; the art runs from about -16..+17 x and -15..+11 y around the origin
+    # mythical creatures: volumetric etched beasts (midtone + shade + gold rim).
+    # Soft halo behind so form still reads on olive land; keep decorative scale.
     for c in spec.get("creatures", []):
         kind, clon, clat, s, flip = c[:5]
         label = c[5] if len(c) > 5 else None
         x, y = project(clon, clat, box, w, h, pad)
-        # decorative margin marks only — never amplify (old *1.75 made continent beasts)
-        S = s
+        S = s  # ~0.65–0.9 — never amplify into continent beasts
         sx = -S if flip else S
         A('<ellipse cx="%.1f" cy="%.1f" rx="%.1f" ry="%.1f" fill="url(#halo)"/>'
-          % (x, y, 14 * S, 11 * S))
-        A('<g transform="translate(%.1f %.1f) scale(%.2f %.2f)" opacity=".9">%s</g>'
+          % (x, y, 16 * S, 13 * S))
+        A('<g transform="translate(%.1f %.1f) scale(%.2f %.2f)" opacity=".94">%s</g>'
           % (x, y, sx, S, map_creatures.art(kind, GOLD)))
         if label:
             lab = label if lang == "en" else FA.get(label, label)
             A('<text class="lb" x="%.0f" y="%.0f" font-size="10" text-anchor="middle" '
               'stroke="#05070b" stroke-width="2.5" stroke-opacity=".55" paint-order="stroke" opacity=".92">%s</text>'
-              % (x, y + 11 * S + 10, esc(lab)))
+              % (x, y + 12 * S + 10, esc(lab)))
 
     # frame
     A('<rect x="7" y="7" width="%d" height="%d" fill="none" stroke="%s" stroke-width="2" rx="7" opacity=".7"/>' % (w - 14, h - 14, GOLD))
