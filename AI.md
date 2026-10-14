@@ -183,6 +183,8 @@ Needs Python 3.8+, git, hugo. Binds to 127.0.0.1; every API call needs the per-r
 
 **Keep Hugo out of a devcontainer feature.** A feature is pulled from `ghcr.io` while the image builds, and a failed pull makes Codespaces fall back **silently** to a recovery container (`/workspaces/.codespaces/shared/merged_devcontainer.json` then carries `CODESPACES_RECOVERY_CONTAINER:true` and an Alpine image) with no Hugo, no forwarded ports and no `postAttachCommand` — the codespace still reports `Available`, so nothing tells you. `.devcontainer/setup-hugo.sh` runs from `postCreateCommand` instead, pinned to the workflow's version, and a failure lands in the creation log where you can see it.
 
+`gh cs ssh` needs an ssh server *inside* the container and the devcontainer image above carries none, so the CLI cannot get a shell — it reports `failed to start SSH server`. VS Code and the browser editor do not need it. Add `ghcr.io/devcontainers/features/sshd` only if you specifically want CLI access, and accept the `ghcr.io` pull risk described above. (The recovery container is the confusing part: it is Alpine and *does* ship sshd, so `gh cs ssh` works there and only there — the one place nothing else works.)
+
 ### 9.1 Safety model - keep these invariants
 1. **Nothing reaches the project until Save.** Edits are *temporary drafts* stored in `tools/.drafts/` (survive page switches and reloads). `POST /api/apply` moves drafts into real files.
 2. **Preview runs on a copy** (`tools/.preview/` = saved files + drafts). `hugo server --source tools/.preview`. The UI navigates the preview to the page being edited (`pageUrl()` in admin.html); do not re-add `--navigateToChanged`, it jumps to whichever file changed last.
