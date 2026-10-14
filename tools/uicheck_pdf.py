@@ -36,11 +36,11 @@ from uicheck import connect, nocache, start, BASE  # noqa: E402
 ROUTES = [
     ("/", "home"),
     ("/fa/", "fa-home"),
-    ("/guide/", "guide"),
-    ("/fa/guide/", "fa-guide"),
-    ("/cultures/iranian/characters/mehr/", "character"),
-    ("/cultures/mesopotamian/stories/journey-to-the-cedar-forest/", "story"),
-    ("/fa/cultures/iranian/characters/mehr/", "fa-character"),
+    ("/cultures/", "cultures"),
+    ("/fa/cultures/", "fa-cultures"),
+    ("/cultures/iranian/", "culture"),
+    ("/cultures/mesopotamian/", "culture-meso"),
+    ("/fa/cultures/iranian/", "fa-culture"),
     ("/library/", "library"),
 ]
 

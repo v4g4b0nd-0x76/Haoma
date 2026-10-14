@@ -6,6 +6,7 @@ culture: norse
 grade: draft
 sources: ["Prose Edda, Gylfaginning", "Poetic Edda, Voluspa"]
 reviewed: 2026-10-12
+draft: true
 ---
 Show notes: Ymir, the first giant, and the creation of the world.
 

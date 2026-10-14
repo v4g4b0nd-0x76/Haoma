@@ -12,10 +12,6 @@ taxonomies = {}
   weight = 1
   contentDir = "content/en"
   [[languages.en.menus.main]]
-    name = "Episodes"
-    pageRef = "/episodes"
-    weight = 2
-  [[languages.en.menus.main]]
     name = "About"
     pageRef = "/about"
     weight = 4
@@ -26,10 +22,6 @@ taxonomies = {}
   title = "هوم"
   weight = 2
   contentDir = "content/fa"
-  [[languages.fa.menus.main]]
-    name = "قسمت‌ها"
-    pageRef = "/episodes"
-    weight = 2
   [[languages.fa.menus.main]]
     name = "دربارهٔ ما"
     pageRef = "/about"

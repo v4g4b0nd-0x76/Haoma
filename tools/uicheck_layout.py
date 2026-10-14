@@ -22,18 +22,13 @@ ROUTES = [
     ("cultures", "/cultures/"),
     ("culture", "/cultures/iranian/"),
     ("section", "/cultures/iranian/characters/"),
-    ("character", "/cultures/iranian/characters/mehr/"),
-    ("story", "/cultures/iranian/stories/two-spirits/"),
     ("episodes", "/episodes/"),
-    ("episode", "/episodes/001-first-giant/"),
-    ("guide", "/guide/"),
-    ("typography", "/guide/typography/"),
     ("library", "/library/"),
     ("about", "/about/"),
     ("fa-home", "/fa/"),
     ("fa-culture", "/fa/cultures/iranian/"),
-    ("fa-character", "/fa/cultures/iranian/characters/mehr/"),
-    ("fa-guide", "/fa/guide/"),
+    ("fa-library", "/fa/library/"),
+    ("fa-about", "/fa/about/"),
 ]
 
 MEASURE = r"""

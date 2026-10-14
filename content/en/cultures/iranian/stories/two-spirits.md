@@ -6,6 +6,7 @@ sources:
   - "Avesta, Yasna 30 (Gathas) — primary"
   - "Mary Boyce, A History of Zoroastrianism — modern scholarship"
 reviewed: 2026-10-13
+draft: true
 ---
 <p class="lead">In Yasna 30 — one of the Gathas directly attributed to Zarathustra — two primal spirits appear, twin in origin, who chose their natures at the beginning of existence.</p>
 

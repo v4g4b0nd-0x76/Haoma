@@ -4,6 +4,7 @@ tagline: "Couplets, headpieces, drop caps and star bullets"
 dropcap: true
 grade: guide
 reviewed: 2026-10-13
+draft: true
 ---
 Haoma's type is inspired by manuscripts: an ornamental headpiece under every title, eight-pointed star bullets, an optional drop cap, and couplets set in two hemistichs. Persian couplets use a real Nastaliq face, the hand of the Shahnameh manuscripts.
 

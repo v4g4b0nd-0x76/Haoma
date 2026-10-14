@@ -4,6 +4,7 @@ tagline: "Layouts, sliders, notes and media for pages"
 wide: true
 grade: guide
 reviewed: 2026-10-12
+draft: true
 ---
 This page is both documentation and a live demo of every layout tool. Open it in the editor to see the source.
 

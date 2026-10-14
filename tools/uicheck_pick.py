@@ -76,7 +76,7 @@ def main():
 
     # ---- the trigger shows the culture in force -------------------------------
     print("trigger")
-    nav(p, "/cultures/iranian/characters/mehr/")
+    nav(p, "/cultures/iranian/")
     cur = p.js("""(function(){var b=document.getElementById('cpick-btn'),
       c=document.getElementById('culture-pick');
       return {name:b.querySelector('.cpick__name').textContent,

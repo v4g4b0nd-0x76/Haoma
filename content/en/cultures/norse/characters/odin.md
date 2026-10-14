@@ -4,6 +4,7 @@ tagline: Chief of the Aesir
 sources: ["Poetic Edda, Voluspa (primary)", "Prose Edda, Gylfaginning (later compilation)"]
 grade: primary text
 reviewed: 2026-10-12
+draft: true
 ---
 Odin is the chief of the Aesir, associated with wisdom, poetry, war and death.
 

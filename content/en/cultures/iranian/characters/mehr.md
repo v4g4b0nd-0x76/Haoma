@@ -6,6 +6,7 @@ sources:
   - "Avesta, Mihr Yasht (Yasht 10) — primary"
   - "Mary Boyce, A History of Zoroastrianism — modern scholarship"
 reviewed: 2026-10-13
+draft: true
 ---
 <p class="lead">Mehr, Avestan <em>Miθra</em>, is the yazata (divine being worthy of worship) who guards covenants, truth and the light of day.</p>
 

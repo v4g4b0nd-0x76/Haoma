@@ -6,6 +6,7 @@ sources:
   - "Epic of Gilgamesh (Standard Babylonian version), Tablet V — primary text, paraphrased here"
   - "Andrew George, The Epic of Gilgamesh (Penguin, 2003) — modern translation and scholarship"
 reviewed: 2026-10-13
+draft: true
 ---
 <p class="lead">In Tablet V the heroes set out to cut cedar in the forests beyond the western mountains, where the demon Huwawa guards the trees. This page follows their road across the map — the geography is real, the story is myth.</p>
 
