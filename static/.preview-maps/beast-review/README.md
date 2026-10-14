@@ -1,31 +1,21 @@
 # Beast review — #1 Zahhak (ضحاک)
 
-**Status:** awaiting approval. Not baked into maps.
+**Status:** awaiting approval. Not on any map.
 
-## Correction from prior draft
+## What this is
 
-Previous draft showed a three-headed dragon (Avestan Aži Dahāka as beast).  
-**Shahnameh Zahhak** that Iranians know is a **man (king)** with **two snakes growing from his shoulders** — that is what this revision draws.
+Shahnameh **Zahhak**: a **human king** with **two snakes growing from his shoulders** (the figure Iranians know) — **not** a three-headed dragon.
 
-## Design notes
+Dark ash/skin/bone palette, crimson only for eyes/wounds/tongues. No map-UI gold. Smaller figure, finer line work, human proportions (head ~1/7 of height), legs/hands/robe folds/scale rows.
 
-- Human figure: crown, face, robe, arms — dark ash/skin, bone accents, crimson only for eyes/wounds/snake mouths
-- Two serpents rising from the shoulders with scale rows, horns, tongues
-- Smaller, neater line work; denser detail; no map-UI gold (`#c9a45c`)
-- Compact artboard (320×400) so it stays a small decorative mark when placed
+## Proposed placement (only after you approve)
 
-## Proposed placement (after approval)
-
-| Field | Value |
-|-------|--------|
-| Map | `persia` |
-| Lon / lat | **46.5°E, 33.8°N** (Zagros / Media–Elam margin — Zahhak’s tyranny; keep clear of Damavand pin) |
-| Alt | or **53.2°E, 35.4°N** if chaining-to-Damavand reading preferred (offset from summit) |
+| Map | Lon/lat | Note |
+|-----|---------|------|
+| `persia` | **46.5°E, 33.8°N** | Zagros margin (tyranny lands); keep clear of Damavand pin |
 
 ## Files
 
 - `dahaka.svg` / `dahaka.png`
 
-## Next
-
-Approve / reject / revise this Zahhak only. Then Simorgh.
+Reply **approve** / **reject** (+ notes). Next beast only after this one.

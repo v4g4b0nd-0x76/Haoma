@@ -1,164 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 400" width="320" height="400" role="img" aria-label="Zahhak — Shahnameh">
-  <defs>
-    <radialGradient id="gnd" cx="50%" cy="50%" r="50%">
-      <stop offset="0" stop-color="#141210"/><stop offset="100%" stop-color="#0a0908"/>
-    </radialGradient>
-    <linearGradient id="skinL" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#4a3c32"/><stop offset="55%" stop-color="#2e261f"/><stop offset="100%" stop-color="#1a1410"/>
-    </linearGradient>
-    <linearGradient id="skinR" x1="1" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#5c4a3e"/><stop offset="100%" stop-color="#2e261f"/>
-    </linearGradient>
-    <linearGradient id="robe" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#3d342c"/><stop offset="40%" stop-color="#2a2420"/><stop offset="100%" stop-color="#1a1614"/>
-    </linearGradient>
-    <linearGradient id="snL" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#3a3028"/><stop offset="50%" stop-color="#1c1814"/><stop offset="100%" stop-color="#0e0c0a"/>
-    </linearGradient>
-    <linearGradient id="snR" x1="1" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#423830"/><stop offset="50%" stop-color="#221c18"/><stop offset="100%" stop-color="#100e0c"/>
-    </linearGradient>
-    <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="2.2"/>
-    </filter>
-  </defs>
-  <rect width="320" height="400" fill="url(#gnd)"/>
-  <text x="160" y="28" text-anchor="middle" fill="#8a8074" font-family="Georgia,serif" font-size="11" letter-spacing=".12em">ZAHHAK</text>
-  <text x="160" y="44" text-anchor="middle" fill="#5a5248" font-family="Georgia,serif" font-size="8">Shahnameh — man with two snakes</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 420" width="280" height="420" role="img" aria-label="Zahhak Shahnameh">
+<defs>
+  <radialGradient id="bg" cx="50%" cy="40%" r="65%"><stop offset="0" stop-color="#161310"/><stop offset="100%" stop-color="#080706"/></radialGradient>
+  <linearGradient id="sk" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a5848"/><stop offset=".45" stop-color="#5a4a3c"/><stop offset="1" stop-color="#3a3028"/></linearGradient>
+  <linearGradient id="skD" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5a4a3c"/><stop offset="1" stop-color="#241c18"/></linearGradient>
+  <linearGradient id="rb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a322c"/><stop offset=".5" stop-color="#2c2622"/><stop offset="1" stop-color="#1a1613"/></linearGradient>
+  <linearGradient id="sn" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a4036"/><stop offset=".5" stop-color="#221c18"/><stop offset="1" stop-color="#0c0a08"/></linearGradient>
+  <filter id="sh"><feGaussianBlur stdDeviation="1.8"/></filter>
+</defs>
+<rect width="280" height="420" fill="url(#bg)"/>
+<text x="140" y="22" text-anchor="middle" fill="#8a8074" font-family="Georgia,serif" font-size="10" letter-spacing=".14em">ZAHHAK</text>
+<text x="140" y="36" text-anchor="middle" fill="#5a524a" font-family="Georgia,serif" font-size="7.5">Shahnameh — tyrant with snakes on his shoulders</text>
+<ellipse cx="140" cy="392" rx="42" ry="7" fill="#000" opacity=".5" filter="url(#sh)"/>
 
-  <!-- ground shadow -->
-  <ellipse cx="160" cy="368" rx="58" ry="10" fill="#000" opacity=".55" filter="url(#soft)"/>
+<!-- feet -->
+<path d="M118 368 C116 378 122 382 132 380 L138 368 Z" fill="url(#sk)" stroke="#080706" stroke-width=".55"/>
+<path d="M162 368 C164 378 158 382 148 380 L142 368 Z" fill="url(#skD)" stroke="#080706" stroke-width=".55"/>
+<!-- legs -->
+<path d="M124 300 L120 368 L136 368 L138 300 Z" fill="url(#rb)" stroke="#080706" stroke-width=".6"/>
+<path d="M156 300 L158 368 L144 368 L142 300 Z" fill="url(#rb)" stroke="#080706" stroke-width=".6"/>
+<path d="M128 320 L132 360 M152 320 L148 360" fill="none" stroke="#080706" stroke-width=".35" opacity=".45"/>
 
-  <!-- lower robe / legs suggestion -->
-  <path d="M118 300 C120 340 130 358 148 362 L172 362 C190 358 200 340 202 300 Z" fill="url(#robe)" stroke="#0a0908" stroke-width=".8"/>
-  <path d="M130 310 L136 355 M190 310 L184 355" fill="none" stroke="#0a0908" stroke-width=".5" opacity=".5"/>
-  <path d="M140 320 Q160 328 180 320" fill="none" stroke="#8a8074" stroke-width=".4" opacity=".35"/>
+<!-- hips / skirt -->
+<path d="M112 268 C110 290 118 305 140 308 C162 305 170 290 168 268 Z" fill="url(#rb)" stroke="#080706" stroke-width=".7"/>
+<path d="M120 280 Q140 288 160 280 M124 292 Q140 298 156 292" fill="none" stroke="#080706" stroke-width=".4" opacity=".5"/>
 
-  <!-- torso -->
-  <path d="M122 168 C118 200 120 250 128 298 L192 298 C200 250 202 200 198 168
-           C188 158 172 154 160 154 C148 154 132 158 122 168 Z" fill="url(#robe)" stroke="#0a0908" stroke-width=".9"/>
-  <!-- robe folds -->
-  <path d="M140 175 Q145 230 142 290 M160 170 Q158 240 160 295 M180 175 Q175 230 178 290"
-        fill="none" stroke="#0a0908" stroke-width=".55" opacity=".65"/>
-  <path d="M134 200 Q160 210 186 200" fill="none" stroke="#8a8074" stroke-width=".35" opacity=".3"/>
-  <!-- belt -->
-  <path d="M126 248 H194" fill="none" stroke="#0a0908" stroke-width="2.2"/>
-  <path d="M126 248 H194" fill="none" stroke="#8a8074" stroke-width=".6" opacity=".45"/>
-  <circle cx="160" cy="248" r="3.2" fill="#1a1614" stroke="#8a8074" stroke-width=".5"/>
+<!-- torso -->
+<path d="M116 150 C112 190 114 240 118 268 L162 268 C166 240 168 190 164 150
+         C156 142 146 140 140 140 C134 140 124 142 116 150 Z" fill="url(#rb)" stroke="#080706" stroke-width=".75"/>
+<!-- folds -->
+<path d="M128 158 Q130 210 128 260 M140 152 Q139 215 140 265 M152 158 Q150 210 152 260"
+      fill="none" stroke="#080706" stroke-width=".45" opacity=".55"/>
+<path d="M122 200 Q140 208 158 200" fill="none" stroke="#8a8074" stroke-width=".3" opacity=".28"/>
+<!-- sash -->
+<path d="M116 248 H164" stroke="#080706" stroke-width="1.8"/>
+<path d="M116 248 H164" stroke="#8a8074" stroke-width=".45" opacity=".4"/>
+<rect x="136" y="244" width="8" height="8" rx="1" fill="#1a1613" stroke="#8a8074" stroke-width=".4"/>
 
-  <!-- arms -->
-  <path d="M122 175 C100 190 92 220 98 255 C100 268 110 272 118 260 C112 240 114 210 124 188 Z"
-        fill="url(#skinL)" stroke="#0a0908" stroke-width=".75"/>
-  <path d="M198 175 C220 190 228 220 222 255 C220 268 210 272 202 260 C208 240 206 210 196 188 Z"
-        fill="url(#skinR)" stroke="#0a0908" stroke-width=".75"/>
-  <!-- arm muscle lines -->
-  <path d="M108 200 Q105 230 110 250 M212 200 Q215 230 210 250" fill="none" stroke="#0a0908" stroke-width=".45" opacity=".5"/>
-  <!-- hands -->
-  <path d="M100 255 C96 262 100 270 108 268 L116 262 C112 256 106 254 100 255 Z" fill="#2e261f" stroke="#0a0908" stroke-width=".6"/>
-  <path d="M220 255 C224 262 220 270 212 268 L204 262 C208 256 214 254 220 255 Z" fill="#4a3c32" stroke="#0a0908" stroke-width=".6"/>
+<!-- upper chest skin at collar -->
+<path d="M128 150 Q140 156 152 150 L150 162 Q140 166 130 162 Z" fill="url(#sk)" stroke="#080706" stroke-width=".5"/>
 
-  <!-- neck -->
-  <path d="M148 138 L148 158 L172 158 L172 138 Q160 142 148 138 Z" fill="url(#skinL)" stroke="#0a0908" stroke-width=".7"/>
-  <path d="M152 145 H168" fill="none" stroke="#0a0908" stroke-width=".4" opacity=".4"/>
+<!-- arms thinner, articulated -->
+<path d="M116 155 C96 168 88 200 92 235 C94 252 104 256 112 246 C106 220 108 185 118 168 Z"
+      fill="url(#sk)" stroke="#080706" stroke-width=".6"/>
+<path d="M164 155 C184 168 192 200 188 235 C186 252 176 256 168 246 C174 220 172 185 162 168 Z"
+      fill="url(#skD)" stroke="#080706" stroke-width=".6"/>
+<path d="M100 185 Q98 215 102 240 M180 185 Q182 215 178 240" fill="none" stroke="#080706" stroke-width=".35" opacity=".4"/>
+<!-- hands with fingers -->
+<g stroke="#080706" stroke-width=".45" fill="url(#sk)">
+  <path d="M94 240 C90 248 94 258 104 256 L112 248 C106 242 98 240 94 240 Z"/>
+  <path d="M96 250 L90 262 M100 252 L98 264 M105 252 L108 264" fill="none" stroke-linecap="round"/>
+</g>
+<g stroke="#080706" stroke-width=".45" fill="url(#skD)">
+  <path d="M186 240 C190 248 186 258 176 256 L168 248 C174 242 182 240 186 240 Z"/>
+  <path d="M184 250 L190 262 M180 252 L182 264 M175 252 L172 264" fill="none" stroke-linecap="round"/>
+</g>
 
-  <!-- head -->
-  <ellipse cx="160" cy="112" rx="28" ry="32" fill="url(#skinL)" stroke="#0a0908" stroke-width=".9"/>
-  <!-- face shade -->
-  <path d="M160 88 C175 90 186 105 184 122 C182 135 172 142 160 144 Z" fill="#1a1410" opacity=".35"/>
-  <!-- brow / nose / mouth -->
-  <path d="M142 105 Q160 100 178 105" fill="none" stroke="#0a0908" stroke-width="1.1" stroke-linecap="round"/>
-  <path d="M160 108 L158 122 Q160 126 162 122 Z" fill="#2e261f" stroke="#0a0908" stroke-width=".45"/>
-  <path d="M148 132 Q160 138 172 132" fill="none" stroke="#0a0908" stroke-width=".7" stroke-linecap="round"/>
-  <path d="M152 133 Q160 136 168 133" fill="none" stroke="#6a1414" stroke-width=".45" opacity=".7"/>
-  <!-- eyes -->
-  <ellipse cx="148" cy="112" rx="4.2" ry="3.2" fill="#0a0908"/>
-  <ellipse cx="172" cy="112" rx="4.2" ry="3.2" fill="#0a0908"/>
-  <circle cx="149.2" cy="111.5" r="1.3" fill="#6a1414"/>
-  <circle cx="173.2" cy="111.5" r="1.3" fill="#6a1414"/>
-  <circle cx="148.6" cy="110.8" r=".45" fill="#b8aea0" opacity=".7"/>
-  <circle cx="172.6" cy="110.8" r=".45" fill="#b8aea0" opacity=".7"/>
-  <!-- crown / diadem (simple, bone, not gold) -->
-  <path d="M136 92 Q160 78 184 92 L180 98 Q160 88 140 98 Z" fill="#1a1614" stroke="#8a8074" stroke-width=".7"/>
-  <path d="M148 86 L150 78 L152 86 M160 84 L160 74 L160 84 M168 86 L170 78 L172 86"
-        fill="none" stroke="#b8aea0" stroke-width=".7" stroke-linejoin="round"/>
-  <!-- hair / beard hint -->
-  <path d="M134 100 C128 120 130 140 142 148 M186 100 C192 120 190 140 178 148"
-        fill="none" stroke="#0a0908" stroke-width="1.2" opacity=".5"/>
-  <path d="M150 140 Q160 148 170 140" fill="none" stroke="#2a2420" stroke-width="1.4" stroke-linecap="round" opacity=".8"/>
+<!-- neck -->
+<path d="M132 128 L132 148 L148 148 L148 128 Q140 132 132 128 Z" fill="url(#sk)" stroke="#080706" stroke-width=".55"/>
 
-  <!-- ===== LEFT SNAKE (shoulder) ===== -->
-  <!-- shoulder join -->
-  <ellipse cx="118" cy="168" rx="14" ry="10" fill="#2e261f" stroke="#0a0908" stroke-width=".6"/>
-  <!-- coiled body from shoulder -->
-  <path d="M118 162
-           C100 150 88 138 82 120
-           C76 100 84 88 98 92
-           C110 96 112 110 104 118
-           C96 126 86 122 84 112
-           C82 100 92 94 102 100
-           C112 106 108 120 96 128
-           C84 136 78 148 88 158
-           C96 166 110 168 118 162 Z"
-        fill="url(#snL)" stroke="#0a0908" stroke-width=".85" stroke-linejoin="round"/>
-  <!-- scale rows left -->
-  <g fill="none" stroke="#8a8074" stroke-width=".35" opacity=".45">
-    <path d="M90 156 Q100 150 108 146"/>
-    <path d="M86 148 Q96 142 104 138"/>
-    <path d="M84 138 Q94 132 102 128"/>
-    <path d="M88 120 Q98 116 106 114"/>
-    <path d="M92 108 Q100 106 108 108"/>
-    <path d="M96 98 Q102 100 106 104"/>
-  </g>
-  <g fill="none" stroke="#0a0908" stroke-width=".4" opacity=".55">
-    <path d="M94 152 L98 148 M90 144 L96 138 M88 132 L94 126 M92 118 L98 114"/>
-  </g>
-  <!-- left snake head -->
-  <path d="M96 96 C90 88 92 78 102 74 C110 72 116 78 114 88 C112 96 104 100 96 96 Z"
-        fill="url(#snL)" stroke="#0a0908" stroke-width=".8"/>
-  <path d="M102 78 L108 70 M108 80 L116 74" fill="none" stroke="#b8aea0" stroke-width=".7" stroke-linecap="round"/>
-  <circle cx="106" cy="84" r="1.8" fill="#6a1414"/>
-  <circle cx="106.5" cy="83.5" r=".5" fill="#b8aea0" opacity=".8"/>
-  <path d="M100 90 L114 88" fill="none" stroke="#0a0908" stroke-width=".55"/>
-  <path d="M112 86 L120 84 M112 90 L120 92" fill="none" stroke="#3a0c0c" stroke-width=".5" stroke-linecap="round"/>
-  <!-- tongue -->
-  <path d="M114 88 L122 86 M114 88 L122 90" fill="none" stroke="#6a1414" stroke-width=".45"/>
+<!-- head (smaller ~18% of figure height) -->
+<ellipse cx="140" cy="104" rx="22" ry="26" fill="url(#sk)" stroke="#080706" stroke-width=".7"/>
+<path d="M140 82 C152 84 160 96 158 112 C156 122 148 128 140 128 Z" fill="#1a1410" opacity=".28"/>
+<!-- brow nose mouth -->
+<path d="M126 98 Q140 94 154 98" fill="none" stroke="#080706" stroke-width=".85" stroke-linecap="round"/>
+<path d="M140 100 L138 112 Q140 115 142 112 Z" fill="#3a3028" stroke="#080706" stroke-width=".35"/>
+<path d="M130 118 Q140 124 150 118" fill="none" stroke="#080706" stroke-width=".55"/>
+<path d="M133 119 Q140 122 147 119" fill="none" stroke="#7a1818" stroke-width=".35" opacity=".65"/>
+<!-- eyes -->
+<ellipse cx="131" cy="104" rx="3.4" ry="2.6" fill="#080706"/>
+<ellipse cx="149" cy="104" rx="3.4" ry="2.6" fill="#080706"/>
+<circle cx="132" cy="103.5" r="1.05" fill="#7a1818"/>
+<circle cx="150" cy="103.5" r="1.05" fill="#7a1818"/>
+<circle cx="131.5" cy="103" r=".35" fill="#c4b8a8" opacity=".75"/>
+<circle cx="149.5" cy="103" r=".35" fill="#c4b8a8" opacity=".75"/>
+<!-- beard -->
+<path d="M128 122 Q140 134 152 122" fill="none" stroke="#2c2622" stroke-width="2.2" stroke-linecap="round" opacity=".85"/>
+<path d="M132 124 Q140 132 148 124" fill="none" stroke="#080706" stroke-width=".4" opacity=".5"/>
+<!-- diadem bone -->
+<path d="M122 88 Q140 76 158 88 L154 94 Q140 86 126 94 Z" fill="#1a1613" stroke="#8a8074" stroke-width=".55"/>
+<path d="M132 82 L134 74 L136 82 M140 80 L140 70 L140 80 M144 82 L146 74 L148 82"
+      fill="none" stroke="#c4b8a8" stroke-width=".55" stroke-linejoin="round"/>
+<!-- hair -->
+<path d="M120 96 C114 112 116 128 126 136 M160 96 C166 112 164 128 154 136"
+      fill="none" stroke="#080706" stroke-width="1.05" opacity=".45"/>
 
-  <!-- ===== RIGHT SNAKE ===== -->
-  <ellipse cx="202" cy="168" rx="14" ry="10" fill="#4a3c32" stroke="#0a0908" stroke-width=".6"/>
-  <path d="M202 162
-           C220 150 232 138 238 120
-           C244 100 236 88 222 92
-           C210 96 208 110 216 118
-           C224 126 234 122 236 112
-           C238 100 228 94 218 100
-           C208 106 212 120 224 128
-           C236 136 242 148 232 158
-           C224 166 210 168 202 162 Z"
-        fill="url(#snR)" stroke="#0a0908" stroke-width=".85" stroke-linejoin="round"/>
-  <g fill="none" stroke="#8a8074" stroke-width=".35" opacity=".45">
-    <path d="M230 156 Q220 150 212 146"/>
-    <path d="M234 148 Q224 142 216 138"/>
-    <path d="M236 138 Q226 132 218 128"/>
-    <path d="M232 120 Q222 116 214 114"/>
-    <path d="M228 108 Q220 106 212 108"/>
-    <path d="M224 98 Q218 100 214 104"/>
-  </g>
-  <g fill="none" stroke="#0a0908" stroke-width=".4" opacity=".55">
-    <path d="M226 152 L222 148 M230 144 L224 138 M232 132 L226 126 M228 118 L222 114"/>
-  </g>
-  <path d="M224 96 C230 88 228 78 218 74 C210 72 204 78 206 88 C208 96 216 100 224 96 Z"
-        fill="url(#snR)" stroke="#0a0908" stroke-width=".8"/>
-  <path d="M218 78 L212 70 M212 80 L204 74" fill="none" stroke="#b8aea0" stroke-width=".7" stroke-linecap="round"/>
-  <circle cx="214" cy="84" r="1.8" fill="#6a1414"/>
-  <circle cx="214.5" cy="83.5" r=".5" fill="#b8aea0" opacity=".8"/>
-  <path d="M220 90 L206 88" fill="none" stroke="#0a0908" stroke-width=".55"/>
-  <path d="M208 86 L200 84 M208 90 L200 92" fill="none" stroke="#3a0c0c" stroke-width=".5" stroke-linecap="round"/>
-  <path d="M206 88 L198 86 M206 88 L198 90" fill="none" stroke="#6a1414" stroke-width=".45"/>
+<!-- LEFT snake from shoulder — thinner, more coils, finer scales -->
+<ellipse cx="112" cy="152" rx="9" ry="7" fill="url(#sk)" stroke="#080706" stroke-width=".45"/>
+<path d="M112 148 C98 140 88 128 84 112 C80 96 88 86 100 88 C110 90 112 102 104 110
+         C98 116 90 114 88 106 C86 96 96 92 104 98 C112 104 110 116 100 124
+         C90 132 86 142 96 150 C102 154 110 152 112 148 Z"
+      fill="url(#sn)" stroke="#080706" stroke-width=".65" stroke-linejoin="round"/>
+<g fill="none" stroke="#8a8074" stroke-width=".28" opacity=".5">
+  <path d="M98 146 Q104 142 110 140"/><path d="M92 136 Q100 132 108 130"/>
+  <path d="M88 126 Q96 122 104 120"/><path d="M90 114 Q98 112 106 112"/>
+  <path d="M94 102 Q100 102 106 104"/><path d="M98 94 Q102 96 106 100"/>
+</g>
+<!-- left head small -->
+<path d="M98 90 C94 82 98 74 108 72 C116 72 120 80 116 88 C114 94 106 96 98 90 Z"
+      fill="url(#sn)" stroke="#080706" stroke-width=".6"/>
+<path d="M106 76 L110 68 M112 78 L118 72" fill="none" stroke="#c4b8a8" stroke-width=".5" stroke-linecap="round"/>
+<circle cx="110" cy="82" r="1.35" fill="#7a1818"/><circle cx="110.4" cy="81.6" r=".35" fill="#c4b8a8"/>
+<path d="M104 88 L116 86" stroke="#080706" stroke-width=".4"/>
+<path d="M116 85 L124 82 M116 88 L124 90" stroke="#7a1818" stroke-width=".35" stroke-linecap="round"/>
 
-  <!-- blood / wound marks at snake roots (Shahnameh: snakes grew from kisses) -->
-  <path d="M112 164 Q118 160 124 164" fill="none" stroke="#3a0c0c" stroke-width="1.2" opacity=".75"/>
-  <path d="M196 164 Q202 160 208 164" fill="none" stroke="#3a0c0c" stroke-width="1.2" opacity=".75"/>
+<!-- RIGHT snake -->
+<ellipse cx="168" cy="152" rx="9" ry="7" fill="url(#skD)" stroke="#080706" stroke-width=".45"/>
+<path d="M168 148 C182 140 192 128 196 112 C200 96 192 86 180 88 C170 90 168 102 176 110
+         C182 116 190 114 192 106 C194 96 184 92 176 98 C168 104 170 116 180 124
+         C190 132 194 142 184 150 C178 154 170 152 168 148 Z"
+      fill="url(#sn)" stroke="#080706" stroke-width=".65" stroke-linejoin="round"/>
+<g fill="none" stroke="#8a8074" stroke-width=".28" opacity=".5">
+  <path d="M182 146 Q176 142 170 140"/><path d="M188 136 Q180 132 172 130"/>
+  <path d="M192 126 Q184 122 176 120"/><path d="M190 114 Q182 112 174 112"/>
+  <path d="M186 102 Q180 102 174 104"/><path d="M182 94 Q178 96 174 100"/>
+</g>
+<path d="M182 90 C186 82 182 74 172 72 C164 72 160 80 164 88 C166 94 174 96 182 90 Z"
+      fill="url(#sn)" stroke="#080706" stroke-width=".6"/>
+<path d="M174 76 L170 68 M168 78 L162 72" fill="none" stroke="#c4b8a8" stroke-width=".5" stroke-linecap="round"/>
+<circle cx="170" cy="82" r="1.35" fill="#7a1818"/><circle cx="170.4" cy="81.6" r=".35" fill="#c4b8a8"/>
+<path d="M176 88 L164 86" stroke="#080706" stroke-width=".4"/>
+<path d="M164 85 L156 82 M164 88 L156 90" stroke="#7a1818" stroke-width=".35" stroke-linecap="round"/>
 
-  <text x="160" y="392" text-anchor="middle" fill="#4a4440" font-family="Georgia,serif" font-size="7">review #1 — not on map until approved · no UI gold</text>
+<!-- shoulder wounds -->
+<path d="M106 150 Q112 146 118 150" fill="none" stroke="#4a0e0e" stroke-width="1.1" opacity=".8"/>
+<path d="M162 150 Q168 146 174 150" fill="none" stroke="#4a0e0e" stroke-width="1.1" opacity=".8"/>
+
+<text x="140" y="412" text-anchor="middle" fill="#45403c" font-family="Georgia,serif" font-size="6.5">review #1 — not on map · approve / reject</text>
 </svg>
