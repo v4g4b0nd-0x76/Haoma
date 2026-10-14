@@ -18,3 +18,4 @@
 ## Next
 
 Reply **approve** / **reject** (+ notes). Only then Simorgh.
+SVG deferred until PNG approved — review dahaka.png only.
