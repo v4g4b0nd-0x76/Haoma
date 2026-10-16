@@ -1,125 +1,210 @@
-"""Regenerates the Haoma logo set: emblem, wedge lettering (EN), Nastaliq wordmark (FA), favicon, cover and share-image SVGs, and layouts/partials/logo.html.
-Needs: pip install fonttools brotli uharfbuzz. PNG/JPG exports are made separately (see AI.md)."""
-import math, os, sys
-HERE=os.path.dirname(os.path.abspath(__file__))
-ROOT=os.path.abspath(os.path.join(HERE,'..','..'))
-sys.path.insert(0,HERE)
-from fa_word import shaped_path
-GOLD='<linearGradient id="@@hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6cf7a"/><stop offset="1" stop-color="#d9972c"/></linearGradient>'
-def P(cx,cy,r,a): return cx+r*math.cos(math.radians(a)), cy+r*math.sin(math.radians(a))
-def pts(l): return ' '.join(f'{x:.1f} {y:.1f}' for x,y in l)
-# ---------- emblem (100x100) ----------
-def mark(ring=True, anim=True):
-    c=lambda n: f' class="hm-{n}"' if anim else ''
-    r=''
-    if ring: r='<circle cx="50" cy="50" r="46.5" fill="none" stroke="url(#@@hg)" stroke-width="1.4"/><circle cx="50" cy="50" r="42" fill="none" stroke="url(#@@hg)" stroke-width="1.8" stroke-dasharray="0.1 3.15" stroke-linecap="round" opacity=".8"/>'
-    return (r+'<g transform="translate(6 6) scale(.88)">'+
-    '<path d="M26 65H74Q74 84 50 87Q26 84 26 65Z" fill="url(#@@hg)"/><path d="M41 87Q50 90 59 87L58 91H42Z" fill="url(#@@hg)"/><path d="M30 68H70" stroke="#14161a" stroke-width="1" opacity=".35"/>'
-    '<g fill="none" stroke="#e8b455" stroke-width="3.2" stroke-linecap="round"><path d="M50 65V33"/><path d="M45 65Q40 51 32 38"/><path d="M55 65Q60 51 68 38"/></g>'
-    '<g fill="none" stroke="#e8b455" stroke-width="1.8" stroke-linecap="round"><path d="M46.3 55H53.7M46.8 47H53.2M47.4 40H52.6"/></g>'
-    '<g fill="url(#@@hg)"><path transform="translate(32 38) rotate(-34)" d="M0 0Q-3.4-7 0-15Q3.4-7 0 0Z"/><path transform="translate(68 38) rotate(34)" d="M0 0Q-3.4-7 0-15Q3.4-7 0 0Z"/>'
-    '<path transform="translate(41.5 52) rotate(-62)" d="M0 0Q-2.2-4.5 0-9.5Q2.2-4.5 0 0Z"/><path transform="translate(58.5 52) rotate(62)" d="M0 0Q-2.2-4.5 0-9.5Q2.2-4.5 0 0Z"/>'
-    '<path transform="translate(43.5 45) rotate(-48)" d="M0 0Q-1.8-3.6 0-7.6Q1.8-3.6 0 0Z"/><path transform="translate(56.5 45) rotate(48)" d="M0 0Q-1.8-3.6 0-7.6Q1.8-3.6 0 0Z"/></g>'
-    f'<path{c("drop")} d="M50 8C58 18 59 25 50 32C41 25 42 18 50 8Z" fill="url(#@@hg)"/><path d="M50 14C54 20 54 24 50 28C46 24 46 20 50 14Z" fill="#fff4cf" opacity=".55"/>'
-    f'<g fill="#f6cf7a"><circle{c("sp")} cx="41" cy="24" r="1"/><circle{c("sp2")} cx="59" cy="22" r="1"/></g></g>')
-# ---------- cuneiform-inspired Latin lettering ----------
-def wedge(h,t,w0=9,w1=1.3):
-    dx,dy=t[0]-h[0],t[1]-h[1];L=math.hypot(dx,dy);nx,ny=-dy/L,dx/L
-    return [(h[0]+nx*w0/2,h[1]+ny*w0/2),(h[0]-nx*w0/2,h[1]-ny*w0/2),(t[0]-nx*w1/2,t[1]-ny*w1/2),(t[0]+nx*w1/2,t[1]+ny*w1/2)]
-def letter(ch,x0):
-    W=[]; w=0
-    if ch=='H': W=[wedge((7,0),(7,60)),wedge((37,0),(37,60)),wedge((7,31),(36,31),7)]; w=44
-    if ch=='A': W=[wedge((22,0),(3,60)),wedge((22,0),(41,60)),wedge((11,41),(33,41),6)]; w=44
-    if ch=='M': W=[wedge((6,0),(6,60)),wedge((50,0),(50,60)),wedge((6,3),(28,43),8),wedge((50,3),(28,43),8)]; w=56
-    polys=[[(x+x0,y) for x,y in p] for p in W]
-    return polys,w
-def word_en(oring=True):
-    out=[];x=0;widths={}
-    seq='HAOMA'
-    for i,ch in enumerate(seq):
-        if ch=='O':
-            # the O: sun ring holding the haoma drop
-            cx=x+26
-            out.append(('ring',cx)); x+=52+10; continue
-        p,w=letter(ch,x);out+= [('poly',q) for q in p];x+=w+10
-    return out,x-10
-def en_svg(grp_id='@@hg'):
-    items,W=word_en();s=''
-    for k,v in items:
-        if k=='poly':
-            pt=pts(v);s+=f'<polygon points="{pt}" transform="translate(1.3 1.6)" fill="#0b0a0c" opacity=".5"/>'
-    for k,v in items:
-        if k=='poly': s+=f'<polygon points="{pts(v)}" fill="url(#@@hg)"/>'
-        else:
-            cx=v;s+=f'<circle cx="{cx+1.3}" cy="31.6" r="24" fill="none" stroke="#0b0a0c" stroke-width="7" opacity=".5"/><circle cx="{cx}" cy="30" r="24" fill="none" stroke="url(#@@hg)" stroke-width="7"/><path d="M{cx} 13C{cx+7} 22 {cx+8} 29 {cx} 38C{cx-8} 29 {cx-7} 22 {cx} 13Z" fill="url(#@@hg)"/><path d="M{cx} 19C{cx+3.5} 24 {cx+3.5} 28 {cx} 32C{cx-3.5} 28 {cx-3.5} 24 {cx} 19Z" fill="#fff4cf" opacity=".5"/>'
-    return s,W,60
-# ---------- Nastaliq wordmark (outlined) ----------
-FONT=os.path.join(HERE,'NotoNastaliqUrdu-Bold.woff2')
-FAD,FAB,_=shaped_path(FONT,'هوم')
-def fa_svg(height=86):
-    x0,y0,x1,y1=FAB;sc=height/(y1-y0);w=(x1-x0)*sc
-    tr=f'translate({-x0*sc+1.2:.2f} {-y0*sc+1.5:.2f}) scale({sc:.5f})'
-    tr2=f'translate({-x0*sc:.2f} {-y0*sc:.2f}) scale({sc:.5f})'
-    return f'<path d="{FAD}" transform="{tr}" fill="#0b0a0c" opacity=".5"/><path d="{FAD}" transform="{tr2}" fill="url(#@@hg)"/>',w,height
-STYLE='<style>.hm-drop{animation:hd 6s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}@keyframes hd{to{transform:scale(1.07,1.1);opacity:.85}}.hm-sp,.hm-sp2{animation:hs 5s ease-out infinite;opacity:0}.hm-sp2{animation-delay:-2.5s}@keyframes hs{0%{opacity:0;transform:translateY(0)}25%{opacity:.9}100%{opacity:0;transform:translateY(-16px)}}@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style>'
-def sub(s,i): return s.replace('@@hg','hg'+i)
-def doc(vb,body,bg=None):
-    return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vb}">{STYLE}<defs>{GOLD}</defs>{bg or ""}{body}</svg>'
-# ====================== deliverables ======================
-import random, json, os
-def build():
-    out={}
-    en,W,H=en_svg(); fa,fw,fh=fa_svg(78)
-    markS=mark(); markN=mark(anim=False)
-    out['haoma-mark.svg']=sub(doc('0 0 100 100',markS),'')
-    out['haoma-logo.svg']=sub(doc(f'0 0 {116+W+4:.0f} 100',f'<g>{markS}</g><g transform="translate(116 20)">{en}</g>'),'')
-    out['haoma-logo-fa.svg']=sub(doc(f'0 0 {fw+16+104:.0f} 100',f'<g transform="translate(0 11)">{fa}</g><g transform="translate({fw+16:.0f} 0)">{markS}</g>'),'')
-    # favicon
-    out['favicon.svg']=sub(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs>{GOLD}</defs><rect width="64" height="64" rx="13" fill="#14161a"/><g transform="translate(-5 -5) scale(.74)">{mark(ring=False,anim=False)}</g></svg>','f')
-    # sky + mountains used by cover and og
-    r=random.Random(9)
-    def sky(w,h,n,ymax):
-        st=''.join(f'<circle cx="{r.randint(10,w-10)}" cy="{r.randint(8,ymax)}" r="{r.choice([1,1.3,1.7,2.2])}" fill="#fff" opacity="{r.choice([.35,.5,.7])}"/>' for _ in range(n));return st
-    def ridge(w,h,y0,amp,seed,col):
-        rr=random.Random(seed);x=0;d=f'M0 {h} L0 {y0}'
-        while x<w:
-            x+=rr.randint(w//14,w//8);d+=f' L{min(x,w)} {y0-rr.randint(-amp//3,amp)}'
-        return f'<path d="{d} L{w} {h}Z" fill="{col}"/>'
-    # ---- cover 1000x1000
-    rays=''.join('M%.0f %.0fL%.0f %.0f'%(*P(500,420,260,k*7.5),*P(500,420,430 if k%2==0 else 360,k*7.5)) for k in range(48))
-    en2=en.replace('@@hg','@@hg')
-    FAC,FWC,_=fa_svg(78)
-    cover=(f'<defs>{GOLD}<linearGradient id="cs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#130f26"/><stop offset=".55" stop-color="#3d2336"/><stop offset="1" stop-color="#a8672f"/></linearGradient><radialGradient id="cg"><stop offset="0" stop-color="#ffd27a" stop-opacity=".55"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient></defs>'
-     f'<rect width="1000" height="1000" fill="url(#cs)"/>{sky(1000,1000,70,520)}<circle cx="500" cy="420" r="440" fill="url(#cg)"/><g stroke="#f0b650" stroke-width="1.4" opacity=".22"><path d="{rays}"/></g>'
-     f'{ridge(1000,1000,700,70,3,"#2b1b2c")}{ridge(1000,1000,790,60,8,"#1b1120")}<rect y="900" width="1000" height="100" fill="#0b0810"/>'
-     f'<g transform="translate(320 240) scale(3.6)">{markN}</g>'
-     f'<g transform="translate(276 752) scale(1.6)">{en}</g><g transform="translate({500-FWC/2:.0f} 872)">{FAC}</g>'
-     '<rect x="22" y="22" width="956" height="956" fill="none" stroke="#e0a03a" stroke-width="2" opacity=".7"/><rect x="34" y="34" width="932" height="932" fill="none" stroke="#e0a03a" stroke-width="4" stroke-dasharray="0.1 11" stroke-linecap="round" opacity=".6"/>')
-    for (x,y) in [(22,22),(978,22),(22,978),(978,978)]:
-        cover+=f'<polygon transform="translate({x} {y})" points="{pts([P(0,0,13 if k%2==0 else 5,k*22.5-90) for k in range(16)])}" fill="#e0a03a"/>'
-    out['haoma-cover.svg']=sub(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">{STYLE}{cover}</svg>','c')
-    # ---- og 1200x630
-    ogr=''.join('M%.0f %.0fL%.0f %.0f'%(*P(330,300,200,k*9),*P(330,300,300 if k%2==0 else 260,k*9)) for k in range(40))
-    og=(f'<defs>{GOLD}<linearGradient id="cs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#130f26"/><stop offset=".6" stop-color="#3d2336"/><stop offset="1" stop-color="#a8672f"/></linearGradient><radialGradient id="cg"><stop offset="0" stop-color="#ffd27a" stop-opacity=".5"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/></radialGradient></defs>'
-     f'<rect width="1200" height="630" fill="url(#cs)"/>{sky(1200,630,60,300)}<circle cx="330" cy="300" r="330" fill="url(#cg)"/><g stroke="#f0b650" stroke-width="1.2" opacity=".2"><path d="{ogr}"/></g>'
-     f'{ridge(1200,630,500,70,5,"#2b1b2c")}{ridge(1200,630,550,55,12,"#1b1120")}<rect y="590" width="1200" height="40" fill="#0b0810"/>'
-     f'<g transform="translate(120 100) scale(4.2)">{markN}</g><g transform="translate(600 190) scale(1.75)">{en}</g><g transform="translate(790 340)">{fa_svg(110)[0]}</g>')
-    out['haoma-og.svg']=sub(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">{STYLE}{og}</svg>','o')
-    # ---- Hugo inline partial
-    def inl(body): return body.replace('@@hg','hg{{ $i }}')
-    full_en=f'<svg class="logo logo-full" viewBox="0 0 {116+W+4:.0f} 100" role="img" aria-label="{{{{ site.Title }}}}"><defs>{GOLD}</defs><g>{markS}</g><g transform="translate(116 20)">{en}</g></svg>'
-    full_fa=f'<svg class="logo logo-full" viewBox="0 0 {fw+16+104:.0f} 100" role="img" aria-label="{{{{ site.Title }}}}"><defs>{GOLD}</defs><g transform="translate(0 11)">{fa}</g><g transform="translate({fw+16:.0f} 0)">{markS}</g></svg>'
-    mk=f'<svg class="logo logo-mark" viewBox="0 0 100 100" role="img" aria-label="{{{{ site.Title }}}}"><defs>{GOLD}</defs>{markS}</svg>'
-    word_en_s=f'<svg class="logo logo-word" viewBox="0 0 {W+4:.0f} 63" role="img" aria-label="{{{{ site.Title }}}}"><defs>{GOLD}</defs>{en}</svg>'
-    word_fa_s=f'<svg class="logo logo-word" viewBox="0 0 {fw+2:.0f} {fh+2:.0f}" role="img" aria-label="{{{{ site.Title }}}}"><defs>{GOLD}</defs>{fa}</svg>'
-    part='{{- $i := .id | default "x" -}}\n{{- if eq .v "mark" -}}'+inl(mk)+'{{- else if eq .v "word" -}}{{- if eq site.Language.Lang "fa" -}}'+inl(word_fa_s)+'{{- else -}}'+inl(word_en_s)+'{{- end -}}'+'{{- else if eq site.Language.Lang "fa" -}}'+inl(full_fa)+'{{- else -}}'+inl(full_en)+'{{- end -}}\n'
-    out['_partial_logo.html']=part
+"""Regenerates the Haoma logo set. The identity is pure text, set in real scripts only:
+
+  Old Persian cuneiform  U+103C3 U+103A2 U+103B6  (ha-u-ma = hauma-, first element of Haumavarga, DNa 25 / XPh 26)
+  Old Persian word divider U+103D0
+  Avestan                U+10B35 U+10B00 U+10B0A U+10B28 U+10B00  (h-a-o-m-a, written right to left)
+  Latin                  HAOMA in Cinzel Bold (inscriptional capitals)
+  Persian                هوم in Noto Nastaliq Urdu Bold
+
+Every glyph is taken from a font and converted to outlines. Nothing is drawn by hand or imitated.
+
+The wordmark is the name set above a strip of the ancient scripts (the Old Persian
+ha-u-ma, the word divider, then the Avestan name), the whole centred. The Latin
+wordmark sets that strip at em 30; the Persian one at em 34, a touch larger so the
+strip reads at the same weight as the Latin one once both lockups are scaled to a
+common height (the Persian name is narrower and taller than HAOMA).
+
+Needs: pip install fonttools brotli uharfbuzz. PNG/JPG exports are made separately (see AI.md 8a).
+The cover/share images (haoma-cover.svg, haoma-og.svg, haoma-og.png) are NOT regenerated here."""
+import io, math, os, sys
+import uharfbuzz as hb
+from fontTools.ttLib import TTFont
+from fontTools.pens.svgPathPen import SVGPathPen
+from fontTools.pens.transformPen import TransformPen
+from fontTools.pens.boundsPen import BoundsPen
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.abspath(os.path.join(HERE, '..', '..'))
+F_OP = os.path.join(HERE, 'NotoSansOldPersian-Regular.woff')
+F_AV = os.path.join(HERE, 'NotoSansAvestan-Regular.woff')
+F_LA = os.path.join(HERE, 'Cinzel-Bold.woff')
+F_FA = os.path.join(HERE, 'NotoNastaliqUrdu-Bold.woff2')
+
+OP_HAUMA = '\U000103C3\U000103A2\U000103B6'       # ha, u, ma
+OP_DIV = '\U000103D0'                             # word divider
+AV_HAOMA = '\U00010B35\U00010B00\U00010B0A\U00010B28\U00010B00'  # he a o me a
+LA_NAME = 'HAOMA'
+FA_NAME = 'هوم'
+
+GOLD = '<linearGradient id="@@hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6cf7a"/><stop offset="1" stop-color="#d9972c"/></linearGradient>'
+NIGHT = '#14161a'
+
+# wordmark strip sizes (em). Persian is set a little larger so its strip reads at
+# the same weight as the Latin one when both lockups are scaled to a common height.
+STRIP_EM = {'en': 30, 'fa': 34}
+
+
+# ---------------------------------------------------------------- glyph outlines
+_cache = {}
+def _font(path):
+    if path not in _cache:
+        f = TTFont(path); f.flavor = None
+        bio = io.BytesIO(); f.save(bio); data = bio.getvalue()
+        ft = TTFont(io.BytesIO(data))
+        _cache[path] = (ft, ft.getGlyphSet(), ft.getGlyphOrder(), hb.Font(hb.Face(hb.Blob(data))), ft['head'].unitsPerEm)
+    return _cache[path]
+
+def shape(path, text, track=0):
+    """Outline `text` with HarfBuzz. Returns dict(d, b=(x0,y0,x1,y1) ink bounds, upm), y axis down, baseline y=0.
+    `track` (font units) adds letter-spacing; only for Latin capitals."""
+    ft, gs, order, hbf, upm = _font(path)
+    parts = [text] if not track else list(text)
+    x = 0; d = ''; bb = None
+    for ci, part in enumerate(parts):
+        buf = hb.Buffer(); buf.add_str(part); buf.guess_segment_properties(); hb.shape(hbf, buf, {})
+        for info, pos in zip(buf.glyph_infos, buf.glyph_positions):
+            name = order[info.codepoint]
+            m = (1, 0, 0, -1, x + pos.x_offset, -pos.y_offset)
+            pen = SVGPathPen(gs, ntos=lambda v: f'{v:.0f}'); gs[name].draw(TransformPen(pen, m)); d += pen.getCommands()
+            bp = BoundsPen(gs); gs[name].draw(TransformPen(bp, m))
+            if bp.bounds:
+                b = bp.bounds
+                bb = b if bb is None else (min(bb[0], b[0]), min(bb[1], b[1]), max(bb[2], b[2]), max(bb[3], b[3]))
+            x += pos.x_advance
+        if track and ci < len(parts) - 1: x += track
+    return dict(d=d, b=bb, upm=upm)
+
+def size(g, em):
+    s = em / g['upm']; b = g['b']
+    return (b[2] - b[0]) * s, (b[3] - b[1]) * s
+
+def carved(g, em, x, y, anchor='lt'):
+    """Gold glyph run with a soft bevel: dark drop, light upper edge, gold fill.
+    anchor 'lt' = x,y is the left-top ink corner; 'ct' = centre-top."""
+    s = em / g['upm']; b = g['b']; w = (b[2] - b[0]) * s
+    left = x - w / 2 if anchor == 'ct' else x
+    tx = left - b[0] * s; ty = y - b[1] * s
+    o = max(.7, em * .011)
+    f = lambda dx, dy: f'transform="translate({tx+dx:.2f} {ty+dy:.2f}) scale({s:.5f})"'
+    return (f'<path d="{g["d"]}" {f(o*1.1, o*1.4)} fill="#0b0a0c" opacity=".55"/>'
+            f'<path d="{g["d"]}" {f(-o*.4, -o*.4)} fill="#fff4cf" opacity=".3"/>'
+            f'<path d="{g["d"]}" {f(0, 0)} fill="url(#@@hg)"/>')
+
+def flat(g, em, x, y, anchor='lt', fill='url(#@@hg)', opacity=1):
+    s = em / g['upm']; b = g['b']; w = (b[2] - b[0]) * s
+    left = x - w / 2 if anchor == 'ct' else x
+    op = '' if opacity == 1 else ' opacity="%s"' % opacity
+    return '<path d="%s" transform="translate(%.2f %.2f) scale(%.5f)" fill="%s"%s/>' % (g['d'], left - b[0] * s, y - b[1] * s, s, fill, op)
+
+def taper(x0, x1, y, t=1.6):
+    """Hairline that thins toward x1 (a tapering stroke, like the tail of a wedge)."""
+    return f'<path d="M{x0:.1f} {y-t/2:.2f}L{x1:.1f} {y-0.2:.2f}L{x1:.1f} {y+0.2:.2f}L{x0:.1f} {y+t/2:.2f}Z" fill="url(#@@hg)" opacity=".8"/>'
+
+
+# ---------------------------------------------------------------- the lockups
+OP = shape(F_OP, OP_HAUMA)
+DIV = shape(F_OP, OP_DIV)
+AV = shape(F_AV, AV_HAOMA)
+FA = shape(F_FA, FA_NAME)
+def LA(track=.30): return shape(F_LA, LA_NAME, track=int(track * 1000))
+
+def rule(cx, y, half, em=26, gap=10):
+    """Hairline - Old Persian word divider - hairline, centred on cx."""
+    dw, dh = size(DIV, em)
+    return (taper(cx - gap - dw / 2, cx - half, y) + taper(cx + gap + dw / 2, cx + half, y)
+            + carved(DIV, em, cx, y - dh / 2, 'ct'))
+
+def fa_only(h):
+    """Minimal Persian lockup: the name alone in Nastaliq."""
+    em = h * FA['upm'] / (FA['b'][3] - FA['b'][1]); w = size(FA, em)[0]; pad = 3
+    return flat(FA, em, pad, pad), w + 2 * pad, h + 2 * pad
+
+def under(kind):
+    """The wordmark: the name centred above a strip of the ancient scripts,
+    the whole thing centred. Returns (svg body, width, height)."""
+    name = LA() if kind == 'en' else FA
+    name_em = 100 if kind == 'en' else 110 * FA['upm'] / (FA['b'][3] - FA['b'][1])
+    pad = 10
+    nw, nh = size(name, name_em)
+    em = STRIP_EM[kind]
+    em_div = em * .62
+    ow, oh = size(OP, em); dw, dh = size(DIV, em_div); aw, ah = size(AV, em)
+    gap = em * .55
+    total = ow + gap + dw + gap + aw
+    # The name and the strip are centred on one shared axis, and whichever is wider
+    # sets the box width. (For Latin, HAOMA is wider than the strip; for Persian the
+    # Nastaliq name is narrower, so the strip governs — both must still be centred.)
+    W = max(nw, total) + 2 * pad
+    cx = W / 2
+    strip_top = pad + nh + name_em * .34
+    x = cx - total / 2
+    base_ty = strip_top - OP['b'][1] * (em / OP['upm'])          # shared baseline for the two word-runs
+    def put(g, e, xx):
+        s = e / g['upm']; return flat(g, e, xx, base_ty + g['b'][1] * s)
+    body = flat(name, name_em, pad, pad)
+    body += put(OP, em, x); x += ow + gap
+    body += flat(DIV, em_div, x, strip_top + (oh - dh) / 2); x += dw + gap
+    body += put(AV, em, x)
+    H = strip_top + max(oh, ah) + pad
+    return body, W, H
+
+def stack(kind):
+    """Stacked lockup for the 'full' lockup. kind: 'en' | 'fa' | 'both'."""
+    if kind == 'fa': return fa_only(100)
+    pad = 8; opw, oph = size(OP, 100); W = opw + 2 * pad; cx = W / 2
+    out = carved(OP, 100, cx, pad, 'ct'); y = pad + oph + 20
+    out += rule(cx, y, opw / 2 + 2); y += 20
+    la = LA(); lw, lh = size(la, 40)
+    out += flat(la, 40, cx, y, 'ct'); y += lh + 15
+    aw, ah = size(AV, 40)
+    out += flat(AV, 40, cx, y, 'ct', opacity=.92); y += ah + pad
+    return out, W, y
+
+def mark(frame=True):
+    """Square emblem: the Avestan letter he (first letter of the name in the script of the Avesta) in a double ruled panel, like a carved inscription tablet."""
+    out = ''
+    if frame:
+        out += ('<rect x="3" y="3" width="94" height="94" rx="3" fill="none" stroke="url(#@@hg)" stroke-width="1.6"/>'
+                '<rect x="9" y="9" width="82" height="82" rx="1.5" fill="none" stroke="url(#@@hg)" stroke-width=".8" opacity=".75"/>')
+    w, h = size(AV_HE, 100)
+    em = 100 * (52 / w) if frame else 100 * (66 / w)
+    w, h = size(AV_HE, em)
+    out += carved(AV_HE, em, 50, 50 - h / 2, 'ct')
     return out
-if __name__=='__main__':
-    o=build()
-    brand=os.path.join(ROOT,'static','img','brand');os.makedirs(brand,exist_ok=True)
-    for k,v in o.items():
-        if k=='_partial_logo.html': path=os.path.join(ROOT,'layouts','partials','logo.html')
-        else: path=os.path.join(brand,k)
-        open(path,'w').write(v)
-    print('wrote',len(o),'files')
+AV_HE = shape(F_AV, '\U00010B35')
+
+def doc(vb, body, extra=''):
+    return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{vb}">{extra}<defs>{GOLD}</defs>{body}</svg>'
+def sub(s, i): return s.replace('@@hg', 'hg' + i)
+
+
+def build():
+    out = {}
+    # ---- brand SVG files
+    for name, kind in [('haoma-logo.svg', 'en'), ('haoma-logo-fa.svg', 'fa')]:
+        body, W, H = under(kind); out[name] = sub(doc(f'0 0 {W:.0f} {H:.0f}', body), '')
+    out['haoma-mark.svg'] = sub(doc('0 0 100 100', mark()), '')
+    out['favicon.svg'] = sub(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs>{GOLD}</defs><rect width="64" height="64" rx="13" fill="{NIGHT}"/><g transform="scale(.64)">{mark(frame=False)}</g></svg>', 'f')
+
+    # ---- Hugo inline partial (v = word | full | mark)
+    def inl(b, vb, cls):
+        return (f'<svg class="logo {cls}" viewBox="{vb}" role="img" aria-label="{{{{ site.Title }}}}"><defs>{GOLD}</defs>{b}</svg>').replace('@@hg', 'hg{{ $i }}')
+    parts = {}
+    for lang in ('en', 'fa'):
+        b, W, H = under(lang); parts[('word', lang)] = inl(b, f'0 0 {W:.0f} {H:.0f}', 'logo-word')
+        b, W, H = stack(lang); parts[('full', lang)] = inl(b, f'0 0 {W:.0f} {H:.0f}', 'logo-full')
+    mk = inl(mark(), '0 0 100 100', 'logo-mark')
+    part = ('{{- $i := .id | default "x" -}}\n{{- if eq .v "mark" -}}' + mk +
+            '{{- else if eq .v "word" -}}{{- if eq site.Language.Lang "fa" -}}' + parts[('word', 'fa')] + '{{- else -}}' + parts[('word', 'en')] + '{{- end -}}' +
+            '{{- else if eq site.Language.Lang "fa" -}}' + parts[('full', 'fa')] + '{{- else -}}' + parts[('full', 'en')] + '{{- end -}}\n')
+    out['_partial_logo.html'] = part
+    return out
+
+
+if __name__ == '__main__':
+    o = build()
+    brand = os.path.join(ROOT, 'static', 'img', 'brand'); os.makedirs(brand, exist_ok=True)
+    for k, v in o.items():
+        path = os.path.join(ROOT, 'layouts', 'partials', 'logo.html') if k == '_partial_logo.html' else os.path.join(brand, k)
+        open(path, 'w').write(v)
+    print('wrote', len(o), 'files')

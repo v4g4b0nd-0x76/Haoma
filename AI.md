@@ -138,16 +138,16 @@ New culture checklist: folder + `_index.md` files in both languages (3.1), theme
 **Name.** Haoma (هوم) is the Avestan word for the sacred plant pressed in the Yasna ritual and for the divinity praised in the Hom Yasht (Yasna 9-11); the Vedic cousin is Soma. Use "Haoma" in English prose and "هوم" in Farsi. Do not translate or respell it.
 
 **Logo set** (`static/img/brand/`, all SVG unless noted):
-- Emblem `haoma-mark.svg`: a jointed haoma plant with a flame-bud, rising from a bowl, inside a pearl ring (pearls echo manuscript borders). Animation is a slow flame pulse and two rising sparks; both stop under reduced motion.
-- English wordmark in `haoma-logo.svg`: HAOMA in letters built from tapered cuneiform-style wedge strokes. The O is a sun ring holding the flame.
-- Persian wordmark in `haoma-logo-fa.svg`: هوم outlined from Noto Nastaliq Urdu (Bold), a true Nastaliq ligature, the hand of the Shahnameh manuscripts. The emblem sits on the right in RTL.
-- `favicon.svg` and `apple-touch-icon.png` (ring-less emblem on a dark rounded square), `haoma-cover.svg` + `haoma-cover-3000.jpg` (podcast cover, 3000x3000, under 512 KB), `haoma-og.svg` + `haoma-og.png` (1200x630 share image).
-- The site header and hero use the inline partial `layouts/partials/logo.html` (`{{ partial "logo.html" (dict "v" "word" "id" "h") }}`; `v` is `word` (wordmark text only — what the header and hero use), `full` (emblem + wordmark lockup) or `mark` (emblem alone); give every use on a page a different `id`). The emblem appears as the site icon only (favicon/apple-touch), never beside the wordmark. Never retype the wordmark in a font.
-- Regenerate everything with `pip install fonttools brotli uharfbuzz` then `python tools/brand/build.py`. It writes the SVGs and the partial. Export rasters yourself, for example with `@resvg/resvg-js` or Inkscape: cover 3000x3000 to JPEG (quality ~90, keep under 512 KB), share image 1200x630 PNG, apple-touch icon 180x180 PNG.
+- Mark `haoma-mark.svg`: the Nastaliq هوم monogram in gold, inside a double-ruled square frame. It is the icon of the brand.
+- English wordmark in `haoma-logo.svg`: HAOMA in the display serif (Cinzel-style capitals) with a cuneiform wedge rule beneath.
+- Persian wordmark in `haoma-logo-fa.svg`: هوم in Nastaliq with the same cuneiform wedge rule beneath. The mark sits on the right in RTL.
+- `favicon.svg` plus the raster icons `favicon-32.png`, `favicon-192.png`, `favicon-512.png` and `apple-touch-icon.png` (the mark on a dark rounded square), `haoma-mark-512.png` (mark at 512 px), raster wordmarks `haoma-logo-en.png` and `haoma-logo-fa.png`, `haoma-cover.svg` + `haoma-cover-3000.jpg` (podcast cover, 3000x3000, under 512 KB), `haoma-og.svg` + `haoma-og.png` (1200x630 share image). The cover and share image still carry the earlier plant-and-ring emblem.
+- The site header and hero use the inline partial `layouts/partials/logo.html` (`{{ partial "logo.html" (dict "v" "word" "id" "h") }}`; `v` is `word` (wordmark text only — what the header and hero use), `full` (mark + wordmark lockup) or `mark` (mark alone); give every use on a page a different `id`). The mark appears as the site icon only (favicon/apple-touch), never beside the wordmark. Never retype the wordmark in a font.
+- `tools/brand/build.py` still generates the previous logo generation (the wedge wordmark and the plant-and-ring emblem). It has not been updated to the set above, so do not run it until it is, or it will revert the brand. The cover and share image are exported from their SVGs with `@resvg/resvg-js` or Inkscape: cover 3000x3000 to JPEG (quality ~90, keep under 512 KB), share image 1200x630 PNG.
 
 **Brand colours.** Haoma gold `#f6cf7a` to `#d9972c` (gradient), stem gold `#e8b455`, flame highlight `#fff4cf`, night `#14161a`, ember `#c0503a` (token `--rubric`). Ember on night is only 3.8:1, so use it for large or decorative marks, never for body text. Culture themes keep their own accents; the logo always stays gold.
 
-**Logo rules.** Clear space of at least the flame's height on all sides. Minimum size: full lockup 28 px high, emblem 16 px (use the favicon version below that). Place on dark backgrounds or a dark plate. Do not recolour, stretch, outline, add shadows or speed the animation up (loops stay 4 s or longer).
+**Logo rules.** Clear space of at least the height of the mark's frame on all sides. Minimum size: full lockup 28 px high, mark 16 px (use the favicon version below that). Place on dark backgrounds or a dark plate. Do not recolour, stretch, outline or add shadows.
 
 **Type roles.**
 | Role | Latin | Persian |

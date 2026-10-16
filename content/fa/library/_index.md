@@ -14,4 +14,4 @@ title: کتابخانه
 | نقشه‌ها | `static/img/maps/*.svg` | ساخته‌شده با `tools/genmaps.py` از داده‌های Natural Earth (پهنه ۱:۱۱۰میلیون)؛ سبک‌آرایی اصلی | Natural Earth = مالکیت عمومی؛ سبک CC BY-SA |
 | صحنه‌های جنگل سرو | `static/img/media/cedar-*.svg`، `cedar-mist.gif` | هنر و پویانمایی اصلی ساخته‌شده برای این پروژه | CC BY-SA |
 | قلم‌ها | `static/fonts/*` | به `static/fonts/LICENSES.txt` مراجعه شود — بیشتر SIL OFL؛ ایران‌سانس قلم تجاری فونت‌ایران است و با مجوزِ دارندهٔ پروژه به کار رفته است | هر پرونده جداگانه، به `LICENSES.txt` مراجعه شود |
-| نشان و مجموعهٔ برند | `static/img/brand/*` | ساخته‌شده با `tools/brand/build.py` (نشان، نام‌نوشتهٔ HAOMA و هوم، نماد، جلد پادکست و تصویر اشتراک)؛ طرح‌های نستعلیق از Noto Nastaliq Urdu | هنر ساخته‌شدهٔ اصل = CC BY-SA؛ Noto Nastaliq Urdu = SIL OFL |
+| نشان و مجموعهٔ برند | `static/img/brand/*` | طرح نشان و نام‌نوشته‌های ساخته‌شده برای این پروژه (نام‌نوشتهٔ HAOMA و هوم، نشان، نماد و شمایل‌ها، جلد پادکست و تصویر اشتراک)؛ طرح‌های نستعلیق از Noto Nastaliq Urdu | هنر اصلی = CC BY-SA؛ Noto Nastaliq Urdu = SIL OFL |

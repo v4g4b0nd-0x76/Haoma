@@ -445,13 +445,10 @@ html[lang=fa] .myth-region__pop b{letter-spacing:0;font-family:var(--ui)}
 .logo{display:block;height:36px;width:auto;overflow:visible}
 .cine-logo{margin:0;line-height:0;text-transform:none;letter-spacing:0;text-shadow:none}
 .cine .logo{height:clamp(84px,17vw,150px);margin:0 auto;filter:drop-shadow(0 6px 28px rgba(0,0,0,.65))}
-/* wordmark-only variant (header/hero show text; the emblem is the site icon) */
+/* wordmark-only variant (header/hero show text; the mark is the site icon) */
 html[lang="en"] .brand .logo-word{height:24px}
 .cine .logo-word{height:clamp(52px,11vw,104px)}
 .cine .sub{margin:var(--s3) auto 0;max-width:46ch;color:#d6d3dd;font:1rem/1.5 var(--ui);text-shadow:0 2px 12px #000}
-.hm-drop{animation:hd 6s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:50% 100%}@keyframes hd{to{transform:scale(1.07,1.1);opacity:.85}}
-.hm-sp,.hm-sp2{animation:hs 5s ease-out infinite;opacity:0}.hm-sp2{animation-delay:-2.5s}@keyframes hs{0%{opacity:0;transform:translateY(0)}25%{opacity:.9}100%{opacity:0;transform:translateY(-16px)}}
-@media(prefers-reduced-motion:reduce){.hm-drop,.hm-sp,.hm-sp2{animation:none}}
 /* headpiece (sarlowh) under every page title */
 article h1::after{content:"";display:block;width:min(260px,70%);aspect-ratio:260/14;margin-top:.8rem;background:var(--accent);-webkit-mask:var(--m-orn) no-repeat center/contain;mask:var(--m-orn) no-repeat center/contain;opacity:.85}
 /* eight-pointed star list markers */

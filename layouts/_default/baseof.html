@@ -6,6 +6,8 @@
 <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
 <meta name="description" content="{{ if .IsHome }}{{ i18n "tagline" }}{{ else }}{{ .Summary | plainify | truncate 150 }}{{ end }}">
 <link rel="icon" href="{{ "img/brand/favicon.svg" | relURL }}" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="{{ "img/brand/favicon-32.png" | relURL }}">
+<link rel="icon" type="image/png" sizes="192x192" href="{{ "img/brand/favicon-192.png" | relURL }}">
 <link rel="apple-touch-icon" href="{{ "img/brand/apple-touch-icon.png" | relURL }}">
 <meta name="theme-color" content="#14161a">
 <meta property="og:site_name" content="{{ site.Title }}"><meta property="og:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }}{{ end }}"><meta property="og:description" content="{{ i18n "tagline" }}"><meta property="og:image" content="{{ "img/brand/haoma-og.png" | absURL }}"><meta name="twitter:card" content="summary_large_image">

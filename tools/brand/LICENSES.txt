@@ -1,0 +1,2 @@
+Noto Sans Old Persian, Noto Sans Avestan, Noto Nastaliq Urdu (Noto Project Authors) and Cinzel (Natanael Gama): SIL Open Font License 1.1 (via fontsource).
+Used here only to produce outlined SVG artwork (tools/brand/build.py).
