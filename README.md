@@ -57,7 +57,7 @@ Every route below exists in both languages (`/fa/…` mirrors `/…`); Farsi is 
 | **About** | `/about/` | What the project is and how it is sourced. |
 | **Editor launcher** | `/tools/` | One-click **Open editor** → GitHub Codespace (real editor). See §5 and §10. |
 
-> **Read next.** This README is the human guide. `AI.md` is the complete technical reference — every shortcode attribute, the editor's API and safety model, the page grid, the brand rules and the exact verification commands. When the two overlap, `AI.md` is the detailed one.
+> **Read next.** This README is the human guide. Persian overview (especially the editor): [`README.fa.md`](README.fa.md). On-site guides: [/editor/](https://v4g4b0nd-0x76.github.io/Haoma/editor/) (EN) · [/fa/editor/](https://v4g4b0nd-0x76.github.io/Haoma/fa/editor/) (FA). `AI.md` is the complete technical reference for agents and deep contributors.
 
 ---
 
@@ -203,7 +203,9 @@ Pages are linked as translations when the relative path is **identical** in `con
 
 ---
 
-## 5. The local editor
+## 5. The editor (web, binary, or Python)
+
+Non-tech walkthroughs (English + Farsi) also live on the site: **[/editor/](https://v4g4b0nd-0x76.github.io/Haoma/editor/)** and **[/fa/editor/](https://v4g4b0nd-0x76.github.io/Haoma/fa/editor/)**. Persian repo summary: [`README.fa.md`](README.fa.md).
 
 ### Start with Python
 
@@ -213,9 +215,44 @@ python tools/editor.py
 
 ### Or download a binary (no Python)
 
-GitHub Actions builds standalone binaries for Linux, Windows and macOS (`editor-v*` tags, or the **Release editor binary** workflow). Download from **Releases**, place the binary in (or next to) a clone of this repo, and run it — it opens in your browser the same way.
+GitHub Actions builds standalone binaries for Linux, Windows and macOS when an `editor-v*` tag is pushed (or via **Release editor binary**).
 
-You still need **Hugo Extended** and **git** on your PATH (the binary only replaces Python). Or set `HAOMA_ROOT` to the project folder if you run the binary from elsewhere.
+**Install / locate**
+
+1. Open [Releases](https://github.com/v4g4b0nd-0x76/Haoma/releases) and the latest `editor-v…` tag (e.g. `editor-v1.0.0`).
+2. Download the asset for your OS:
+
+| OS | Asset |
+|---|---|
+| Linux | `haoma-editor-linux-amd64` |
+| Windows | `haoma-editor-windows-amd64.exe` |
+| macOS | `haoma-editor-macos-amd64` |
+
+3. Put the file **in the project root** (same folder as `hugo.toml`), after cloning this repo:
+
+```text
+Haoma/
+  hugo.toml
+  haoma-editor-linux-amd64   ← here
+  content/ …
+```
+
+   Or set `HAOMA_ROOT` to that folder if the binary lives elsewhere.
+
+4. You still need **Hugo Extended** ≥ 0.139 and **git** on PATH (the binary only replaces Python).
+
+5. Run it:
+
+```bash
+# Linux / macOS
+chmod +x haoma-editor-linux-amd64
+./haoma-editor-linux-amd64
+
+# Windows: double-click haoma-editor-windows-amd64.exe
+# or run it from PowerShell in the project folder
+```
+
+Browser opens `http://localhost:8765/` (also printed in the terminal).
 
 ### What the editor does
 
