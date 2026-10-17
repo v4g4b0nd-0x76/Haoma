@@ -1,4 +1,26 @@
-<li{{ with .Params.culture }} data-culture="{{ . }}"{{ end }}>
-{{ with .Params.culture }}{{ $b := (index site.Data.themes . | default dict).banner }}{{ if $b }}<a class="art" href="{{ $.RelPermalink }}" tabindex="-1" aria-hidden="true"><img src="{{ printf "img/%s" $b | relURL }}" alt="" loading="lazy"></a>{{ end }}{{ end }}
-<div class="body"><h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3><p>{{ with .Params.tagline }}{{ . }}{{ else }}{{ .Summary | plainify | truncate 120 }}{{ end }}</p></div>
+{{ $cult := .Params.culture | default "base" }}
+{{ $kind := cond .IsSection "cat" "art" }}
+{{ $bg := .Params.card_bg }}
+{{ $bgKind := .Params.card_bg_kind | default "" }}
+{{ if and $bg (not $bgKind) }}{{ $bgKind = cond (strings.HasSuffix (lower $bg) ".gif") "gif" "static" }}{{ end }}
+{{ $isGif := and $bg (eq $bgKind "gif") }}
+<li class="card card--{{ $kind }}{{ if $bg }} card--media{{ end }}{{ if $isGif }} card--gif{{ end }}" data-culture="{{ $cult }}" data-kind="{{ $kind }}">
+<a class="art{{ if not $bg }} art--fall{{ end }}" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true">
+{{- if $bg -}}
+{{- $src := printf "img/%s" $bg | relURL -}}
+{{- if $isGif -}}
+<img data-gif="{{ $src }}" alt="" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+{{- else -}}
+<img src="{{ $src }}" alt="" loading="lazy">
+{{- end -}}
+{{- end -}}
+<span class="art-fall" aria-hidden="true"{{ if $bg }} hidden{{ end }}></span>
+<span class="art-lattice" aria-hidden="true"></span>
+<span class="art-seal" aria-hidden="true"></span>
+</a>
+<div class="body">
+<span class="card-kind">{{ if .IsSection }}{{ i18n "cardCat" }}{{ else }}{{ i18n "cardArt" }}{{ end }}</span>
+<h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+<p>{{ with .Params.tagline }}{{ . }}{{ else }}{{ .Summary | plainify | truncate 120 }}{{ end }}</p>
+</div>
 </li>

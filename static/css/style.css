@@ -86,21 +86,84 @@ article hr{border:0;border-top:1px solid var(--border);margin:var(--s4) 0}
 .sources ul{margin:0}
 .muted{color:var(--muted)}
 audio{width:100%;margin:var(--s1) 0 var(--s3)}
-/* ---------- cards ---------- */
+/* ---------- cards ----------
+   Categories = vertical “portal” (tall art band). Articles = horizontal strip
+   (culture seal column + text). Art uses card_bg or culture anim + low-opacity
+   lattice/seal from that culture’s atlas motifs. */
 .wrap,.hero{max-width:var(--shell);margin:0 auto;padding:0 var(--s3)}
 .hero{padding-top:var(--s5);padding-bottom:var(--s2)}
 .hero h1{font-size:2.8rem;margin:0 0 var(--s1)}
 .hero p{max-width:60ch;font-size:1.15rem;color:var(--muted)}
 .wrap h2{margin:var(--s4) 0 var(--s2)}
-.cards{list-style:none;margin:var(--s3) 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:var(--s3)}
-.cards li{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
-.cards li:hover{transform:translateY(-3px);border-color:var(--accent)}
-.cards .art{height:110px;display:block;border-bottom:1px solid var(--border)}
-.cards .art img{width:100%;height:100%;object-fit:cover;display:block}
-.cards .body{padding:var(--s2) var(--s3) var(--s3)}
+.cards{list-style:none;margin:var(--s3) 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:var(--s3);
+  --card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M0 24h48M24 0v48' stroke='%23fff' stroke-width='.6' opacity='.35'/%3E%3C/svg%3E");
+  --card-grid-size:48px;--card-motif:none;--card-motif-size:72%}
+.cards .card[data-culture=iranian]{--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 2L54 28 28 54 2 28Z' fill='none' stroke='%23fff' stroke-width='.7' opacity='.45'/%3E%3Cpath d='M28 12L44 28 28 44 12 28Z' fill='none' stroke='%23fff' stroke-width='.5' opacity='.3'/%3E%3Ccircle cx='28' cy='28' r='3' fill='none' stroke='%23fff' stroke-width='.6' opacity='.35'/%3E%3C/svg%3E");--card-grid-size:56px;--card-motif:url("../img/atlas/iranian-motifs.svg?v=seal-2")}
+.cards .card[data-culture=greek]{--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 32h28V12H8v12h12' fill='none' stroke='%23fff' stroke-width='1.1' opacity='.4'/%3E%3C/svg%3E");--card-grid-size:40px;--card-motif:url("../img/atlas/greek-motifs.svg?v=seal-2")}
+.cards .card[data-culture=mesopotamian]{--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='28'%3E%3Cpath d='M0 14l11-10 11 10 11-10 11 10' fill='none' stroke='%23fff' stroke-width='1' opacity='.42'/%3E%3C/svg%3E");--card-grid-size:44px 28px;--card-motif:url("../img/atlas/mesopotamian-motifs.svg?v=seal-2")}
+.cards .card[data-culture=indian]{--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52'%3E%3Ccircle cx='26' cy='26' r='18' fill='none' stroke='%23fff' stroke-width='.55' opacity='.3'/%3E%3Ccircle cx='26' cy='26' r='10' fill='none' stroke='%23fff' stroke-width='.5' opacity='.34'/%3E%3Cpath d='M26 4v44M4 26h44' stroke='%23fff' stroke-width='.4' opacity='.22'/%3E%3C/svg%3E");--card-grid-size:52px;--card-motif:url("../img/atlas/indian-motifs.svg?v=seal-2")}
+.cards .card[data-culture=norse]{--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 4v40M8 12l32 24M40 12L8 36' stroke='%23fff' stroke-width='.7' opacity='.36'/%3E%3C/svg%3E");--card-grid-size:48px;--card-motif:url("../img/atlas/norse-motifs.svg?v=seal-2")}
+.cards .card{position:relative;background:var(--surface);border:1px solid var(--border);overflow:hidden;display:flex;transition:transform .2s,border-color .2s,box-shadow .2s}
+.cards .card:hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--accent) 70%,var(--border));box-shadow:0 10px 28px -18px color-mix(in srgb,var(--accent) 55%,#000)}
+/* —— category: vertical portal, tall culture field —— */
+.cards .card--cat{flex-direction:column;border-radius:14px;background:linear-gradient(180deg,color-mix(in srgb,var(--accent) 8%,var(--surface)),var(--surface))}
+.cards .card--cat .art{height:148px;width:100%;border-bottom:1px solid color-mix(in srgb,var(--accent) 28%,var(--border))}
+.cards .card--cat .art::before{content:"";position:absolute;inset-inline:0;top:0;height:12px;z-index:3;pointer-events:none;
+  background:var(--accent);opacity:.75;-webkit-mask:var(--meander) repeat-x center;mask:var(--meander) repeat-x center}
+.cards .card--cat .art-lattice{opacity:.28;-webkit-mask-size:var(--card-grid-size);mask-size:var(--card-grid-size)}
+.cards .card--cat .art-seal{inset:18% 12% 14%;opacity:.2;-webkit-mask-size:var(--card-motif-size);mask-size:var(--card-motif-size)}
+.cards .card--cat .body{padding:var(--s2) var(--s3) var(--s3)}
+.cards .card--cat .body h3{font-family:var(--display);font-size:1.22rem;letter-spacing:.03em;text-transform:uppercase}
+html[lang=fa] .cards .card--cat .body h3{letter-spacing:0;text-transform:none}
+.cards .card--cat .card-kind{border-radius:3px;letter-spacing:.1em;background:color-mix(in srgb,var(--accent) 88%,#111);color:var(--bg);border-color:transparent}
+/* —— article without custom media: horizontal culture-seal column —— */
+.cards .card--art{flex-direction:row;align-items:stretch;border-radius:8px;min-height:108px;border-inline-start:3px solid var(--accent)}
+.cards .card--art .art{flex:0 0 92px;width:92px;min-height:108px;height:auto;border-bottom:0;border-inline-end:1px solid color-mix(in srgb,var(--accent) 25%,var(--border))}
+.cards .card--art .art-lattice{opacity:.22;-webkit-mask-size:calc(var(--card-grid-size) * .7);mask-size:calc(var(--card-grid-size) * .7)}
+.cards .card--art .art-seal{inset:16% 10%;opacity:.34;-webkit-mask-size:78%;mask-size:78%}
+.cards .card--art .body{flex:1;min-width:0;padding:14px 16px 14px;display:flex;flex-direction:column;justify-content:center}
+.cards .card--art .body h3{font-family:var(--read-font);font-size:1.14rem;font-weight:600;text-transform:none;letter-spacing:0}
+.cards .card--art .card-kind{border-radius:99px;align-self:flex-start}
+/* —— article with uploaded/generated background: full-width media band —— */
+.cards .card--art.card--media{flex-direction:column;min-height:0}
+.cards .card--art.card--media .art{flex:none;width:100%;height:clamp(150px,28vw,200px);min-height:150px;
+  border-inline-end:0;border-bottom:1px solid color-mix(in srgb,var(--accent) 28%,var(--border))}
+.cards .card--art.card--media .art img{object-fit:cover;object-position:center}
+.cards .card--art.card--media .art-lattice{opacity:.1}
+.cards .card--art.card--media .art-seal{inset:auto 10px 10px auto;width:36px;height:36px;opacity:.28;-webkit-mask-size:contain;mask-size:contain}
+.cards .card--art.card--media .body{padding:var(--s2) var(--s3) var(--s3)}
+/* shared art layers */
+.cards .art{position:relative;display:block;overflow:hidden;background:linear-gradient(165deg,color-mix(in srgb,var(--accent) 16%,var(--bg)),var(--bg) 60%,color-mix(in srgb,var(--accent) 8%,var(--bg)))}
+.cards .art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
+.cards .art img~ .art-lattice,.cards .art img~.art-seal{opacity:.12}
+.cards .art-fall{position:absolute;inset:0;z-index:0;opacity:.5;background-size:130px 130px;
+  background-image:radial-gradient(2px 2px at 20px 30px,var(--accent),transparent),radial-gradient(1.5px 1.5px at 90px 70px,var(--accent),transparent),radial-gradient(2px 2px at 120px 120px,var(--accent),transparent);
+  animation:var(--anim,fall) 28s linear infinite}
+.cards .art-fall[hidden]{display:none!important}
+.cards .art-lattice{position:absolute;inset:0;z-index:1;pointer-events:none;
+  background-color:color-mix(in srgb,var(--accent) 70%,transparent);
+  -webkit-mask:var(--card-grid) repeat;mask:var(--card-grid) repeat;
+  -webkit-mask-size:var(--card-grid-size);mask-size:var(--card-grid-size)}
+.cards .art-seal{position:absolute;z-index:2;pointer-events:none;
+  background-color:color-mix(in srgb,var(--accent) 85%,#fff 8%);
+  -webkit-mask:var(--card-motif) no-repeat center;mask:var(--card-motif) no-repeat center;
+  -webkit-mask-size:var(--card-motif-size);mask-size:var(--card-motif-size)}
+.cards .card[data-culture=base] .art-seal,.cards .card:not([data-culture]) .art-seal{display:none}
+.cards .body{position:relative;z-index:1}
+.cards .card-kind{display:inline-block;margin:0 0 6px;padding:1px 9px;font:600 .68rem/1.4 var(--ui);
+  letter-spacing:.06em;text-transform:uppercase;color:var(--accent);
+  border:1px solid color-mix(in srgb,var(--accent) 45%,var(--border));
+  background:color-mix(in srgb,var(--accent) 10%,transparent)}
+html[lang=fa] .cards .card-kind{letter-spacing:0;text-transform:none}
 .cards h3{margin:0 0 4px;font-size:1.15rem}
-.cards h3 a{text-decoration:none}
+.cards h3 a{text-decoration:none;color:inherit}
+.cards h3 a:hover{color:var(--accent)}
 .cards p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.55}
+@media(prefers-reduced-motion:reduce){.cards .art-fall{animation:none}}
+@media(max-width:520px){
+  .cards .card--art:not(.card--media){flex-direction:column}
+  .cards .card--art:not(.card--media) .art{flex:none;width:100%;height:88px;min-height:0;border-inline-end:0;border-bottom:1px solid color-mix(in srgb,var(--accent) 25%,var(--border))}
+}
 footer{text-align:center;color:var(--muted);padding:var(--s4) var(--s3);font-size:.9rem;border-top:1px solid var(--border)}
 @media(max-width:900px){.layout{grid-template-columns:minmax(0,1fr);row-gap:var(--s3)}aside.side,aside.toc,article,article.wide{grid-column:1;grid-row:auto}aside{width:100%;position:static}nav{gap:var(--s2)}}
 @media(prefers-reduced-motion:reduce){.bg{animation:none}}
@@ -326,8 +389,11 @@ body{font-family:var(--ui)}
 .arrows button{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:1.4rem;cursor:pointer}
 .arrows button:hover{border-color:var(--accent);color:var(--accent)}
 .cards.rail{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:var(--s3);padding-bottom:var(--s2);scrollbar-width:thin}
-.rail li{flex:0 0 min(380px,84%);scroll-snap-align:start}
-.rail .art{height:150px}
+.rail .card{flex:0 0 min(380px,84%);scroll-snap-align:start}
+.rail .card--cat .art{height:160px}
+.rail .card--art{min-height:120px}
+.rail .card--art .art{flex-basis:100px;width:100px}
+.rail .card--art.card--media .art{width:100%;height:180px;min-height:180px;flex-basis:auto}
 /* reading */
 /* the grid column is the measure, so EN and FA fill an identical column */
 article{font-family:var(--read-font);font-size:var(--read);line-height:1.9;max-width:var(--col)}
@@ -610,7 +676,7 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
      an error, not as a deliberate break */
   h1,h2,h3{break-after:avoid}
   figure,table,pre,blockquote,.sources,.verse,.infobox,.fig,.grid-md,
-  .slider-md,.myth-map,.cards li{break-inside:avoid}
+  .slider-md,.myth-map,.cards .card{break-inside:avoid}
   img,svg,video{max-width:100%!important}
   /* a tab strip hides two thirds of the page from a printer, and a scroll rail
      hides whatever is past the fold: flatten both so the PDF carries every list

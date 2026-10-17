@@ -261,7 +261,18 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
  const md=p.endsWith('.md'),svg=p.endsWith('.svg'),sp=md?split(txt):{fm:'',body:txt},hasFm=md&&sp.fm!=='';
  const lm=p.match(/^content\/(\w+)\//),ol=lm&&(lm[1]==='en'?'fa':lm[1]==='fa'?'en':null),op=ol&&p.replace('content/'+lm[1]+'/','content/'+ol+'/'),isNew=!files.includes(p);
  $('#main').innerHTML=`<div class="bar"><div class="crumb">${esc(p.replace(/\//g,' › '))}${isNew?' <span class="tag">new</span>':''}</div><div class="row">${op?`<button id="tr">${allFiles().includes(op)?'Open '+ol.toUpperCase():'Create '+ol.toUpperCase()+' stub'}</button>`:''}<button id="pp" title="Show this page in the preview pane">Preview page</button><button class="pri" id="sv">Save</button><button id="rv">Discard changes</button><button id="dl">Delete</button><span id="em" class="msg"></span></div></div>
- ${hasFm?`<div class="card pad"><div class="two"><div><label>Title</label><input type="text" id="mt"><label>Tagline</label><input type="text" id="mg"></div><div><label>Evidence grade</label><input type="text" id="mr" list="gl"><datalist id="gl"><option>primary text<option>later compilation<option>archaeology<option>modern scholarship<option>draft</datalist><label>Reviewed</label><div class="row"><input type="text" id="mv"><button id="mn" type="button">Today</button></div><label style="display:flex;gap:8px;align-items:center;margin-top:12px"><input type="checkbox" id="mw" style="width:auto"> Wide layout (for grids, infobox)</label><label style="display:flex;gap:8px;align-items:center;margin-top:8px" title="Uncheck to hide this page from the published site (Hugo draft: true). Culture and section indexes usually stay published."><input type="checkbox" id="mpub" style="width:auto" checked> Published on the site</label></div></div><label>Sources (one per line)</label><textarea id="ms" rows="3"></textarea><label>Related pages <span class="msg">(atlas / mindmap links)</span></label><div class="relbox" id="mrel"></div><details style="margin-top:8px"><summary>Raw front matter</summary><textarea id="fm" rows="8" class="mono"></textarea></details></div>`:''}
+ ${hasFm?`<div class="card pad"><div class="two"><div><label>Title</label><input type="text" id="mt"><label>Tagline</label><input type="text" id="mg"></div><div><label>Evidence grade</label><input type="text" id="mr" list="gl"><datalist id="gl"><option>primary text<option>later compilation<option>archaeology<option>modern scholarship<option>draft</datalist><label>Reviewed</label><div class="row"><input type="text" id="mv"><button id="mn" type="button">Today</button></div><label style="display:flex;gap:8px;align-items:center;margin-top:12px"><input type="checkbox" id="mw" style="width:auto"> Wide layout (for grids, infobox)</label><label style="display:flex;gap:8px;align-items:center;margin-top:8px" title="Uncheck to hide this page from the published site (Hugo draft: true). Culture and section indexes usually stay published."><input type="checkbox" id="mpub" style="width:auto" checked> Published on the site</label></div></div>
+ <label>Card background <span class="msg">(shown on list cards)</span></label>
+ <div class="row"><select id="mcbgk" title="Background kind">
+  <option value="">Culture animation (default)</option>
+  <option value="static">Static image</option>
+  <option value="gif">Animated GIF</option>
+ </select></div>
+ <div class="row" id="mcbgrow"><select id="mcbg"><option value="">— choose file —</option></select>
+  <button type="button" id="ucbg">Upload…</button><button type="button" id="xcbg" title="Clear custom background">Clear</button></div>
+ <input type="file" id="fcbg" hidden>
+ <div id="mcbgprev" class="msg" style="margin-top:6px"></div>
+ <label>Sources (one per line)</label><textarea id="ms" rows="3"></textarea><label>Related pages <span class="msg">(atlas / mindmap links)</span></label><div class="relbox" id="mrel"></div><details style="margin-top:8px"><summary>Raw front matter</summary><textarea id="fm" rows="8" class="mono"></textarea></details></div>`:''}
  ${md?`<div class="tb"><button id="tH">H2</button><button id="tB">B</button><button id="tI">I</button><button id="tQ">❝</button><button id="tL">Link</button><button id="tA">Attach file…</button><span class="sep"></span><button id="iL">▦ Layout</button><button id="iS">⇆ Slider</button><button id="iI">▤ Infobox</button><button id="iF">🖼 Figure</button><button id="iP">▶ Scroll-play</button><button id="iN">✎ Note</button><button id="iM">🗺 Map</button><button id="iV">❝ Verse</button></div><input type="file" id="fi" hidden>`:''}
  <div class="${svg?'two':''}"><textarea class="ed" id="ta" spellcheck="false"></textarea>${svg?'<div class="card"><img id="sp" style="width:100%"></div>':''}</div>`;
  const ta=$('#ta');ta.value=sp.body;const prev=()=>{if(svg)$('#sp').src='data:image/svg+xml;utf8,'+encodeURIComponent(ta.value)};prev();
@@ -272,12 +283,42 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
  if(hasFm){const FM=$('#fm');FM.value=sp.fm;
   const sync=()=>{let f=FM.value;f=setK(f,'title',$('#mt').value);f=setK(f,'tagline',$('#mg').value);f=setK(f,'grade',$('#mr').value);f=setK(f,'reviewed',$('#mv').value);f=setSrc(f,$('#ms').value.split('\n').map(s=>s.trim()).filter(Boolean));
    const rel=[...document.querySelectorAll('#mrel input:checked')].map(c=>c.dataset.u);f=setRel(f,rel);
-   f=f.replace(/^wide:.*(\n|$)/m,'').replace(/^draft:.*(\n|$)/m,'').replace(/\n+$/,'');if($('#mw').checked)f+=(f?'\n':'')+'wide: true';if(!$('#mpub').checked)f+=(f?'\n':'')+'draft: true';FM.value=f;mark()};
+   const kind=($('#mcbgk')&&$('#mcbgk').value)||'';const cbg=kind?(($('#mcbg')&&$('#mcbg').value)||''):'';
+   f=f.replace(/^card_bg:.*(\n|$)/m,'').replace(/^card_bg_kind:.*(\n|$)/m,'');
+   if(kind&&cbg){f=setK(f,'card_bg',cbg);f=setK(f,'card_bg_kind',kind)}
+   f=f.replace(/^wide:.*(\n|$)/m,'').replace(/^draft:.*(\n|$)/m,'').replace(/\n+$/,'');if($('#mw').checked)f+=(f?'\n':'')+'wide: true';if(!$('#mpub').checked)f+=(f?'\n':'')+'draft: true';FM.value=f;mark();paintCbgPrev()};
   const paintRel=()=>{const box=$('#mrel');if(!box)return;const sel=new Set(getRel(FM.value));const opts=sameCulturePages(p);
    box.innerHTML=opts.length?opts.map(o=>`<label><input type="checkbox" data-u="${esc(o.url)}" ${sel.has(o.url)?'checked':''}> ${esc(o.label)}</label>`).join(''):'<span class="msg">No other pages in this culture yet.</span>';
    box.querySelectorAll('input').forEach(c=>c.onchange=sync)};
-  const fill=()=>{$('#mt').value=getK(FM.value,'title');$('#mg').value=getK(FM.value,'tagline');$('#mr').value=getK(FM.value,'grade');$('#mv').value=getK(FM.value,'reviewed');$('#ms').value=getSrc(FM.value).join('\n');$('#mw').checked=/^wide:\s*true/m.test(FM.value);$('#mpub').checked=!/^draft:\s*true\b/m.test(FM.value);paintRel()};fill();
-  ['mt','mg','mr','mv','ms','mw','mpub'].forEach(i=>$('#'+i).oninput=sync);$('#mn').onclick=()=>{$('#mv').value=today();sync()};FM.oninput=()=>{fill();mark()}}
+  const cbgKindOf=(f,path)=>{const k=getK(f,'card_bg_kind');if(k==='gif'||k==='static')return k;return /\.gif$/i.test(path||'')?'gif':(path?'static':'')};
+  const paintCbgPrev=()=>{const el=$('#mcbgprev');if(!el)return;const kind=$('#mcbgk').value,rel=$('#mcbg').value;
+   if(!kind){el.innerHTML='Using this culture’s animated particle field + motif.';return}
+   if(!rel){el.innerHTML='<span class="warn">Choose or upload a '+(kind==='gif'?'GIF':'static image')+'.</span>';return}
+   const src='/api/raw?path='+E('static/img/'+rel)+'&ws=1&t='+T+'&v='+Date.now();
+   el.innerHTML=`<span class="ok">${kind==='gif'?'Animated GIF':'Static image'}:</span> <code>${esc(rel)}</code><br><img src="${src}" alt="" style="margin-top:6px;max-width:100%;height:88px;object-fit:cover;border-radius:8px;border:1px solid var(--b);background:#000">`};
+  const paintCbg=()=>{const sel=$('#mcbg'),kindEl=$('#mcbgk'),row=$('#mcbgrow');if(!sel||!kindEl)return;
+   const cur=getK(FM.value,'card_bg');let kind=cbgKindOf(FM.value,cur);kindEl.value=kind;
+   const re=kind==='gif'?/\.gif$/i:/\.(svg|png|jpe?g|webp)$/i;
+   const imgs=allFiles().filter(f=>f.startsWith('static/img/')&&re.test(f)).map(f=>f.slice(11));
+   if(cur&&!imgs.includes(cur)&&(kind==='gif'?/\.gif$/i:/\.(svg|png|jpe?g|webp)$/i).test(cur))imgs.unshift(cur);
+   sel.innerHTML='<option value="">— choose file —</option>'+imgs.map(x=>`<option value="${esc(x)}" ${x===cur?'selected':''}>${esc(x)}</option>`).join('');
+   if(row)row.style.display=kind?'flex':'none';
+   const up=$('#ucbg');if(up)up.textContent=kind==='gif'?'Upload GIF…':kind==='static'?'Upload image…':'Upload…';
+   paintCbgPrev()};
+  const fill=()=>{$('#mt').value=getK(FM.value,'title');$('#mg').value=getK(FM.value,'tagline');$('#mr').value=getK(FM.value,'grade');$('#mv').value=getK(FM.value,'reviewed');$('#ms').value=getSrc(FM.value).join('\n');$('#mw').checked=/^wide:\s*true/m.test(FM.value);$('#mpub').checked=!/^draft:\s*true\b/m.test(FM.value);paintCbg();paintRel()};fill();
+  ['mt','mg','mr','mv','ms','mw','mpub','mcbg'].forEach(i=>{const el=$('#'+i);if(el)el.oninput=sync});
+  $('#mcbgk').onchange=()=>{const k=$('#mcbgk').value;if(!k){$('#mcbg').value='';sync();paintCbg();return}
+   const cur=$('#mcbg').value;if(cur&&((k==='gif')!==/\.gif$/i.test(cur)))$('#mcbg').value='';paintCbg();sync()};
+  $('#mn').onclick=()=>{$('#mv').value=today();sync()};
+  $('#xcbg').onclick=()=>{$('#mcbg').value='';$('#mcbgk').value='';sync();paintCbg()};
+  $('#ucbg').onclick=()=>{const k=$('#mcbgk').value;if(!k){say('Pick Static image or Animated GIF first','warn');return}
+   const inp=$('#fcbg');inp.accept=k==='gif'?'.gif,image/gif':'image/png,image/jpeg,image/webp,image/svg+xml,.png,.jpg,.jpeg,.webp,.svg';inp.click()};
+  $('#fcbg').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+   const k=$('#mcbgk').value||(/\.(gif)$/i.test(f.name)?'gif':'static');
+   if(k==='gif'&&!/\.gif$/i.test(f.name)){say('Animated GIF kind needs a .gif file','bad');return}
+   if(k==='static'&&/\.gif$/i.test(f.name)){say('For a GIF, set kind to Animated GIF','bad');return}
+   try{$('#mcbgk').value=k;const ps=await uploadMedia([f]);const rel=ps[0].replace(/^static\/img\//,'');paintCbg();$('#mcbg').value=rel;sync();say('Card background ('+k+') set — Save to keep: '+rel,'warn')}catch(err){say(err.message,'bad')}};
+  FM.oninput=()=>{fill();mark()}}
  const wrap=(a,b)=>{const s=ta.selectionStart,e=ta.selectionEnd;ta.setRangeText(a+ta.value.slice(s,e)+b,s,e,'end');ta.focus();prev();mark()};
  const save=async()=>{try{setDraft(p,compose());if(drafts.has(p))await commit([p],'Edit '+p.replace('content/',''));else say('No changes to save')}catch(e){$('#em').textContent=e.message;$('#em').className='msg bad'}};
  $('#sv').onclick=save;ta.onkeydown=e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();save()}if(e.key==='Tab'){e.preventDefault();ta.setRangeText('  ',ta.selectionStart,ta.selectionEnd,'end');mark()}};

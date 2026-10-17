@@ -61,6 +61,8 @@ Path: `content/<lang>/cultures/<culture>/<section>/<slug>.md`. Sections used by 
 ---
 title: "Mehr (Mithra)"
 tagline: "Lord of oaths, covenants and light"   # card subtitle
+card_bg: "media/mehr-card.jpg"                  # optional list-card art under static/img/; omit for culture animated fallback
+card_bg_kind: static                            # static | gif (editor sets this; gif uses scroll-play like other GIFs)
 grade: "primary text"      # primary text | later compilation | archaeology | modern scholarship | draft
 sources:
   - "Avesta, Mihr Yasht (Yasht 10) - primary"
@@ -114,6 +116,7 @@ Preset grids the editor offers: 2/3+1/3, 1/3+2/3, 1/2+1/2, 3 and 4 columns, 2x2,
 - `anim`: `fall` (snow), `drift`, `rise` (embers), `none`.
 - `pattern`: `none | meander | rosette | zigzag | waves` (top strip, tinted with `accent`).
 - `glyphs`: text strip, e.g. runes. `banner`: file name inside `static/img/` (empty = no banner).
+- List cards (`layouts/partials/card.html`): sections use `.card--cat`, leaf pages `.card--art`, each tinted by `data-culture`. Optional `card_bg` + `card_bg_kind: static|gif` (editor: kind dropdown + type-filtered Upload). `.card--media` gives articles a full-width band (~150–200px); GIFs use `data-gif` (scroll-play / print still). Omit both for culture animated particle + lattice/seal fallback.
 - `base` is the general, no-culture theme. Keep contrast WCAG AA (text on bg >= 4.5:1). Keep the dark, dimmed mood: backgrounds under ~#1a1a1a lightness, text never pure white.
 - Theme is applied through `data-culture` on `<html>`; culture pages are fixed to their culture, other pages follow the visitor's culture pick.
 

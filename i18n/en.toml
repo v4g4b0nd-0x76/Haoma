@@ -93,3 +93,7 @@
   other = "Drag to rearrange · scroll to zoom · click a node to highlight links · double-click to open"
 [atlasEmpty]
   other = "No linked pages yet — add characters, stories or history with related: links and they will appear here."
+[cardCat]
+  other = "Category"
+[cardArt]
+  other = "Article"
