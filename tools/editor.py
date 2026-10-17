@@ -4,6 +4,7 @@ Binds to 127.0.0.1 locally, or 0.0.0.0 inside a GitHub Codespace (port forwardin
 Needs: git and hugo (in PATH). Python is optional when using the released binary
 (see .github/workflows/release-editor.yml)."""
 import hashlib, time, json, mimetypes, os, re, secrets, shutil, socket, subprocess, sys, tempfile, atexit, webbrowser
+import http.client
 from datetime import date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -49,6 +50,10 @@ TEXT = {".md", ".json", ".toml", ".yaml", ".yml", ".html", ".css", ".js", ".svg"
 LOG = ROOT / "tools" / ".preview.log"
 WS = ROOT / "tools" / ".preview"
 HIST = ROOT / "tools" / ".history"
+# Hugo is only reachable via this same-origin path (proxied). Loading the
+# Codespace :1313 URL in an iframe makes GitHub's port-forward page navigate
+# the top window and bury the editor under the site preview.
+HUGO_PREFIX = "/__hugo__"
 DRAFTS = ROOT / "tools" / ".drafts"
 DEL = DRAFTS / "__deleted.json"
 MAXH = 60
@@ -312,8 +317,7 @@ def bind_host():
     return "0.0.0.0" if CODESPACE else "127.0.0.1"
 
 
-def free_port(start):
-    host = bind_host()
+def free_port(start, host="127.0.0.1"):
     for p in range(start, start + 40):
         with socket.socket() as k:
             try:
@@ -330,6 +334,11 @@ def forward_url(port):
     if CODESPACE:
         return f"https://{CODESPACE}-{port}.{FWD_DOMAIN}/"
     return f"http://localhost:{port}/"
+
+
+def preview_embed_url():
+    """Iframe URL on the editor origin (proxied to Hugo)."""
+    return forward_url(PORT).rstrip("/") + HUGO_PREFIX + "/"
 
 
 def allowed_host(host_header):
@@ -355,7 +364,7 @@ def preview_status():
     proc = preview["proc"]
     running = proc is not None and proc.poll() is None
     tail = LOG.read_text(errors="replace").splitlines()[-12:] if LOG.exists() else []
-    url = forward_url(preview["port"]) if running else ""
+    url = preview_embed_url() if running else ""
     return {"running": running, "url": url, "log": "\n".join(tail)}
 
 
@@ -367,19 +376,20 @@ def preview_start():
         return
     if not WS.exists():
         ws_sync()
-    port = free_port(HUGO_PORT)
+    # Hugo stays on loopback; the editor proxies it at HUGO_PREFIX so the iframe
+    # never loads a different Codespace port (that steals the top window).
+    port = free_port(HUGO_PORT, host="127.0.0.1")
     preview["port"] = port
     cmd = [
         "hugo", "server",
         "--source", str(WS),
         "--port", str(port),
-        "--bind", bind_host(),
+        "--bind", "127.0.0.1",
         "--disableFastRender",
+        "--disableLiveReload",
+        "--baseURL", preview_embed_url(),
+        "--appendPort=false",
     ]
-    if CODESPACE:
-        # Otherwise Hugo writes http://localhost:PORT/ into every link, which in a
-        # codespace resolves to the reader's machine, not the preview server.
-        cmd += ["--baseURL", forward_url(port), "--appendPort=false"]
     log = open(LOG, "w")
     preview["proc"] = subprocess.Popen(cmd, cwd=WS, stdout=log, stderr=subprocess.STDOUT)
 
@@ -457,12 +467,59 @@ class H(BaseHTTPRequestHandler):
             raise ValueError("file too large")
         return self.rfile.read(n)
 
+    def proxy_hugo(self, method):
+        """Serve Hugo under HUGO_PREFIX on this same host (iframe-safe)."""
+        port = preview.get("port")
+        proc = preview.get("proc")
+        if not port or proc is None or proc.poll() is not None:
+            return self.send(503, b"preview not running", "text/plain")
+        u = urlparse(self.path)
+        rest = u.path[len(HUGO_PREFIX) :] or "/"
+        if not rest.startswith("/"):
+            rest = "/" + rest
+        path = rest + (("?" + u.query) if u.query else "")
+        skip = {
+            "host", "connection", "content-length", "transfer-encoding",
+            "keep-alive", "proxy-authenticate", "proxy-authorization",
+            "te", "trailers", "upgrade", "accept-encoding",
+        }
+        hdrs = {k: v for k, v in self.headers.items() if k.lower() not in skip}
+        hdrs["Host"] = f"127.0.0.1:{port}"
+        body = self.body() if method in ("POST", "PUT", "PATCH") else None
+        try:
+            conn = http.client.HTTPConnection("127.0.0.1", port, timeout=60)
+            conn.request(method, path, body=body, headers=hdrs)
+            resp = conn.getresponse()
+            data = resp.read()
+        except OSError as e:
+            return self.send(502, f"preview proxy: {e}".encode(), "text/plain")
+        self.send_response(resp.status)
+        for k, v in resp.getheaders():
+            kl = k.lower()
+            if kl in skip or kl == "content-length":
+                continue
+            if kl == "location":
+                pu = urlparse(v)
+                local = not pu.netloc or pu.hostname in ("127.0.0.1", "localhost")
+                if local:
+                    path = pu.path or "/"
+                    if not path.startswith(HUGO_PREFIX):
+                        path = HUGO_PREFIX + (path if path.startswith("/") else "/" + path)
+                    v = path + (("?" + pu.query) if pu.query else "")
+            self.send_header(k, v)
+        self.send_header("Content-Length", str(len(data)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(data)
+
     def handle_any(self, method):
         u = urlparse(self.path)
         q = {k: v[0] for k, v in parse_qs(u.query).items()}
         try:
             if not allowed_host(self.headers.get("Host", "")):
                 return self.send(403, {"error": "bad host"})
+            if u.path == HUGO_PREFIX or u.path.startswith(HUGO_PREFIX + "/"):
+                return self.proxy_hugo(method)
             if u.path == "/" and method == "GET":
                 html = admin_html_path().read_text(encoding="utf-8").replace("__TOKEN__", TOKEN)
                 return self.send(200, html, "text/html")

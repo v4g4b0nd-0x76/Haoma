@@ -68,7 +68,10 @@ jobs:
           assert allow("funny-space-1313.app.github.dev")
           assert not allow("other-space-8765.app.github.dev")
           assert not allow("funny-space-8765.evil.dev")
-          print("allowed_host checks OK")
+          assert ns["HUGO_PREFIX"] == "/__hugo__"
+          g["PORT"] = 8765
+          assert ns["preview_embed_url"]().endswith("/__hugo__/")
+          print("allowed_host + preview proxy checks OK")
           PY
 
       - name: Prebuild hint
