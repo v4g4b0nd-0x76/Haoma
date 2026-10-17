@@ -3,6 +3,8 @@
 **Read this before generating any art for Haoma.**  
 This file is for cheaper / weaker image models and agents. Follow sizes, palettes, and bans exactly. Prefer matching existing files over inventing a new look.
 
+**In the site editor:** open the **Art prompt** panel. Pick the slot (hero, article card, poster…), culture, static vs GIF, and target agent (Claude / Gemini / Midjourney), describe the idea, optionally attach reference images, then **Generate**. That tool embeds live colours from `themes.json` and the sizes below. Claude + this structured brief usually stays on-style; Gemini mode rewrites as a narrative scene (Google’s guidance: describe the scene, don’t keyword-dump) with explicit aspect words.
+
 Related docs (do not contradict them):
 
 | Doc | Use when |

@@ -1,1 +1,65 @@
-<ul class="files">{{ range readDir "static/library" }}{{ if not .IsDir }}<li><a href="{{ printf "library/%s" .Name | relURL }}">{{ .Name }}</a><span class="muted">{{ path.Ext .Name }}</span></li>{{ end }}{{ end }}</ul>
+{{- /* Library discovery: filterable list with type + human title. */ -}}
+{{- $files := slice -}}
+{{- range readDir "static/library" -}}
+  {{- if and (not .IsDir) (ne .Name "README.md") -}}
+    {{- $ext := path.Ext .Name | strings.TrimPrefix "." | lower -}}
+    {{- $kind := "file" -}}
+    {{- if eq $ext "pdf" }}{{ $kind = "pdf" }}{{ end -}}
+    {{- if or (eq $ext "md") (eq $ext "markdown") }}{{ $kind = "md" }}{{ end -}}
+    {{- if or (eq $ext "epub") (eq $ext "txt") }}{{ $kind = "text" }}{{ end -}}
+    {{- $title := .Name | strings.TrimSuffix (path.Ext .Name) | replaceRE `[-_]+` " " -}}
+    {{- $files = $files | append (dict "name" .Name "title" $title "ext" $ext "kind" $kind "url" (printf "library/%s" .Name | relURL)) -}}
+  {{- end -}}
+{{- end -}}
+<div class="lib" data-lib>
+  <div class="lib__bar">
+    <label class="lib__search"><span class="visually-hidden">{{ i18n "libraryFilter" }}</span>
+      <input type="search" class="lib__q" placeholder="{{ i18n "libraryFilter" }}" autocomplete="off">
+    </label>
+    <div class="lib__chips" role="group" aria-label="{{ i18n "libraryFilter" }}">
+      <button type="button" class="lib__chip is-on" data-kind="all">{{ i18n "libraryAll" }}</button>
+      <button type="button" class="lib__chip" data-kind="pdf">PDF</button>
+      <button type="button" class="lib__chip" data-kind="md">{{ i18n "libraryMd" }}</button>
+      <button type="button" class="lib__chip" data-kind="text">{{ i18n "libraryText" }}</button>
+    </div>
+  </div>
+  {{- if $files -}}
+  <ul class="files">
+    {{- range sort $files "title" -}}
+    <li class="files__item" data-kind="{{ .kind }}" data-name="{{ .name | lower }}" data-title="{{ .title | lower }}">
+      <a href="{{ .url }}"><span class="files__title">{{ .title }}</span><span class="files__name muted">{{ .name }}</span></a>
+      <span class="files__ext muted">{{ .ext }}</span>
+    </li>
+    {{- end -}}
+  </ul>
+  <p class="lib__empty msg" hidden>{{ i18n "libraryEmptyFilter" }}</p>
+  {{- else -}}
+  <p class="lib__empty msg">{{ i18n "libraryEmpty" }}</p>
+  {{- end -}}
+</div>
+<script>
+(function(){
+  var root=document.querySelector("[data-lib]"); if(!root) return;
+  var q=root.querySelector(".lib__q"), chips=root.querySelectorAll(".lib__chip");
+  var items=[].slice.call(root.querySelectorAll(".files__item"));
+  var empty=root.querySelector(".lib__empty");
+  var kind="all";
+  function run(){
+    var t=(q&&q.value||"").toLowerCase().trim();
+    var n=0;
+    items.forEach(function(li){
+      var okKind=kind==="all"||li.getAttribute("data-kind")===kind;
+      var hay=(li.getAttribute("data-title")||"")+" "+(li.getAttribute("data-name")||"");
+      var okQ=!t||hay.indexOf(t)>=0;
+      var on=okKind&&okQ; li.hidden=!on; if(on)n++;
+    });
+    if(empty) empty.hidden=n>0;
+  }
+  if(q) q.addEventListener("input",run);
+  chips.forEach(function(b){ b.addEventListener("click",function(){
+    kind=b.getAttribute("data-kind")||"all";
+    chips.forEach(function(c){ c.classList.toggle("is-on",c===b); });
+    run();
+  }); });
+})();
+</script>

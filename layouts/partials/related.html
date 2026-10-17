@@ -1,0 +1,19 @@
+{{- /* Episode ↔ wiki / article ↔ article bridge from related: front matter. */ -}}
+{{- with .Params.related -}}
+{{- $pages := slice -}}
+{{- range . -}}
+  {{- $path := . | strings.TrimSuffix "/" -}}
+  {{- $p := site.GetPage $path -}}
+  {{- if not $p }}{{ $p = site.GetPage (printf "%s/" $path) }}{{ end -}}
+  {{- if $p }}{{ $pages = $pages | append $p }}{{ end -}}
+{{- end -}}
+{{- if $pages -}}
+<section class="related" aria-labelledby="related-h">
+  <h2 id="related-h">{{ i18n "relatedTitle" }}</h2>
+  <p class="related__hint">{{ i18n "relatedHint" }}</p>
+  <ul class="cards cards--related">
+    {{- range $pages -}}{{ partial "card.html" . }}{{- end -}}
+  </ul>
+</section>
+{{- end -}}
+{{- end -}}

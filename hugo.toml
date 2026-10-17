@@ -4,6 +4,13 @@ defaultContentLanguage = "en"
 # no content is ever filed under categories/tags, so don't emit those pages
 taxonomies = {}
 enableRobotsTXT = true
+[outputs]
+  home = ["HTML", "RSS", "SearchIndex"]
+[outputFormats.SearchIndex]
+  mediaType = "application/json"
+  baseName = "search"
+  isPlainText = true
+  notAlternative = true
 [markup.goldmark.renderer]
   unsafe = true
 [languages.en]

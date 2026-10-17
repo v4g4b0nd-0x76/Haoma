@@ -1,0 +1,28 @@
+{{- /* Translation / stub status on culture hubs — low noise, actionable. */ -}}
+{{- $culture := .Params.culture -}}
+{{- if and $culture (not .Params.sec) -}}
+{{- $stubs := slice -}}
+{{- $missing := slice -}}
+{{- range .RegularPagesRecursive -}}
+  {{- if .Params.sec -}}
+    {{- if hasPrefix .Title "TODO translate:" -}}
+      {{- $stubs = $stubs | append . -}}
+    {{- end -}}
+    {{- if not .Translations -}}
+      {{- $missing = $missing | append . -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- if or $stubs $missing -}}
+<section class="lang-status wrap" aria-label="{{ i18n "langStatusLabel" }}">
+  <h2>{{ i18n "langStatusTitle" }}</h2>
+  {{- if $stubs -}}
+  <p class="lang-status__line">{{ i18n "langStatusStubs" }} <strong>{{ len $stubs }}</strong></p>
+  <ul class="lang-status__list">{{ range first 6 $stubs }}<li><a href="{{ .RelPermalink }}">{{ .Title }}</a></li>{{ end }}</ul>
+  {{- end -}}
+  {{- if $missing -}}
+  <p class="lang-status__line">{{ i18n "langStatusMissing" }} <strong>{{ len $missing }}</strong></p>
+  {{- end -}}
+</section>
+{{- end -}}
+{{- end -}}

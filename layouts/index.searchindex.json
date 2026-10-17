@@ -1,0 +1,32 @@
+{{- /* Compact search index: title/tagline weighted; body truncated for AND matching. */ -}}
+{{- $items := slice -}}
+{{- range where site.RegularPages "Draft" false -}}
+  {{- $kind := "page" -}}
+  {{- if eq .Section "episodes" }}{{ $kind = "episode" }}{{ end -}}
+  {{- if .Params.sec }}{{ $kind = .Params.sec }}{{ end -}}
+  {{- $body := trim (.Plain | replaceRE `\s+` " ") " \n\t" -}}
+  {{- $body = $body | truncate 480 "" -}}
+  {{- $items = $items | append (dict
+    "t" .Title
+    "g" (.Params.tagline | default "")
+    "b" $body
+    "u" .RelPermalink
+    "c" (.Params.culture | default "")
+    "k" $kind
+  ) -}}
+{{- end -}}
+{{- range where site.Pages "Kind" "section" -}}
+  {{- if and (not .Draft) (ne .RelPermalink site.Home.RelPermalink) -}}
+    {{- $kind := "section" -}}
+    {{- if .Params.culture }}{{ $kind = "culture" }}{{ end -}}
+    {{- $items = $items | append (dict
+      "t" .Title
+      "g" (.Params.tagline | default "")
+      "b" ""
+      "u" .RelPermalink
+      "c" (.Params.culture | default "")
+      "k" $kind
+    ) -}}
+  {{- end -}}
+{{- end -}}
+{{ dict "lang" site.Language.Lang "items" $items | jsonify }}

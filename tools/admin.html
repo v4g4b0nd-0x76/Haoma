@@ -5,16 +5,27 @@
 button,select,input,textarea{font:inherit;color:var(--t);background:var(--bg);border:1px solid var(--b);border-radius:8px;padding:6px 11px}
 button{cursor:pointer;background:var(--s2)}button:hover{border-color:var(--a)}button.pri{background:var(--a);color:#0b0d10;border-color:var(--a);font-weight:600}button.link{background:none;border:0;color:var(--a);padding:0}
 input:focus,textarea:focus,select:focus{outline:2px solid var(--a);outline-offset:-1px}
-#app{display:grid;grid-template-columns:210px 290px 1fr;height:100vh}#app.nolist{grid-template-columns:210px 1fr}#app.nolist #panel{display:none}
+#app{display:grid;grid-template-columns:200px 300px 1fr;height:100vh}#app.nolist{grid-template-columns:200px 1fr}#app.nolist #panel{display:none}
 /* no backend: the file panel has nothing to list, so it is not shown at all */
-#app.static{grid-template-columns:210px 1fr}#app.static #panel{display:none}
-#app.pv{grid-template-columns:210px 290px 1fr 1fr}#app.pv.nolist{grid-template-columns:210px 1fr 1fr}
+#app.static{grid-template-columns:200px 1fr}#app.static #panel{display:none}
+#app.pv{grid-template-columns:180px 260px 1fr 1fr}#app.pv.nolist{grid-template-columns:200px 1fr 1fr}
+#app.note-mode #main{padding:0;display:flex;flex-direction:column;overflow:hidden}
+#app.note-mode #panel{padding:10px 8px}
 #rail{background:var(--s);border-right:1px solid var(--b);display:flex;flex-direction:column;padding:12px 8px}
 .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:15px;padding:6px 10px 14px;color:#e0a03a}.logo svg{width:30px;height:30px}#rl{flex:1}
 .rb{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:none;border-radius:8px;padding:9px 10px;margin:1px 0;color:var(--m)}
 .rb span{width:22px;text-align:center}.rb:hover{background:var(--s2);color:var(--t)}.rb.on{background:var(--s2);color:var(--a);box-shadow:inset 3px 0 var(--a)}
 .rbot{border-top:1px solid var(--b);padding-top:10px;display:grid;gap:6px}.rbot button{width:100%}#branch{color:var(--m);font-size:12px;padding:0 4px}
 #panel{background:var(--s);border-right:1px solid var(--b);overflow:auto;padding:12px}#main{overflow:auto;padding:22px 26px;min-width:0}
+.vault-tools{display:flex;gap:6px;margin-bottom:8px}.vault-tools button{flex:1;padding:7px 8px;font-size:12.5px}
+.vault-search{width:100%;margin:0 0 10px;padding:9px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--b)}
+.vault-search:focus{border-color:var(--a)}
+#ct details{margin:0 0 2px}#ct>details>summary{font-size:11px;letter-spacing:.08em;padding:8px 8px 4px;color:var(--m)}
+#ct summary.s2{padding:6px 10px;border-radius:8px;font-weight:600;color:var(--t)}
+#ct summary.s2:hover{background:var(--s2)}
+#ct .item{padding:7px 12px 7px 18px;border-radius:8px;font-size:13px;margin:1px 0;line-height:1.35;white-space:normal}
+#ct .item .path{display:block;font-size:11px;color:var(--m);margin-top:1px}
+#ct .item.on{box-shadow:inset 3px 0 var(--a)}
 #pvwrap{display:none;border-left:1px solid var(--b);flex-direction:column;min-width:0}#app.pv #pvwrap{display:flex}#pvwrap iframe{flex:1;border:0;background:#fff}#pvwrap .row{padding:8px;background:var(--s)}
 label{display:block;margin:10px 0 3px;color:var(--m);font-size:12px}input[type=text],select,textarea{width:100%}
 .row{display:flex;gap:8px;align-items:center}.row>input,.row>select{flex:1}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -106,9 +117,49 @@ textarea.ed{height:calc(100vh - 340px);min-height:240px}textarea.mono,textarea.e
 #ctx .sep{height:1px;background:var(--b);margin:4px 6px}
 .guide{background:linear-gradient(135deg,color-mix(in srgb,var(--a) 12%,var(--s)),var(--s));border:1px solid var(--b);border-radius:12px;padding:16px 18px;margin:0 0 16px}
 .guide ol{margin:8px 0 0;padding-inline-start:1.3rem;color:var(--m)}.guide li{margin:4px 0}
-.relbox{max-height:160px;overflow:auto;border:1px solid var(--b);border-radius:8px;padding:6px 8px;background:var(--bg)}
-.relbox label{display:flex;gap:8px;align-items:center;margin:4px 0;color:var(--t);font-size:13px;cursor:pointer}
-.relbox input{width:auto}
+.relbox{display:flex;flex-wrap:wrap;gap:8px;max-height:200px;overflow:auto;padding:2px 0 4px}
+.relchip{appearance:none;display:inline-flex;align-items:center;gap:6px;border:1px solid var(--b);border-radius:99px;padding:4px 12px 4px 8px;background:transparent;color:var(--m);font-size:12.5px;cursor:pointer;line-height:1.3}
+.relchip .tick{width:1.1em;text-align:center;font-weight:700}
+.relchip:hover{border-color:var(--a);color:var(--t)}
+.relchip.on{border-color:var(--ok);color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,transparent)}
+.chklist{display:flex;flex-wrap:wrap;gap:8px;margin:0;font-size:12px;color:var(--m)}
+.chklist span{border:1px solid var(--b);border-radius:99px;padding:2px 10px}
+.chklist span.ok{border-color:var(--ok);color:var(--ok)}
+.chklist span.bad{border-color:var(--bad);color:var(--bad)}
+/* Obsidian-like note workspace */
+.note{display:flex;flex-direction:column;height:100%;min-height:0;background:var(--bg)}
+.note__top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 22px;border-bottom:1px solid var(--b);background:var(--s);flex-shrink:0}
+.note__crumb{color:var(--m);font-size:12.5px}.note__actions{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.note__scroll{flex:1;min-height:0;overflow:auto;padding:18px 28px 28px;display:flex;flex-direction:column;gap:14px}
+.note__title{width:100%;border:0;background:transparent;font:700 1.65rem/1.25 system-ui,-apple-system,"Segoe UI",sans-serif;padding:4px 0;color:var(--t);border-radius:0}
+.note__title:focus{outline:none;box-shadow:inset 0 -2px 0 var(--a)}
+.note__hint{margin:0;color:var(--m);font-size:13px}
+.note__props{border:1px solid var(--b);border-radius:12px;background:var(--s);overflow:hidden;flex-shrink:0}
+.note__props>summary{list-style:none;padding:12px 16px;font-size:13px;font-weight:600;color:var(--t);text-transform:none;letter-spacing:0;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.note__props>summary::-webkit-details-marker{display:none}
+.note__props>summary::after{content:"▸";color:var(--m);font-size:12px}
+.note__props[open]>summary::after{content:"▾"}
+.note__props .inner{padding:0 16px 16px;border-top:1px solid var(--b)}
+.note__bodywrap{flex:1;min-height:280px;display:flex;flex-direction:column;border:1px solid var(--b);border-radius:14px;background:var(--s);overflow:hidden}
+.note__tb{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:8px 10px;border-bottom:1px solid var(--b);background:var(--s2)}
+.note__tb button{font-size:12.5px;padding:5px 10px}
+.note__tb .sep{align-self:stretch}
+textarea.ed.note__body{flex:1;min-height:320px;height:auto;border:0;border-radius:0;padding:22px 24px;font:15px/1.7 ui-monospace,Menlo,Consolas,monospace;background:transparent;resize:none;tab-size:2}
+textarea.ed.note__body::placeholder{color:var(--m);opacity:.75}
+.note__foot{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:0 2px}
+#pal{position:fixed;inset:0;z-index:80;background:rgba(0,0,0,.55);display:none;align-items:flex-start;justify-content:center;padding:12vh 16px 16px}
+#pal.on{display:flex}#pal .box{width:min(520px,100%);background:var(--s);border:1px solid var(--b);border-radius:14px;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,.55)}
+#pal input{width:100%;border:0;border-bottom:1px solid var(--b);border-radius:0;padding:14px 16px;font-size:16px;background:var(--s2)}
+#pal ul{list-style:none;margin:0;padding:6px;max-height:50vh;overflow:auto}
+#pal li{padding:9px 12px;border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
+#pal li.on,#pal li:hover{background:var(--s2)}#pal li b{font-weight:600}#pal li span{color:var(--m);font-size:12px;overflow:hidden;text-overflow:ellipsis}
+.ap-sw{display:inline-block;width:14px;height:14px;border-radius:3px;border:1px solid var(--b);vertical-align:middle;margin-inline-end:6px}
+.ap-refs{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.ap-refs .ri{position:relative;width:72px;height:72px;border-radius:8px;overflow:hidden;border:1px solid var(--b);background:#000}
+.ap-refs .ri img{width:100%;height:100%;object-fit:cover;display:block}
+.ap-refs .ri button{position:absolute;top:2px;right:2px;padding:0 5px;font-size:11px;line-height:1.4;border-radius:4px}
+pre.ap-out{white-space:pre-wrap;max-height:42vh;font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace;user-select:text}
+.ap-tip{background:color-mix(in srgb,var(--a) 10%,var(--s));border:1px solid var(--b);border-radius:10px;padding:10px 12px;margin:0 0 14px;color:var(--m);font-size:13px}
 </style></head><body>
 <div id="ctx" hidden></div>
 <div id="app"><nav id="rail"><div class="logo"><svg class="lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6cf7a"/><stop offset="1" stop-color="#d9972c"/></linearGradient></defs><rect x="3" y="3" width="94" height="94" rx="3" fill="none" stroke="url(#hg)" stroke-width="1.6"/><rect x="9" y="9" width="82" height="82" rx="1.5" fill="none" stroke="url(#hg)" stroke-width=".8" opacity=".75"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(20.14 62.81) scale(0.07303)" fill="#0b0a0c" opacity=".55"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(18.93 61.36) scale(0.07303)" fill="#fff4cf" opacity=".3"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(19.25 61.69) scale(0.07303)" fill="url(#hg)"/></svg>Haoma editor</div><div id="rl"></div><div class="rbot"><div id="pend" class="pend" hidden><b></b><div class="row"><button class="pri" id="sa">Save all to files</button><button id="da">Discard</button></div></div><div id="branch"></div><button id="bundo">↶ Undo last change</button><button id="bpv">▶ Preview</button><button id="bchk">Check build</button><div id="hmsg" class="msg"></div></div></nav>
@@ -139,7 +190,7 @@ async function discardPaths(paths){for(const p of paths){drafts.delete(p);clearT
 async function loadDrafts(){const r=await api('drafts');drafts.clear();r.items.forEach(i=>drafts.set(i.path,i.kind==='del'?null:i.kind==='bin'?{bin:true,name:i.path.split('/').pop(),size:i.size}:i.text))}
 async function load(){files=await api('tree');for(const p of DATA){try{orig[p]=await get(p)}catch(e){}}git=await api('git');$('#branch').textContent=git.ok?'⎇ '+git.branch:'not a git repo';audit=(await api('audit')).items;pend()}
 function refresh(){const c=cur;render();if(c&&VIEWS[view][3]&&allFiles().includes(c)&&view!=='themes'&&view!=='nav')openFile(c)}
-const VIEWS={dash:['🏠','Dashboard',pDash,0],content:['📝','Content',pContent,1],drafts:['🗒','Drafts',pDrafts,0],themes:['🎨','Themes',pThemes,1],nav:['🧭','Navigation',pNav,1],review:['🔎','Review',pReview,0],files:['🗂','Files',pFiles,1],history:['↶','History',pHistory,0],publish:['🚀','Publish & PR',pPublish,0],settings:['⚙️','Settings',pSettings,0]};
+const VIEWS={dash:['🏠','Dashboard',pDash,0],content:['📝','Content',pContent,1],drafts:['🗒','Drafts',pDrafts,0],themes:['🎨','Themes',pThemes,1],art:['🖌','Art prompt',pArtPrompt,0],nav:['🧭','Navigation',pNav,1],review:['🔎','Review',pReview,0],files:['🗂','Files',pFiles,1],history:['↶','History',pHistory,0],publish:['🚀','Publish & PR',pPublish,0],settings:['⚙️','Settings',pSettings,0]};
 /* ===== panel visibility (persisted to localStorage) ===== */
 let hiddenPanels=new Set();
 try{const h=JSON.parse(localStorage.getItem('editor_hidden_panels')||'[]');hiddenPanels=new Set(h)}catch(e){}
@@ -151,9 +202,13 @@ function pPanelConfig(){modal('Show / hide panels',
 function render(){$('#rl').innerHTML='';for(const k in VIEWS){if(hiddenPanels.has(k))continue;const b=document.createElement('button');b.className='rb'+(k===view?' on':'');b.innerHTML=`<span>${VIEWS[k][0]}</span>${VIEWS[k][1]}`;b.onclick=()=>{view=k;render()};$('#rl').append(b)}
  const cfg=document.createElement('button');cfg.className='rb';cfg.title='Show / hide panels';cfg.innerHTML=`<span>⊞</span><span style="color:var(--m);font-size:11px">Panels</span>`;cfg.onclick=pPanelConfig;$('#rl').append(cfg);
  if(hiddenPanels.has(view)){view='dash'}
- $('#app').classList.toggle('nolist',!VIEWS[view][3]);$('#panel').innerHTML='';$('#main').innerHTML='';VIEWS[view][2]()}
+ $('#app').classList.toggle('nolist',!VIEWS[view][3]);$('#app').classList.remove('note-mode');$('#panel').innerHTML='';$('#main').innerHTML='';VIEWS[view][2]()}
 function list(paths,filter=''){return paths.filter(p=>p.includes(filter)).map(p=>`<button class="item ${p===cur?'on':''}" data-p="${esc(p)}" title="${esc(p)}">${drafts.has(p)?'● ':''}${esc(p.replace(/^content\//,''))}</button>`).join('')}
 function bindItems(){document.querySelectorAll('#panel .item').forEach(b=>{b.onclick=()=>openFile(b.dataset.p);b.oncontextmenu=e=>{e.preventDefault();showCtx(e.clientX,e.clientY,treeCtx(b.dataset.p))}})}
+function leafLabel(p){const leaf=p.split('/').pop().replace(/\.md$/,'').replace(/^index$/,'');const parts=p.replace(/^content\/\w+\//,'').split('/');
+ if(parts[0]==='cultures'&&parts.length>=4)return{title:leaf.replace(/-/g,' '),sub:parts[2]};
+ if(parts[0]==='episodes')return{title:leaf.replace(/-/g,' '),sub:'episode'};
+ return{title:leaf.replace(/-/g,' '),sub:parts.slice(0,-1).join(' / ')||'page'}}
 function showCtx(x,y,items){const m=$('#ctx');if(!items||!items.length){hideCtx();return}
  m.hidden=false;m.style.display='block';m.innerHTML=items.map(it=>it==='-'?'<div class="sep"></div>':`<button type="button" class="${it.bad?'bad':''}" data-i="${esc(it.id)}">${esc(it.label)}</button>`).join('');
  const r=m.getBoundingClientRect(),vx=Math.min(x,innerWidth-r.width-8),vy=Math.min(y,innerHeight-r.height-8);
@@ -161,7 +216,38 @@ function showCtx(x,y,items){const m=$('#ctx');if(!items||!items.length){hideCtx(
  m.querySelectorAll('button').forEach(b=>b.onclick=()=>{const it=items.find(i=>i&&i.id===b.dataset.i);hideCtx();if(it&&it.run)it.run()})}
 function hideCtx(){const m=$('#ctx');if(m){m.hidden=true;m.style.display='none';m.innerHTML=''}}
 document.addEventListener('click',e=>{if(!e.target.closest('#ctx'))hideCtx()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')hideCtx()});
+document.addEventListener('keydown',e=>{
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();openPalette();return}
+ if(e.key==='Escape'){hideCtx();closePalette()}
+});
+function openPalette(){
+ let el=$('#pal');if(!el){el=document.createElement('div');el.id='pal';el.innerHTML='<div class="box"><input type="search" id="palq" placeholder="Jump to page, culture, review…" autocomplete="off"><ul id="pall"></ul></div>';document.body.appendChild(el);
+ el.addEventListener('click',e=>{if(e.target===el)closePalette()})}
+ el.classList.add('on');const q=$('#palq'),list=$('#pall');let hits=[],ai=0;
+ const acts=[
+  {t:'Dashboard',s:'view',run:()=>{view='dash';render()}},
+  {t:'Content',s:'view',run:()=>{view='content';render()}},
+  {t:'Review',s:'view',run:()=>{view='review';render()}},
+  {t:'Art prompt',s:'view',run:()=>{view='art';render()}},
+  {t:'Publish & PR',s:'view',run:()=>{view='publish';render()}},
+  {t:'New page',s:'action',run:()=>{view='content';render();wizPage()}},
+  {t:'Preview site',s:'action',run:()=>$('#bpv').click()}
+ ];
+ const paint=()=>{const needle=(q.value||'').toLowerCase().trim();
+  hits=acts.filter(a=>!needle||a.t.toLowerCase().includes(needle));
+  allFiles().filter(f=>f.startsWith('content/')&&f.endsWith('.md')).forEach(f=>{
+   const leaf=f.replace(/^content\//,'');if(needle&&!leaf.toLowerCase().includes(needle)&&!f.toLowerCase().includes(needle))return;
+   hits.push({t:leaf.split('/').slice(-2).join('/').replace(/\.md$/,''),s:leaf,run:()=>{view='content';render();openFile(f)}})});
+  hits=hits.slice(0,14);ai=0;
+  list.innerHTML=hits.map((h,i)=>`<li class="${i===0?'on':''}" data-i="${i}"><b>${esc(h.t)}</b><span>${esc(h.s)}</span></li>`).join('')||'<li><span>No matches</span></li>';
+  list.querySelectorAll('li[data-i]').forEach(li=>{li.onmouseenter=()=>{ai=+li.dataset.i;list.querySelectorAll('li').forEach((x,i)=>x.classList.toggle('on',i===ai))};
+   li.onclick=()=>{const h=hits[+li.dataset.i];closePalette();if(h)h.run()}})};
+ q.oninput=paint;q.onkeydown=e=>{if(e.key==='Escape'){e.preventDefault();closePalette();return}
+  if(e.key==='ArrowDown'){e.preventDefault();ai=Math.min(hits.length-1,ai+1);list.querySelectorAll('li').forEach((x,i)=>x.classList.toggle('on',i===ai));return}
+  if(e.key==='ArrowUp'){e.preventDefault();ai=Math.max(0,ai-1);list.querySelectorAll('li').forEach((x,i)=>x.classList.toggle('on',i===ai));return}
+  if(e.key==='Enter'){e.preventDefault();const h=hits[ai];closePalette();if(h)h.run()}};
+ paint();setTimeout(()=>{q.focus();q.select()},10)}
+function closePalette(){const el=$('#pal');if(el)el.classList.remove('on')}
 function treeCtx(p){const dir=p.replace(/\/[^/]+$/,'');
  return[
   {id:'open',label:'Open',run:()=>openFile(p)},
@@ -185,30 +271,33 @@ async function renamePath(p){try{const leaf=p.split('/').pop().replace(/\.md$/,'
  const txt=drafts.has(p)?drafts.get(p):(files.includes(p)?await get(p):null);if(txt===null||(txt&&txt.bin))throw Error('cannot rename this entry');
  setDraft(np,txt);if(files.includes(p)){setDraft(p,null);await push(p)}else{drafts.delete(p);await api('discard?path='+E(p),{method:'POST'}).catch(()=>{})}
  view='content';render();openFile(np);say('Renamed as draft — Save to apply','warn')}catch(e){say(e.message,'bad')}}
-function ctree(paths,filter){const f=filter.toLowerCase(),g={};paths.filter(p=>p.toLowerCase().includes(f)).forEach(p=>{const m=p.match(/^content\/(\w+)\/(.*)$/),l=m?m[1]:'other',rest=m?m[2]:p,pt=rest.split('/'),k=pt[0]==='cultures'&&pt.length>2?'cultures / '+pt[1]:pt[0].replace(/\.md$/,'');g[l]=g[l]||{};(g[l][k]=g[l][k]||[]).push(p)});
- return Object.keys(g).sort().map(l=>`<details open><summary>${l}</summary>${Object.keys(g[l]).sort().map(k=>`<details ${f?'open':''}><summary class="s2">${esc(k)}</summary>${g[l][k].map(p=>`<button class="item ${p===cur?'on':''}" data-p="${esc(p)}" title="${esc(p)}">${drafts.has(p)?'● ':''}${esc(p.split('/').slice(-2).join('/').replace(/\.md$/,''))}</button>`).join('')}</details>`).join('')}</details>`).join('')}
-function pContent(){const md=allFiles().filter(f=>f.startsWith('content/'));$('#panel').innerHTML=`<div class="row"><button class="pri" id="np">+ Page</button><button id="nc">+ Culture</button></div><input type="text" id="cs" placeholder="Search content…" style="margin-top:10px"><div id="ct" style="margin-top:8px">${ctree(md,'')}</div>`;bindItems();$('#np').onclick=wizPage;$('#nc').onclick=wizCulture;$('#cs').oninput=()=>{$('#ct').innerHTML=ctree(md,$('#cs').value);bindItems()}}
+function ctree(paths,filter){const f=filter.toLowerCase(),g={};paths.filter(p=>p.toLowerCase().includes(f)||leafLabel(p).title.toLowerCase().includes(f)).forEach(p=>{const m=p.match(/^content\/(\w+)\/(.*)$/),l=m?m[1]:'other',rest=m?m[2]:p,pt=rest.split('/'),k=pt[0]==='cultures'&&pt.length>2?pt[1]:pt[0].replace(/\.md$/,'');g[l]=g[l]||{};(g[l][k]=g[l][k]||[]).push(p)});
+ return Object.keys(g).sort().map(l=>`<details open><summary>${l==='en'?'English':l==='fa'?'فارسی':l}</summary>${Object.keys(g[l]).sort().map(k=>`<details ${f||(cur&&cur.includes('/'+k+'/'))?'open':''}><summary class="s2">${esc(k)}</summary>${g[l][k].map(p=>{const lb=leafLabel(p);return`<button class="item ${p===cur?'on':''}" data-p="${esc(p)}" title="${esc(p)}">${drafts.has(p)?'● ':''}${esc(lb.title)}${lb.sub?`<span class="path">${esc(lb.sub)}</span>`:''}</button>`}).join('')}</details>`).join('')}</details>`).join('')}
+function pContent(){const md=allFiles().filter(f=>f.startsWith('content/'));$('#panel').innerHTML=`<div class="vault-tools"><button class="pri" id="np">+ Page</button><button id="nc">+ Culture</button></div><input type="search" class="vault-search" id="cs" placeholder="Find a page…" autocomplete="off"><div id="ct">${ctree(md,'')}</div>`;bindItems();$('#np').onclick=wizPage;$('#nc').onclick=wizCulture;$('#cs').oninput=()=>{$('#ct').innerHTML=ctree(md,$('#cs').value);bindItems()}}
 /* ===== dashboard / review ===== */
-const issues={drafts:a=>a.draft&&!a.index,stale:a=>a.stale,nosrc:a=>!a.sources&&!a.index,untr:a=>a.missing.length&&!a.index};
+const issues={drafts:a=>a.draft&&!a.index,stale:a=>a.stale,nosrc:a=>!a.sources&&!a.index,untr:a=>a.missing.length&&!a.index,stubs:a=>a.stub&&!a.index,orphan:a=>a.orphan&&!a.index};
 function pDash(){const pg=audit.filter(a=>!a.index),n=k=>audit.filter(issues[k]).length,ch=(git.status||'').split('\n').filter(Boolean);
  $('#main').innerHTML=`<h2>Dashboard</h2>
  <div class="guide"><b>How to edit (no coding needed)</b>
  <ol><li>Open <b>Content</b> in the left menu (or press <b>+ New page</b> below).</li>
  <li>Pick a culture page from the list — right-click for Open, Duplicate, Rename, Delete.</li>
- <li>Edit the title, sources, and related pages; write in the big text box.</li>
- <li>Press <b>Preview</b> to see the site, then <b>Save</b> when you are happy.</li>
- <li>Use <b>Publish &amp; PR</b> to commit and open a pull request on GitHub.</li></ol>
- <p class="msg" style="margin:10px 0 0">Tip: right-click in the writing box for Bold, Heading, Link and shortcodes (like Obsidian).</p></div>
- <p class="msg" style="margin:0">Counts describe saved files. Unsaved edits live only in the editor and the preview.</p><div class="stats" style="margin-top:12px">${[['all','Pages',pg.length],['drafts','Drafts',n('drafts')],['stale','Need review',n('stale')],['nosrc','Without sources',n('nosrc')],['untr','Untranslated',n('untr')]].map(([k,l,v])=>`<button class="stat" data-r="${k}"><b>${v}</b><span>${l}</span></button>`).join('')}<button class="stat" data-v="publish"><b>${ch.length}</b><span>Uncommitted files</span></button></div>
- <h3 style="margin-top:22px">Quick actions</h3><div class="row" style="flex-wrap:wrap"><button class="pri" id="qp">+ New page</button><button id="qc">+ New culture</button><button id="qv">▶ Preview site</button><button id="qk">Check build</button>${site().repo?`<button id="qi">GitHub issues ↗</button><button id="qr">Pull requests ↗</button>`:''}</div>
+ <li>Open a page, set title / related / sources in <b>Properties</b>.</li>
+ <li><b>Paste</b> your article from Obsidian (or any editor) into the big space — you do not need to write here.</li>
+ <li>Press <b>Preview</b>, then <b>Save</b>. Use <b>Publish &amp; PR</b> when ready.</li></ol>
+ <p class="msg" style="margin:10px 0 0">Tip: <b>Ctrl+K</b> jumps to any page. Related links use the same ✓ ticks as the checklist.</p></div>
+ <div class="guide" style="margin-top:12px"><b>Onboarding checklist</b>
+ <ol><li>Theme colours look right for your culture</li><li>At least one character, story and history page</li><li>Card art (or culture animation) + sources + related links</li><li>EN/FA pair (or a <code>TODO translate:</code> stub)</li><li>Publish &amp; PR</li></ol></div>
+ <p class="msg" style="margin:0">Counts describe saved files. Unsaved edits live only in the editor and the preview.</p><div class="stats" style="margin-top:12px">${[['all','Pages',pg.length],['drafts','Drafts',n('drafts')],['stubs','Stubs',n('stubs')],['stale','Need review',n('stale')],['nosrc','Without sources',n('nosrc')],['orphan','No related',n('orphan')],['untr','Untranslated',n('untr')]].map(([k,l,v])=>`<button class="stat" data-r="${k}"><b>${v}</b><span>${l}</span></button>`).join('')}<button class="stat" data-v="publish"><b>${ch.length}</b><span>Uncommitted files</span></button></div>
+ <h3 style="margin-top:22px">Quick actions</h3><div class="row" style="flex-wrap:wrap"><button class="pri" id="qp">+ New page</button><button id="qc">+ New culture</button><button id="qv">▶ Preview site</button><button id="qk">Check build</button><button id="qpal">⌘K Jump…</button>${site().repo?`<button id="qi">GitHub issues ↗</button><button id="qr">Pull requests ↗</button>`:''}</div>
  <h3 style="margin-top:22px">Uncommitted changes</h3><pre>${esc(ch.join('\n')||'Working tree clean')}</pre>`;
  document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{rf=b.dataset.r;view='review';render()});document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{view=b.dataset.v;render()});
  $('#qp').onclick=()=>{view='content';render();wizPage()};$('#qc').onclick=()=>{view='content';render();wizCulture()};$('#qv').onclick=()=>$('#bpv').click();$('#qk').onclick=()=>$('#bchk').click();
+ if($('#qpal'))$('#qpal').onclick=()=>openPalette();
  if(site().repo){$('#qi').onclick=()=>window.open(site().repo+'/issues');$('#qr').onclick=()=>window.open(site().repo+'/pulls')}}
-function pReview(){const L={all:'All',drafts:'Drafts',stale:'Need review (older than 180 days)',nosrc:'No sources',untr:'Missing translation'};
+function pReview(){const L={all:'All',drafts:'Drafts',stubs:'TODO translate stubs',stale:'Need review (older than 180 days)',nosrc:'No sources',orphan:'No related links',untr:'Missing translation'};
  const rows=audit.filter(a=>!a.index&&(rf==='all'||issues[rf](a)));
- $('#main').innerHTML=`<h2>Review</h2><p class="msg" style="margin:0">Find pages that need a source, a translation or a fresh review.</p><div class="chips">${Object.keys(L).map(k=>`<button class="chip ${k===rf?'on':''}" data-r="${k}">${L[k]}</button>`).join('')}</div>
- <table><tr><th>Page</th><th>Lang</th><th>Grade</th><th>Reviewed</th><th>Flags</th></tr>${rows.map(a=>`<tr class="go" data-p="${esc(a.path)}"><td>${esc(a.title)}<br><span class="msg" style="margin:0">${esc(a.path.replace('content/',''))}</span></td><td>${a.lang}</td><td>${esc(a.grade)}</td><td>${esc(a.reviewed||'-')}</td><td>${a.draft?'<span class="tag">draft</span>':''}${a.stale?'<span class="tag">review</span>':''}${a.sources?'':'<span class="tag">no sources</span>'}${a.missing.map(m=>`<span class="tag">no ${m}</span>`).join('')}</td></tr>`).join('')||'<tr><td colspan=5 class="ok">Nothing to fix here.</td></tr>'}</table>`;
+ $('#main').innerHTML=`<h2>Review</h2><p class="msg" style="margin:0">Find pages that need a source, a translation, atlas links, or a fresh review.</p><div class="chips">${Object.keys(L).map(k=>`<button class="chip ${k===rf?'on':''}" data-r="${k}">${L[k]}</button>`).join('')}</div>
+ <table><tr><th>Page</th><th>Lang</th><th>Grade</th><th>Reviewed</th><th>Flags</th></tr>${rows.map(a=>`<tr class="go" data-p="${esc(a.path)}"><td>${esc(a.title)}<br><span class="msg" style="margin:0">${esc(a.path.replace('content/',''))}</span></td><td>${a.lang}</td><td>${esc(a.grade)}</td><td>${esc(a.reviewed||'-')}</td><td>${a.stub?'<span class="tag">stub</span>':''}${a.draft&&!a.stub?'<span class="tag">draft</span>':''}${a.stale?'<span class="tag">review</span>':''}${a.sources?'':'<span class="tag">no sources</span>'}${a.orphan?'<span class="tag">no related</span>':''}${a.missing.map(m=>`<span class="tag">no ${m}</span>`).join('')}</td></tr>`).join('')||'<tr><td colspan=5 class="ok">Nothing to fix here.</td></tr>'}</table>`;
  document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{rf=b.dataset.r;pReview()});document.querySelectorAll('tr.go').forEach(r=>r.onclick=()=>openFile(r.dataset.p))}
 /* ===== new page / culture wizards (create DRAFTS, not files) ===== */
 const cultures=()=>Object.keys(themes()).filter(k=>k!=='base'),SECS=['characters','stories','history'],SECFA={characters:'شخصیت‌ها',stories:'داستان‌ها',history:'تاریخ'};
@@ -229,7 +318,12 @@ function createPage(){try{const g=id=>$('#'+id).value.trim(),ty=g('ty'),lg=g('lg
   else if(ty==='episode'){path=`content/${l}/episodes/${sg}/index.md`;front=fm({title,date:today(),culture:cu,grade:g('gr'),sources:base.sources,reviewed:today()})}
   else{path=`content/${l}/${sg}/_index.md`;front=fm({title})}
   if(allFiles().includes(path))throw Error('already exists: '+path);setDraft(path,front+'\nWrite here.\n');return path};
- const first=mk(lg,g('ti'));if($('#st').checked)mk(lg==='en'?'fa':'en','TODO translate: '+g('ti'));view='content';render();openFile(first)}catch(e){$('#wm').textContent=e.message;$('#wm').className='msg bad'}}
+ const first=mk(lg,g('ti'));if($('#st').checked){const ol=lg==='en'?'fa':'en';const stubTitle='TODO translate: '+g('ti');
+  if(ty==='culture'){const se=slug(g('se'))||'characters';ensure(`content/${ol}/cultures/${cu}/_index.md`,cultIdx(cu,cap(cu)));ensure(`content/${ol}/cultures/${cu}/${se}/_index.md`,secIdx(ol,se));
+   const sp=`content/${ol}/cultures/${cu}/${se}/${sg}.md`;if(!allFiles().includes(sp))setDraft(sp,fm({title:stubTitle,tagline:g('tg'),grade:'draft',sources:base.sources,reviewed:today()})+'\nTranslate this page.\n')}
+  else if(ty==='episode'){const sp=`content/${ol}/episodes/${sg}/index.md`;if(!allFiles().includes(sp))setDraft(sp,fm({title:stubTitle,date:today(),culture:cu,grade:'draft',sources:base.sources,reviewed:today()})+'\nTranslate this page.\n')}
+  else{const sp=`content/${ol}/${sg}/_index.md`;if(!allFiles().includes(sp))setDraft(sp,fm({title:stubTitle})+'\nTranslate this page.\n')}}
+ view='content';render();openFile(first)}catch(e){$('#wm').textContent=e.message;$('#wm').className='msg bad'}}
 function wizCulture(){$('#main').innerHTML=`<h2>New culture</h2><p class="msg" style="margin:0">Created as unsaved drafts (folders, theme and banner).</p><div class="two"><div><label>Key (a-z, e.g. egyptian)</label><input type="text" id="k"><label>English name</label><input type="text" id="n1"><label>Farsi name</label><input type="text" id="n2" dir="rtl"><label>Tagline (English)</label><input type="text" id="t1"><label>Tagline (Farsi)</label><input type="text" id="t2" dir="rtl"></div>
 <div><div class="sw"><div><label>Accent</label><input type="color" id="ac" value="#c9a45a"></div><div><label>Background</label><input type="color" id="bg" value="#15171a"></div></div><label>Background animation</label><select id="an"><option>fall</option><option>drift</option><option>rise</option><option>none</option></select><label>Top strip pattern</label><select id="pa"><option>none</option><option>meander</option><option>rosette</option><option>zigzag</option><option>waves</option></select>
 <label>Banner art</label><select id="bs"><option value="mountains">Mountains + moon</option><option value="waves">Waves</option><option value="">None</option></select></div></div><p><button class="pri" id="go">Create draft</button><span id="wm" class="msg"></span></p>`;
@@ -246,107 +340,157 @@ const setSrc=(f,a)=>{f=(f+'\n').replace(/^sources:\s*\n(?:[ \t]+- .*\n?)*/m,'').
 const getRel=f=>{const m=(f+'\n').match(/^related:\s*\n((?:[ \t]+- .*\n?)*)/m);if(m&&m[1])return m[1].split('\n').filter(Boolean).map(l=>{let v=l.replace(/^\s*-\s*/,'').trim();try{v=JSON.parse(v)}catch(e){}return String(v).replace(/\/?$/,'/')});return[]};
 const setRel=(f,a)=>{f=(f+'\n').replace(/^related:\s*\n(?:[ \t]+- .*\n?)*/m,'').replace(/^related:\s*\[.*\]\n?/m,'').replace(/\n+$/,'');return a.length?f+'\nrelated:\n'+a.map(s=>'  - '+JSON.stringify(s.replace(/\/?$/,'/'))).join('\n'):f};
 const pathToUrl=p=>{const m=p.match(/^content\/\w+\/(.+?)(?:\.md|\/index\.md)$/);if(!m)return'';let u='/'+m[1].replace(/\/_index$/,'');if(!u.endsWith('/'))u+='/';return u};
-const sameCulturePages=p=>{const m=p.match(/^content\/(\w+)\/cultures\/([^/]+)\//);if(!m)return[];const[,lang,cu]=m;const out=[];
+const fmOf=f=>{const t=drafts.get(f)!==undefined?drafts.get(f):(orig[f]||'');return typeof t==='string'?t:''};
+const cultureOf=f=>{const t=fmOf(f);const m=t.match(/^culture:\s*["']?([\w-]+)/m);return m?m[1]:''};
+const sameCulturePages=p=>{const m=p.match(/^content\/(\w+)\/cultures\/([^/]+)\//);const em=p.match(/^content\/(\w+)\/episodes\//);let lang,cu;
+ if(m){lang=m[1];cu=m[2]}else if(em){lang=em[1];cu=cultureOf(p);if(!cu)return[]}else return[];
+ const out=[];
  allFiles().filter(f=>f.startsWith(`content/${lang}/cultures/${cu}/`)&&f.endsWith('.md')&&!f.endsWith('/_index.md')&&f!==p).forEach(f=>{const u=pathToUrl(f);if(u)out.push({path:f,url:u,label:f.split('/').slice(-2).join('/').replace(/\.md$/,'')})});
- allFiles().filter(f=>f.match(new RegExp('^content/'+lang+'/episodes/.+/index\\.md$'))).forEach(f=>{out.push({path:f,url:pathToUrl(f),label:'episode · '+f.split('/')[3]})});
+ allFiles().filter(f=>f.match(new RegExp('^content/'+lang+'/episodes/.+/index\\.md$'))&&f!==p).forEach(f=>{
+  const ec=cultureOf(f);if(ec&&ec!==cu)return; /* unloaded episodes stay listed until culture is known */
+  out.push({path:f,url:pathToUrl(f),label:'episode · '+f.split('/')[3]})});
  return out};
 const eolOf={};
 async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;document.querySelectorAll('#panel .item').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
  let txt;try{const d=drafts.get(p);
-  if(d===null){$('#main').innerHTML=`<div class="bar"><div class="crumb">${esc(p)}</div><button id="un">Restore (cancel delete)</button></div><p class="warn">Marked for deletion. Save all to apply.</p>`;$('#un').onclick=()=>discardPaths([p]);return}
-  if(d&&d.bin){$('#main').innerHTML=`<div class="bar"><div class="crumb">${esc(p)}</div><button id="un">Discard</button></div><p class="warn">Unsaved upload: ${esc(d.name)} (${d.size} bytes). It is in the preview only until you save.</p>`;$('#un').onclick=()=>discardPaths([p]);return}
+  if(d===null){$('#app').classList.remove('note-mode');$('#main').innerHTML=`<div class="bar"><div class="crumb">${esc(p)}</div><button id="un">Restore (cancel delete)</button></div><p class="warn">Marked for deletion. Save all to apply.</p>`;$('#un').onclick=()=>discardPaths([p]);return}
+  if(d&&d.bin){$('#app').classList.remove('note-mode');$('#main').innerHTML=`<div class="bar"><div class="crumb">${esc(p)}</div><button id="un">Discard</button></div><p class="warn">Unsaved upload: ${esc(d.name)} (${d.size} bytes). It is in the preview only until you save.</p>`;$('#un').onclick=()=>discardPaths([p]);return}
   if(files.includes(p)&&orig[p]===undefined)orig[p]=await get(p);txt=d!==undefined?d:await get(p);if(files.includes(p)&&orig[p]===undefined)orig[p]=txt}
- catch(e){$('#main').innerHTML=`<p class="bad">${esc(e.message)}</p>`;return}
+ catch(e){$('#app').classList.remove('note-mode');$('#main').innerHTML=`<p class="bad">${esc(e.message)}</p>`;return}
  eolOf[p]=txt.includes('\r\n')?'\r\n':'\n';txt=txt.replace(/\r\n/g,'\n');
  const md=p.endsWith('.md'),svg=p.endsWith('.svg'),sp=md?split(txt):{fm:'',body:txt},hasFm=md&&sp.fm!=='';
  const lm=p.match(/^content\/(\w+)\//),ol=lm&&(lm[1]==='en'?'fa':lm[1]==='fa'?'en':null),op=ol&&p.replace('content/'+lm[1]+'/','content/'+ol+'/'),isNew=!files.includes(p);
- $('#main').innerHTML=`<div class="bar"><div class="crumb">${esc(p.replace(/\//g,' › '))}${isNew?' <span class="tag">new</span>':''}</div><div class="row">${op?`<button id="tr">${allFiles().includes(op)?'Open '+ol.toUpperCase():'Create '+ol.toUpperCase()+' stub'}</button>`:''}<button id="pp" title="Show this page in the preview pane">Preview page</button><button class="pri" id="sv">Save</button><button id="rv">Discard changes</button><button id="dl">Delete</button><span id="em" class="msg"></span></div></div>
- ${hasFm?`<div class="card pad"><div class="two"><div><label>Title</label><input type="text" id="mt"><label>Tagline</label><input type="text" id="mg"></div><div><label>Evidence grade</label><input type="text" id="mr" list="gl"><datalist id="gl"><option>primary text<option>later compilation<option>archaeology<option>modern scholarship<option>draft</datalist><label>Reviewed</label><div class="row"><input type="text" id="mv"><button id="mn" type="button">Today</button></div><label style="display:flex;gap:8px;align-items:center;margin-top:12px"><input type="checkbox" id="mw" style="width:auto"> Wide layout (for grids, infobox)</label><label style="display:flex;gap:8px;align-items:center;margin-top:8px" title="Uncheck to hide this page from the published site (Hugo draft: true). Culture and section indexes usually stay published."><input type="checkbox" id="mpub" style="width:auto" checked> Published on the site</label></div></div>
- <label>Card background <span class="msg">(shown on list cards)</span></label>
- <div class="row"><select id="mcbgk" title="Background kind">
-  <option value="">Culture animation (default)</option>
-  <option value="static">Static image</option>
-  <option value="gif">Animated GIF</option>
- </select></div>
+ $('#app').classList.toggle('note-mode',md&&!svg);
+ $('#main').innerHTML=`<div class="note">
+ <div class="note__top"><div class="note__crumb">${esc(p.replace(/\//g,' › '))}${isNew?' <span class="tag">new</span>':''}</div>
+ <div class="note__actions">${op?`<button id="tr">${allFiles().includes(op)?'Open '+ol.toUpperCase():'Create '+ol.toUpperCase()+' stub'}</button>`:''}<button id="pp">Preview</button><button class="pri" id="sv">Save</button><button id="rv">Discard</button><button id="dl">Delete</button><span id="em" class="msg"></span></div></div>
+ <div class="note__scroll">
+ ${hasFm?`<input type="text" class="note__title" id="mt" placeholder="Title" spellcheck="true">
+ <p class="note__hint">Write in Obsidian (or anywhere), then paste below. Use Properties for title, sources and related links.</p>
+ <details class="note__props"><summary>Properties <span class="msg" style="margin:0;font-weight:400">tagline · grade · sources · related · card</span></summary>
+ <div class="inner"><div class="two"><div><label>Tagline</label><input type="text" id="mg"><label>Evidence grade</label><input type="text" id="mr" list="gl"><datalist id="gl"><option>primary text<option>later compilation<option>archaeology<option>modern scholarship<option>draft</datalist>
+ <label>Reviewed</label><div class="row"><input type="text" id="mv"><button id="mn" type="button">Today</button></div>
+ <label style="display:flex;gap:8px;align-items:center;margin-top:12px"><input type="checkbox" id="mw" style="width:auto"> Wide layout</label>
+ <label style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="mpub" style="width:auto" checked> Published on the site</label></div>
+ <div><label>Card background</label>
+ <div class="row"><select id="mcbgk"><option value="">Culture animation (default)</option><option value="static">Static image</option><option value="gif">Animated GIF</option></select></div>
  <div class="row" id="mcbgrow"><select id="mcbg"><option value="">— choose file —</option></select>
-  <button type="button" id="ucbg">Upload…</button><button type="button" id="xcbg" title="Clear custom background">Clear</button></div>
- <input type="file" id="fcbg" hidden>
- <div id="mcbgprev" class="msg" style="margin-top:6px"></div>
- <label>Sources (one per line)</label><textarea id="ms" rows="3"></textarea><label>Related pages <span class="msg">(atlas / mindmap links)</span></label><div class="relbox" id="mrel"></div><details style="margin-top:8px"><summary>Raw front matter</summary><textarea id="fm" rows="8" class="mono"></textarea></details></div>`:''}
- ${md?`<div class="tb"><button id="tH">H2</button><button id="tB">B</button><button id="tI">I</button><button id="tQ">❝</button><button id="tL">Link</button><button id="tA">Attach file…</button><span class="sep"></span><button id="iL">▦ Layout</button><button id="iS">⇆ Slider</button><button id="iI">▤ Infobox</button><button id="iF">🖼 Figure</button><button id="iP">▶ Scroll-play</button><button id="iN">✎ Note</button><button id="iM">🗺 Map</button><button id="iV">❝ Verse</button></div><input type="file" id="fi" hidden>`:''}
- <div class="${svg?'two':''}"><textarea class="ed" id="ta" spellcheck="false"></textarea>${svg?'<div class="card"><img id="sp" style="width:100%"></div>':''}</div>`;
+  <button type="button" id="ucbg">Upload…</button><button type="button" id="xcbg">Clear</button></div>
+ <input type="file" id="fcbg" hidden><div id="mcbgprev" class="msg" style="margin-top:6px"></div>
+ <label>Sources (one per line)</label><textarea id="ms" rows="3" placeholder="Paste citations, one per line"></textarea></div></div>
+ <label>Related pages <span class="msg">tap to link — same ✓ style as below</span></label><div class="relbox" id="mrel"></div>
+ <details style="margin-top:10px"><summary>Raw front matter</summary><textarea id="fm" rows="6" class="mono"></textarea></details></div></details>
+ <div class="chklist" id="mchk"></div>`:`${md?`<p class="note__hint">Paste Markdown below. This file has no front matter.</p>`:''}`}
+ ${md?`<div class="note__bodywrap">
+ <div class="note__tb"><button type="button" id="tPaste" class="pri" title="Replace body with clipboard">Paste article</button><button type="button" id="tClear">Clear body</button><span class="sep"></span>
+ <button type="button" id="tH">H2</button><button type="button" id="tB">B</button><button type="button" id="tI">I</button><button type="button" id="tL">Link</button><button type="button" id="tA">Attach…</button>
+ <span class="sep"></span><button type="button" id="iMore" title="Shortcodes">Insert ▾</button>
+ <input type="file" id="fi" hidden></div>
+ <textarea class="ed note__body" id="ta" spellcheck="true" placeholder="Paste your article from Obsidian here…&#10;&#10;Ctrl+V works too. Front matter stays in Properties above."></textarea></div>
+ <div class="note__foot"><span class="msg" id="wc"></span><span class="msg">Ctrl+S save · Ctrl+K jump</span></div>`
+ :`<div class="${svg?'two':''}"><textarea class="ed" id="ta" spellcheck="false"></textarea>${svg?'<div class="card"><img id="sp" style="width:100%"></div>':''}</div>`}
+ </div></div>`;
  const ta=$('#ta');ta.value=sp.body;const prev=()=>{if(svg)$('#sp').src='data:image/svg+xml;utf8,'+encodeURIComponent(ta.value)};prev();
+ const wordCount=()=>{const el=$('#wc');if(!el)return;const n=(ta.value.trim().match(/\S+/g)||[]).length;el.textContent=n?n+' words':'Empty — ready to paste'};
  const compose=()=>{const t=hasFm?'---\n'+$('#fm').value.replace(/\n+$/,'')+'\n---\n'+ta.value:ta.value;return eolOf[p]==='\r\n'?t.replace(/\n/g,'\r\n'):t};
- const mark=()=>{setDraft(p,compose());const d=drafts.has(p);$('#em').textContent=d?'● unsaved (preview only)':'';$('#em').className='msg warn'};
- if(drafts.has(p)){$('#em').textContent='● unsaved (preview only)';$('#em').className='msg warn'}
- ta.oninput=()=>{prev();mark()};
+ const mark=()=>{setDraft(p,compose());const d=drafts.has(p);$('#em').textContent=d?'● unsaved':'';$('#em').className='msg warn';wordCount()};
+ if(drafts.has(p)){$('#em').textContent='● unsaved';$('#em').className='msg warn'}
+ ta.oninput=()=>{prev();mark()};wordCount();
  if(hasFm){const FM=$('#fm');FM.value=sp.fm;
   const sync=()=>{let f=FM.value;f=setK(f,'title',$('#mt').value);f=setK(f,'tagline',$('#mg').value);f=setK(f,'grade',$('#mr').value);f=setK(f,'reviewed',$('#mv').value);f=setSrc(f,$('#ms').value.split('\n').map(s=>s.trim()).filter(Boolean));
-   const rel=[...document.querySelectorAll('#mrel input:checked')].map(c=>c.dataset.u);f=setRel(f,rel);
+   const rel=[...document.querySelectorAll('#mrel .relchip.on')].map(c=>c.dataset.u);f=setRel(f,rel);
    const kind=($('#mcbgk')&&$('#mcbgk').value)||'';const cbg=kind?(($('#mcbg')&&$('#mcbg').value)||''):'';
    f=f.replace(/^card_bg:.*(\n|$)/m,'').replace(/^card_bg_kind:.*(\n|$)/m,'');
    if(kind&&cbg){f=setK(f,'card_bg',cbg);f=setK(f,'card_bg_kind',kind)}
-   f=f.replace(/^wide:.*(\n|$)/m,'').replace(/^draft:.*(\n|$)/m,'').replace(/\n+$/,'');if($('#mw').checked)f+=(f?'\n':'')+'wide: true';if(!$('#mpub').checked)f+=(f?'\n':'')+'draft: true';FM.value=f;mark();paintCbgPrev()};
+   f=f.replace(/^wide:.*(\n|$)/m,'').replace(/^draft:.*(\n|$)/m,'').replace(/\n+$/,'');if($('#mw').checked)f+=(f?'\n':'')+'wide: true';if(!$('#mpub').checked)f+=(f?'\n':'')+'draft: true';FM.value=f;mark();paintCbgPrev();paintChk()};
   const paintRel=()=>{const box=$('#mrel');if(!box)return;const sel=new Set(getRel(FM.value));const opts=sameCulturePages(p);
-   box.innerHTML=opts.length?opts.map(o=>`<label><input type="checkbox" data-u="${esc(o.url)}" ${sel.has(o.url)?'checked':''}> ${esc(o.label)}</label>`).join(''):'<span class="msg">No other pages in this culture yet.</span>';
-   box.querySelectorAll('input').forEach(c=>c.onchange=sync)};
+   box.innerHTML=opts.length?opts.map(o=>`<button type="button" class="relchip ${sel.has(o.url)?'on':''}" data-u="${esc(o.url)}"><span class="tick">${sel.has(o.url)?'✓':'·'}</span>${esc(o.label)}</button>`).join(''):'<span class="msg">No other pages in this culture yet.</span>';
+   box.querySelectorAll('.relchip').forEach(b=>b.onclick=()=>{b.classList.toggle('on');const on=b.classList.contains('on');b.querySelector('.tick').textContent=on?'✓':'·';sync()});paintChk()};
+  const paintChk=()=>{const el=$('#mchk');if(!el)return;const f=FM.value,body=ta.value||'';
+   const bits=[['Title',!!getK(f,'title')],['Sources',getSrc(f).length>0],['Related',getRel(f).length>0],['Grade',!!getK(f,'grade')],['Card art',!!getK(f,'card_bg')||!/cultures\//.test(p)],['Body',body.trim().length>40]];
+   el.innerHTML=bits.map(([l,ok])=>`<span class="${ok?'ok':'bad'}">${ok?'✓':'·'} ${l}</span>`).join('')};
   const cbgKindOf=(f,path)=>{const k=getK(f,'card_bg_kind');if(k==='gif'||k==='static')return k;return /\.gif$/i.test(path||'')?'gif':(path?'static':'')};
   const paintCbgPrev=()=>{const el=$('#mcbgprev');if(!el)return;const kind=$('#mcbgk').value,rel=$('#mcbg').value;
    if(!kind){el.innerHTML='Using this culture’s animated particle field + motif.';return}
    if(!rel){el.innerHTML='<span class="warn">Choose or upload a '+(kind==='gif'?'GIF':'static image')+'.</span>';return}
    const src='/api/raw?path='+E('static/img/'+rel)+'&ws=1&t='+T+'&v='+Date.now();
    el.innerHTML=`<span class="ok">${kind==='gif'?'Animated GIF':'Static image'}:</span> <code>${esc(rel)}</code><br><img src="${src}" alt="" style="margin-top:6px;max-width:100%;height:88px;object-fit:cover;border-radius:8px;border:1px solid var(--b);background:#000">`};
-  const paintCbg=()=>{const sel=$('#mcbg'),kindEl=$('#mcbgk'),row=$('#mcbgrow');if(!sel||!kindEl)return;
-   const cur=getK(FM.value,'card_bg');let kind=cbgKindOf(FM.value,cur);kindEl.value=kind;
+  const paintCbg=(forceKind)=>{const sel=$('#mcbg'),kindEl=$('#mcbgk'),row=$('#mcbgrow');if(!sel||!kindEl)return;
+   const curPath=getK(FM.value,'card_bg');
+   /* Prefer the UI choice (forceKind / current select) so picking GIF does not
+      snap back to “default” before a file is saved into front matter. */
+   let kind=forceKind!==undefined?forceKind:(kindEl.value||cbgKindOf(FM.value,curPath));
+   if(kind!=='gif'&&kind!=='static')kind='';
+   kindEl.value=kind;
    const re=kind==='gif'?/\.gif$/i:/\.(svg|png|jpe?g|webp)$/i;
-   const imgs=allFiles().filter(f=>f.startsWith('static/img/')&&re.test(f)).map(f=>f.slice(11));
-   if(cur&&!imgs.includes(cur)&&(kind==='gif'?/\.gif$/i:/\.(svg|png|jpe?g|webp)$/i).test(cur))imgs.unshift(cur);
-   sel.innerHTML='<option value="">— choose file —</option>'+imgs.map(x=>`<option value="${esc(x)}" ${x===cur?'selected':''}>${esc(x)}</option>`).join('');
-   if(row)row.style.display=kind?'flex':'none';
-   const up=$('#ucbg');if(up)up.textContent=kind==='gif'?'Upload GIF…':kind==='static'?'Upload image…':'Upload…';
+   const imgs=kind?allFiles().filter(f=>f.startsWith('static/img/')&&re.test(f)).map(f=>f.slice(11)):[];
+   const keep=sel.value||curPath;
+   if(keep&&kind&&re.test(keep)&&!imgs.includes(keep))imgs.unshift(keep);
+   sel.innerHTML='<option value="">— choose file —</option>'+imgs.map(x=>`<option value="${esc(x)}" ${x===keep?'selected':''}>${esc(x)}</option>`).join('');
+   if(row){row.hidden=!kind;row.style.display=kind?'flex':'none'}
+   const up=$('#ucbg');if(up){up.hidden=!kind;up.textContent=kind==='gif'?'Upload GIF…':kind==='static'?'Upload image…':'Upload…'}
    paintCbgPrev()};
-  const fill=()=>{$('#mt').value=getK(FM.value,'title');$('#mg').value=getK(FM.value,'tagline');$('#mr').value=getK(FM.value,'grade');$('#mv').value=getK(FM.value,'reviewed');$('#ms').value=getSrc(FM.value).join('\n');$('#mw').checked=/^wide:\s*true/m.test(FM.value);$('#mpub').checked=!/^draft:\s*true\b/m.test(FM.value);paintCbg();paintRel()};fill();
+  const fill=()=>{$('#mt').value=getK(FM.value,'title');$('#mg').value=getK(FM.value,'tagline');$('#mr').value=getK(FM.value,'grade');$('#mv').value=getK(FM.value,'reviewed');$('#ms').value=getSrc(FM.value).join('\n');$('#mw').checked=/^wide:\s*true/m.test(FM.value);$('#mpub').checked=!/^draft:\s*true\b/m.test(FM.value);paintCbg(cbgKindOf(FM.value,getK(FM.value,'card_bg')));paintRel()};fill();
+  ta.oninput=()=>{prev();mark();paintChk()};
   ['mt','mg','mr','mv','ms','mw','mpub','mcbg'].forEach(i=>{const el=$('#'+i);if(el)el.oninput=sync});
-  $('#mcbgk').onchange=()=>{const k=$('#mcbgk').value;if(!k){$('#mcbg').value='';sync();paintCbg();return}
-   const cur=$('#mcbg').value;if(cur&&((k==='gif')!==/\.gif$/i.test(cur)))$('#mcbg').value='';paintCbg();sync()};
+  $('#mcbgk').onchange=()=>{const k=$('#mcbgk').value;if(!k){$('#mcbg').value='';paintCbg('');sync();return}
+   const cur=$('#mcbg').value;if(cur&&((k==='gif')!==/\.gif$/i.test(cur)))$('#mcbg').value='';
+   paintCbg(k);sync()};
   $('#mn').onclick=()=>{$('#mv').value=today();sync()};
-  $('#xcbg').onclick=()=>{$('#mcbg').value='';$('#mcbgk').value='';sync();paintCbg()};
+  $('#xcbg').onclick=()=>{$('#mcbg').value='';paintCbg('');sync()};
   $('#ucbg').onclick=()=>{const k=$('#mcbgk').value;if(!k){say('Pick Static image or Animated GIF first','warn');return}
-   const inp=$('#fcbg');inp.accept=k==='gif'?'.gif,image/gif':'image/png,image/jpeg,image/webp,image/svg+xml,.png,.jpg,.jpeg,.webp,.svg';inp.click()};
+   const inp=$('#fcbg');if(!inp){say('Upload control missing — reload the editor','bad');return}
+   inp.accept=k==='gif'?'.gif,image/gif':'image/png,image/jpeg,image/webp,image/svg+xml,.png,.jpg,.jpeg,.webp,.svg';inp.click()};
   $('#fcbg').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
    const k=$('#mcbgk').value||(/\.(gif)$/i.test(f.name)?'gif':'static');
    if(k==='gif'&&!/\.gif$/i.test(f.name)){say('Animated GIF kind needs a .gif file','bad');return}
    if(k==='static'&&/\.gif$/i.test(f.name)){say('For a GIF, set kind to Animated GIF','bad');return}
-   try{$('#mcbgk').value=k;const ps=await uploadMedia([f]);const rel=ps[0].replace(/^static\/img\//,'');paintCbg();$('#mcbg').value=rel;sync();say('Card background ('+k+') set — Save to keep: '+rel,'warn')}catch(err){say(err.message,'bad')}};
+   try{$('#mcbgk').value=k;const ps=await uploadMedia([f]);const rel=ps[0].replace(/^static\/img\//,'');paintCbg(k);$('#mcbg').value=rel;sync();say('Card background ('+k+') set — Save to keep: '+rel,'warn')}catch(err){say(err.message,'bad')}};
   FM.oninput=()=>{fill();mark()}}
  const wrap=(a,b)=>{const s=ta.selectionStart,e=ta.selectionEnd;ta.setRangeText(a+ta.value.slice(s,e)+b,s,e,'end');ta.focus();prev();mark()};
  const save=async()=>{try{setDraft(p,compose());if(drafts.has(p))await commit([p],'Edit '+p.replace('content/',''));else say('No changes to save')}catch(e){$('#em').textContent=e.message;$('#em').className='msg bad'}};
  $('#sv').onclick=save;ta.onkeydown=e=>{if((e.ctrlKey||e.metaKey)&&e.key==='s'){e.preventDefault();save()}if(e.key==='Tab'){e.preventDefault();ta.setRangeText('  ',ta.selectionStart,ta.selectionEnd,'end');mark()}};
  $('#rv').onclick=()=>discardPaths([p]);$('#pp').onclick=async()=>{if(!pvOn)await pv('start');show(pageUrl(p))};followPage(p);
  $('#dl').onclick=async()=>{if(!confirm('Mark '+p+' for deletion? (applied on Save, can be rolled back)'))return;if(files.includes(p)){setDraft(p,null);await push(p)}else{drafts.delete(p);await api('discard?path='+E(p),{method:'POST'});pend()}cur=null;render()};
- if(op)$('#tr').onclick=()=>{if(!allFiles().includes(op)){const t=hasFm?'---\n'+setK($('#fm').value,'title','TODO translate: '+getK($('#fm').value,'title'))+'\n---\n\nTranslate this page.\n':'Translate this page.\n';setDraft(op,t)}openFile(op)};
+ if(op)$('#tr').onclick=()=>{if(!allFiles().includes(op)){let f=hasFm?$('#fm').value:'';if(hasFm){f=setK(f,'title','TODO translate: '+getK(f,'title'));f=setK(f,'grade','draft')}
+  setDraft(op,hasFm?'---\n'+f+'\n---\n\nTranslate this page.\n':'Translate this page.\n')}openFile(op)};
  if(md){const ins=t=>{const s=ta.selectionStart;ta.setRangeText(t,s,ta.selectionEnd,'end');ta.focus();prev();mark()};const wide=()=>{if(hasFm&&!$('#mw').checked){$('#mw').checked=true;$('#mw').dispatchEvent(new Event('input'))}};
+  const doPaste=async(replace)=>{try{const t=await navigator.clipboard.readText();if(!t){say('Clipboard is empty','warn');return}
+   const empty=!ta.value.trim();if(replace||empty)ta.value=t;else ta.setRangeText(t,ta.selectionStart,ta.selectionEnd,'end');
+   ta.focus();prev();mark();if(hasFm){const el=$('#mchk');if(el){const f=$('#fm').value,body=ta.value||'';
+    const bits=[['Title',!!getK(f,'title')],['Sources',getSrc(f).length>0],['Related',getRel(f).length>0],['Grade',!!getK(f,'grade')],['Card art',!!getK(f,'card_bg')||!/cultures\//.test(p)],['Body',body.trim().length>40]];
+    el.innerHTML=bits.map(([l,ok])=>`<span class="${ok?'ok':'bad'}">${ok?'✓':'·'} ${l}</span>`).join('')}}
+   say(replace||empty?'Pasted article':'Pasted at cursor','ok')}catch(err){say('Allow clipboard access, or use Ctrl+V','warn')}};
+  if($('#tPaste'))$('#tPaste').onclick=()=>doPaste(true);
+  if($('#tClear'))$('#tClear').onclick=()=>{if(ta.value&&!confirm('Clear the article body?'))return;ta.value='';prev();mark();say('Body cleared — paste when ready','warn')};
   const doLink=()=>{const sel=ta.value.slice(ta.selectionStart,ta.selectionEnd)||'title';const opts=sameCulturePages(p);const pick=opts.length?prompt('Internal path (e.g. /cultures/…/) or leave blank for web URL:\n\n'+opts.slice(0,8).map(o=>o.url).join('\n'),opts[0]?opts[0].url:''):prompt('Link URL','https://');
    if(pick===null)return;if(pick.startsWith('/'))wrap('[',']('+pick.replace(/\/?$/,'/')+')');else wrap('[',']('+(pick||'https://')+')')};
+  if($('#iMore'))$('#iMore').onclick=e=>{const r=e.target.getBoundingClientRect();showCtx(r.left,r.bottom+4,[
+   {id:'layout',label:'Layout grid…',run:()=>bGrid(t=>{ins(t);wide()})},
+   {id:'slider',label:'Slider…',run:()=>bSlider(ins)},
+   {id:'infobox',label:'Infobox…',run:()=>bInfobox(t=>{ins(t);wide()})},
+   {id:'fig',label:'Figure…',run:()=>bFig(ins)},
+   {id:'play',label:'Scroll-play…',run:()=>bPlay(ins)},
+   {id:'note',label:'Note…',run:()=>bNote(ins,ta.value.slice(ta.selectionStart,ta.selectionEnd))},
+   {id:'map',label:'Map…',run:()=>bMap({ins,ta,wide})},
+   {id:'verse',label:'Verse…',run:()=>bVerse(ins)},
+   '-',
+   {id:'quote',label:'Block quote',run:()=>wrap('\n> ','\n')}
+  ])};
   ta.oncontextmenu=e=>{e.preventDefault();const sel=ta.value.slice(ta.selectionStart,ta.selectionEnd);
    showCtx(e.clientX,e.clientY,[
+    {id:'pasteAll',label:'Paste article (replace)',run:()=>doPaste(true)},
+    {id:'paste',label:'Paste at cursor',run:()=>doPaste(false)},
     {id:'cut',label:'Cut',run:async()=>{try{await navigator.clipboard.writeText(sel);ta.setRangeText('',ta.selectionStart,ta.selectionEnd,'end');mark()}catch(err){document.execCommand('cut')}}},
     {id:'copy',label:'Copy',run:async()=>{try{await navigator.clipboard.writeText(sel)}catch(err){document.execCommand('copy')}}},
-    {id:'paste',label:'Paste',run:async()=>{try{const t=await navigator.clipboard.readText();ta.setRangeText(t,ta.selectionStart,ta.selectionEnd,'end');mark()}catch(err){say('Paste with Ctrl+V','warn')}}},
     '-',
     {id:'h2',label:'Heading',run:()=>wrap('\n## ','\n')},
     {id:'b',label:'Bold',run:()=>wrap('**','**')},
     {id:'i',label:'Italic',run:()=>wrap('*','*')},
-    {id:'link',label:'Insert link…',run:doLink},
-    '-',
-    {id:'note',label:'Insert note…',run:()=>bNote(ins,sel)},
-    {id:'fig',label:'Insert figure…',run:()=>bFig(ins)},
-    {id:'map',label:'Insert map…',run:()=>bMap({ins,ta,wide})},
-    {id:'verse',label:'Insert verse…',run:()=>bVerse(ins)}
+    {id:'link',label:'Insert link…',run:doLink}
    ])};
-  $('#iL').onclick=()=>bGrid(t=>{ins(t);wide()});$('#iS').onclick=()=>bSlider(ins);$('#iI').onclick=()=>bInfobox(t=>{ins(t);wide()});$('#iF').onclick=()=>bFig(ins);$('#iP').onclick=()=>bPlay(ins);$('#iN').onclick=()=>bNote(ins,ta.value.slice(ta.selectionStart,ta.selectionEnd));$('#iM').onclick=()=>bMap({ins,ta,wide});$('#iV').onclick=()=>bVerse(ins);
-  $('#tH').onclick=()=>wrap('\n## ','\n');$('#tB').onclick=()=>wrap('**','**');$('#tI').onclick=()=>wrap('*','*');$('#tQ').onclick=()=>wrap('\n> ','\n');$('#tL').onclick=doLink;
-  $('#tA').onclick=()=>$('#fi').click();$('#fi').onchange=async()=>{const f=$('#fi').files[0];if(!f)return;const ext=(f.name.split('.').pop()||'').toLowerCase(),n=f.name.toLowerCase().replace(/[^a-z0-9.]+/g,'-');
+  if($('#tH'))$('#tH').onclick=()=>wrap('\n## ','\n');if($('#tB'))$('#tB').onclick=()=>wrap('**','**');if($('#tI'))$('#tI').onclick=()=>wrap('*','*');if($('#tL'))$('#tL').onclick=doLink;
+  if($('#tA'))$('#tA').onclick=()=>$('#fi').click();if($('#fi'))$('#fi').onchange=async()=>{const f=$('#fi').files[0];if(!f)return;const ext=(f.name.split('.').pop()||'').toLowerCase(),n=f.name.toLowerCase().replace(/[^a-z0-9.]+/g,'-');
    const img=['png','jpg','jpeg','gif','webp','svg'].includes(ext),au=['mp3','ogg','wav','m4a','mp4','webm'].includes(ext),dir=img?'img/media/':/^(mp4|webm)$/.test(ext)?'video/':au?'audio/':'library/';
    await putBin('static/'+dir+n,f);wrap(img?`![${n}](/${dir}${n})`:(au||ext==='pdf')?`\n{{< media src="${dir}${n}" >}}\n`:`[${n}](/${dir}${n})`,'');say('Attached '+n+' (unsaved)','warn')}}}
 /* ===== themes (edits are drafts of data/themes.json) ===== */
@@ -747,6 +891,206 @@ async function pPublish(){git=await api('git');const ch=(git.status||'').split('
  $('#rc').onclick=async()=>{if(!confirm('Create a new commit that reverses the last commit?'))return;const r=await api('revert',{method:'POST'});$('#co').textContent=r.output;$('#co').className=r.ok?'ok':'bad';await load()};
  $('#cp').onclick=async()=>{if(drafts.size){$('#co').textContent='Save or discard your unsaved changes first.';$('#co').className='bad';return}const pr=$('#md').value==='pr',b=$('#br').value;$('#co').textContent='Working…';$('#prl').innerHTML='';try{const r=await api('commit',{method:'POST',body:JSON.stringify({message:$('#cm').value,branch:b,push:$('#ps').checked,newBranch:pr})});$('#co').textContent=r.output;$('#co').className=r.ok?'ok':'bad';
   if(r.ok&&pr&&$('#ps').checked&&repo){const u=`${repo}/compare/${site().branch||'master'}...${b}?expand=1&title=${E($('#cm').value)}`;$('#prl').innerHTML=`<p><button class="pri" onclick="window.open('${u}')">Open pull request on GitHub ↗</button></p>`}await load()}catch(e){$('#co').textContent=e.message;$('#co').className='bad'}}}
+/* ===== art prompt generator (follows art-gen-ai.md) ===== */
+const ART_CULT={
+ base:{mood:'neutral steel night',motifs:'star / pearl, no culture seal',sky:'near-black to cool grey dusk'},
+ iranian:{mood:'ember gold, dusk violet→amber',motifs:'rosette, Derafsh geometry, Mehr disc, cypress, Simurgh line-work',sky:'violet night fading to amber horizon'},
+ norse:{mood:'cold sea steel',motifs:'longship silhouette, aurora wash, fjord ridges, sparse stars',sky:'deep blue-black with faint aurora'},
+ greek:{mood:'warm bronze',motifs:'meander strip, temple silhouette, olive / dark sea',sky:'warm dusk over dark sea'},
+ mesopotamian:{mood:'lapis dusk',motifs:'zigzag / reed, cedar trunks, night blue-green',sky:'lapis night over cedar dark'},
+ indian:{mood:'lotus dusk rose',motifs:'waves / mandala hint, temple silhouette',sky:'rose-tinted dusk, accent only as glow'}
+};
+const ART_FORMS={
+ hero_banner:{label:'Culture / page hero banner',w:1200,h:300,ar:'4:1',arWords:'extreme wide landscape banner (four by one)',fmt:'SVG preferred (or PNG then trace)',max:'≲20 KB if SVG',gif:0,compose:'object-fit contain — centre-weighted; full scene must read uncropped',path:'static/img/<culture>-….svg → themes.json banner',recipe:'silhouette epic: sky + 2–3 ridge layers + one centred subject + soft accent glow'},
+ home_cine:{label:'Home cinema slide',w:1200,h:300,ar:'4:1',arWords:'extreme wide landscape (four by one)',fmt:'SVG preferred',max:'≲20 KB if SVG',gif:0,compose:'same as hero banner',path:'same file as culture banner',recipe:'same as hero banner'},
+ article_card:{label:'Article card background',w:800,h:450,ar:'16:9',arWords:'widescreen sixteen-by-nine',fmt:'PNG/WebP or GIF',max:'static ≲350 KB; GIF ≲1.5 MB',gif:1,compose:'object-fit cover in ~150–200px band — keep subject in centre 70% safe zone',path:'static/img/media/<slug>-card.png|.gif + card_bg / card_bg_kind',recipe:'character or scene key art, large night negative space, 1–2 attributes'},
+ category_card:{label:'Category card background',w:800,h:450,ar:'16:9',arWords:'widescreen sixteen-by-nine',fmt:'PNG/WebP or GIF',max:'static ≲350 KB; GIF ≲1.5 MB',gif:1,compose:'taller portal band ~148px — wide landscape read',path:'static/img/media/<slug>-card.png|.gif on section _index.md',recipe:'symbolic place/section mood, not a single portrait face'},
+ card_gif:{label:'Card animated GIF loop',w:800,h:450,ar:'16:9',arWords:'widescreen sixteen-by-nine',fmt:'GIF (6–12 fps)',max:'≲1.5 MB',gif:1,forceGif:1,compose:'seamless calm loop; subject almost still',path:'card_bg_kind: gif',recipe:'embers / shimmer / slow parallax — never action fight cycles'},
+ scene_plate:{label:'In-article scene / slider still',w:960,h:540,ar:'16:9',arWords:'widescreen sixteen-by-nine',fmt:'SVG or PNG/WebP',max:'raster ≲400 KB',gif:0,compose:'story first; tiny figures for scale OK',path:'static/img/media/<slug>.svg|.png',recipe:'layered environment + mist; face optional and secondary'},
+ char_poster:{label:'Character poster',w:1080,h:1350,ar:'4:5',arWords:'vertical portrait four-by-five',fmt:'PNG/WebP',max:'≲600 KB',gif:0,compose:'head+shoulders or full figure with large night around them',path:'static/img/media/<slug>-poster.png',recipe:'three-quarter or profile silhouette; not photoreal'},
+ char_square:{label:'Character square',w:1024,h:1024,ar:'1:1',arWords:'square',fmt:'PNG/WebP',max:'≲500 KB',gif:0,compose:'centred emblematic figure',path:'static/img/media/<slug>-sq.png',recipe:'same as poster, square crop'},
+ og_share:{label:'OG / share image',w:1200,h:630,ar:'1.91:1',arWords:'landscape share card about 1.91:1',fmt:'PNG',max:'≲500 KB',gif:0,compose:'readable at small social size; little fine detail',path:'static/img/brand/ or media/',recipe:'bold silhouette + accent; avoid tiny text'},
+ podcast_cover:{label:'Podcast cover',w:3000,h:3000,ar:'1:1',arWords:'square',fmt:'JPG from SVG',max:'<512 KB',gif:0,compose:'brand gold on night — see AI.md §8a',path:'static/img/brand/',recipe:'Haoma brand chrome, not culture page art'},
+ atlas_seal:{label:'Atlas / card motif seal',w:320,h:320,ar:'1:1',arWords:'square seal',fmt:'SVG (white strokes, transparent)',max:'tiny',gif:0,compose:'mask-friendly geometric line art',path:'static/img/atlas/<culture>-motifs.svg',recipe:'literary seal — sparse, regal, not sticker-cute'}
+};
+const ART_NEG='cartoon, chibi, anime, disney, marvel, photoreal face, stock photo, neon, white background, watermark, logo, UI chrome, readable text letters, cute smile, glossy 3d render, purple SaaS gradient, oversaturated, busy collage, googly eyes, children\'s book';
+let artRefs=[]; // {name,file,url,path?}
+function artCultMeta(k){const t=themes()[k]||themes().base||{},h=ART_CULT[k]||ART_CULT.base;return{key:k,accent:t.accent||'#9aa3b5',bg:t.bg||'#14161a',surface:t.surface||'#1c1f25',border:t.border||'#2a2e36',anim:t.anim||'fall',pattern:t.pattern||'none',...h}}
+function buildArtPrompt(o){
+ const f=ART_FORMS[o.form],c=artCultMeta(o.culture),idea=(o.idea||'').trim()||'a serious mythic scene for this culture';
+ const kind=f.forceGif?'gif':(o.kind||'static');
+ const isGif=kind==='gif';
+ const agent=o.agent||'claude';
+ const refs=artRefs.slice();
+ const palette=`night sky near ${c.bg}, surfaces around ${c.surface}, borders ${c.border}, ONE accent glow ${c.accent} (${c.mood})`;
+ const house='Haoma night-manuscript style: antique engraved silhouette storytelling, dark serious myth atlas mood, copper-plate clarity, slow ember light — NOT cartoon, NOT photoreal celebrity, NOT bright fantasy splash art.';
+ const bans='Empty dark night canvas (no white background). No logos, watermarks, UI, or title text in the image. Gold only as thin lines/rays if needed — never gold-filled creatures. Faces as silhouette or simplified planes.';
+ const tech=`Exact output: ${f.w}×${f.h} px (${f.ar} — ${f.arWords}). Format: ${isGif?'animated GIF, 6–12 fps, seamless calm loop, limited palette':f.fmt}. File budget: ${f.max}. Composition: ${f.compose}. Save path hint: ${f.path}.`;
+ const motion=isGif?`Motion: slow seamless loop (embers, shimmer, aurora, gentle flag/particle) — subject almost still; loop 2s+; no strobe.`:`Motion: still image`+(f.fmt.toLowerCase().includes('svg')?`; if delivering SVG banner later, CSS @keyframes only (6–30s), with prefers-reduced-motion:reduce`:``)+`.`;
+ const recipe=`Recipe: ${f.recipe}. Culture motifs to hint (not stamp crowded): ${c.motifs}. Sky: ${c.sky}.`;
+ let refBlock='';
+ if(refs.length){
+  refBlock=refs.map((r,i)=>`Reference image ${i+1} ("${r.name}"): use as ${i===0?'primary style / composition guide':'additional style or subject guide'}; match its silhouette language, contrast, and dusk palette — do not copy watermarks or modern UI.`).join('\n')+'\n';
+ }
+ let prompt='',howto='';
+ if(agent==='gemini'){
+  // Google: narrative scene, positive framing, aspect words, camera language; refs named
+  prompt=[
+   refs.length?refBlock.trim():'',
+   `Create a single image for the Haoma open myth site.`,
+   `Purpose: ${f.label} asset that must look correct when placed in a ${f.arWords} frame.`,
+   `Scene (describe, do not keyword-dump): In a ${c.sky}, a ${house} depiction of: ${idea}.`,
+   `Build the picture as ${recipe}`,
+   `Lighting: soft radial accent glow in ${c.accent} only; deep dusk elsewhere; sparse tiny stars if any.`,
+   `Camera / framing: wide establishing view for landscape slots, or centred vertical subject for posters; keep the main symbol in the middle safe zone; ${f.compose}.`,
+   `Colour story: ${palette}.`,
+   bans,
+   tech,
+   motion,
+   `Deliver exactly one image at ${f.w}×${f.h} (${f.ar}). Preserve this aspect ratio.`,
+   isGif?`If the tool outputs video, convert to a short looping GIF under ${f.max}.`:''
+  ].filter(Boolean).join('\n\n');
+  howto='Gemini / Imagen: paste as one narrative prompt (not comma tags). Attach reference files in order Ref 1…N. If aspect drifts, add a blank '+f.ar+' canvas as the last reference or restate “Do not change the '+f.ar+' aspect ratio.” Prefer positive wording (empty night sky) over long “no …” lists — bans are already phrased that way above.';
+ }else if(agent==='midjourney'){
+  prompt=[
+   `Haoma myth ${f.label}, ${idea}, ${house}`,
+   `${c.key} culture, accent ${c.accent}, ${c.mood}, ${c.motifs}`,
+   `dark night sky ${c.bg}, silhouette layers, soft glow, centre-weighted`,
+   `${f.w}x${f.h}, ${recipe}`,
+   isGif?'subtle looping motion still-friendly keyframe':'still',
+   refs.length?`style reference attached (${refs.map(r=>r.name).join(', ')})`:'',
+   `--ar ${f.ar==='1.91:1'?'1.91:1':f.ar} --stylize 80 --v 6`
+  ].filter(Boolean).join(', ');
+  howto='Midjourney: paste in Discord/web. Drop style refs with the prompt. Adjust --stylize down if it ignores the dark palette.';
+ }else{
+  // Claude / ChatGPT-as-director / generic — structured brief matching art-gen-ai.md (user's strong results)
+  prompt=[
+   `# Haoma art brief (follow art-gen-ai.md)`,
+   ``,
+   refs.length?`## References\n${refBlock}`:'',
+   `## Slot`,
+   `- Form: ${f.label}`,
+   `- Size: ${f.w}×${f.h} px · aspect ${f.ar} (${f.arWords})`,
+   `- Medium: ${isGif?'Animated GIF':'Static image'} · Format: ${isGif?'GIF':f.fmt}`,
+   `- Max file: ${f.max}`,
+   `- Site crop: ${f.compose}`,
+   `- Suggested path: ${f.path}`,
+   ``,
+   `## Culture`,
+   `- Key: ${c.key}`,
+   `- Accent: ${c.accent}`,
+   `- Palette: ${palette}`,
+   `- Mood: ${c.mood}`,
+   `- Motifs: ${c.motifs}`,
+   `- Theme anim/pattern (site chrome, not required in pixels): ${c.anim} / ${c.pattern}`,
+   ``,
+   `## Subject (user intent)`,
+   idea,
+   ``,
+   `## Style north star`,
+   house,
+   recipe,
+   ``,
+   `## Hard constraints`,
+   bans,
+   motion,
+   tech,
+   ``,
+   `## Negative / avoid`,
+   ART_NEG,
+   ``,
+   `## Checklist before accept`,
+   `- [ ] Exact aspect ${f.ar} at ${f.w}×${f.h}`,
+   `- [ ] Accent is ${c.accent} only (no random neon)`,
+   `- [ ] Dark night mood, centre-weighted subject`,
+   `- [ ] No text/logo/watermark in frame`,
+   isGif?'- [ ] Calm seamless loop, subject nearly still':'- [ ] Readable when shrunk to card/hero height'
+  ].filter(Boolean).join('\n');
+  howto=agent==='claude'
+   ?'Claude (+ image tool or hand-off): this structured brief matches art-gen-ai.md — keep the checklist. Attach references and say “Ref 1 = style lock.” If Claude only writes prompts, ask it to emit a single Gemini-ready narrative next.'
+   :'Generic: paste the brief into your image agent. For keyword models, also copy the Midjourney line from regenerating with agent=Midjourney.';
+ }
+ return{prompt,howto,neg:ART_NEG,spec:`${f.label} · ${c.key} · ${f.w}×${f.h} (${f.ar}) · ${isGif?'GIF':'static'} · accent ${c.accent}`,kind:isGif?'gif':'static',form:f,cult:c};
+}
+function pArtPrompt(){
+ $('#panel').innerHTML='<p class="msg" style="padding:8px">Built from <code>art-gen-ai.md</code> + live <code>themes.json</code> colours.</p>';
+ const cults=Object.keys(themes());
+ artRefs=[];
+ $('#main').innerHTML=`<h2>Art prompt generator</h2>
+ <div class="ap-tip"><b>Beginner path:</b> pick the slot → culture → static or GIF → describe what you want → optional reference images → <b>Generate</b> → copy into your agent.<br>
+ Claude + this brief usually stays on-style; Gemini needs the <b>Gemini</b> agent mode (narrative + aspect words). Always attach Haoma refs when you have them.</div>
+ <div class="card pad">
+  <div class="two">
+   <div>
+    <label>Art form (slot)</label>
+    <select id="ap_form">${Object.entries(ART_FORMS).map(([k,v])=>`<option value="${k}">${esc(v.label)} — ${v.w}×${v.h} (${v.ar})</option>`).join('')}</select>
+    <label>Culture</label>
+    <select id="ap_cult">${cults.map(k=>`<option value="${k}">${k==='base'?'base (general)':k}</option>`).join('')}</select>
+    <label>Medium</label>
+    <select id="ap_kind"><option value="static">Static image</option><option value="gif">Animated GIF</option></select>
+    <label>Target agent</label>
+    <select id="ap_agent">
+     <option value="claude">Claude (structured brief — recommended)</option>
+     <option value="gemini">Gemini / Imagen (narrative scene)</option>
+     <option value="midjourney">Midjourney</option>
+     <option value="generic">Generic / other</option>
+    </select>
+   </div>
+   <div>
+    <label>What do you want to generate?</label>
+    <textarea id="ap_idea" rows="8" placeholder="Example: Mehr (Mithra) as a watchful silhouette before a glowing sun-disc, sparse stars, Iranian dusk — for an article card"></textarea>
+    <label>Reference images <span class="msg">(style lock — optional)</span></label>
+    <div class="row"><button type="button" id="ap_addref">Attach…</button><button type="button" id="ap_saveref" title="Upload into static/img/media/">Save into project</button><button type="button" id="ap_clearref">Clear</button></div>
+    <input type="file" id="ap_reffile" accept="image/*,.svg" multiple hidden>
+    <div class="ap-refs" id="ap_refbox"></div>
+    <p class="msg" id="ap_meta" style="margin-top:10px"></p>
+   </div>
+  </div>
+  <p style="margin:14px 0 0"><button class="pri" id="ap_go">Generate prompt</button>
+   <button type="button" id="ap_copy" disabled>Copy prompt</button>
+   <button type="button" id="ap_copyall" disabled>Copy all</button>
+   <button type="button" id="ap_dl" disabled>Download .md</button>
+   <span id="ap_msg" class="msg"></span></p>
+ </div>
+ <div class="card pad" id="ap_outwrap" hidden>
+  <div class="row" style="justify-content:space-between;flex-wrap:wrap"><b id="ap_spec"></b><span class="msg" id="ap_swatch"></span></div>
+  <label>Prompt</label><pre class="ap-out" id="ap_prompt"></pre>
+  <label>How to use this agent</label><pre class="ap-out" id="ap_howto" style="max-height:12vh"></pre>
+  <label>Negative / avoid</label><pre class="ap-out" id="ap_neg" style="max-height:8vh"></pre>
+ </div>`;
+ let last=null;
+ const paintMeta=()=>{
+  const f=ART_FORMS[$('#ap_form').value],c=artCultMeta($('#ap_cult').value);
+  const gifOk=!!f.gif;$('#ap_kind').disabled=!gifOk||!!f.forceGif;
+  if(f.forceGif)$('#ap_kind').value='gif';
+  else if(!gifOk)$('#ap_kind').value='static';
+  $('#ap_meta').innerHTML=`<span class="ap-sw" style="background:${c.accent}"></span><b>${esc(c.key)}</b> accent <code>${esc(c.accent)}</code> · ${f.w}×${f.h} · ${f.ar} · ${f.fmt}${gifOk?' · GIF allowed':''}<br>${esc(f.compose)}`;
+ };
+ const paintRefs=()=>{
+  $('#ap_refbox').innerHTML=artRefs.map((r,i)=>`<div class="ri" title="${esc(r.name)}"><img src="${r.url}" alt=""><button type="button" data-x="${i}">×</button></div>`).join('');
+  $('#ap_refbox').querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>{URL.revokeObjectURL(artRefs[+b.dataset.x].url);artRefs.splice(+b.dataset.x,1);paintRefs()});
+ };
+ paintMeta();
+ ['ap_form','ap_cult'].forEach(id=>$('#'+id).onchange=paintMeta);
+ $('#ap_addref').onclick=()=>$('#ap_reffile').click();
+ $('#ap_reffile').onchange=e=>{[...e.target.files||[]].forEach(file=>{if(artRefs.length>=6)return;artRefs.push({name:file.name,file,url:URL.createObjectURL(file)});});e.target.value='';paintRefs()};
+ $('#ap_clearref').onclick=()=>{artRefs.forEach(r=>URL.revokeObjectURL(r.url));artRefs=[];paintRefs()};
+ $('#ap_saveref').onclick=async()=>{if(!artRefs.length){say('Attach references first','warn');return}
+  try{const ps=await uploadMedia(artRefs.map(r=>r.file));artRefs.forEach((r,i)=>{r.path=ps[i]});say('Saved '+ps.length+' ref(s) under static/img/media/ (unsaved drafts)','warn')}catch(err){say(err.message,'bad')}};
+ $('#ap_go').onclick=()=>{
+  last=buildArtPrompt({form:$('#ap_form').value,culture:$('#ap_cult').value,kind:$('#ap_kind').value,agent:$('#ap_agent').value,idea:$('#ap_idea').value});
+  $('#ap_outwrap').hidden=false;$('#ap_spec').textContent=last.spec;
+  $('#ap_swatch').innerHTML=`<span class="ap-sw" style="background:${last.cult.accent}"></span>${esc(last.cult.accent)}`;
+  $('#ap_prompt').textContent=last.prompt;$('#ap_howto').textContent=last.howto;$('#ap_neg').textContent=last.neg;
+  ['ap_copy','ap_copyall','ap_dl'].forEach(id=>$('#'+id).disabled=false);
+  $('#ap_msg').textContent='Ready — copy into '+$('#ap_agent').selectedOptions[0].text;$('#ap_msg').className='msg ok';
+ };
+ const clip=async t=>{try{await navigator.clipboard.writeText(t);$('#ap_msg').textContent='Copied';$('#ap_msg').className='msg ok'}catch(e){say('Copy failed — select the text manually','warn')}};
+ $('#ap_copy').onclick=()=>last&&clip(last.prompt);
+ $('#ap_copyall').onclick=()=>last&&clip(last.prompt+'\n\n---\nHOW TO USE\n'+last.howto+'\n\n---\nAVOID\n'+last.neg+'\n\n---\n'+last.spec);
+ $('#ap_dl').onclick=()=>{if(!last)return;const blob=new Blob([`# Haoma art prompt\n\n${last.spec}\n\n## Prompt\n\n${last.prompt}\n\n## How to use\n\n${last.howto}\n\n## Avoid\n\n${last.neg}\n\n## Refs\n\n${artRefs.map(r=>`- ${r.name}${r.path?' → '+r.path:''}`).join('\n')||'(none)'}\n`],{type:'text/markdown'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='haoma-art-prompt.md';a.click();URL.revokeObjectURL(a.href)};
+}
 /* ===== settings ===== */
 function pSettings(){const s=site();$('#main').innerHTML=`<h2>Settings</h2><div class="card pad"><h3>GitHub project</h3><p class="msg" style="margin:0">Adds "Edit this page", "Report a correction" and "Page history" links under every article.</p>
  <label>Repository URL</label><div class="row"><input type="text" id="sr" placeholder="https://github.com/you/mythblog" value="${esc(s.repo||'')}"><button id="sd">Detect from git</button></div><label>Main branch</label><input type="text" id="sb" value="${esc(s.branch||'master')}"><p><button class="pri" id="ss">Save</button> <button id="sx">Discard changes</button><span id="wm" class="msg"></span></p></div>`;

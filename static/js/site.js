@@ -110,6 +110,68 @@ Q('.slider').forEach(function(s){var r=s.querySelector('.rail'),rtl=getComputedS
  Q('[data-dir]',s).forEach(function(b){b.onclick=function(){r.scrollBy({left:(+b.dataset.dir)*(rtl?-1:1)*r.clientWidth*.8,behavior:'smooth'})}})});
 /* tabs */
 Q('[role=tablist]').forEach(function(l){var bs=Q('button',l);bs.forEach(function(x){x.onclick=function(){bs.forEach(function(y){y.setAttribute('aria-selected',y===x);document.getElementById(y.getAttribute('aria-controls')).hidden=y!==x})}})});
+
+/* Simple keyboard actions for non-tech readers */
+function typingInField(el){
+  if(!el)return false;
+  var tag=(el.tagName||'').toLowerCase();
+  return tag==='input'||tag==='textarea'||tag==='select'||el.isContentEditable;
+}
+function openKeysHelp(on){
+  var box=document.getElementById('keys-help');
+  if(!box)return;
+  box.hidden=!on;
+  if(on){var ok=document.getElementById('keys-help-ok');if(ok)ok.focus()}
+}
+var keysBtn=document.getElementById('keys-help-btn');
+var keysOk=document.getElementById('keys-help-ok');
+if(keysBtn)keysBtn.onclick=function(){openKeysHelp(true)};
+if(keysOk)keysOk.onclick=function(){openKeysHelp(false);keysBtn&&keysBtn.focus()};
+var keysBox=document.getElementById('keys-help');
+if(keysBox)keysBox.addEventListener('click',function(e){if(e.target===keysBox)openKeysHelp(false)});
+
+var cardFocus=-1;
+function cardList(){return Q('.cards .card a, .cards a.card').filter(function(a){return a.offsetParent!==null})}
+function focusCard(d){
+  var list=cardList();if(!list.length)return;
+  cardFocus=Math.max(0,Math.min(list.length-1,cardFocus<0?(d>0?0:list.length-1):cardFocus+d));
+  list[cardFocus].focus();
+  try{list[cardFocus].scrollIntoView({block:'nearest',behavior:'smooth'})}catch(e){list[cardFocus].scrollIntoView(true)}
+}
+document.addEventListener('keydown',function(e){
+  if(typingInField(e.target))return;
+  if(e.key==='/'&&!e.ctrlKey&&!e.metaKey&&!e.altKey){
+    e.preventDefault();
+    if(window.haomaSearchOpen)window.haomaSearchOpen();
+    return;
+  }
+  if(e.key==='?'||(e.key==='/'&&e.shiftKey)){
+    e.preventDefault();openKeysHelp(true);return;
+  }
+  if(e.key==='Escape'){
+    openKeysHelp(false);
+    if(window.haomaSearchClose)window.haomaSearchClose();
+    return;
+  }
+  if(e.key==='j'||e.key==='J'){e.preventDefault();focusCard(1);return}
+  if(e.key==='k'||e.key==='K'){e.preventDefault();focusCard(-1);return}
+});
+
+/* Reading progress on long articles */
+var bar=document.getElementById('read-progress');
+var art=document.querySelector('main article');
+if(bar&&art){
+  function prog(){
+    var r=art.getBoundingClientRect(),vh=window.innerHeight||1;
+    var total=art.offsetHeight-vh;
+    var done=total>40?Math.min(1,Math.max(0,(-r.top)/total)):0;
+    bar.style.transform='scaleX('+done+')';
+    bar.classList.toggle('is-on',total>40);
+  }
+  window.addEventListener('scroll',prog,{passive:true});
+  window.addEventListener('resize',prog);
+  prog();
+}
 })();
 /* ===== v4: sliders, play-on-scroll media, notes ===== */
 (function(){

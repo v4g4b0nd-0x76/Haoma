@@ -1,5 +1,6 @@
 {{- /* Culture atlas: 2D force graph from related: front matter.
-       Always shown on a culture hub — empty themed box when no leaves yet. */ -}}
+       Always shown on a culture hub — empty themed box when no leaves yet.
+       Edges are undirected (A↔B counts once). Optional atlas_path: for Tour. */ -}}
 {{- $culture := .Params.culture -}}
 {{- if and $culture (not .Params.sec) -}}
 {{- $nodes := slice -}}
@@ -8,7 +9,7 @@
   {{- if .Params.sec -}}
     {{- $id := .RelPermalink -}}
     {{- $ids = merge $ids (dict $id true) -}}
-    {{- $nodes = $nodes | append (dict "id" $id "title" .Title "sec" .Params.sec "url" .RelPermalink) -}}
+    {{- $nodes = $nodes | append (dict "id" $id "title" .Title "sec" .Params.sec "url" .RelPermalink "tagline" (.Params.tagline | default "")) -}}
   {{- end -}}
 {{- end -}}
 {{- range where site.RegularPages "Section" "episodes" -}}
@@ -16,7 +17,7 @@
     {{- $id := .RelPermalink -}}
     {{- if not (index $ids $id) -}}
       {{- $ids = merge $ids (dict $id true) -}}
-      {{- $nodes = $nodes | append (dict "id" $id "title" .Title "sec" "episode" "url" .RelPermalink) -}}
+      {{- $nodes = $nodes | append (dict "id" $id "title" .Title "sec" "episode" "url" .RelPermalink "tagline" (.Params.tagline | default "")) -}}
     {{- end -}}
   {{- end -}}
 {{- end -}}
@@ -31,10 +32,14 @@
       {{- if not $target -}}{{ $target = site.GetPage (printf "%s/" $path) }}{{- end -}}
       {{- if $target -}}
         {{- $tgt := $target.RelPermalink -}}
-        {{- $ek := printf "%s→%s" $src $tgt -}}
-        {{- if and (index $ids $src) (index $ids $tgt) (not (index $edgeSeen $ek)) -}}
-          {{- $edgeSeen = merge $edgeSeen (dict $ek true) -}}
-          {{- $edges = $edges | append (dict "source" $src "target" $tgt) -}}
+        {{- if and (index $ids $src) (index $ids $tgt) (ne $src $tgt) -}}
+          {{- $a := cond (lt $src $tgt) $src $tgt -}}
+          {{- $b := cond (lt $src $tgt) $tgt $src -}}
+          {{- $ek := printf "%s|%s" $a $b -}}
+          {{- if not (index $edgeSeen $ek) -}}
+            {{- $edgeSeen = merge $edgeSeen (dict $ek true) -}}
+            {{- $edges = $edges | append (dict "source" $src "target" $tgt) -}}
+          {{- end -}}
         {{- end -}}
       {{- end -}}
     {{- end -}}
@@ -50,12 +55,30 @@
         {{- if not $target -}}{{ $target = site.GetPage (printf "%s/" $path) }}{{- end -}}
         {{- if $target -}}
           {{- $tgt := $target.RelPermalink -}}
-          {{- $ek := printf "%s→%s" $src $tgt -}}
-          {{- if and (index $ids $src) (index $ids $tgt) (not (index $edgeSeen $ek)) -}}
-            {{- $edgeSeen = merge $edgeSeen (dict $ek true) -}}
-            {{- $edges = $edges | append (dict "source" $src "target" $tgt) -}}
+          {{- if and (index $ids $src) (index $ids $tgt) (ne $src $tgt) -}}
+            {{- $a := cond (lt $src $tgt) $src $tgt -}}
+            {{- $b := cond (lt $src $tgt) $tgt $src -}}
+            {{- $ek := printf "%s|%s" $a $b -}}
+            {{- if not (index $edgeSeen $ek) -}}
+              {{- $edgeSeen = merge $edgeSeen (dict $ek true) -}}
+              {{- $edges = $edges | append (dict "source" $src "target" $tgt) -}}
+            {{- end -}}
           {{- end -}}
         {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $path := slice -}}
+{{- with .Params.atlas_path -}}
+  {{- range . -}}
+    {{- $pathRaw := . | strings.TrimSuffix "/" -}}
+    {{- $pp := site.GetPage $pathRaw -}}
+    {{- if not $pp }}{{ $pp = site.GetPage (printf "%s/" $pathRaw) }}{{ end -}}
+    {{- if $pp -}}
+      {{- $pid := $pp.RelPermalink -}}
+      {{- if index $ids $pid -}}
+        {{- $path = $path | append $pid -}}
       {{- end -}}
     {{- end -}}
   {{- end -}}
@@ -64,10 +87,22 @@
   <div class="atlas__head">
     <h2>{{ i18n "atlasTitle" }}</h2>
     <p class="atlas__hint">{{ if gt (len $nodes) 0 }}{{ i18n "atlasHint" }}{{ else }}{{ i18n "atlasEmpty" }}{{ end }}</p>
+    {{- if and (gt (len $nodes) 0) (gt (len $path) 0) -}}
+    <div class="atlas__tourbar" data-atlas-tour hidden>
+      <button type="button" class="atlas__tour-btn" data-tour-start>{{ i18n "atlasTourStart" }}</button>
+      <div class="atlas__tour-run" data-tour-run hidden>
+        <button type="button" class="atlas__tour-btn" data-tour-prev aria-label="{{ i18n "prev" }}">←</button>
+        <p class="atlas__tour-step" data-tour-step></p>
+        <button type="button" class="atlas__tour-btn" data-tour-next aria-label="{{ i18n "next" }}">→</button>
+        <button type="button" class="atlas__tour-btn" data-tour-open>{{ i18n "atlasTourOpen" }}</button>
+        <button type="button" class="atlas__tour-btn" data-tour-end>{{ i18n "atlasTourEnd" }}</button>
+      </div>
+    </div>
+    {{- end -}}
   </div>
   {{- if gt (len $nodes) 0 -}}
   <div class="atlas__canvas" data-atlas-root role="img" aria-label="{{ i18n "atlasLabel" }}"></div>
-  <script type="application/json" data-atlas-json>{{ dict "nodes" $nodes "edges" $edges | jsonify | safeJS }}</script>
+  <script type="application/json" data-atlas-json>{{ dict "nodes" $nodes "edges" $edges "path" $path | jsonify | safeJS }}</script>
   {{- else -}}
   <div class="atlas__canvas atlas__canvas--empty" role="img" aria-label="{{ i18n "atlasEmpty" }}">
     <div class="atlas__empty">

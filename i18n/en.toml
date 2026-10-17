@@ -90,10 +90,68 @@
 [atlasLabel]
   other = "Culture relationship atlas"
 [atlasHint]
-  other = "Drag to rearrange · scroll to zoom · click a node to highlight links · double-click to open"
+  other = "Drag to rearrange · scroll to zoom · click a node to highlight links · double-click to open · use Reading path for a guided tour"
 [atlasEmpty]
   other = "No linked pages yet — add characters, stories or history with related: links and they will appear here."
 [cardCat]
   other = "Category"
 [cardArt]
   other = "Article"
+[searchOpen]
+  other = "Search the site"
+[searchClose]
+  other = "Close search"
+[searchPlaceholder]
+  other = "Search titles and text…"
+[searchEmpty]
+  other = "No matches — try fewer or different words"
+[searchTip]
+  other = "Press / to search · Esc to close · ↑↓ then Enter"
+[relatedTitle]
+  other = "Related"
+[relatedHint]
+  other = "Pages and episodes linked from this article"
+[langStatusLabel]
+  other = "Translation status"
+[langStatusTitle]
+  other = "Translations"
+[langStatusStubs]
+  other = "Stub pages still needing a full translation:"
+[langStatusMissing]
+  other = "Pages missing a paired translation:"
+[libraryFilter]
+  other = "Filter library…"
+[libraryAll]
+  other = "All"
+[libraryText]
+  other = "Text"
+[libraryMd]
+  other = "Markdown"
+[keysEscKey]
+  other = "Esc"
+[libraryEmpty]
+  other = "No library files yet — add PDFs or Markdown under static/library/."
+[libraryEmptyFilter]
+  other = "No files match this filter."
+[atlasTourStart]
+  other = "Start reading path"
+[atlasTourOpen]
+  other = "Open page"
+[atlasTourEnd]
+  other = "End tour"
+[keysHelp]
+  other = "Keyboard help"
+[keysHelpTitle]
+  other = "Keyboard shortcuts"
+[keysSearch]
+  other = "Open search"
+[keysHelpThis]
+  other = "Show this help"
+[keysEsc]
+  other = "Close search or help"
+[keysTour]
+  other = "Next / previous step on an atlas tour"
+[keysCards]
+  other = "Move between cards on a list page"
+[keysOk]
+  other = "Got it"

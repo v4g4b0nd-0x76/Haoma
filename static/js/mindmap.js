@@ -1,10 +1,10 @@
-/* Culture atlas: lightweight 2D force graph (no external deps). */
+/* Culture atlas: lightweight 2D force graph + optional reading-path tour. */
 (function () {
   var roots = document.querySelectorAll("[data-atlas-root]");
   if (!roots.length) return;
 
   var SEC_COLOR = {
-    characters: null, /* filled from --accent */
+    characters: null,
     stories: "#93b9d1",
     history: "#c9a27a",
     episode: "#a88f56"
@@ -24,6 +24,7 @@
       var a = (i / Math.max(1, data.nodes.length)) * Math.PI * 2;
       return {
         id: n.id, title: n.title, sec: n.sec || "characters", url: n.url,
+        tagline: n.tagline || "",
         x: Math.cos(a) * 165, y: Math.sin(a) * 165, vx: 0, vy: 0
       };
     });
@@ -33,16 +34,20 @@
     var links = (data.edges || []).map(function (e) {
       return { source: byId[e.source], target: byId[e.target] };
     }).filter(function (l) { return l.source && l.target; });
+    var pathIds = (data.path || []).filter(function (id) { return byId[id]; });
+    var tourBar = wrap.querySelector("[data-atlas-tour]");
+    var tourRun = wrap.querySelector("[data-tour-run]");
+    var tourStepEl = wrap.querySelector("[data-tour-step]");
+    var tourIdx = -1;
 
     var W = root.clientWidth || 640;
     var H = Math.max(360, Math.min(520, Math.round(W * 0.55)));
     root.style.height = H + "px";
-    /* Kill default text-select / drag / caret inside the atlas */
     ["selectstart", "dragstart"].forEach(function (type) {
       root.addEventListener(type, function (e) { e.preventDefault(); });
     });
     root.addEventListener("mousedown", function (e) {
-      if (e.detail > 1) e.preventDefault(); /* no word-select on double-click */
+      if (e.detail > 1) e.preventDefault();
     });
 
     var svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -82,9 +87,22 @@
       if (n && n.url) location.assign(n.url);
     }
 
+    function pathPair(a, b) {
+      for (var i = 0; i < pathIds.length - 1; i++) {
+        if ((pathIds[i] === a && pathIds[i + 1] === b) || (pathIds[i] === b && pathIds[i + 1] === a)) return true;
+      }
+      return false;
+    }
+
     function paintFocus() {
       var neigh = {};
-      if (focus) {
+      var pathSet = {};
+      if (tourIdx >= 0 && pathIds.length) {
+        pathIds.forEach(function (id) { pathSet[id] = 1; });
+        neigh[pathIds[tourIdx]] = 1;
+        if (pathIds[tourIdx - 1]) neigh[pathIds[tourIdx - 1]] = 1;
+        if (pathIds[tourIdx + 1]) neigh[pathIds[tourIdx + 1]] = 1;
+      } else if (focus) {
         neigh[focus.id] = 1;
         links.forEach(function (l) {
           if (l.source === focus) neigh[l.target.id] = 1;
@@ -92,16 +110,68 @@
         });
       }
       nodeEls.forEach(function (g, i) {
-        var on = !focus || neigh[nodes[i].id];
-        g.classList.toggle("is-dim", !on);
-        g.classList.toggle("is-focus", focus === nodes[i]);
+        var n = nodes[i];
+        var on = !focus && tourIdx < 0 || neigh[n.id] || (tourIdx >= 0 && pathSet[n.id]);
+        g.classList.toggle("is-dim", !on && (focus || tourIdx >= 0));
+        g.classList.toggle("is-focus", focus === n || (tourIdx >= 0 && pathIds[tourIdx] === n.id));
+        g.classList.toggle("is-step", tourIdx >= 0 && pathSet[n.id]);
+        g.classList.toggle("is-tour-here", tourIdx >= 0 && pathIds[tourIdx] === n.id);
       });
       linkEls.forEach(function (line, i) {
         var l = links[i];
-        var on = !focus || l.source === focus || l.target === focus;
-        line.classList.toggle("is-dim", !on);
-        line.classList.toggle("is-hot", !!(focus && on));
+        var onPath = pathPair(l.source.id, l.target.id);
+        var on = !focus && tourIdx < 0 || l.source === focus || l.target === focus || (tourIdx >= 0 && onPath);
+        line.classList.toggle("is-dim", !on && (focus || tourIdx >= 0));
+        line.classList.toggle("is-hot", !!(focus && on && tourIdx < 0));
+        line.classList.toggle("is-path", tourIdx >= 0 && onPath);
       });
+    }
+
+    function setTour(i) {
+      if (!pathIds.length) return;
+      tourIdx = i;
+      focus = byId[pathIds[i]] || null;
+      if (tourBar) tourBar.hidden = false;
+      if (tourRun) tourRun.hidden = false;
+      var startBtn = wrap.querySelector("[data-tour-start]");
+      if (startBtn) startBtn.hidden = true;
+      if (tourStepEl && focus) {
+        var syn = focus.tagline ? " — " + focus.tagline : "";
+        tourStepEl.textContent = (i + 1) + " / " + pathIds.length + ": " + focus.title + syn;
+      }
+      paintFocus();
+      try { history.replaceState(null, "", "#atlas-tour-" + (i + 1)); } catch (err) {}
+    }
+
+    function endTour() {
+      tourIdx = -1;
+      focus = null;
+      if (tourRun) tourRun.hidden = true;
+      var startBtn = wrap.querySelector("[data-tour-start]");
+      if (startBtn) startBtn.hidden = false;
+      paintFocus();
+      try {
+        if (/#atlas-tour/.test(location.hash)) history.replaceState(null, "", location.pathname + location.search);
+      } catch (err) {}
+    }
+
+    if (tourBar && pathIds.length) {
+      tourBar.hidden = false;
+      var start = wrap.querySelector("[data-tour-start]");
+      var prev = wrap.querySelector("[data-tour-prev]");
+      var next = wrap.querySelector("[data-tour-next]");
+      var open = wrap.querySelector("[data-tour-open]");
+      var end = wrap.querySelector("[data-tour-end]");
+      if (start) start.onclick = function () { setTour(0); };
+      if (prev) prev.onclick = function () { if (tourIdx > 0) setTour(tourIdx - 1); };
+      if (next) next.onclick = function () { if (tourIdx >= 0 && tourIdx < pathIds.length - 1) setTour(tourIdx + 1); };
+      if (open) open.onclick = function () { if (tourIdx >= 0) openNode(byId[pathIds[tourIdx]]); };
+      if (end) end.onclick = endTour;
+      var m = location.hash.match(/^#atlas-tour-(\d+)$/);
+      if (m) {
+        var step = Math.max(1, Math.min(pathIds.length, parseInt(m[1], 10))) - 1;
+        setTour(step);
+      }
     }
 
     function nodeFromEvent(e) {
@@ -128,7 +198,6 @@
       var title = document.createElementNS(svg.namespaceURI, "title");
       title.textContent = n.title + " — double-click to open";
       g.appendChild(title);
-      /* Invisible hit pad so labels/near-misses still register */
       var hit = document.createElementNS(svg.namespaceURI, "circle");
       hit.setAttribute("r", 18);
       hit.setAttribute("fill", "transparent");
@@ -146,7 +215,6 @@
       g.appendChild(t);
       gNodes.appendChild(g);
 
-      /* detail===2 (and a manual fallback) opens; single click highlights after a short delay */
       var clickTimer = null;
       function onActivate(ev) {
         if (dragMoved) return;
@@ -163,9 +231,14 @@
         }
         clearTimeout(clickTimer);
         clickTimer = setTimeout(function () {
-          focus = n;
-          paintFocus();
-          /* Drop browser focus box after pointer select; keyboard keeps :focus-visible */
+          if (tourIdx >= 0) {
+            var pi = pathIds.indexOf(n.id);
+            if (pi >= 0) setTour(pi);
+            else { focus = n; paintFocus(); }
+          } else {
+            focus = n;
+            paintFocus();
+          }
           if (ev.detail && document.activeElement === g) try { g.blur(); } catch (err) {}
         }, 280);
       }
@@ -230,16 +303,15 @@
         try { svg.releasePointerCapture(e.pointerId); } catch (err) {}
       }
       capturing = false;
-      /* keep dragMoved true until after the click that follows pointerup */
       setTimeout(function () { dragMoved = false; }, 0);
     }
     svg.addEventListener("pointerup", endDrag);
     svg.addEventListener("pointercancel", endDrag);
 
-    /* Click empty parchment to clear focus */
     svg.addEventListener("click", function (e) {
       if (nodeFromEvent(e)) return;
       if (dragMoved) return;
+      if (tourIdx >= 0) return;
       focus = null;
       paintFocus();
     });
@@ -249,6 +321,22 @@
       scale = Math.min(2.4, Math.max(0.45, scale * (e.deltaY > 0 ? 0.92 : 1.08)));
       gWorld.setAttribute("transform", "scale(" + scale + ")");
     }, { passive: false });
+
+    document.addEventListener("keydown", function (e) {
+      if (tourIdx < 0 || !pathIds.length) return;
+      var t = e.target;
+      if (t && (t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+      if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+        e.preventDefault();
+        if (tourIdx < pathIds.length - 1) setTour(tourIdx + 1);
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        e.preventDefault();
+        if (tourIdx > 0) setTour(tourIdx - 1);
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        endTour();
+      }
+    });
 
     var alpha = 1;
     function tick() {
@@ -299,5 +387,27 @@
     requestAnimationFrame(tick);
   }
 
-  roots.forEach(init);
+  function boot() {
+    roots.forEach(function (root) {
+      if (root.dataset.atlasReady) return;
+      var wrap = root.closest("[data-atlas]");
+      if (!wrap) return;
+      if ("IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) {
+            if (!e.isIntersecting) return;
+            io.disconnect();
+            root.dataset.atlasReady = "1";
+            init(root);
+          });
+        }, { rootMargin: "80px", threshold: 0.05 });
+        io.observe(wrap);
+      } else {
+        root.dataset.atlasReady = "1";
+        init(root);
+      }
+    });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
 })();

@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="{{ "img/brand/apple-touch-icon.png" | relURL }}">
 <meta name="theme-color" content="#14161a">
 <script src="{{ "js/boot.js" | relURL }}"></script>
-<link rel="stylesheet" href="{{ printf "%s?v=atlas-noselect-1" ("css/style.css" | relURL) }}">
+<link rel="stylesheet" href="{{ printf "%s?v=meta-gap-1" ("css/style.css" | relURL) }}">
 <style>{{ range $k, $t := site.Data.themes }}[data-culture="{{ $k }}"]{--accent:{{ $t.accent | safeCSS }};--bg:{{ $t.bg | safeCSS }};--surface:{{ $t.surface | safeCSS }};--border:{{ $t.border | safeCSS }};--text:{{ $t.text | safeCSS }};--muted:{{ $t.muted | safeCSS }};--anim:{{ $t.anim | default "none" | safeCSS }};--meander:var(--m-{{ $t.pattern | default "none" | safeCSS }});--rune:{{ printf "%q" ($t.glyphs | default "") | safeCSS }}}
 {{ end }}</style>
 <link rel="preload" href="{{ "fonts/iransans-400.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
@@ -22,6 +22,18 @@
   <a class="brand" href="{{ site.Home.RelPermalink }}">{{ partial "logo.html" (dict "v" "word" "id" "h") }}</a>
   <nav>{{ range index site.Data.nav site.Language.Lang }}<a href="{{ .url | relLangURL }}">{{ .name }}</a>{{ end }}</nav>
   <div class="ctrl">
+    <div class="search" id="site-search">
+      <button type="button" class="search__open" aria-expanded="false" aria-controls="search-panel" title="{{ i18n "searchOpen" }}" aria-label="{{ i18n "searchOpen" }}">⌕</button>
+      <div class="search__panel" id="search-panel" role="combobox" aria-expanded="false" aria-owns="search-list" hidden>
+        <div class="search__row">
+          <input type="search" class="search__input" placeholder="{{ i18n "searchPlaceholder" }}" autocomplete="off" aria-autocomplete="list" aria-controls="search-list" aria-label="{{ i18n "searchOpen" }}">
+          <button type="button" class="search__close" aria-label="{{ i18n "searchClose" }}">×</button>
+        </div>
+        <p class="search__status" data-empty="{{ i18n "searchEmpty" }}" role="status"></p>
+        <ul class="search__list" id="search-list" role="listbox"></ul>
+        <p class="search__tip muted">{{ i18n "searchTip" }}</p>
+      </div>
+    </div>
     {{- /* culture picker: a listbox rather than a <select>, because a native one
            cannot show the culture's own colour while you hover its option.
            Each option carries that culture's --c (its main colour) and --pat (its
@@ -37,15 +49,31 @@
     </div>
     {{ $t := .Translations }}{{ if not $t }}{{ $t = site.Home.Translations }}{{ end }}
     {{ range $t }}<a class="lang" href="{{ .RelPermalink }}" hreflang="{{ .Language.Lang }}" lang="{{ .Language.Lang }}">{{ .Language.LanguageName }}</a>{{ end }}
+    <button type="button" class="keys-help-btn" id="keys-help-btn" title="{{ i18n "keysHelp" }}" aria-label="{{ i18n "keysHelp" }}">?</button>
   </div>
 </header>
+<div class="read-progress" id="read-progress" aria-hidden="true"></div>
+<div class="keys-help" id="keys-help" hidden role="dialog" aria-labelledby="keys-help-title" aria-modal="true">
+  <div class="keys-help__panel">
+    <h2 id="keys-help-title">{{ i18n "keysHelpTitle" }}</h2>
+    <ul class="keys-help__list">
+      <li><kbd>/</kbd> {{ i18n "keysSearch" }}</li>
+      <li><kbd>?</kbd> {{ i18n "keysHelpThis" }}</li>
+      <li><kbd>{{ i18n "keysEscKey" }}</kbd> {{ i18n "keysEsc" }}</li>
+      <li><kbd>←</kbd> <kbd>→</kbd> {{ i18n "keysTour" }}</li>
+      <li><kbd>j</kbd> <kbd>k</kbd> {{ i18n "keysCards" }}</li>
+    </ul>
+    <button type="button" class="keys-help__ok" id="keys-help-ok">{{ i18n "keysOk" }}</button>
+  </div>
+</div>
 <div class="motif"></div>
 {{ with .Params.culture }}{{ $b := (index site.Data.themes . | default dict).banner }}{{ if $b }}
 <div class="hero-art c-{{ . }}"><img class="sbg" src="{{ printf "img/%s" $b | relURL }}" alt="" aria-hidden="true"><img class="sfg" src="{{ printf "img/%s" $b | relURL }}" alt="{{ $.Params.culture }} banner art"></div>
 {{ end }}{{ end }}
 <main>{{ block "main" . }}{{ end }}</main>
 <footer>{{ i18n "textLabel" }} CC BY-SA · {{ i18n "codeLabel" }} MIT{{ with site.Home.OutputFormats.Get "rss" }} · <a href="{{ .RelPermalink }}">RSS</a>{{ end }} · <a href="{{ "about/" | relLangURL }}">{{ i18n "sources" }}</a></footer>
-<script src="{{ printf "%s?v=hero-preview-5" ("js/site.js" | relURL) }}"></script>
-{{ if and .Params.culture (not .Params.sec) }}<script src="{{ printf "%s?v=atlas-space-1" ("js/mindmap.js" | relURL) }}"></script>{{ end }}
+<script src="{{ printf "%s?v=keys-search-1" ("js/site.js" | relURL) }}"></script>
+<script src="{{ printf "%s?v=1" ("js/search.js" | relURL) }}"></script>
+{{ if and .Params.culture (not .Params.sec) }}<script src="{{ printf "%s?v=atlas-tour-1" ("js/mindmap.js" | relURL) }}"></script>{{ end }}
 </body>
 </html>

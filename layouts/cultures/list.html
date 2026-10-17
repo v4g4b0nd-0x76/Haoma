@@ -4,7 +4,9 @@
 {{ partial "tools.html" . }}{{ partial "crumbs.html" . }}
 <h1>{{ .Title }}</h1>
 {{ .Content }}
+{{ partial "lang-status.html" . }}
 {{ partial "mindmap.html" . }}
 <ul class="cards">{{ range .Pages }}{{ partial "card.html" . }}{{ end }}</ul>
 </article></div>
 {{ end }}
+

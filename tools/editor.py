@@ -432,9 +432,15 @@ def audit():
                 stale = (date.today() - date.fromisoformat(rev)).days > 180 if rev else (not idx)
             except ValueError:
                 stale = True
-            items.append({"path": "content/%s/%s" % (l, rel), "lang": l, "title": fmval(fm, "title") or rel, "grade": grade,
+            title = fmval(fm, "title") or rel
+            stub = title.startswith("TODO translate:")
+            rb = re.search(r"^related:\s*\n((?:[ \t]+- .*\n?)*)", fm + "\n", re.M)
+            nrel = len(re.findall(r"^\s+- ", rb.group(1), re.M)) if rb else 0
+            items.append({"path": "content/%s/%s" % (l, rel), "lang": l, "title": title, "grade": grade,
                           "reviewed": rev, "sources": nsrc, "index": idx,
-                          "draft": ("draft" in grade.lower() or "پیش‌نویس" in grade),
+                          "draft": ("draft" in grade.lower() or "پیش‌نویس" in grade) or stub,
+                          "stub": stub, "related": nrel,
+                          "orphan": (not idx) and nrel == 0 and ("cultures/" in rel or "episodes/" in rel),
                           "stale": bool(stale) and not idx, "missing": [o for o in langs if o != l and rel not in rels[o]]})
     return items
 

@@ -4,6 +4,12 @@ culture: iranian
 quote: "Mehr has a thousand ears and ten thousand eyes, and no oath-breaker escapes him."
 quoteSource: "Mihr Yasht (paraphrase)"
 tagline: "Light, oaths and the cosmic struggle of truth against the lie"
+atlas_path:
+  - /cultures/iranian/characters/zarathustra/
+  - /cultures/iranian/stories/two-spirits/
+  - /cultures/iranian/characters/mehr/
+  - /episodes/002-lord-of-oaths/
+  - /cultures/iranian/history/zoroastrianism-in-persia/
 cascade:
   culture: iranian
 wide: true

@@ -1,15 +1,17 @@
 ---
-title: زرتشت
-tagline: پیامبری که سرودهایش دین زرتشتی را بنیاد نهاد
-grade: متن اصلی
+title: "زرتشت"
+tagline: "پیامبری که سرودهایش دین زرتشتی را بنیاد نهاد"
+grade: "متن اصلی"
+reviewed: 2026-10-13
 sources:
   - "اوستا، گاهان (در یسنا) — متن اصلی"
   - "Mary Boyce, A History of Zoroastrianism — پژوهش نوین"
-reviewed: 2026-10-13
 related:
-  - /cultures/iranian/characters/mehr/
-  - /cultures/iranian/stories/two-spirits/
-  - /cultures/iranian/history/zoroastrianism-in-persia/
+  - "/cultures/iranian/characters/mehr/"
+  - "/cultures/iranian/history/zoroastrianism-in-persia/"
+  - "/cultures/iranian/stories/two-spirits/"
+card_bg: "media/zarathustra-journey-card.gif"
+card_bg_kind: "gif"
 ---
 <p class="lead">زرتشت (در یونانی زوروآستر) پیامبری است که گاهان — کهن‌ترین سرودهای اوستایی — به او نسبت داده می‌شود.</p>
 

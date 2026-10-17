@@ -90,10 +90,68 @@
 [atlasLabel]
   other = "نقشهٔ پیوندهای فرهنگ"
 [atlasHint]
-  other = "بکشید تا جابه‌جا شود · چرخ موش برای بزرگ‌نمایی · یک گره را کلیک کنید تا پیوندها روشن شود · دوبار کلیک برای گشودن"
+  other = "بکشید تا جابه‌جا شود · چرخ موش برای بزرگ‌نمایی · یک گره را کلیک کنید تا پیوندها روشن شود · دوبار کلیک برای گشودن · مسیر خواندن برای تور راهنما"
 [atlasEmpty]
   other = "هنوز صفحه‌ای پیوند نخورده — شخصیت‌ها، داستان‌ها یا تاریخ را با related: اضافه کنید تا اینجا دیده شوند."
 [cardCat]
   other = "دسته"
 [cardArt]
   other = "مقاله"
+[searchOpen]
+  other = "جستجو در سایت"
+[searchClose]
+  other = "بستن جستجو"
+[searchPlaceholder]
+  other = "جستجو در عنوان و متن…"
+[searchEmpty]
+  other = "نتیجه‌ای نبود — کلمات کمتر یا متفاوت را بیازمایید"
+[searchTip]
+  other = "کلید / برای جستجو · Esc برای بستن · ↑↓ سپس Enter"
+[relatedTitle]
+  other = "مرتبط"
+[relatedHint]
+  other = "صفحه‌ها و قسمت‌هایی که از این مقاله پیوند شده‌اند"
+[langStatusLabel]
+  other = "وضعیت ترجمه"
+[langStatusTitle]
+  other = "ترجمه‌ها"
+[langStatusStubs]
+  other = "صفحه‌های ناقص که هنوز ترجمهٔ کامل می‌خواهند:"
+[langStatusMissing]
+  other = "صفحه‌های بدون جفت ترجمه:"
+[libraryFilter]
+  other = "پالایش کتابخانه…"
+[libraryAll]
+  other = "همه"
+[libraryText]
+  other = "متن"
+[libraryMd]
+  other = "Markdown"
+[keysEscKey]
+  other = "Esc"
+[libraryEmpty]
+  other = "هنوز فایلی در کتابخانه نیست — PDF یا Markdown را در static/library/ بگذارید."
+[libraryEmptyFilter]
+  other = "هیچ فایلی با این پالایش نیست."
+[atlasTourStart]
+  other = "شروع مسیر خواندن"
+[atlasTourOpen]
+  other = "گشودن صفحه"
+[atlasTourEnd]
+  other = "پایان مسیر"
+[keysHelp]
+  other = "راهنمای صفحه‌کلید"
+[keysHelpTitle]
+  other = "میانبرهای صفحه‌کلید"
+[keysSearch]
+  other = "باز کردن جستجو"
+[keysHelpThis]
+  other = "نمایش این راهنما"
+[keysEsc]
+  other = "بستن جستجو یا راهنما"
+[keysTour]
+  other = "گام بعد / قبل در مسیر طلسم‌نما"
+[keysCards]
+  other = "جابه‌جایی بین کارت‌ها در فهرست"
+[keysOk]
+  other = "متوجه شدم"

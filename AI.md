@@ -68,13 +68,16 @@ sources:
   - "Avesta, Mihr Yasht (Yasht 10) - primary"
 reviewed: 2026-10-12       # ISO date, update when you verify the page
 wide: true                 # optional: wide article, needed for grids/infobox
-related:                   # optional: site-root paths for the culture atlas (mindmap)
+related:                   # optional: site-root paths for the culture atlas (mindmap) + Related cards on the page
+atlas_path:                # culture hub only: ordered paths for Atlas “reading path” / tour mode
   - /cultures/iranian/characters/zarathustra/
   - /cultures/iranian/stories/two-spirits/
   - /episodes/002-lord-of-oaths/
 ---
 ```
-Culture `_index.md` also takes `quote`, `quoteSource` (hero line, paraphrase unless public domain) and `tagline`. The culture hub renders an **Atlas** (`layouts/partials/mindmap.html` + `static/js/mindmap.js`) from every leaf under that culture (plus matching episodes) and edges from each page's `related:` list only — no body scanning. Paths are language-root absolute (`/cultures/…/`, never `/fa/…`); `site.GetPage` resolves them per language.
+Culture `_index.md` also takes `quote`, `quoteSource` (hero line, paraphrase unless public domain), `tagline`, and optional `atlas_path:` (ordered site-root paths for the Atlas reading-path tour). The culture hub renders an **Atlas** (`layouts/partials/mindmap.html` + `static/js/mindmap.js`) from every leaf under that culture (plus matching episodes) and **undirected** edges from each page's `related:` list only — no body scanning. Paths are language-root absolute (`/cultures/…/`, never `/fa/…`); `site.GetPage` resolves them per language. Leaf and episode pages also render a **Related** card strip from the same `related:` list.
+
+**Site search** is Hugo-only: home output `search.json` (`layouts/index.searchindex.json`) + `static/js/search.js`. Title/tagline rank above body; queries use AND matching and return at most 8 hits (header ⌕ or `/`).
 
 ### 3.2 Episodes
 `content/<lang>/episodes/<nnn-slug>/index.md` with `date`, `culture`, `audio` (path under `static/`, e.g. `audio/002.mp3`, or a full https URL), `grade`, `sources`, `reviewed`, optional `related:`. Body: show notes, `## Script`, `## Media credits` (every asset with its licence).
@@ -123,7 +126,7 @@ Preset grids the editor offers: 2/3+1/3, 1/3+2/3, 1/2+1/2, 3 and 4 columns, 2x2,
 New culture checklist: folder + `_index.md` files in both languages (3.1), theme entry, banner, tagline/quote, at least one page per section, translations, Review view clean.
 
 ## 6. Banner and art (SVG) rules
-**Generating characters, posters, card media, hero banners, or GIFs?** Follow [art-gen-ai.md](art-gen-ai.md) (sizes, palettes, bans, prompt templates for weaker image agents). Maps stay in [MAP-DESIGN.md](MAP-DESIGN.md).
+**Generating characters, posters, card media, hero banners, or GIFs?** Follow [art-gen-ai.md](art-gen-ai.md). In the editor, **Art prompt** builds a polished prompt (culture colours, exact size, static/GIF, agent-specific wording, optional reference attachments). Maps stay in [MAP-DESIGN.md](MAP-DESIGN.md).
 - `viewBox="0 0 1200 300"`, `preserveAspectRatio="xMidYMid slice"`; one file, under ~20 KB.
 - Animation only with CSS `@keyframes` inside the SVG `<style>` (works when loaded via `<img>`). No scripts, no external `href`, no web fonts, no raster embeds.
 - Include `@media (prefers-reduced-motion: reduce){*{animation:none}}` inside the SVG style.

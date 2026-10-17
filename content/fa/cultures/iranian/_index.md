@@ -4,6 +4,12 @@ culture: iranian
 quote: "مهر هزار گوش و ده هزار چشم دارد و هیچ پیمانشکنی از او نمی‌گریزد."
 quoteSource: "مهر یشت (برگردان آزاد)"
 tagline: روشنایی، پیمان و نبرد راستی با دروغ
+atlas_path:
+  - /cultures/iranian/characters/zarathustra/
+  - /cultures/iranian/stories/two-spirits/
+  - /cultures/iranian/characters/mehr/
+  - /episodes/002-lord-of-oaths/
+  - /cultures/iranian/history/zoroastrianism-in-persia/
 cascade:
   culture: iranian
 wide: true
