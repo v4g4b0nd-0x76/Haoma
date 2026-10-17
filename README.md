@@ -272,7 +272,7 @@ Browser opens `http://localhost:8765/` (also printed in the terminal).
 
 ### Security
 
-The editor binds to `127.0.0.1` only. Every API call requires the per-run token (`X-Token` header or `?t=` query param). Only the paths `content data i18n layouts static assets hugo.toml` are writable.
+The editor binds to `127.0.0.1` locally (or `0.0.0.0` in a Codespace so port forwarding works). Every API call requires the per-run token (`X-Token` header or `?t=` query param). Only the paths `content data i18n layouts static assets hugo.toml` are writable.
 
 ### Edit in the browser (GitHub Codespaces)
 

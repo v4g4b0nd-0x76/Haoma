@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """Local site editor. Standard library only. Run from the project: python tools/editor.py
-Binds to 127.0.0.1 only. Needs: git and hugo (in PATH). Python is optional when using
-the released binary (see .github/workflows/release-editor.yml)."""
+Binds to 127.0.0.1 locally, or 0.0.0.0 inside a GitHub Codespace (port forwarding).
+Needs: git and hugo (in PATH). Python is optional when using the released binary
+(see .github/workflows/release-editor.yml)."""
 import hashlib, time, json, mimetypes, os, re, secrets, shutil, socket, subprocess, sys, tempfile, atexit, webbrowser
 from datetime import date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -306,11 +307,17 @@ def txn_args(q):
     return x, q.get("l", "")[:120]
 
 
+def bind_host():
+    """Codespace port forwarding needs a non-loopback bind; local stays loopback-only."""
+    return "0.0.0.0" if CODESPACE else "127.0.0.1"
+
+
 def free_port(start):
+    host = bind_host()
     for p in range(start, start + 40):
         with socket.socket() as k:
             try:
-                k.bind(("127.0.0.1", p))
+                k.bind((host, p))
                 return p
             except OSError:
                 continue
@@ -328,7 +335,7 @@ def forward_url(port):
 def allowed_host(host_header):
     """Localhost, or this codespace's forwarded hostname for our ports."""
     h = (host_header or "").split(":")[0].lower()
-    if h in ("127.0.0.1", "localhost"):
+    if h in ("127.0.0.1", "localhost", "0.0.0.0"):
         return True
     if not CODESPACE or not h:
         return False
@@ -337,7 +344,11 @@ def allowed_host(host_header):
     if not h.endswith(suffix):
         return False
     prefix = h[: -len(suffix)]  # witty-space-8765
-    return prefix.startswith(CODESPACE.lower() + "-") and prefix[len(CODESPACE) + 1 :].isdigit()
+    name = CODESPACE.lower()
+    if not prefix.startswith(name + "-"):
+        return False
+    rest = prefix[len(name) + 1 :]
+    return rest.isdigit()
 
 
 def preview_status():
@@ -358,7 +369,13 @@ def preview_start():
         ws_sync()
     port = free_port(HUGO_PORT)
     preview["port"] = port
-    cmd = ["hugo", "server", "--source", str(WS), "--port", str(port), "--bind", "127.0.0.1", "--disableFastRender"]
+    cmd = [
+        "hugo", "server",
+        "--source", str(WS),
+        "--port", str(port),
+        "--bind", bind_host(),
+        "--disableFastRender",
+    ]
     if CODESPACE:
         # Otherwise Hugo writes http://localhost:PORT/ into every link, which in a
         # codespace resolves to the reader's machine, not the preview server.
@@ -615,13 +632,17 @@ if __name__ == "__main__":
         if c == 127:
             print(f"Warning: '{need}' not found on PATH — preview/publish may fail.")
     ws_sync()
+    host = bind_host()
     url = forward_url(PORT)
-    print(f"Site editor: {url}  (project: {ROOT})\nCtrl+C to stop.", flush=True)
+    print(f"Site editor: {url}  (bind {host}:{PORT}, project: {ROOT})", flush=True)
+    print("Ctrl+C to stop.", flush=True)
     try:
-        srv = ThreadingHTTPServer(("127.0.0.1", PORT), H)
-    except OSError:
-        print(f"Port {PORT} is already in use — the editor is probably already running.")
-        sys.exit(0)
+        srv = ThreadingHTTPServer((host, PORT), H)
+    except OSError as e:
+        print(f"Port {PORT} is already in use ({e}).", flush=True)
+        print(f"If the editor is already running, open: {url}", flush=True)
+        # Exit non-zero in Codespace so the attach task shows as failed, not "running".
+        sys.exit(1 if CODESPACE else 0)
     if not CODESPACE:
         try:
             webbrowser.open(url)

@@ -5,3 +5,4 @@ tools/.preview.log
 __pycache__/
 tools/.preview/
 tools/.history/
+tools/.editor.log

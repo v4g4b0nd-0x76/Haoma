@@ -34,6 +34,10 @@ jobs:
           ports = data.get("portsAttributes", {})
           assert ports.get("8765", {}).get("onAutoForward") == "openBrowser", \
               "8765 must openBrowser for non-tech Codespace flow"
+          # Do not list 8765 in forwardPorts — that opens the browser before
+          # postAttach starts the editor and yields a 502 empty forward.
+          assert 8765 not in (data.get("forwardPorts") or []), \
+              "omit 8765 from forwardPorts so openBrowser waits for a listener"
           print("devcontainer.json OK:", p.resolve())
           PY
 

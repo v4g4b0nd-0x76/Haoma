@@ -2,10 +2,20 @@
   "name": "Haoma - Hugo + site editor",
   "image": "mcr.microsoft.com/devcontainers/python:3.12",
   "postCreateCommand": "sh .devcontainer/setup-hugo.sh",
-  "forwardPorts": [8765, 1313],
   "portsAttributes": {
-    "8765": { "label": "Haoma editor", "onAutoForward": "openBrowser" },
-    "1313": { "label": "Hugo preview", "onAutoForward": "silent" }
+    "8765": {
+      "label": "Haoma editor",
+      "onAutoForward": "openBrowser",
+      "visibility": "public",
+      "requireLocalPort": true
+    },
+    "1313": {
+      "label": "Hugo preview",
+      "onAutoForward": "silent",
+      "visibility": "public"
+    }
   },
-  "postAttachCommand": { "editor": "python3 tools/editor.py" }
+  "postAttachCommand": {
+    "editor": "sh .devcontainer/start-editor.sh"
+  }
 }
