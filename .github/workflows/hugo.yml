@@ -38,10 +38,7 @@ jobs:
         uses: actions/configure-pages@v5
       - name: Build
         run: hugo --gc --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
-      - name: Copy editor UI to /tools/
-        run: |
-          mkdir -p public/tools
-          cp tools/admin.html public/tools/index.html
+      # /tools/ launcher ships from static/tools/ (Codespace one-click); do not copy admin.html
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:

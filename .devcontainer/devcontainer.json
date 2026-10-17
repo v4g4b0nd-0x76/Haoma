@@ -4,7 +4,7 @@
   "postCreateCommand": "sh .devcontainer/setup-hugo.sh",
   "forwardPorts": [8765, 1313],
   "portsAttributes": {
-    "8765": { "label": "Haoma editor", "onAutoForward": "notify" },
+    "8765": { "label": "Haoma editor", "onAutoForward": "openBrowser" },
     "1313": { "label": "Hugo preview", "onAutoForward": "silent" }
   },
   "postAttachCommand": { "editor": "python3 tools/editor.py" }

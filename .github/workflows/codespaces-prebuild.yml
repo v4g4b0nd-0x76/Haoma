@@ -1,0 +1,72 @@
+# Keep Codespace cold-starts fast for the one-click /tools/ editor.
+# Prebuilds run after pushes that touch the container definition or tooling
+# the editor needs at create time.
+name: Codespaces prebuild
+
+on:
+  push:
+    branches: [master, main]
+    paths:
+      - ".devcontainer/**"
+      - "tools/editor.py"
+      - "tools/admin.html"
+      - ".github/workflows/codespaces-prebuild.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate devcontainer config
+        run: |
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path(".devcontainer/devcontainer.json")
+          data = json.loads(p.read_text())
+          assert data.get("postAttachCommand"), "postAttachCommand required"
+          ports = data.get("portsAttributes", {})
+          assert ports.get("8765", {}).get("onAutoForward") == "openBrowser", \
+              "8765 must openBrowser for non-tech Codespace flow"
+          print("devcontainer.json OK:", p.resolve())
+          PY
+
+      - name: Smoke-test Hugo setup script
+        run: |
+          set -euo pipefail
+          sh .devcontainer/setup-hugo.sh
+          hugo version
+          hugo version | grep -qi extended
+
+      - name: Syntax-check editor + Codespace host allowlist
+        run: |
+          python3 - <<'PY'
+          import ast
+          from pathlib import Path
+          src = Path("tools/editor.py").read_text(encoding="utf-8")
+          ast.parse(src)
+          ns = {"__name__": "editor_check"}  # not __main__ — do not bind the server
+          exec(compile(src, "tools/editor.py", "exec"), ns)
+          allow = ns["allowed_host"]
+          g = allow.__globals__
+          g["CODESPACE"] = None
+          assert allow("127.0.0.1") and allow("localhost")
+          assert not allow("evil.example.com")
+          g["CODESPACE"] = "funny-space"
+          g["FWD_DOMAIN"] = "app.github.dev"
+          assert allow("funny-space-8765.app.github.dev")
+          assert allow("funny-space-1313.app.github.dev")
+          assert not allow("other-space-8765.app.github.dev")
+          assert not allow("funny-space-8765.evil.dev")
+          print("allowed_host checks OK")
+          PY
+
+      - name: Prebuild hint
+        run: |
+          echo "::notice::Enable GitHub Codespaces prebuilds for this repo (Settings → Codespaces → Prebuilds) on branch master pointing at .devcontainer, so Create codespace uses this validated environment."

@@ -17,7 +17,7 @@ The name _Haoma_ is the Avestan word for the sacred plant pressed in the Yasna r
 7. [Themes and visuals](#7-themes-and-visuals)
 8. [Exporting a page as PDF](#8-exporting-a-page-as-pdf)
 9. [Deploying to GitHub Pages](#9-deploying-to-github-pages)
-10. [The published editor panel](#10-the-published-editor-panel)
+10. [The `/tools/` editor launcher](#10-the-tools-editor-launcher)
 11. [Verification checklist](#11-verification-checklist)
 12. [Editing and contributing](#12-editing-and-contributing)
 13. [Licences](#13-licences)
@@ -55,7 +55,7 @@ Every route below exists in both languages (`/fa/…` mirrors `/…`); Farsi is 
 | **Library** | `/library/` | Everything in `static/library/` — downloadable PDFs and Markdown. |
 | **Guide** | `/guide/` | A live demo of every writing component. Read it before editing content. |
 | **About** | `/about/` | What the project is and how it is sourced. |
-| **Editor panel** | `/tools/` | The editor's interface published as a static file. Not linked from the site; see §10. |
+| **Editor launcher** | `/tools/` | One-click **Open editor** → GitHub Codespace (real editor). See §5 and §10. |
 
 > **Read next.** This README is the human guide. `AI.md` is the complete technical reference — every shortcode attribute, the editor's API and safety model, the page grid, the brand rules and the exact verification commands. When the two overlap, `AI.md` is the detailed one.
 
@@ -239,13 +239,21 @@ The editor binds to `127.0.0.1` only. Every API call requires the per-run token 
 
 ### Edit in the browser (GitHub Codespaces)
 
-GitHub Pages serves static files only, so it cannot run `editor.py` — the panel published at `/tools/` has no backend (§10). To get the **real editor** without a local clone, open the repository in a Codespace: **Code → Codespaces → Create codespace on `<branch>`**. The `.devcontainer/devcontainer.json` in this repo installs Hugo (extended) and Python, forwards ports 8765 and 1313, and starts `python tools/editor.py` for you when the editor attaches.
+Easiest path for non-tech editors:
 
-Open the forwarded URL for port 8765 (the editor also prints it — `https://<codespace>-8765.app.github.dev/`) and you get the same editor: drafts, rollback, the map studio, the live Hugo preview, and **Publish & PR** — the codespace carries git credentials, so the branch push works. If the preview pane stays blank, open port 1313's URL directly from the **Ports** tab (forwarded ports are private to your account by default).
+1. Open **`/tools/`** on the live site (or the same path on a local Hugo build).
+2. Click **Open editor** — sign in with GitHub if asked.
+3. Wait for the Codespace to start; the editor UI opens in a new browser tab automatically.
 
-The devcontainer installs Hugo with `.devcontainer/setup-hugo.sh` (run once at creation, pinned to the same version as the Pages workflow) rather than with a devcontainer *feature*. A feature is pulled from `ghcr.io` while the image is built, and if that pull fails Codespaces does not report an error — it quietly starts a bare **recovery container** with no language tooling, no forwarded ports and no attach command. If the preview reports that Hugo is missing, check the codespace's creation log, then rebuild the container.
+That Codespace uses `.devcontainer/devcontainer.json`: it installs Hugo (extended) and Python, forwards ports **8765** (editor) and **1313** (preview), starts `python tools/editor.py` on attach, and sets port 8765 to **openBrowser**. You get drafts, rollback, the map studio, live preview, and **Publish & PR** (git credentials are already in the Codespace).
 
-Codespaces gives personal accounts a monthly free allowance (compute core-hours + storage) and simply stops when it is used up, with no payment method on file. It also sleeps after a period of inactivity; drafts live on disk in `tools/.drafts/`, so they survive.
+If the preview pane stays blank, open port 1313 from the **Ports** tab (forwarded ports are private to your account by default).
+
+The devcontainer installs Hugo with `.devcontainer/setup-hugo.sh` (pinned to the same version as the Pages workflow), not a devcontainer *feature* pulled from `ghcr.io` (failed feature pulls can silently fall back to a bare recovery container). If Hugo is missing, check the Codespace creation log, then rebuild the container.
+
+**Repo setting (once):** GitHub → **Settings → Codespaces → Prebuilds** → prebuild `.devcontainer` on `master` so cold starts stay fast. CI workflow `codespaces-prebuild.yml` validates the container config on relevant pushes.
+
+Codespaces gives personal accounts a monthly free allowance and sleeps after inactivity; drafts live in `tools/.drafts/`, so they survive.
 
 ---
 
@@ -365,30 +373,19 @@ Production builds emit `robots.txt` (disallows `/tools/`), per-language sitemaps
 
 ---
 
-## 10. The published editor panel
+## 10. The `/tools/` editor launcher
 
-The editor UI (`tools/admin.html`) is one self-contained HTML file with no build step, so it can be published as a plain page alongside the site. The Pages workflow copies it into the Hugo output, so it is automatically deployed at:
+GitHub Pages is static — it cannot run `editor.py`. Instead, Hugo publishes [`static/tools/index.html`](static/tools/index.html) at:
 
 ```
 https://<user>.github.io/<repo>/tools/
 ```
 
-Nothing on the public site links to it. Its `<head>` carries `<meta name="robots" content="noindex,nofollow">` and it is kept out of the sitemap, so it is reachable only by typing the URL.
+That page is a **one-click launcher**: **Open editor** sends you to `codespaces.new` for this repo. The Codespace runs the real editor (see §5). A secondary link points at GitHub Releases for the desktop binary.
 
-Since there is no `editor.py` behind it, `/api/` does not exist. The panel therefore boots into **static mode**: it disables the write controls, hides the empty file panel, and shows how to run a real editor — download the release binary (§5), use a Codespace, or `python tools/editor.py`. It cannot read or change the project — the token it ships with is the literal `__TOKEN__` placeholder, so even a running backend would refuse it.
+Nothing in the main nav links to `/tools/`. The launcher has `<meta name="robots" content="noindex,nofollow">`, and `robots.txt` disallows `/tools/`.
 
-GitHub Pages cannot run the editor backend at all — it is a static file host.
-
-The build step in `.github/workflows/hugo.yml` does the copy:
-
-```yaml
-- name: Copy editor UI to /tools/
-  run: |
-    mkdir -p public/tools
-    cp tools/admin.html public/tools/index.html
-```
-
-> To edit the panel itself, change `tools/admin.html` and run `python tools/editor.py` — the server substitutes a fresh token and the panel boots normally. A local `hugo` build never contains `/tools/`; only the workflow adds it.
+The real admin UI remains `tools/admin.html`, served only by `python tools/editor.py` (or the release binary / Codespace), which injects a fresh per-run token.
 
 ---
 

@@ -38,7 +38,8 @@ tools/fetch_geo.py        download Natural Earth 1:50m land/rivers/lakes for gen
 tools/regions.py          prints `region` lines for a map (lon/lat rings -> % points)
 tools/editor.py           local editor server (Python standard library only)
 tools/admin.html          the editor UI (single file, vanilla JS)
-.devcontainer/            Codespace: Hugo (extended) + Python, forwards 8765/1313, starts the editor
+.devcontainer/            Codespace: Hugo (extended) + Python, forwards 8765/1313, starts the editor (8765 openBrowser)
+static/tools/index.html   Public /tools/ launcher → codespaces.new (not admin.html)
 tools/uicheck.py          headless-Chrome (CDP) driver (+ `nocache`, see 10)
 tools/uicheck_map.py      the editor's map studio, driven without clicking
 tools/uicheck_layout.py   the page grid: one shell, one reading column, no overflow
@@ -185,6 +186,8 @@ A third block closes the file: `@page{margin:0}` and `@media print` are the PDF 
 
 ## 9. The editor (`python tools/editor.py` or released binary)
 Needs git and hugo on PATH. With Python: `python tools/editor.py`. Without Python: download a platform binary from GitHub Releases (`editor-v*` / workflow `release-editor.yml`); it still opens in the browser and finds the project via cwd or `HAOMA_ROOT`. Binds to 127.0.0.1; every API call needs the per-run token (`X-Token` header or `t` query parameter); only `content data i18n layouts static assets hugo.toml` are writable. The content form edits `related:` via a same-culture checklist; right-click menus cover the file tree and the markdown textarea.
+
+**Web / non-tech path:** `/tools/` on the published site is a launcher (`static/tools/index.html`) that opens a Codespace — never ship `admin.html` to Pages. In a Codespace, `allowed_host()` accepts `{CODESPACE_NAME}-{port}.{GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN}` as well as localhost so the forwarded HTTPS URL works; reject every other Host. Port 8765 uses `onAutoForward: openBrowser`. Validate with `.github/workflows/codespaces-prebuild.yml`; enable GitHub **Settings → Codespaces → Prebuilds** on `master` for fast cold starts.
 
 **In a GitHub codespace** the editor is reached through a forwarded https hostname, not localhost, so `forward_url()` builds every URL it hands out from `CODESPACE_NAME` + `GITHUB_CODESPACES_PORT_FORWARDING_DOMAIN`. That covers the editor's own printed URL and `GET preview` (the UI takes its iframe base from `url`), and `preview_start()` passes `--baseURL <forwarded>/ --appendPort=false` so the preview's own links point back at the forwarded host instead of the reader's machine. A codespace has no browser, so it skips `webbrowser.open`, and a bind failure (the editor already running — `postAttachCommand` re-runs on every attach) prints a line and exits instead of a traceback.
 

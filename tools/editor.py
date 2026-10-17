@@ -325,6 +325,21 @@ def forward_url(port):
     return f"http://localhost:{port}/"
 
 
+def allowed_host(host_header):
+    """Localhost, or this codespace's forwarded hostname for our ports."""
+    h = (host_header or "").split(":")[0].lower()
+    if h in ("127.0.0.1", "localhost"):
+        return True
+    if not CODESPACE or not h:
+        return False
+    # e.g. witty-space-8765.app.github.dev
+    suffix = "." + FWD_DOMAIN.lower()
+    if not h.endswith(suffix):
+        return False
+    prefix = h[: -len(suffix)]  # witty-space-8765
+    return prefix.startswith(CODESPACE.lower() + "-") and prefix[len(CODESPACE) + 1 :].isdigit()
+
+
 def preview_status():
     proc = preview["proc"]
     running = proc is not None and proc.poll() is None
@@ -429,7 +444,7 @@ class H(BaseHTTPRequestHandler):
         u = urlparse(self.path)
         q = {k: v[0] for k, v in parse_qs(u.query).items()}
         try:
-            if self.headers.get("Host", "").split(":")[0] not in ("127.0.0.1", "localhost"):
+            if not allowed_host(self.headers.get("Host", "")):
                 return self.send(403, {"error": "bad host"})
             if u.path == "/" and method == "GET":
                 html = admin_html_path().read_text(encoding="utf-8").replace("__TOKEN__", TOKEN)
