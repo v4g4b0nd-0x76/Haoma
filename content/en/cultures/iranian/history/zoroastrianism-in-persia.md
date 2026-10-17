@@ -6,7 +6,10 @@ sources:
   - "Mary Boyce, A History of Zoroastrianism (3 vols.) — modern scholarship"
   - "Placeholder: add Achaemenid and Sasanian primary source references"
 reviewed: 2026-10-13
-draft: true
+related:
+  - /cultures/iranian/characters/zarathustra/
+  - /cultures/iranian/stories/two-spirits/
+  - /cultures/iranian/characters/mehr/
 ---
 <p class="lead">Zoroastrian ideas shaped Iranian civilisation for over a millennium, from the Achaemenid empire through the Sasanian dynasty, and the community survived the Arab conquest to continue into the present day.</p>
 

@@ -6,7 +6,9 @@ culture: iranian
 grade: draft
 sources: ["Avesta, Mihr Yasht", "Yasna 30"]
 reviewed: 2026-10-12
-draft: true
+related:
+  - /cultures/iranian/characters/mehr/
+  - /cultures/iranian/characters/zarathustra/
 ---
 Show notes: Mehr, guardian of promises, and the prophet Zarathustra.
 

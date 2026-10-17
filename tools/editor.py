@@ -1,13 +1,40 @@
 #!/usr/bin/env python3
 """Local site editor. Standard library only. Run from the project: python tools/editor.py
-Binds to 127.0.0.1 only. Needs: python 3.8+, git, hugo (in PATH)."""
+Binds to 127.0.0.1 only. Needs: git and hugo (in PATH). Python is optional when using
+the released binary (see .github/workflows/release-editor.yml)."""
 import hashlib, time, json, mimetypes, os, re, secrets, shutil, socket, subprocess, sys, tempfile, atexit, webbrowser
 from datetime import date
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlparse, parse_qs
 
-ROOT = Path(__file__).resolve().parent.parent
+
+def find_root():
+    """Project root = directory with hugo.toml. Env HAOMA_ROOT wins; else cwd; else beside the binary."""
+    env = os.environ.get("HAOMA_ROOT")
+    if env:
+        return Path(env).resolve()
+    here = Path.cwd().resolve()
+    for p in [here, *here.parents]:
+        if (p / "hugo.toml").exists():
+            return p
+    if getattr(sys, "frozen", False):
+        exe = Path(sys.executable).resolve().parent
+        for p in [exe, *exe.parents]:
+            if (p / "hugo.toml").exists():
+                return p
+    return Path(__file__).resolve().parent.parent
+
+
+def admin_html_path():
+    if getattr(sys, "frozen", False):
+        bundled = Path(getattr(sys, "_MEIPASS", "")) / "admin.html"
+        if bundled.exists():
+            return bundled
+    return ROOT / "tools" / "admin.html"
+
+
+ROOT = find_root()
 PORT = int(os.environ.get("EDITOR_PORT", "8765"))
 HUGO_PORT = int(os.environ.get("HUGO_PORT", "1313"))
 # A GitHub codespace reaches every port through its own forwarded https
@@ -21,7 +48,6 @@ TEXT = {".md", ".json", ".toml", ".yaml", ".yml", ".html", ".css", ".js", ".svg"
 LOG = ROOT / "tools" / ".preview.log"
 WS = ROOT / "tools" / ".preview"
 HIST = ROOT / "tools" / ".history"
-DRAFTS = ROOT / "tools" / ".drafts"
 DRAFTS = ROOT / "tools" / ".drafts"
 DEL = DRAFTS / "__deleted.json"
 MAXH = 60
@@ -406,7 +432,7 @@ class H(BaseHTTPRequestHandler):
             if self.headers.get("Host", "").split(":")[0] not in ("127.0.0.1", "localhost"):
                 return self.send(403, {"error": "bad host"})
             if u.path == "/" and method == "GET":
-                html = (ROOT / "tools" / "admin.html").read_text(encoding="utf-8").replace("__TOKEN__", TOKEN)
+                html = admin_html_path().read_text(encoding="utf-8").replace("__TOKEN__", TOKEN)
                 return self.send(200, html, "text/html")
             if not u.path.startswith("/api/"):
                 return self.send(404, {"error": "not found"})
@@ -565,6 +591,14 @@ class H(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    if not (ROOT / "hugo.toml").exists():
+        print("Could not find a Haoma project (hugo.toml).")
+        print("Run this from the project folder, or set HAOMA_ROOT to that folder.")
+        sys.exit(1)
+    for need in ("hugo", "git"):
+        c, _ = run([need, "version"] if need == "hugo" else [need, "--version"], 10)
+        if c == 127:
+            print(f"Warning: '{need}' not found on PATH — preview/publish may fail.")
     ws_sync()
     url = forward_url(PORT)
     print(f"Site editor: {url}  (project: {ROOT})\nCtrl+C to stop.", flush=True)

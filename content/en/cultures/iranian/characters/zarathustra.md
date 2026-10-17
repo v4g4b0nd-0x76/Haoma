@@ -6,7 +6,10 @@ sources:
   - "Avesta, Gathas (within the Yasna) — primary"
   - "Mary Boyce, A History of Zoroastrianism — modern scholarship"
 reviewed: 2026-10-13
-draft: true
+related:
+  - /cultures/iranian/characters/mehr/
+  - /cultures/iranian/stories/two-spirits/
+  - /cultures/iranian/history/zoroastrianism-in-persia/
 ---
 <p class="lead">Zarathustra, known in Greek as Zoroaster, is the prophet to whom the Gathas — the oldest Avestan hymns — are attributed.</p>
 

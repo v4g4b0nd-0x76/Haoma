@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" fill="none">
+  <!-- Greek key medallion + owl of Athena (coin tradition) -->
+  <g transform="translate(160 160)" stroke="#fff">
+    <circle r="120" stroke-width="1.1" opacity=".4"/>
+    <circle r="112" stroke-width="1.8" opacity=".7"/>
+    <!-- square meander frame -->
+    <g stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" opacity=".9">
+      <!-- top -->
+      <path d="M-72-84h18v12h-9v9h18v-30h18v30h-9v-9h9v-9h-27v30h-18z"/>
+      <!-- right -->
+      <path d="M84-72v18h-12v-9h-9v18h30v18h-30v-9h9v9h9v-9h9v27h-30v-18h18v-9h-18v-9h-18v30h-18v-18h9v9h-9v9h-9v-27h30v-18z"/>
+      <!-- bottom -->
+      <path d="M72 84h-18v-12h9v-9h-18v30h-18v-30h9v9h-9v9h27v-30h18z"/>
+      <!-- left -->
+      <path d="M-84 72v-18h12v9h9v-18h-30v-18h30v9h-9v-9h-9v9h-9v-27h30v18h-18v9h18v9h18v-30h18v18h-9v-9h9v-9h9v27h-30v18z"/>
+    </g>
+    <!-- owl -->
+    <g stroke-linecap="round" stroke-linejoin="round" opacity=".88">
+      <ellipse cx="0" cy="6" rx="30" ry="36" stroke-width="1.6"/>
+      <circle cx="-10" cy="-2" r="9.5" stroke-width="1.35"/>
+      <circle cx="10" cy="-2" r="9.5" stroke-width="1.35"/>
+      <circle cx="-10" cy="-2" r="3.2" stroke-width="1.15"/>
+      <circle cx="10" cy="-2" r="3.2" stroke-width="1.15"/>
+      <path d="M-3.5 8 0 17 3.5 8" stroke-width="1.25"/>
+      <path d="M-22-14c6-4 14-4 22 0 6-4 14-4 22 0" stroke-width="1.05" opacity=".8"/>
+      <path d="M-24 14c-2 10 0 20 5 28M-16 18c-1 9 1 16 4 22M24 14c2 10 0 20-5 28M16 18c1 9-1 16-4 22" stroke-width=".7" opacity=".55"/>
+      <!-- olive -->
+      <g transform="translate(-52 8)" stroke-width=".95" opacity=".7">
+        <path d="M0 28c3-14 8-24 8-34"/>
+        <ellipse cx="1" cy="4" rx="6" ry="2.8" transform="rotate(-40 1 4)"/>
+        <ellipse cx="3" cy="14" rx="6" ry="2.8" transform="rotate(-25 3 14)"/>
+        <ellipse cx="5" cy="23" rx="5.5" ry="2.5" transform="rotate(-12 5 23)"/>
+      </g>
+    </g>
+  </g>
+</svg>

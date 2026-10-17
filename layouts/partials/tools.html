@@ -4,7 +4,8 @@
 <button type="button" data-act="minus" title="{{ i18n "tSmaller" }}">A−</button>
 <button type="button" data-act="plus" title="{{ i18n "tBigger" }}">A+</button>
 <button type="button" data-act="focus" title="{{ i18n "tFocus" }}">◐</button>
-{{- /* PDF export: the page's own theme is what gets printed, so the reader's
-       "Save as PDF" produces a themed file. See the print block in style.css. */ -}}
+{{- /* PDF export: culture leaf articles (characters/stories/history) and episodes only. */ -}}
+{{- if or (and (eq .Section "cultures") .IsPage .Params.sec) (eq .Section "episodes") -}}
 <button type="button" class="tools__pdf" data-act="pdf" title="{{ i18n "exportPdfHint" }}" aria-label="{{ i18n "exportPdf" }}">{{ i18n "exportPdf" }}</button>
+{{- end -}}
 </div>

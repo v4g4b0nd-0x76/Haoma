@@ -1,0 +1,80 @@
+{{- /* Culture atlas: 2D force graph from related: front matter.
+       Always shown on a culture hub — empty themed box when no leaves yet. */ -}}
+{{- $culture := .Params.culture -}}
+{{- if and $culture (not .Params.sec) -}}
+{{- $nodes := slice -}}
+{{- $ids := dict -}}
+{{- range .RegularPagesRecursive -}}
+  {{- if .Params.sec -}}
+    {{- $id := .RelPermalink -}}
+    {{- $ids = merge $ids (dict $id true) -}}
+    {{- $nodes = $nodes | append (dict "id" $id "title" .Title "sec" .Params.sec "url" .RelPermalink) -}}
+  {{- end -}}
+{{- end -}}
+{{- range where site.RegularPages "Section" "episodes" -}}
+  {{- if eq .Params.culture $culture -}}
+    {{- $id := .RelPermalink -}}
+    {{- if not (index $ids $id) -}}
+      {{- $ids = merge $ids (dict $id true) -}}
+      {{- $nodes = $nodes | append (dict "id" $id "title" .Title "sec" "episode" "url" .RelPermalink) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $edges := slice -}}
+{{- $edgeSeen := dict -}}
+{{- range .RegularPagesRecursive -}}
+  {{- $src := .RelPermalink -}}
+  {{- with .Params.related -}}
+    {{- range . -}}
+      {{- $path := . | strings.TrimSuffix "/" -}}
+      {{- $target := site.GetPage $path -}}
+      {{- if not $target -}}{{ $target = site.GetPage (printf "%s/" $path) }}{{- end -}}
+      {{- if $target -}}
+        {{- $tgt := $target.RelPermalink -}}
+        {{- $ek := printf "%s→%s" $src $tgt -}}
+        {{- if and (index $ids $src) (index $ids $tgt) (not (index $edgeSeen $ek)) -}}
+          {{- $edgeSeen = merge $edgeSeen (dict $ek true) -}}
+          {{- $edges = $edges | append (dict "source" $src "target" $tgt) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- range where site.RegularPages "Section" "episodes" -}}
+  {{- if eq .Params.culture $culture -}}
+    {{- $src := .RelPermalink -}}
+    {{- with .Params.related -}}
+      {{- range . -}}
+        {{- $path := . | strings.TrimSuffix "/" -}}
+        {{- $target := site.GetPage $path -}}
+        {{- if not $target -}}{{ $target = site.GetPage (printf "%s/" $path) }}{{- end -}}
+        {{- if $target -}}
+          {{- $tgt := $target.RelPermalink -}}
+          {{- $ek := printf "%s→%s" $src $tgt -}}
+          {{- if and (index $ids $src) (index $ids $tgt) (not (index $edgeSeen $ek)) -}}
+            {{- $edgeSeen = merge $edgeSeen (dict $ek true) -}}
+            {{- $edges = $edges | append (dict "source" $src "target" $tgt) -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+<section id="atlas" class="atlas wrap" data-atlas data-culture="{{ $culture }}" aria-label="{{ i18n "atlasLabel" }}">
+  <div class="atlas__head">
+    <h2>{{ i18n "atlasTitle" }}</h2>
+    <p class="atlas__hint">{{ if gt (len $nodes) 0 }}{{ i18n "atlasHint" }}{{ else }}{{ i18n "atlasEmpty" }}{{ end }}</p>
+  </div>
+  {{- if gt (len $nodes) 0 -}}
+  <div class="atlas__canvas" data-atlas-root role="img" aria-label="{{ i18n "atlasLabel" }}"></div>
+  <script type="application/json" data-atlas-json>{{ dict "nodes" $nodes "edges" $edges | jsonify | safeJS }}</script>
+  {{- else -}}
+  <div class="atlas__canvas atlas__canvas--empty" role="img" aria-label="{{ i18n "atlasEmpty" }}">
+    <div class="atlas__empty">
+      <span class="atlas__empty-mark" aria-hidden="true"></span>
+      <p>{{ i18n "atlasEmpty" }}</p>
+    </div>
+  </div>
+  {{- end -}}
+</section>
+{{- end -}}

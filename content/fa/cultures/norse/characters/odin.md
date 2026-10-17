@@ -5,6 +5,8 @@ sources: ["ادای شعری، ولوسپا (متن اصلی)", "ادای نثر
 grade: متن اصلی
 reviewed: 2026-10-12
 draft: true
+related:
+  - /cultures/norse/stories/ragnarok/
 ---
 اودین سرور آسیرهاست و با خرد، شعر، جنگ و مرگ پیوند دارد.
 

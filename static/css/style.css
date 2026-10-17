@@ -104,23 +104,108 @@ audio{width:100%;margin:var(--s1) 0 var(--s3)}
 footer{text-align:center;color:var(--muted);padding:var(--s4) var(--s3);font-size:.9rem;border-top:1px solid var(--border)}
 @media(max-width:900px){.layout{grid-template-columns:minmax(0,1fr);row-gap:var(--s3)}aside.side,aside.toc,article,article.wide{grid-column:1;grid-row:auto}aside{width:100%;position:static}nav{gap:var(--s2)}}
 @media(prefers-reduced-motion:reduce){.bg{animation:none}}
-/* ---------- cinematic home ---------- */
-.cine{position:relative;height:var(--hero-h);overflow:hidden;text-align:center;isolation:isolate;border-bottom:1px solid var(--border)}
-.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.8s;z-index:-2}
+.home-choose{padding-top:var(--s4);padding-bottom:var(--s2)}
+/* ---------- culture atlas (force graph) ---------- */
+.atlas{margin:var(--s4) 0 var(--s5);padding:0;--atlas-grid:var(--atlas-grid-base)}
+.atlas__head{margin-bottom:var(--s2)}
+.atlas__head h2{margin:0 0 .35rem;color:var(--accent)}
+.atlas__hint{margin:0;color:var(--muted);font-size:.85rem}
+/* Ancient cartographic grids — one lattice per culture vibe, tinted by --accent */
+.atlas{--atlas-grid-base:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M0 24h48M24 0v48' stroke='%23fff' stroke-width='.6' opacity='.35'/%3E%3Cpath d='M0 0h48v48H0z' fill='none' stroke='%23fff' stroke-width='.35' opacity='.2'/%3E%3C/svg%3E");
+  --atlas-grid-iranian:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 2L54 28 28 54 2 28Z' fill='none' stroke='%23fff' stroke-width='.7' opacity='.4'/%3E%3Cpath d='M28 12L44 28 28 44 12 28Z' fill='none' stroke='%23fff' stroke-width='.5' opacity='.28'/%3E%3Ccircle cx='28' cy='28' r='3' fill='none' stroke='%23fff' stroke-width='.6' opacity='.35'/%3E%3C/svg%3E");
+  --atlas-grid-greek:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 32h28V12H8v12h12' fill='none' stroke='%23fff' stroke-width='1.1' opacity='.38'/%3E%3Cpath d='M0 0h40M0 40h40M0 0v40M40 0v40' stroke='%23fff' stroke-width='.35' opacity='.18'/%3E%3C/svg%3E");
+  --atlas-grid-mesopotamian:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='28'%3E%3Cpath d='M0 14l11-10 11 10 11-10 11 10' fill='none' stroke='%23fff' stroke-width='1' opacity='.4'/%3E%3Cpath d='M0 0h44M0 28h44' stroke='%23fff' stroke-width='.4' opacity='.2'/%3E%3C/svg%3E");
+  --atlas-grid-indian:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52'%3E%3Ccircle cx='26' cy='26' r='18' fill='none' stroke='%23fff' stroke-width='.55' opacity='.28'/%3E%3Ccircle cx='26' cy='26' r='10' fill='none' stroke='%23fff' stroke-width='.5' opacity='.32'/%3E%3Cpath d='M26 4v44M4 26h44M10 10l32 32M42 10L10 42' stroke='%23fff' stroke-width='.4' opacity='.22'/%3E%3C/svg%3E");
+  --atlas-grid-norse:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 4v40M8 12l32 24M40 12L8 36' stroke='%23fff' stroke-width='.7' opacity='.34'/%3E%3Cpath d='M4 4h40v40H4z' fill='none' stroke='%23fff' stroke-width='.4' opacity='.2'/%3E%3C/svg%3E")}
+.atlas[data-culture=iranian]{--atlas-grid:var(--atlas-grid-iranian);--atlas-motif:url("../img/atlas/iranian-motifs.svg?v=seal-2")}
+.atlas[data-culture=greek]{--atlas-grid:var(--atlas-grid-greek);--atlas-motif:url("../img/atlas/greek-motifs.svg?v=seal-2")}
+.atlas[data-culture=mesopotamian]{--atlas-grid:var(--atlas-grid-mesopotamian);--atlas-motif:url("../img/atlas/mesopotamian-motifs.svg?v=seal-2")}
+.atlas[data-culture=indian]{--atlas-grid:var(--atlas-grid-indian);--atlas-motif:url("../img/atlas/indian-motifs.svg?v=seal-2")}
+.atlas[data-culture=norse]{--atlas-grid:var(--atlas-grid-norse);--atlas-motif:url("../img/atlas/norse-motifs.svg?v=seal-2")}
+.atlas__canvas{position:relative;width:100%;min-height:360px;border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));border-radius:10px;background-color:var(--bg);background-image:
+  radial-gradient(ellipse at 50% 42%,color-mix(in srgb,var(--accent) 16%,transparent),transparent 58%),
+  linear-gradient(180deg,color-mix(in srgb,var(--surface) 88%,#000),var(--bg));
+  overflow:hidden;touch-action:none;cursor:grab;caret-color:transparent;
+  -webkit-user-select:none;user-select:none;-webkit-user-drag:none;user-drag:none;
+  -webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;
+  box-shadow:inset 0 1px 0 color-mix(in srgb,var(--accent) 14%,transparent),0 0 0 1px color-mix(in srgb,var(--accent) 8%,transparent)}
+.atlas__canvas:active{cursor:grabbing}
+.atlas__canvas *,.atlas__canvas svg,.atlas__canvas text{-webkit-user-select:none;user-select:none;-webkit-user-drag:none;caret-color:transparent}
+/* Fine culture lattice */
+.atlas__canvas::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-color:color-mix(in srgb,var(--accent) 55%,transparent);
+  -webkit-mask:var(--atlas-grid) repeat;mask:var(--atlas-grid) repeat;
+  -webkit-mask-size:48px 48px;mask-size:48px 48px;opacity:.4}
+.atlas[data-culture=iranian] .atlas__canvas::before{-webkit-mask-size:56px 56px;mask-size:56px 56px;opacity:.45}
+.atlas[data-culture=greek] .atlas__canvas::before{-webkit-mask-size:40px 40px;mask-size:40px 40px}
+.atlas[data-culture=mesopotamian] .atlas__canvas::before{-webkit-mask-size:44px 28px;mask-size:44px 28px}
+.atlas[data-culture=indian] .atlas__canvas::before{-webkit-mask-size:52px 52px;mask-size:52px 52px;opacity:.38}
+.atlas[data-culture=norse] .atlas__canvas::before{-webkit-mask-size:48px 48px;mask-size:48px 48px;opacity:.36}
+/* One large literary seal — detail over repetition */
+.atlas__canvas::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-color:color-mix(in srgb,var(--accent) 72%,transparent);
+  -webkit-mask:var(--atlas-motif,none) no-repeat center;mask:var(--atlas-motif,none) no-repeat center;
+  -webkit-mask-size:min(70%,420px);mask-size:min(70%,420px);opacity:.34}
+.atlas[data-culture=iranian] .atlas__canvas::after{opacity:.38}
+.atlas[data-culture=greek] .atlas__canvas::after{opacity:.34}
+.atlas[data-culture=mesopotamian] .atlas__canvas::after{opacity:.36}
+.atlas[data-culture=indian] .atlas__canvas::after{opacity:.34}
+.atlas[data-culture=norse] .atlas__canvas::after{opacity:.32}
+.atlas__canvas > *{position:relative;z-index:1}
+.atlas__canvas--empty{display:flex;align-items:center;justify-content:center;min-height:320px;cursor:default}
+.atlas__empty{display:flex;flex-direction:column;align-items:center;gap:14px;padding:28px 24px;max-width:36ch;text-align:center}
+.atlas__empty p{margin:0;color:var(--muted);font-size:.92rem;line-height:1.5}
+.atlas__empty-mark{width:56px;height:56px;border-radius:50%;border:1.5px dashed color-mix(in srgb,var(--accent) 55%,var(--border));background:
+  radial-gradient(circle at 50% 50%,color-mix(in srgb,var(--accent) 22%,transparent),transparent 70%);
+  box-shadow:0 0 0 10px color-mix(in srgb,var(--accent) 6%,transparent)}
+.atlas__svg{width:100%;height:100%;display:block;cursor:grab}
+.atlas__svg:active{cursor:grabbing}
+.atlas__link{stroke:color-mix(in srgb,var(--text) 28%,transparent);stroke-width:1;transition:stroke .2s,opacity .2s}
+.atlas__link.is-hot{stroke:var(--accent);stroke-width:1.6;opacity:1}
+.atlas__link.is-dim{opacity:.12}
+.atlas__node{cursor:pointer;outline:none}
+.atlas__node:focus,.atlas__node:focus-visible{outline:none}
+.atlas__node circle:not(.atlas__hit){stroke:rgba(0,0,0,.55);stroke-width:1.2;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--accent) 35%,transparent));transition:filter .2s,stroke .2s}
+.atlas__node text{fill:color-mix(in srgb,var(--text) 88%,#fff);font:300 .68rem/1 var(--ui);paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round;pointer-events:none}
+.atlas__node.is-dim{opacity:.18}
+/* Selected: soft glow only — no box, no hard border ring */
+.atlas__node.is-focus circle:not(.atlas__hit){stroke:rgba(0,0,0,.45);stroke-width:1.2;filter:drop-shadow(0 0 10px color-mix(in srgb,var(--accent) 70%,transparent)) drop-shadow(0 0 3px color-mix(in srgb,var(--accent) 45%,transparent))}
+.atlas__node:focus-visible circle:not(.atlas__hit){filter:drop-shadow(0 0 10px color-mix(in srgb,var(--accent) 70%,transparent)) drop-shadow(0 0 3px color-mix(in srgb,var(--accent) 45%,transparent))}
+html[lang=fa] .atlas__node text{font-weight:400;font-size:.72rem}
+/* ---------- cinematic home: one full-bleed composition ---------- */
+.cine{position:relative;height:min(92vh,880px);min-height:560px;overflow:hidden;text-align:center;isolation:isolate;border-bottom:1px solid var(--border)}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity 1.4s ease;z-index:-2}
 .slide.on{opacity:1}
 .slide img{position:absolute;inset:0;display:block;width:100%;height:100%}
-/* un-zoomed hero: the whole banner scene stays visible, blurred copy fills the frame */
-.slide .sbg{object-fit:cover;filter:blur(30px) saturate(.85) brightness(.45);transform:scale(1.3)}
-/* the sharp copy is shown whole — every pixel of the banner, never cropped */
-.slide .sfg{object-fit:contain;inset:0}
-.cine::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(rgba(6,8,12,.92),rgba(6,8,12,.5) 16%,rgba(6,8,12,0) 30%),radial-gradient(ellipse at center,rgba(0,0,0,.05) 25%,rgba(0,0,0,.6)),linear-gradient(transparent 60%,var(--bg))}
-/* name and description at the top, quote and pills at the bottom, art between */
-.cine-text{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:34px var(--s3) 30px}
-.cine-top,.cine-bot{display:flex;flex-direction:column;align-items:center}
-.eyebrow{letter-spacing:.3em;text-transform:uppercase;font-size:.8rem;color:var(--accent);margin:0 0 var(--s3)}
-.cine h1{font-size:clamp(2.6rem,8vw,6rem);line-height:1.06;letter-spacing:.08em;text-transform:uppercase;margin:0;color:#fff;text-shadow:0 4px 40px #000}
-.quote{max-width:46ch;min-height:5.5em;margin:0 auto var(--s3);font:italic 1.25rem/1.5 var(--head);color:#e8e9ed;transition:opacity .6s;text-shadow:0 2px 12px #000}
-.quote cite{display:block;margin-top:6px;font:normal .8rem system-ui;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.slide .sbg{object-fit:cover;filter:blur(36px) saturate(.9) brightness(.4);transform:scale(1.25)}
+.slide.on .sfg{animation:cine-drift 28s ease-in-out infinite alternate}
+.slide .sfg{object-fit:contain;inset:0;transform:scale(1.02)}
+@keyframes cine-drift{from{transform:scale(1.02) translateY(0)}to{transform:scale(1.06) translateY(-1.2%)}}
+@media (prefers-reduced-motion:reduce){.slide.on .sfg{animation:none}}
+/* soft veil: readable brand at top, deep foot for CTAs, art open in the middle */
+.cine::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:
+  linear-gradient(180deg,rgba(6,8,12,.78) 0%,rgba(6,8,12,.2) 28%,rgba(6,8,12,.05) 48%,rgba(6,8,12,.55) 72%,rgba(6,8,12,.92) 100%),
+  radial-gradient(ellipse 80% 50% at 50% 40%,transparent 30%,rgba(0,0,0,.45) 100%)}
+.cine-text{position:absolute;inset:0;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:space-between;padding:clamp(28px,5vh,52px) var(--s3) clamp(28px,4vh,44px)}
+.cine-top{display:flex;flex-direction:column;align-items:center;width:min(720px,100%);animation:cine-in .9s ease both}
+.cine-bot{display:flex;flex-direction:column;align-items:center;gap:clamp(12px,2vh,20px);width:min(960px,100%);animation:cine-in 1.1s .12s ease both}
+@keyframes cine-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.cine-top,.cine-bot{animation:none}}
+.eyebrow{letter-spacing:.28em;text-transform:uppercase;font-size:.72rem;font-weight:500;color:var(--accent);margin:0 0 var(--s2);opacity:.95;text-shadow:0 2px 16px #000}
+.cine-logo{margin:0;line-height:0;text-transform:none;letter-spacing:0;text-shadow:none}
+.cine .logo{height:clamp(72px,14vw,128px);margin:0 auto;filter:drop-shadow(0 8px 32px rgba(0,0,0,.55))}
+.cine .logo-word{height:clamp(48px,10vw,96px)}
+.cine .sub{margin:var(--s2) auto 0;max-width:40ch;color:rgba(230,228,236,.88);font:300 1.05rem/1.55 var(--ui);text-shadow:0 2px 14px #000}
+.quote{max-width:38ch;min-height:3.4em;margin:0 auto;font:italic 300 1.05rem/1.55 var(--head);color:rgba(236,234,242,.9);transition:opacity .45s;text-shadow:0 2px 14px #000}
+.quote cite{display:block;margin-top:8px;font:400 .7rem/1.4 var(--ui);letter-spacing:.14em;text-transform:uppercase;color:var(--accent);opacity:.9}
+/* culture switcher: one aligned row; each chip carries --c = theme accent */
+.cine .pills{display:flex;flex-wrap:nowrap;align-items:center;justify-content:center;gap:4px;padding:5px;margin:0;max-width:100%;overflow-x:auto;border-radius:999px;background:rgba(8,10,14,.42);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:0 8px 32px rgba(0,0,0,.35);scrollbar-width:none}
+.cine .pills::-webkit-scrollbar{display:none}
+.cine .pills button{flex:0 0 auto;background:transparent;color:rgba(220,220,228,.78);border:1px solid transparent;padding:8px 14px;border-radius:999px;cursor:pointer;font:500 .76rem/1 var(--ui);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;transition:background .2s,color .2s,border-color .2s,box-shadow .2s}
+.cine .pills button:hover{color:#fff;background:color-mix(in srgb,var(--c,var(--accent)) 32%,transparent);border-color:color-mix(in srgb,var(--c,var(--accent)) 65%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--c,var(--accent)) 25%,transparent)}
+.cine .pills button[aria-pressed=true]{background:color-mix(in srgb,var(--c,var(--accent)) 88%,#fff);color:#12141a;font-weight:600;border-color:transparent;box-shadow:0 4px 16px color-mix(in srgb,var(--c,var(--accent)) 40%,transparent)}
+.cine .enter{margin-top:2px;padding:10px 28px;border-radius:999px;border:0;background:var(--accent);color:#12141a;font:600 .82rem/1 var(--ui);letter-spacing:.1em;text-transform:uppercase;text-decoration:none;box-shadow:0 10px 28px color-mix(in srgb,var(--accent) 35%,transparent);transition:transform .2s,box-shadow .2s,filter .2s}
+.cine .enter:hover{filter:brightness(1.06);transform:translateY(-1px);box-shadow:0 14px 34px color-mix(in srgb,var(--accent) 45%,transparent);background:var(--accent);color:#12141a}
 .pick{display:flex;gap:var(--s2);justify-content:center;flex-wrap:wrap}
 .pick button{background:rgba(0,0,0,.45);color:#ddd;border:1px solid var(--border);padding:8px 22px;border-radius:99px;cursor:pointer;font:600 .85rem system-ui;letter-spacing:.1em;text-transform:uppercase}
 .pick button[aria-pressed=true]{border-color:var(--accent);color:var(--accent)}
@@ -129,12 +214,17 @@ footer{text-align:center;color:var(--muted);padding:var(--s4) var(--s3);font-siz
 .strip a:not(.btn){font:600 1.15rem var(--head);text-decoration:none;flex:1}
 .btn{border:1px solid var(--accent);padding:6px 20px;border-radius:99px;text-decoration:none;font-size:.85rem;text-transform:uppercase;letter-spacing:.08em}
 .btn:hover{background:var(--accent);color:#111}
+html[lang=fa] .cine .pills button,html[lang=fa] .cine .enter,html[lang=fa] .eyebrow,html[lang=fa] .quote cite{letter-spacing:0;text-transform:none}
+html[lang=fa] .cine .sub{font-weight:400}
+@media(max-width:760px){
+  .cine{height:min(88vh,720px);min-height:480px}
+  .cine .sub{font-size:.95rem}
+  .cine .pills{gap:3px;padding:4px;justify-content:flex-start}
+  .cine .pills button{padding:7px 12px;font-size:.72rem}
+}
 .intro{padding-top:var(--s5);text-align:center}.intro p{max-width:60ch;margin:0 auto;font-size:1.15rem;color:var(--muted)}
-/* the home page has no toolbar, so its export control is the .btn outline; a
-   <button> needs the bits .btn leaves to the <a> defaults spelled out */
-.intro__pdf{margin-top:var(--s3);background:transparent;color:var(--accent);font-family:var(--ui);cursor:pointer}
-.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:var(--s3)}
-.panel{position:relative;min-height:320px;display:flex;align-items:flex-end;border-radius:12px;overflow:hidden;border:1px solid var(--border);text-decoration:none;color:var(--text);background:var(--surface)}
+.panels{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:var(--s3)}
+.panel{position:relative;min-height:280px;display:flex;align-items:flex-end;border-radius:12px;overflow:hidden;border:1px solid var(--border);text-decoration:none;color:var(--text);background:var(--surface)}
 .panel img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.2s}
 .panel:hover img{transform:scale(1.06)}
 .panel:hover{border-color:var(--accent)}
@@ -161,7 +251,7 @@ footer{text-align:center;color:var(--muted);padding:var(--s4) var(--s3);font-siz
 html[lang=fa]{--ui:Vazirmatn,system-ui,sans-serif;--display:Lalezar,MarkaziText,Vazirmatn,sans-serif;--head:MarkaziText,Vazirmatn,sans-serif;--read-font:MarkaziText,Vazirmatn,sans-serif;--read:1.28rem;--verse:Nastaliq,MarkaziText,Vazirmatn,serif}
 html[lang=fa] *{letter-spacing:0!important;text-transform:none!important}
 body{font-family:var(--ui)}
-.brand,.cine h1{font-family:var(--display)}
+.brand,.cine-logo{font-family:var(--display)}
 [hidden]{display:none!important}
 /* header controls */
 .ctrl{display:flex;gap:var(--s2);align-items:center}
@@ -229,10 +319,6 @@ body{font-family:var(--ui)}
 .lang:hover{background:var(--accent);color:#111}
 /* hero without auto-rotation */
 .slide{transition:opacity .9s}
-.pills{display:flex;gap:var(--s1);justify-content:center;flex-wrap:wrap;margin-bottom:var(--s2)}
-.pills button{background:rgba(0,0,0,.5);color:#ddd;border:1px solid var(--border);padding:7px 20px;border-radius:99px;cursor:pointer;font:600 .85rem var(--ui)}
-.pills button[aria-pressed=true]{border-color:var(--accent);color:var(--accent);background:rgba(0,0,0,.7)}
-.pills button:hover{border-color:var(--accent)}
 .btn.enter{display:inline-block;background:var(--accent);color:#111;margin-top:var(--s1);font-weight:700}
 /* slider */
 .slider-head{display:flex;justify-content:space-between;align-items:center}
@@ -444,11 +530,8 @@ html[lang=fa] .myth-region__pop b{letter-spacing:0;font-family:var(--ui)}
 .brand{display:flex;align-items:center;line-height:0}
 .logo{display:block;height:36px;width:auto;overflow:visible}
 .cine-logo{margin:0;line-height:0;text-transform:none;letter-spacing:0;text-shadow:none}
-.cine .logo{height:clamp(84px,17vw,150px);margin:0 auto;filter:drop-shadow(0 6px 28px rgba(0,0,0,.65))}
 /* wordmark-only variant (header/hero show text; the mark is the site icon) */
 html[lang="en"] .brand .logo-word{height:24px}
-.cine .logo-word{height:clamp(52px,11vw,104px)}
-.cine .sub{margin:var(--s3) auto 0;max-width:46ch;color:#d6d3dd;font:1rem/1.5 var(--ui);text-shadow:0 2px 12px #000}
 /* headpiece (sarlowh) under every page title */
 article h1::after{content:"";display:block;width:min(260px,70%);aspect-ratio:260/14;margin-top:.8rem;background:var(--accent);-webkit-mask:var(--m-orn) no-repeat center/contain;mask:var(--m-orn) no-repeat center/contain;opacity:.85}
 /* eight-pointed star list markers */

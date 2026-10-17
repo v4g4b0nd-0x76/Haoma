@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" fill="none">
+  <!-- Star of Inanna / Ishtar — standard Mesopotamian astral emblem -->
+  <g transform="translate(160 160)" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <circle r="22" stroke-width="1.8"/>
+    <circle r="13" stroke-width="1.1"/>
+    <circle r="5" fill="#fff" stroke="none" opacity=".9"/>
+    <g stroke-width="2">
+      <path d="M0-28v-70M0 28v70M28 0h70M-28 0h-70"/>
+      <path d="M20-20 70-70M20 20 70 70M-20 20-70 70M-20-20-70-70"/>
+    </g>
+    <g stroke-width="1.2" opacity=".75">
+      <path d="M-8-96h16M-8 96h16M96-8v16M-96-8v16"/>
+      <path d="M62-78 78-62M62 78 78 62M-62 78-78 62M-62-78-78-62"/>
+    </g>
+    <g stroke-width=".8" opacity=".5">
+      <path d="M0-40 12-52 0-64-12-52Z"/>
+      <path d="M0-40 12-52 0-64-12-52Z" transform="rotate(45)"/>
+      <path d="M0-40 12-52 0-64-12-52Z" transform="rotate(90)"/>
+      <path d="M0-40 12-52 0-64-12-52Z" transform="rotate(135)"/>
+      <path d="M0-40 12-52 0-64-12-52Z" transform="rotate(180)"/>
+      <path d="M0-40 12-52 0-64-12-52Z" transform="rotate(225)"/>
+      <path d="M0-40 12-52 0-64-12-52Z" transform="rotate(270)"/>
+      <path d="M0-40 12-52 0-64-12-52Z" transform="rotate(315)"/>
+    </g>
+    <circle r="110" stroke-width="1" opacity=".4"/>
+    <circle r="120" stroke-width="1.6" opacity=".55"/>
+  </g>
+</svg>

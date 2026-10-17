@@ -36,7 +36,8 @@ The name _Haoma_ is the Avestan word for the sacred plant pressed in the Yasna r
 | **Local editor** | `python tools/editor.py` — a local web app that edits content with draft/preview/rollback, no IDE needed. |
 | **Web editor** | Open the repo in a **Codespace** to run that same editor in the browser, no local install. See §5. |
 | **Rich layouts** | Sliders, grids, infoboxes, hover notes, figures, maps, play-on-scroll GIFs, Farsi verse couplets — all via shortcodes. |
-| **PDF export** | Every page offers an export that prints to PDF from the browser, keeping the page's own background and theme. See §8. |
+| **PDF export** | Culture articles and podcast episodes offer an export that prints to PDF from the browser, keeping the page's own theme. See §8. |
+| **Culture atlas** | Each culture hub shows a 2D mindmap of characters, stories, history and related episodes, driven by `related:` front matter. |
 
 ### The sections of the site
 
@@ -46,7 +47,7 @@ Every route below exists in both languages (`/fa/…` mirrors `/…`); Farsi is 
 |---|---|---|
 | **Home** | `/` | The cinematic landing page: culture banners, the latest episodes, and one tab per culture listing its characters, stories and history. |
 | **Cultures** | `/cultures/` | Index of every culture. |
-| **Culture** | `/cultures/<culture>/` | A culture's landing page: its quote and tagline, then cards for its sections. |
+| **Culture** | `/cultures/<culture>/` | A culture's landing page: quote/tagline, interactive atlas (mindmap), then cards for its sections. |
 | **Characters** | `/cultures/<culture>/characters/` | Profiles of gods, heroes and beings. |
 | **Stories** | `/cultures/<culture>/stories/` | Myth summaries and retellings. |
 | **History** | `/cultures/<culture>/history/` | Historical context and scholarship. |
@@ -204,11 +205,17 @@ Pages are linked as translations when the relative path is **identical** in `con
 
 ## 5. The local editor
 
-Start with:
+### Start with Python
 
 ```bash
 python tools/editor.py
 ```
+
+### Or download a binary (no Python)
+
+GitHub Actions builds standalone binaries for Linux, Windows and macOS (`editor-v*` tags, or the **Release editor binary** workflow). Download from **Releases**, place the binary in (or next to) a clone of this repo, and run it — it opens in your browser the same way.
+
+You still need **Hugo Extended** and **git** on your PATH (the binary only replaces Python). Or set `HAOMA_ROOT` to the project folder if you run the binary from elsewhere.
 
 ### What the editor does
 
@@ -223,6 +230,8 @@ python tools/editor.py
 | **Publish & PR** | Commits on a `fix/<topic>` branch and opens a GitHub pull request. |
 | **Map studio** | Click-to-drop pins, drag regions/borders on the actual map artwork. |
 | **Insert builders** | Toolbar buttons generate slider, grid, infobox, figure, note, map, verse shortcodes. |
+| **Related pages** | Checklist of same-culture pages writes `related:` front matter for the culture atlas. |
+| **Right-click menus** | Obsidian-style: file tree (Open, Duplicate, Rename, Delete…) and editor (Bold, Link, shortcodes…). |
 
 ### Security
 
@@ -314,7 +323,7 @@ Each culture has a theme entry in `data/themes.json`:
 
 ## 8. Exporting a page as PDF
 
-Every page that carries content offers an **Export PDF** control, in both languages: the toolbar button on articles, section lists and the library, and an outline button in the home page's intro (the home page has no toolbar).
+**Export PDF** appears only on **culture leaf articles** (characters, stories, history) and **podcast episode** pages — not on the home page, culture hubs, section indexes, library or about.
 
 It calls the browser's own `window.print()`, so **you** pick *Save as PDF*. There is no renderer, no service, no extra copy of the page and no request anywhere — the export stays as static as the rest of the site, works offline, and cannot drift from what the page shows.
 
@@ -331,7 +340,7 @@ What makes the PDF look like the page is the `@media print` block at the end of 
 
 Sources, figures, tables, maps, verse and infoboxes are kept whole, and headings are not left stranded at the foot of a page.
 
-`tools/uicheck_pdf.py` verifies all of it without producing a file: the control must appear once per page and call `window.print()` exactly once, and under `Emulation.setEmulatedMedia(media="print")` the body must still carry the page's own `--bg`, the chrome must be gone, and the hidden panels must be back.
+`tools/uicheck_pdf.py` verifies all of it without producing a file: the control must appear once on each article/episode route (and nowhere on home/hubs/library), call `window.print()` exactly once, and under `Emulation.setEmulatedMedia(media="print")` the body must still carry the page's own `--bg`, the chrome must be gone, and the hidden panels must be back.
 
 ---
 
@@ -350,6 +359,10 @@ Sources, figures, tables, maps, verse and infoboxes are kept whole, and headings
 hugo --gc --minify --baseURL "https://<user>.github.io/<repo>/"
 ```
 
+### SEO on Pages
+
+Production builds emit `robots.txt` (disallows `/tools/`), per-language sitemaps with hreflang, canonical/`og:*`/`twitter:*` tags, and JSON-LD (`WebSite` / `Article` / `PodcastEpisode` / `BreadcrumbList`). Always verify with a production `--baseURL` as above so absolute URLs are correct.
+
 ---
 
 ## 10. The published editor panel
@@ -362,9 +375,9 @@ https://<user>.github.io/<repo>/tools/
 
 Nothing on the public site links to it. Its `<head>` carries `<meta name="robots" content="noindex,nofollow">` and it is kept out of the sitemap, so it is reachable only by typing the URL.
 
-Since there is no `editor.py` behind it, `/api/` does not exist. The panel therefore boots into **static mode**: it disables the write controls, hides the empty file panel, and shows one notice saying what this copy is and how to run a real editor (`python tools/editor.py`). It cannot read or change the project — the token it ships with is the literal `__TOKEN__` placeholder, so even a running backend would refuse it.
+Since there is no `editor.py` behind it, `/api/` does not exist. The panel therefore boots into **static mode**: it disables the write controls, hides the empty file panel, and shows how to run a real editor — download the release binary (§5), use a Codespace, or `python tools/editor.py`. It cannot read or change the project — the token it ships with is the literal `__TOKEN__` placeholder, so even a running backend would refuse it.
 
-GitHub Pages cannot run the Python backend at all — it is a static file host. For a working editor without a local clone, use a Codespace (§5).
+GitHub Pages cannot run the editor backend at all — it is a static file host.
 
 The build step in `.github/workflows/hugo.yml` does the copy:
 

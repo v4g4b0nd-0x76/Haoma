@@ -6,7 +6,10 @@ sources:
   - "اوستا، گاهان (در یسنا) — متن اصلی"
   - "Mary Boyce, A History of Zoroastrianism — پژوهش نوین"
 reviewed: 2026-10-13
-draft: true
+related:
+  - /cultures/iranian/characters/mehr/
+  - /cultures/iranian/stories/two-spirits/
+  - /cultures/iranian/history/zoroastrianism-in-persia/
 ---
 <p class="lead">زرتشت (در یونانی زوروآستر) پیامبری است که گاهان — کهن‌ترین سرودهای اوستایی — به او نسبت داده می‌شود.</p>
 

@@ -1,0 +1,83 @@
+{{- $desc := cond .IsHome (i18n "tagline") (.Summary | plainify | truncate 160) -}}
+{{- if not $desc }}{{ $desc = i18n "tagline" }}{{ end -}}
+{{- $title := cond .IsHome site.Title (printf "%s · %s" .Title site.Title) -}}
+{{- $ogTitle := cond .IsHome site.Title .Title -}}
+{{- $img := "img/brand/haoma-og.png" | absURL -}}
+{{- $type := "website" -}}
+{{- if and (eq .Section "cultures") .IsPage .Params.sec }}{{ $type = "article" }}{{ end -}}
+{{- if eq .Section "episodes" }}{{ $type = "article" }}{{ end -}}
+{{- $locale := site.Language.LanguageCode -}}
+{{- if eq $locale "fa" }}{{ $locale = "fa_IR" }}{{ else }}{{ $locale = "en_US" }}{{ end -}}
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}">
+<link rel="canonical" href="{{ .Permalink }}">
+{{- range .AllTranslations -}}
+<link rel="alternate" hreflang="{{ .Language.LanguageCode }}" href="{{ .Permalink }}">
+{{- end -}}
+{{- with .Sites.First.Home -}}
+<link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
+{{- end -}}
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:title" content="{{ $ogTitle }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:type" content="{{ $type }}">
+<meta property="og:locale" content="{{ $locale }}">
+<meta property="og:image" content="{{ $img }}">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ $ogTitle }}">
+<meta name="twitter:description" content="{{ $desc }}">
+<meta name="twitter:image" content="{{ $img }}">
+{{- /* JSON-LD */ -}}
+{{- $ld := slice -}}
+{{- if .IsHome -}}
+{{- $ld = $ld | append (dict
+  "@context" "https://schema.org"
+  "@type" "WebSite"
+  "name" site.Title
+  "url" .Permalink
+  "description" $desc
+  "inLanguage" (slice "en" "fa")
+) -}}
+{{- else if and (eq .Section "cultures") .IsPage .Params.sec -}}
+{{- $ld = $ld | append (dict
+  "@context" "https://schema.org"
+  "@type" "Article"
+  "headline" .Title
+  "description" $desc
+  "url" .Permalink
+  "inLanguage" site.Language.LanguageCode
+  "image" $img
+  "isPartOf" (dict "@type" "WebSite" "name" site.Title "url" site.Home.Permalink)
+) -}}
+{{- else if eq .Section "episodes" -}}
+{{- $ep := dict
+  "@context" "https://schema.org"
+  "@type" "PodcastEpisode"
+  "name" .Title
+  "description" $desc
+  "url" .Permalink
+  "datePublished" (.Date.Format "2006-01-02")
+  "inLanguage" site.Language.LanguageCode
+  "image" $img
+-}}
+{{- with .Params.audio }}{{ $ep = merge $ep (dict "associatedMedia" (dict "@type" "MediaObject" "contentUrl" (. | absURL))) }}{{ end -}}
+{{- $ld = $ld | append $ep -}}
+{{- end -}}
+{{- if and (not .IsHome) (gt (len .Ancestors) 0) -}}
+{{- $items := slice -}}
+{{- $pos := 1 -}}
+{{- $items = $items | append (dict "@type" "ListItem" "position" $pos "name" (i18n "home") "item" site.Home.Permalink) -}}
+{{- range .Ancestors.Reverse -}}
+{{- if not .IsHome -}}
+{{- $pos = add $pos 1 -}}
+{{- $items = $items | append (dict "@type" "ListItem" "position" $pos "name" .Title "item" .Permalink) -}}
+{{- end -}}
+{{- end -}}
+{{- $pos = add $pos 1 -}}
+{{- $items = $items | append (dict "@type" "ListItem" "position" $pos "name" .Title "item" .Permalink) -}}
+{{- $ld = $ld | append (dict "@context" "https://schema.org" "@type" "BreadcrumbList" "itemListElement" $items) -}}
+{{- end -}}
+{{- range $ld -}}
+<script type="application/ld+json">{{ . | jsonify | safeJS }}</script>
+{{- end -}}

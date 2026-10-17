@@ -3,6 +3,7 @@ title = "Haoma"
 defaultContentLanguage = "en"
 # no content is ever filed under categories/tags, so don't emit those pages
 taxonomies = {}
+enableRobotsTXT = true
 [markup.goldmark.renderer]
   unsafe = true
 [languages.en]

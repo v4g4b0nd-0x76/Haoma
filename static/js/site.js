@@ -27,21 +27,25 @@ function paintPick(eff){
  var n=btn.querySelector('.cpick__name');if(n)n.textContent=o.dataset.name||'';
  Q('.cpick__opt',pick).forEach(function(x){x.setAttribute('aria-selected',x===o)});
 }
+function pill(v){return cine&&cine.querySelector('.pills [data-pick="'+v+'"]')}
+function hrefFor(p){var pb=pill(p),o=opt(p);return(pb&&pb.dataset.href)||(o&&o.dataset.href)||''}
 function setPick(p,first){
  try{localStorage.setItem('culture',p)}catch(e){}
  var eff=fixed||p;D.dataset.pick=p;if(!fixed)D.dataset.culture=p;
  paintPick(eff);
- Q('.pills button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.pick===p)});
- /* The pick filters the home page only: on the cultures index it hid every card but
-    the last culture chosen, so the page "showed only one culture". */
- if(cine)Q('.cards li[data-culture],.panel[data-culture]').forEach(function(e){e.hidden=eff!=='base'&&e.dataset.culture!==eff});
- if(cine){var sl=Q('.slide',cine),on=sl.filter(function(s){return s.dataset.culture===p})[0]||sl[0],q=Q('.quote',cine)[0],en=Q('.enter',cine)[0],o=opt(p);
+ Q('.cine .pills button').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.pick===p)});
+ /* Hero pills only retint the page (theme + banner + quote). Never navigate. */
+ if(cine){var sl=Q('.slide',cine),on=sl.filter(function(s){return s.dataset.culture===p})[0]||sl[0],q=Q('.quote',cine)[0],en=Q('.enter',cine)[0];
   cine.dataset.culture=p;sl.forEach(function(s){s.classList.toggle('on',s===on)});
-  var put=function(){q.innerHTML=on.querySelector('template').innerHTML;q.style.opacity=1};
-  if(first)put();else{q.style.opacity=0;setTimeout(put,250)}
-  en.hidden=p==='base';if(o)en.href=o.dataset.href}}
-/* choosing a culture always goes straight to that culture's own page */
-function pickGo(p){var o=opt(p);if(!o)return;try{localStorage.setItem('culture',p)}catch(e){}if(o.dataset.href)location.href=o.dataset.href}
+  if(q&&on){var tpl=on.querySelector('template'),put=function(){if(tpl)q.innerHTML=tpl.innerHTML;q.style.opacity=1};
+  if(first)put();else{q.style.opacity=0;setTimeout(put,250)}}
+  if(en){var href=hrefFor(p);
+   en.hidden=p==='base';en.setAttribute('aria-hidden',p==='base'?'true':'false');
+   if(p==='base'||!href){en.removeAttribute('href');en.setAttribute('tabindex','-1')}
+   else{en.href=href;en.removeAttribute('tabindex')}}}
+}
+/* Navigate to a culture (or cultures index for base). */
+function pickGo(p){var href=hrefFor(p);if(!href)return;try{localStorage.setItem('culture',p)}catch(e){}location.href=href}
 /* open, close and keyboard: a listbox, not a select */
 function openPick(open){
  if(!btn||!list)return;
@@ -60,16 +64,46 @@ if(btn&&list){
    var d=e.key==='ArrowDown'?1:items.length-1;
    e.preventDefault();items[i<0?(d===1?0:items.length-1):(i+d)%items.length].focus();return}
   if(e.key==='Home'){e.preventDefault();items[0].focus();return}
-  if(e.key==='End'){e.preventDefault();items[items.length-1].focus();return}};
+  if(e.key==='End'){e.preventDefault();items[items.length-1].focus();return}
+  if(e.key==='Enter'||e.key===' '){var cur=document.activeElement;if(cur&&cur.dataset&&cur.dataset.pick){e.preventDefault();pickGo(cur.dataset.pick)}}};
  btn.onkeydown=function(e){
   if(e.key==='ArrowDown'||e.key==='Enter'||e.key===' '){e.preventDefault();openPick(true)}
   else if(e.key==='Escape'){openPick(false)}};
  document.addEventListener('click',function(e){
   if(btn.getAttribute('aria-expanded')==='true'&&pick&&!pick.contains(e.target))openPick(false)});
 }
-Q('.pills button').forEach(function(b){b.onclick=function(){pickGo(b.dataset.pick)}});
+/* Hero culture chips:
+   - single click → preview only (banner + theme + quote)
+   - double-click → open that culture's index
+   - "Enter this world" link → open the selected culture */
+if(cine){
+ var pillsRoot=cine.querySelector('.pills');
+ var enterBtn=cine.querySelector('.enter');
+ if(pillsRoot){
+  pillsRoot.addEventListener('click',function(e){
+   var b=e.target.closest('[data-pick]');
+   if(!b||!pillsRoot.contains(b))return;
+   e.preventDefault();e.stopPropagation();
+   if(typeof e.stopImmediatePropagation==='function')e.stopImmediatePropagation();
+   setPick(b.dataset.pick);
+  },true);
+  pillsRoot.addEventListener('dblclick',function(e){
+   var b=e.target.closest('[data-pick]');
+   if(!b||!pillsRoot.contains(b))return;
+   e.preventDefault();e.stopPropagation();
+   if(b.dataset.pick==='base')return; /* All cultures stays a preview; use Enter */
+   pickGo(b.dataset.pick);
+  },true);
+ }
+ if(enterBtn){
+  enterBtn.addEventListener('click',function(e){
+   e.preventDefault();
+   pickGo(D.dataset.pick||'base');
+  });
+ }
+}
 var p0='iranian';try{p0=localStorage.getItem('culture')||'iranian'}catch(e){}
-if(!opt(p0)&&p0!=='base')p0='iranian';
+if(!pill(p0)&&!opt(p0)&&p0!=='base')p0='iranian';
 setPick(p0,true);
 /* slider */
 Q('.slider').forEach(function(s){var r=s.querySelector('.rail'),rtl=getComputedStyle(r).direction==='rtl';

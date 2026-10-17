@@ -55,14 +55,13 @@ FONT_FA = 'Vazirmatn,"Segoe UI",Tahoma,sans-serif'
 #   's'  seas, oceans, gulfs                   pale blue, italic
 #
 # Realms and countries are declared separately from the seas so each can be tuned
-# on its own. Farsi runs 1.18x larger: the Persian glyphs are shorter and lighter
-# than the Cinzel capitals at the same point size, and this makes the two sheets
-# read at the same weight.
+# on its own. Farsi runs slightly larger: Persian glyphs are shorter than Cinzel
+# capitals at the same point size. Kept modest so labels stay light and neat.
 TYPE_SIZE = {
-    'r': {'en': 1.32, 'fa': 1.32 * 1.18},
-    's': {'en': 1.32, 'fa': 1.32 * 1.18},
+    'r': {'en': 1.05, 'fa': 1.05 * 1.08},
+    's': {'en': 1.00, 'fa': 1.00 * 1.08},
 }
-WORLD_SCALE = 0.9     # the world sheet is wider than a culture sheet, so type drops a shade
+WORLD_SCALE = 0.78    # the world sheet is wider than a culture sheet, so type drops a shade
 
 # --------------------------------------------------------------------------- data
 MAPS = {
@@ -70,14 +69,34 @@ MAPS = {
         box=(-135, 225, -58, 84), w=1800, res="110", cos=False, graticule=30,
         title={"en": "The World", "fa": "جهان"},
         labels=[
-            ("NORTH AMERICA", -100, 46, 20, "r"), ("SOUTH AMERICA", -58, -16, 20, "r"),
-            ("EUROPA", 16, 52, 17, "r"), ("AFRICA", 20, 3, 22, "r"), ("ASIA", 100, 50, 24, "r"),
-            ("ARABIA", 46, 23.4, 14, "r"), ("PERSIA", 56, 34.6, 14, "r"), ("INDIA", 79, 20, 15, "r"),
-            ("CHINA", 109, 33, 16, "r"), ("SCYTHIA", 62, 51.5, 14, "r"), ("SIBERIA", 108, 66, 17, "r"),
-            ("AUSTRALIA", 134, -25, 16, "r"), ("GREENLAND", -42, 74, 14, "r"),
-            ("ATLANTIC OCEAN", -34, 22, 16, "s"), ("INDIAN OCEAN", 78, -22, 16, "s"),
-            ("PACIFIC OCEAN", 160, 6, 16, "s"), ("ARCTIC OCEAN", 100, 79, 14, "s"),
-            ("MEDITERRANEAN SEA", 17, 34.2, 11, "s"), ("AMAZONIA", -62, -5, 12, "r"),
+            # Academic atlas anchors (lon, lat). Sources noted in comments:
+            #   ARABIA   — peninsula centre ~22.8°N 47.5°E (Peakbagger / classical
+            #              Arabia Felix bounds; never Horn of Africa)
+            #   PERSIA   — Iranian plateau ~53.5°E 32.5°N (east of Mesopotamia,
+            #              north of the Gulf; Persepolis 52.9°E 29.9°N is the pin)
+            #   INDIA    — Vedic Āryāvarta / Madhyadeśa ~77°E 27°N (Witzel et al.)
+            #   SCYTHIA  — Saka steppe north of the Caspian ~50°E 48°N (Iranica:
+            #              Saka Tigraxauda; classical Pontic Scythia is farther west)
+            #   AFRICA   — Sahara / Sahel band, west of the Red Sea
+            ("NORTH AMERICA", -100, 45, 18, "r"),
+            ("SOUTH AMERICA", -58, -14, 18, "r"),
+            ("EUROPA", 8, 50, 15, "r"),
+            ("AFRICA", 18, 10, 20, "r"),
+            ("ASIA", 100, 48, 22, "r"),
+            ("ARABIA", 47.5, 21, 12, "r"),
+            ("PERSIA", 54, 35, 13, "r"),
+            ("INDIA", 77, 27, 14, "r"),
+            ("CHINA", 110, 35, 14, "r"),
+            ("SCYTHIA", 50, 48, 11, "r"),
+            ("SIBERIA", 105, 64, 15, "r"),
+            ("AUSTRALIA", 134, -25, 14, "r"),
+            ("GREENLAND", -42, 73, 12, "r"),
+            ("ATLANTIC OCEAN", -34, 22, 14, "s"),
+            ("INDIAN OCEAN", 78, -18, 14, "s"),
+            ("PACIFIC OCEAN", 160, 6, 14, "s"),
+            ("ARCTIC OCEAN", 100, 78, 12, "s"),
+            ("MEDITERRANEAN SEA", 18, 35, 10, "s"),
+            ("AMAZONIA", -62, -4, 11, "r"),
         ],
         ranges=[
             [(-123, 57), (-116, 50), (-110, 43), (-107, 37), (-106, 32)],
@@ -218,12 +237,15 @@ PINS = {
     "india": [("Kailash", 81.25, 31.07), ("Hastinapur", 77.55, 29.02), ("Varanasi", 83.0, 25.32), ("Dwarka", 68.97, 22.24), ("Lanka", 80.4, 8.35)],
     "aegean": [("Olympus", 22.36, 40.09), ("Troy", 26.18, 39.96), ("Delphi", 22.5, 38.48), ("Athens", 23.73, 37.98), ("Knossos", 25.16, 35.3)],
     "scandinavia": [("Uppsala", 17.64, 59.86), ("Birka", 17.64, 59.34), ("Nidaros", 10.4, 63.43), ("Hedeby", 9.42, 54.52), ("Jotunheim", 8.0, 62.0)],
-    "world": [("Mesopotamia", 44, 33), ("Persia", 55, 31.5), ("India", 79, 22), ("Greece", 22.5, 39), ("The North", 15, 62)],
+    # Culture pins: Getty Mesopotamia ~44°E 34°N; Iranian plateau (Media–
+    # Persis belt, north of Arabia) ~53.5°E 32.5°N; Vedic Madhyadeśa ~77°E 27°N;
+    # Olympus 22.4°E 40.1°N; Uppsala 17.6°E 59.9°N.
+    "world": [("Mesopotamia", 44, 34), ("Persia", 53.5, 32.5), ("India", 77, 27), ("Greece", 22.4, 40.1), ("The North", 17.6, 59.9)],
 }
 
 FA = {
     "NORTH AMERICA": "آمریکای شمالی", "SOUTH AMERICA": "آمریکای جنوبی", "EUROPA": "اروپا", "AFRICA": "آفریقا", "ASIA": "آسیا",
-    "ARABIA": "عربستان", "PERSIA": "ایران", "INDIA": "هند", "CHINA": "چین", "SCYTHIA": "سکاستان", "SIBERIA": "سیبری",
+    "ARABIA": "عربستان", "PERSIA": "ایران", "INDIA": "هند", "CHINA": "چین", "SCYTHIA": "سکاها", "SIBERIA": "سیبری",
     "AUSTRALIA": "استرالیا", "GREENLAND": "گرینلند", "ATLANTIC OCEAN": "اقیانوس اطلس", "INDIAN OCEAN": "اقیانوس هند",
     "PACIFIC OCEAN": "اقیانوس آرام", "ARCTIC OCEAN": "اقیانوس منجمد شمالی", "MEDITERRANEAN SEA": "دریای مدیترانه", "AMAZONIA": "آمازونیا",
     "ANATOLIA": "آناتولی", "LEVANT": "شام", "MESOPOTAMIA": "بین‌النهرین", "BLACK SEA": "دریای سیاه", "CASPIAN SEA": "دریای خزر",
@@ -542,12 +564,11 @@ def esc(s):
 def text_w(text, size, lang, kind):
     """Approximate set width of a label — used only to reserve its collision box."""
     if lang == "fa":
-        # Persian: zero-width joiners / non-joiners (the نیم‌فاصله in names such as
-        # بین‌النهرین) advance nothing, so counting them over-estimates the box and
-        # shoves the label further from its true position than it needs to go.
-        n = sum(1 for c in text if c not in "\u200c\u200d\u200e\u200f")
-        return n * size * .54
-    return len(text) * size * (1.0 if kind == "r" else .78)
+        # Persian: ZWNJ/ZWJ/marks advance nothing. Use a tighter per-glyph factor so
+        # collision boxes match the lighter type and labels stay near their anchors.
+        n = sum(1 for c in text if c not in "\u200c\u200d\u200e\u200f\u0640")
+        return max(size * 1.2, n * size * .42)
+    return len(text) * size * (0.88 if kind == "r" else .72)
 
 
 def nice_km(target_px, px_per_deg, lat_ref):
@@ -569,9 +590,16 @@ class Placer:
     def add(self, b):
         self.boxes.append(b)
 
-    def place(self, x, y, w, h, tries=True):
+    def place(self, x, y, w, h, tries=True, near=False):
+        """Place a label. near=True only allows small nudges so geographic
+        anchors (e.g. Arabia vs Persia) stay in their own realms."""
         offs = [(0, 0)]
-        if tries:
+        if near:
+            for k in (.35, .7, 1.0, 1.4):
+                offs += [(0, h * k), (0, -h * k), (w * .35 * k, 0), (-w * .35 * k, 0),
+                         (w * .3 * k, h * .7 * k), (-w * .3 * k, h * .7 * k),
+                         (w * .3 * k, -h * .7 * k), (-w * .3 * k, -h * .7 * k)]
+        elif tries:
             for k in (1, 2, 3, 4):
                 offs += [(0, h * 1.15 * k), (0, -h * 1.15 * k), (w * .55 * k, 0), (-w * .55 * k, 0),
                          (w * .4 * k, h * 1.1 * k), (-w * .4 * k, h * 1.1 * k), (w * .4 * k, -h * 1.1 * k), (-w * .4 * k, -h * 1.1 * k)]
@@ -603,11 +631,11 @@ def build(name, spec, lang):
 
     A_('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 %d %d" preserveAspectRatio="xMidYMid slice" role="img" aria-label="%s">' % (w, h, esc(title)))
     A_('<!-- %s - generated by tools/genmaps.py (art: tools/mapart.py) from Natural Earth (public domain). No scripts, no external assets. -->' % esc(title))
-    A_('<style>.rl{font-family:%s;font-weight:600;letter-spacing:%s;fill:%s;paint-order:stroke;stroke:%s;stroke-width:3.6px;stroke-linejoin:round;stroke-opacity:.82}'
-       '.sl{font-family:%s;font-style:italic;letter-spacing:%s;fill:%s;paint-order:stroke;stroke:%s;stroke-width:3.2px;stroke-linejoin:round;stroke-opacity:.85}'
-       '.cl{font-family:%s;letter-spacing:.08em;fill:%s;paint-order:stroke;stroke:%s;stroke-width:3px;stroke-linejoin:round;stroke-opacity:.85}'
+    A_('<style>.rl{font-family:%s;font-weight:400;letter-spacing:%s;fill:%s;paint-order:stroke;stroke:%s;stroke-width:2.4px;stroke-linejoin:round;stroke-opacity:.75}'
+       '.sl{font-family:%s;font-weight:300;font-style:italic;letter-spacing:%s;fill:%s;paint-order:stroke;stroke:%s;stroke-width:2.2px;stroke-linejoin:round;stroke-opacity:.78}'
+       '.cl{font-family:%s;font-weight:400;letter-spacing:.06em;fill:%s;paint-order:stroke;stroke:%s;stroke-width:2.2px;stroke-linejoin:round;stroke-opacity:.78}'
        '@media (prefers-reduced-motion:reduce){*{animation:none}}</style>'
-       % (fam, "0" if lang == "fa" else ".2em", TEXT, INKC, fam, "0" if lang == "fa" else ".1em", SEA_TEXT, INKC, fam, GOLD, INKC))
+       % (fam, "0" if lang == "fa" else ".12em", TEXT, INKC, fam, "0" if lang == "fa" else ".06em", SEA_TEXT, INKC, fam, GOLD, INKC))
     A_('<defs>')
     A_('<linearGradient id="sea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="%s"/><stop offset="1" stop-color="%s"/></linearGradient>' % (SEA_A, SEA_B))
     A_('<radialGradient id="seaglow" cx="50%" cy="48%" r="70%"><stop offset="0" stop-color="#2a5a78" stop-opacity=".28"/><stop offset="1" stop-color="#2a5a78" stop-opacity="0"/></radialGradient>')
@@ -718,7 +746,11 @@ def build(name, spec, lang):
     P.add((pad, h - pad - 70, pad + 330, h - pad))                                                              # scale bar
     for (_, plon, plat) in PINS.get(name, []):
         px, py = fr.xy(plon, plat)
-        P.add((px - 26, py - 40, px + 26, py + 22))
+        # Culture-sheet pins are drawn in the SVG; keep a small keep-out so a
+        # label does not sit on the dot. World-map pins are HTML overlays — do
+        # not reserve boxes for them or Near East names get shoved together.
+        if not world:
+            P.add((px - 14, py - 22, px + 14, py + 10))
     # ---- ships, then creatures (sea ones sit on the water, land ones on the land)
     deco = []
     for kind, lon, lat, sc, flip in spec.get("ships", []):
@@ -739,14 +771,16 @@ def build(name, spec, lang):
             deco.append('<text class="cl" x="%.0f" y="%.0f" font-size="%.0f" text-anchor="middle">%s</text>' % (x, y + 19 * size + 8, max(10, 10.5 * cs * 1.2), esc(lab)))
             P.add((x - 40, y + 19 * size - 2, x + 40, y + 19 * size + 14))
     # ---- labels
+    # Near East names stay near their anchors so Arabia/Persia/Scythia never merge.
+    STICKY = {"ARABIA", "PERSIA", "SCYTHIA", "INDIA", "MESOPOTAMIA", "EUROPA"}
     labs = sorted(spec["labels"], key=lambda l: -l[3])
     lab_out = []
     for i, (text, lon, lat, size, kind) in enumerate(labs):
         label = text if lang == "en" else FA.get(text, text)
-        sz = size * cs * (1.0 if not world else .9) * 1.32 * (1.18 if lang == "fa" else 1.0)
+        sz = size * cs * (WORLD_SCALE if world else 1.0) * TYPE_SIZE[kind][lang if lang in TYPE_SIZE[kind] else "en"]
         bw, bh = text_w(label, sz, lang, kind), sz * 1.35
         x0, y0 = fr.xy(lon, lat)
-        x, y = P.place(x0, y0, bw, bh)
+        x, y = P.place(x0, y0, bw, bh, near=(text in STICKY and world))
         L = bw * .62 + 18
         curve = (L * (.11 if kind == "r" else .15)) * (1 if i % 2 == 0 else -1) * (1 if kind == "s" else .8)
         pid = "lp%d" % i

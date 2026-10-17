@@ -1,19 +1,28 @@
 {{ define "main" }}
 {{ $cs := (site.GetPage "/cultures").Sections }}
+{{- /* One full-bleed composition: brand over culture art, CTA at the foot. */ -}}
 <section class="cine" data-culture="base">
 <div class="slide on" data-culture="base">{{ with (index site.Data.themes "base").banner }}<img class="sbg" src="{{ printf "img/%s" . | relURL }}" alt="" aria-hidden="true"><img class="sfg" src="{{ printf "img/%s" . | relURL }}" alt="">{{ end }}<template><span>{{ i18n "baseQuote" }}</span></template></div>
 {{ range $cs }}{{ $b := (index site.Data.themes .Params.culture | default dict).banner }}{{ if $b }}
 <div class="slide" data-culture="{{ .Params.culture }}"><img class="sbg" src="{{ printf "img/%s" $b | relURL }}" alt="" aria-hidden="true"><img class="sfg" src="{{ printf "img/%s" $b | relURL }}" alt="{{ .Title }} banner art"><template><span>{{ .Params.quote }}</span><cite>{{ .Params.quoteSource }}</cite></template></div>
 {{ end }}{{ end }}
-<div class="cine-text"><div class="cine-top"><p class="eyebrow">{{ i18n "eyebrow" }}</p><h1 class="cine-logo"><span class="sr">{{ site.Title }}</span>{{ partial "logo.html" (dict "v" "word" "id" "x") }}</h1><p class="sub">{{ i18n "tagline" }}</p></div>
-<div class="cine-bot"><p class="quote" aria-live="polite"></p>
-<div class="pills"><button type="button" data-pick="base" aria-pressed="true">{{ i18n "all" }}</button>{{ range $cs }}<button type="button" data-pick="{{ .Params.culture }}" aria-pressed="false">{{ .Title }}</button>{{ end }}</div>
-<a class="btn enter" href="#" hidden>{{ i18n "enter" }}</a></div></div>
+<div class="cine-text">
+  <div class="cine-top">
+    <p class="eyebrow">{{ i18n "eyebrow" }}</p>
+    <h1 class="cine-logo"><span class="sr">{{ site.Title }}</span>{{ partial "logo.html" (dict "v" "word" "id" "x") }}</h1>
+  </div>
+  <div class="cine-bot">
+    <p class="quote" aria-live="polite"></p>
+    {{- /* Single-click previews; double-click or Enter this world opens the index. */ -}}
+    <div class="pills" role="group" aria-label="{{ i18n "pickLabel" }}"><button type="button" data-pick="base" data-href="{{ (site.GetPage "/cultures").RelPermalink }}" aria-pressed="true" style="--c:#9aa3b5" title="{{ i18n "all" }}">{{ i18n "all" }}</button>{{ range $cs }}{{ $t := index site.Data.themes .Params.culture | default dict }}<button type="button" data-pick="{{ .Params.culture }}" data-href="{{ .RelPermalink }}" aria-pressed="false" style="--c:{{ $t.accent | default "#9aa3b5" | safeCSS }}" title="{{ .Title }}">{{ .Title }}</button>{{ end }}</div>
+    <a class="btn enter" href="{{ (site.GetPage "/cultures").RelPermalink }}" hidden>{{ i18n "enter" }}</a>
+  </div>
+</div>
 </section>
 <section class="wrap slider"><div class="slider-head"><h2>{{ i18n "latest" }}</h2><div class="arrows"><button type="button" data-dir="-1" aria-label="{{ i18n "prev" }}">‹</button><button type="button" data-dir="1" aria-label="{{ i18n "next" }}">›</button></div></div>
 <ul class="cards rail">{{ range first 8 (where site.RegularPages "Section" "episodes") }}{{ partial "card.html" . }}{{ end }}</ul></section>
-<section class="wrap intro"><h2>{{ i18n "introTitle" }}</h2><p>{{ i18n "introText" }}</p><button type="button" class="btn intro__pdf" data-act="pdf" title="{{ i18n "exportPdfHint" }}" aria-label="{{ i18n "exportPdf" }}">{{ i18n "exportPdf" }}</button></section>
-<section class="wrap"><h2>{{ i18n "choose" }}</h2>
+<section class="wrap intro"><h2>{{ i18n "introTitle" }}</h2><p>{{ i18n "introText" }}</p></section>
+<section class="wrap home-choose"><h2>{{ i18n "choose" }}</h2>
 <div class="panels">{{ range $cs }}<a class="panel" data-culture="{{ .Params.culture }}" href="{{ .RelPermalink }}">{{ with .Params.culture }}{{ $b := (index site.Data.themes . | default dict).banner }}{{ if $b }}<img src="{{ printf "img/%s" $b | relURL }}" alt="" loading="lazy">{{ end }}{{ end }}<div><h3>{{ .Title }}</h3><p>{{ .Params.tagline }}</p></div></a>{{ end }}</div></section>
 <section class="wrap"><h2>{{ i18n "explore" }}</h2>
 <div class="tabs" role="tablist"><button role="tab" aria-selected="true" aria-controls="t-ch">{{ i18n "characters" }}</button><button role="tab" aria-selected="false" aria-controls="t-st">{{ i18n "stories" }}</button><button role="tab" aria-selected="false" aria-controls="t-hi">{{ i18n "history" }}</button></div>

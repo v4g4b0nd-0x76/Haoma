@@ -3,16 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} · {{ site.Title }}{{ end }}</title>
-<meta name="description" content="{{ if .IsHome }}{{ i18n "tagline" }}{{ else }}{{ .Summary | plainify | truncate 150 }}{{ end }}">
+{{ partial "head-seo.html" . }}
 <link rel="icon" href="{{ "img/brand/favicon.svg" | relURL }}" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ "img/brand/favicon-32.png" | relURL }}">
 <link rel="icon" type="image/png" sizes="192x192" href="{{ "img/brand/favicon-192.png" | relURL }}">
 <link rel="apple-touch-icon" href="{{ "img/brand/apple-touch-icon.png" | relURL }}">
 <meta name="theme-color" content="#14161a">
-<meta property="og:site_name" content="{{ site.Title }}"><meta property="og:title" content="{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }}{{ end }}"><meta property="og:description" content="{{ i18n "tagline" }}"><meta property="og:image" content="{{ "img/brand/haoma-og.png" | absURL }}"><meta name="twitter:card" content="summary_large_image">
 <script src="{{ "js/boot.js" | relURL }}"></script>
-<link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+<link rel="stylesheet" href="{{ printf "%s?v=atlas-noselect-1" ("css/style.css" | relURL) }}">
 <style>{{ range $k, $t := site.Data.themes }}[data-culture="{{ $k }}"]{--accent:{{ $t.accent | safeCSS }};--bg:{{ $t.bg | safeCSS }};--surface:{{ $t.surface | safeCSS }};--border:{{ $t.border | safeCSS }};--text:{{ $t.text | safeCSS }};--muted:{{ $t.muted | safeCSS }};--anim:{{ $t.anim | default "none" | safeCSS }};--meander:var(--m-{{ $t.pattern | default "none" | safeCSS }});--rune:{{ printf "%q" ($t.glyphs | default "") | safeCSS }}}
 {{ end }}</style>
 <link rel="preload" href="{{ "fonts/iransans-400.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
@@ -47,6 +45,7 @@
 {{ end }}{{ end }}
 <main>{{ block "main" . }}{{ end }}</main>
 <footer>{{ i18n "textLabel" }} CC BY-SA · {{ i18n "codeLabel" }} MIT{{ with site.Home.OutputFormats.Get "rss" }} · <a href="{{ .RelPermalink }}">RSS</a>{{ end }} · <a href="{{ "about/" | relLangURL }}">{{ i18n "sources" }}</a></footer>
-<script src="{{ "js/site.js" | relURL }}"></script>
+<script src="{{ printf "%s?v=hero-preview-5" ("js/site.js" | relURL) }}"></script>
+{{ if and .Params.culture (not .Params.sec) }}<script src="{{ printf "%s?v=atlas-space-1" ("js/mindmap.js" | relURL) }}"></script>{{ end }}
 </body>
 </html>

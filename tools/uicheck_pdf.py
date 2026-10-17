@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
-"""Exercise the PDF export: one control per page, and a print sheet that keeps
-the theme.
+"""Exercise the PDF export: one control on articles/episodes, and a print sheet
+that keeps the theme.
 
     python3 -m http.server 8123 --directory /tmp/opencode/out-root &
     UICHECK_URL=http://127.0.0.1:8123/ python3 tools/uicheck_pdf.py
 
 Two things are checked, and neither needs a PDF file:
 
-1. The control.  Every page that carries content has exactly one
-   [data-act="pdf"], it has an accessible name, and pressing it calls
+1. The control.  Culture leaf articles and episode pages have exactly one
+   [data-act="pdf"]; home/hubs/library/about have none. Pressing it calls
    window.print() exactly once.
 
 2. The sheet.  The print stylesheet is inspected under
@@ -32,16 +32,23 @@ import time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from uicheck import connect, nocache, start, BASE  # noqa: E402
 
-# route, human name -- one per page family that can be exported
+# route, human name -- culture leaf articles and episode pages only
 ROUTES = [
+    ("/cultures/iranian/characters/mehr/", "article-mehr"),
+    ("/cultures/greek/characters/zeus/", "article-zeus"),
+    ("/fa/cultures/iranian/characters/mehr/", "fa-article-mehr"),
+    ("/cultures/iranian/history/zoroastrianism-in-persia/", "article-history"),
+    ("/episodes/001-first-giant/", "episode"),
+    ("/fa/episodes/001-first-giant/", "fa-episode"),
+]
+
+# pages that must NOT expose Export PDF
+NO_PDF_ROUTES = [
     ("/", "home"),
-    ("/fa/", "fa-home"),
     ("/cultures/", "cultures"),
-    ("/fa/cultures/", "fa-cultures"),
-    ("/cultures/iranian/", "culture"),
-    ("/cultures/mesopotamian/", "culture-meso"),
-    ("/fa/cultures/iranian/", "fa-culture"),
+    ("/cultures/iranian/", "culture-hub"),
     ("/library/", "library"),
+    ("/about/", "about"),
 ]
 
 # dropped from the sheet, and kept on it.  The breadcrumbs stay on purpose: a
@@ -221,6 +228,12 @@ def main():
         time.sleep(0.3)
         n = p.js("window.__pn")
         check(n == 1, "%s: pressing it calls window.print() once" % name, n)
+
+    print("no pdf on non-articles")
+    for url, name in NO_PDF_ROUTES:
+        nav(p, url)
+        s = p.js(SCREEN)
+        check(s["count"] == 0, "%s: no export control" % name, s["count"])
 
     print("sheet (print media)")
     for url, name in ROUTES:

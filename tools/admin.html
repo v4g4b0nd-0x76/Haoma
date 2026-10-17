@@ -99,7 +99,18 @@ textarea.ed{height:calc(100vh - 340px);min-height:240px}textarea.mono,textarea.e
 .mp-read{font-family:ui-monospace,Menlo,monospace;font-size:12px;color:var(--warn)}
 .mp-posbtn{padding:4px 7px;font-size:11px;line-height:1}
 #mp_draw button[disabled]{opacity:.4;cursor:default}
+/* Obsidian-style context menu */
+#ctx{position:fixed;z-index:80;min-width:200px;background:var(--s);border:1px solid var(--b);border-radius:10px;padding:4px;box-shadow:0 12px 36px rgba(0,0,0,.55);display:none}
+#ctx button{display:block;width:100%;text-align:left;border:0;background:none;border-radius:7px;padding:7px 12px;color:var(--t);font-size:13px}
+#ctx button:hover{background:var(--s2);color:var(--a)}#ctx button.bad:hover{color:var(--bad)}
+#ctx .sep{height:1px;background:var(--b);margin:4px 6px}
+.guide{background:linear-gradient(135deg,color-mix(in srgb,var(--a) 12%,var(--s)),var(--s));border:1px solid var(--b);border-radius:12px;padding:16px 18px;margin:0 0 16px}
+.guide ol{margin:8px 0 0;padding-inline-start:1.3rem;color:var(--m)}.guide li{margin:4px 0}
+.relbox{max-height:160px;overflow:auto;border:1px solid var(--b);border-radius:8px;padding:6px 8px;background:var(--bg)}
+.relbox label{display:flex;gap:8px;align-items:center;margin:4px 0;color:var(--t);font-size:13px;cursor:pointer}
+.relbox input{width:auto}
 </style></head><body>
+<div id="ctx" hidden></div>
 <div id="app"><nav id="rail"><div class="logo"><svg class="lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6cf7a"/><stop offset="1" stop-color="#d9972c"/></linearGradient></defs><rect x="3" y="3" width="94" height="94" rx="3" fill="none" stroke="url(#hg)" stroke-width="1.6"/><rect x="9" y="9" width="82" height="82" rx="1.5" fill="none" stroke="url(#hg)" stroke-width=".8" opacity=".75"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(20.14 62.81) scale(0.07303)" fill="#0b0a0c" opacity=".55"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(18.93 61.36) scale(0.07303)" fill="#fff4cf" opacity=".3"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(19.25 61.69) scale(0.07303)" fill="url(#hg)"/></svg>Haoma editor</div><div id="rl"></div><div class="rbot"><div id="pend" class="pend" hidden><b></b><div class="row"><button class="pri" id="sa">Save all to files</button><button id="da">Discard</button></div></div><div id="branch"></div><button id="bundo">↶ Undo last change</button><button id="bpv">▶ Preview</button><button id="bchk">Check build</button><div id="hmsg" class="msg"></div></div></nav>
 <div id="panel"></div><div id="main"></div>
 <div id="pvwrap"><div class="row"><input type="text" id="purl" readonly><button id="pre">⟳</button><label style="margin:0;white-space:nowrap"><input type="checkbox" id="pfollow" checked style="width:auto"> follow editor</label></div><iframe id="pf"></iframe></div></div>
@@ -142,14 +153,53 @@ function render(){$('#rl').innerHTML='';for(const k in VIEWS){if(hiddenPanels.ha
  if(hiddenPanels.has(view)){view='dash'}
  $('#app').classList.toggle('nolist',!VIEWS[view][3]);$('#panel').innerHTML='';$('#main').innerHTML='';VIEWS[view][2]()}
 function list(paths,filter=''){return paths.filter(p=>p.includes(filter)).map(p=>`<button class="item ${p===cur?'on':''}" data-p="${esc(p)}" title="${esc(p)}">${drafts.has(p)?'● ':''}${esc(p.replace(/^content\//,''))}</button>`).join('')}
-function bindItems(){document.querySelectorAll('#panel .item').forEach(b=>b.onclick=()=>openFile(b.dataset.p))}
+function bindItems(){document.querySelectorAll('#panel .item').forEach(b=>{b.onclick=()=>openFile(b.dataset.p);b.oncontextmenu=e=>{e.preventDefault();showCtx(e.clientX,e.clientY,treeCtx(b.dataset.p))}})}
+function showCtx(x,y,items){const m=$('#ctx');if(!items||!items.length){hideCtx();return}
+ m.hidden=false;m.style.display='block';m.innerHTML=items.map(it=>it==='-'?'<div class="sep"></div>':`<button type="button" class="${it.bad?'bad':''}" data-i="${esc(it.id)}">${esc(it.label)}</button>`).join('');
+ const r=m.getBoundingClientRect(),vx=Math.min(x,innerWidth-r.width-8),vy=Math.min(y,innerHeight-r.height-8);
+ m.style.left=vx+'px';m.style.top=vy+'px';
+ m.querySelectorAll('button').forEach(b=>b.onclick=()=>{const it=items.find(i=>i&&i.id===b.dataset.i);hideCtx();if(it&&it.run)it.run()})}
+function hideCtx(){const m=$('#ctx');if(m){m.hidden=true;m.style.display='none';m.innerHTML=''}}
+document.addEventListener('click',e=>{if(!e.target.closest('#ctx'))hideCtx()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')hideCtx()});
+function treeCtx(p){const dir=p.replace(/\/[^/]+$/,'');
+ return[
+  {id:'open',label:'Open',run:()=>openFile(p)},
+  {id:'prev',label:'Reveal in Preview',run:async()=>{if(!pvOn)await pv('start');show(pageUrl(p))}},
+  '-',
+  {id:'new',label:'New note here…',run:()=>{view='content';render();wizPage()}},
+  {id:'dup',label:'Duplicate',run:()=>dupPath(p)},
+  {id:'ren',label:'Rename…',run:()=>renamePath(p)},
+  {id:'copy',label:'Copy path',run:()=>navigator.clipboard.writeText(p).then(()=>say('Path copied','ok'),()=>say(p,'ok'))},
+  '-',
+  {id:'del',label:'Delete…',bad:1,run:async()=>{if(!confirm('Mark '+p+' for deletion? (applied on Save)'))return;if(files.includes(p)){setDraft(p,null);await push(p)}else{drafts.delete(p);await api('discard?path='+E(p),{method:'POST'});pend()}if(cur===p)cur=null;render()}}
+ ];
+}
+async function dupPath(p){try{const txt=drafts.has(p)?drafts.get(p):await get(p);if(txt===null||(txt&&txt.bin))throw Error('cannot duplicate this entry');
+ const base=p.replace(/\.md$/,'');let n=base+'-copy.md',i=2;while(allFiles().includes(n)){n=base+'-copy'+i+'.md';i++}
+ setDraft(n,txt);view='content';render();openFile(n);say('Duplicated as draft — Save to keep it','warn')}catch(e){say(e.message,'bad')}}
+async function renamePath(p){try{const leaf=p.split('/').pop().replace(/\.md$/,'');const name=prompt('New file name (without .md)',leaf);if(!name)return;
+ if(!/^[a-z0-9-]+$/i.test(name.replace(/\.md$/,'')))throw Error('use letters, numbers and dashes only');
+ const dir=p.replace(/\/[^/]+$/,'');const np=dir+'/'+name.replace(/\.md$/,'')+'.md';
+ if(np===p)return;if(allFiles().includes(np))throw Error('already exists: '+np);
+ const txt=drafts.has(p)?drafts.get(p):(files.includes(p)?await get(p):null);if(txt===null||(txt&&txt.bin))throw Error('cannot rename this entry');
+ setDraft(np,txt);if(files.includes(p)){setDraft(p,null);await push(p)}else{drafts.delete(p);await api('discard?path='+E(p),{method:'POST'}).catch(()=>{})}
+ view='content';render();openFile(np);say('Renamed as draft — Save to apply','warn')}catch(e){say(e.message,'bad')}}
 function ctree(paths,filter){const f=filter.toLowerCase(),g={};paths.filter(p=>p.toLowerCase().includes(f)).forEach(p=>{const m=p.match(/^content\/(\w+)\/(.*)$/),l=m?m[1]:'other',rest=m?m[2]:p,pt=rest.split('/'),k=pt[0]==='cultures'&&pt.length>2?'cultures / '+pt[1]:pt[0].replace(/\.md$/,'');g[l]=g[l]||{};(g[l][k]=g[l][k]||[]).push(p)});
  return Object.keys(g).sort().map(l=>`<details open><summary>${l}</summary>${Object.keys(g[l]).sort().map(k=>`<details ${f?'open':''}><summary class="s2">${esc(k)}</summary>${g[l][k].map(p=>`<button class="item ${p===cur?'on':''}" data-p="${esc(p)}" title="${esc(p)}">${drafts.has(p)?'● ':''}${esc(p.split('/').slice(-2).join('/').replace(/\.md$/,''))}</button>`).join('')}</details>`).join('')}</details>`).join('')}
 function pContent(){const md=allFiles().filter(f=>f.startsWith('content/'));$('#panel').innerHTML=`<div class="row"><button class="pri" id="np">+ Page</button><button id="nc">+ Culture</button></div><input type="text" id="cs" placeholder="Search content…" style="margin-top:10px"><div id="ct" style="margin-top:8px">${ctree(md,'')}</div>`;bindItems();$('#np').onclick=wizPage;$('#nc').onclick=wizCulture;$('#cs').oninput=()=>{$('#ct').innerHTML=ctree(md,$('#cs').value);bindItems()}}
 /* ===== dashboard / review ===== */
 const issues={drafts:a=>a.draft&&!a.index,stale:a=>a.stale,nosrc:a=>!a.sources&&!a.index,untr:a=>a.missing.length&&!a.index};
 function pDash(){const pg=audit.filter(a=>!a.index),n=k=>audit.filter(issues[k]).length,ch=(git.status||'').split('\n').filter(Boolean);
- $('#main').innerHTML=`<h2>Dashboard</h2><p class="msg" style="margin:0">Counts describe saved files. Unsaved edits live only in the editor and the preview.</p><div class="stats" style="margin-top:12px">${[['all','Pages',pg.length],['drafts','Drafts',n('drafts')],['stale','Need review',n('stale')],['nosrc','Without sources',n('nosrc')],['untr','Untranslated',n('untr')]].map(([k,l,v])=>`<button class="stat" data-r="${k}"><b>${v}</b><span>${l}</span></button>`).join('')}<button class="stat" data-v="publish"><b>${ch.length}</b><span>Uncommitted files</span></button></div>
+ $('#main').innerHTML=`<h2>Dashboard</h2>
+ <div class="guide"><b>How to edit (no coding needed)</b>
+ <ol><li>Open <b>Content</b> in the left menu (or press <b>+ New page</b> below).</li>
+ <li>Pick a culture page from the list — right-click for Open, Duplicate, Rename, Delete.</li>
+ <li>Edit the title, sources, and related pages; write in the big text box.</li>
+ <li>Press <b>Preview</b> to see the site, then <b>Save</b> when you are happy.</li>
+ <li>Use <b>Publish &amp; PR</b> to commit and open a pull request on GitHub.</li></ol>
+ <p class="msg" style="margin:10px 0 0">Tip: right-click in the writing box for Bold, Heading, Link and shortcodes (like Obsidian).</p></div>
+ <p class="msg" style="margin:0">Counts describe saved files. Unsaved edits live only in the editor and the preview.</p><div class="stats" style="margin-top:12px">${[['all','Pages',pg.length],['drafts','Drafts',n('drafts')],['stale','Need review',n('stale')],['nosrc','Without sources',n('nosrc')],['untr','Untranslated',n('untr')]].map(([k,l,v])=>`<button class="stat" data-r="${k}"><b>${v}</b><span>${l}</span></button>`).join('')}<button class="stat" data-v="publish"><b>${ch.length}</b><span>Uncommitted files</span></button></div>
  <h3 style="margin-top:22px">Quick actions</h3><div class="row" style="flex-wrap:wrap"><button class="pri" id="qp">+ New page</button><button id="qc">+ New culture</button><button id="qv">▶ Preview site</button><button id="qk">Check build</button>${site().repo?`<button id="qi">GitHub issues ↗</button><button id="qr">Pull requests ↗</button>`:''}</div>
  <h3 style="margin-top:22px">Uncommitted changes</h3><pre>${esc(ch.join('\n')||'Working tree clean')}</pre>`;
  document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{rf=b.dataset.r;view='review';render()});document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{view=b.dataset.v;render()});
@@ -193,6 +243,13 @@ const getK=(f,k)=>{const m=f.match(new RegExp('^'+k+':\\s*(.*)$','m'));if(!m)ret
 const setK=(f,k,v)=>{const re=new RegExp('^'+k+':.*$','m');if(v===''&&!re.test(f))return f;const line=k+': '+(/^\d{4}-\d\d-\d\d$/.test(v)?v:JSON.stringify(v));return re.test(f)?f.replace(re,()=>line):(f?f+'\n':'')+line};
 const getSrc=f=>{const m=(f+'\n').match(/^sources:\s*\n((?:[ \t]+- .*\n?)*)/m);if(m&&m[1])return m[1].split('\n').filter(Boolean).map(l=>{let v=l.replace(/^\s*-\s*/,'');try{v=JSON.parse(v)}catch(e){}return v});const i=f.match(/^sources:\s*\[(.*)\]/m);if(i)try{return JSON.parse('['+i[1]+']')}catch(e){}return[]};
 const setSrc=(f,a)=>{f=(f+'\n').replace(/^sources:\s*\n(?:[ \t]+- .*\n?)*/m,'').replace(/^sources:\s*\[.*\]\n?/m,'').replace(/\n+$/,'');return a.length?f+'\nsources:\n'+a.map(s=>'  - '+JSON.stringify(s)).join('\n'):f};
+const getRel=f=>{const m=(f+'\n').match(/^related:\s*\n((?:[ \t]+- .*\n?)*)/m);if(m&&m[1])return m[1].split('\n').filter(Boolean).map(l=>{let v=l.replace(/^\s*-\s*/,'').trim();try{v=JSON.parse(v)}catch(e){}return String(v).replace(/\/?$/,'/')});return[]};
+const setRel=(f,a)=>{f=(f+'\n').replace(/^related:\s*\n(?:[ \t]+- .*\n?)*/m,'').replace(/^related:\s*\[.*\]\n?/m,'').replace(/\n+$/,'');return a.length?f+'\nrelated:\n'+a.map(s=>'  - '+JSON.stringify(s.replace(/\/?$/,'/'))).join('\n'):f};
+const pathToUrl=p=>{const m=p.match(/^content\/\w+\/(.+?)(?:\.md|\/index\.md)$/);if(!m)return'';let u='/'+m[1].replace(/\/_index$/,'');if(!u.endsWith('/'))u+='/';return u};
+const sameCulturePages=p=>{const m=p.match(/^content\/(\w+)\/cultures\/([^/]+)\//);if(!m)return[];const[,lang,cu]=m;const out=[];
+ allFiles().filter(f=>f.startsWith(`content/${lang}/cultures/${cu}/`)&&f.endsWith('.md')&&!f.endsWith('/_index.md')&&f!==p).forEach(f=>{const u=pathToUrl(f);if(u)out.push({path:f,url:u,label:f.split('/').slice(-2).join('/').replace(/\.md$/,'')})});
+ allFiles().filter(f=>f.match(new RegExp('^content/'+lang+'/episodes/.+/index\\.md$'))).forEach(f=>{out.push({path:f,url:pathToUrl(f),label:'episode · '+f.split('/')[3]})});
+ return out};
 const eolOf={};
 async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;document.querySelectorAll('#panel .item').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
  let txt;try{const d=drafts.get(p);
@@ -204,7 +261,7 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
  const md=p.endsWith('.md'),svg=p.endsWith('.svg'),sp=md?split(txt):{fm:'',body:txt},hasFm=md&&sp.fm!=='';
  const lm=p.match(/^content\/(\w+)\//),ol=lm&&(lm[1]==='en'?'fa':lm[1]==='fa'?'en':null),op=ol&&p.replace('content/'+lm[1]+'/','content/'+ol+'/'),isNew=!files.includes(p);
  $('#main').innerHTML=`<div class="bar"><div class="crumb">${esc(p.replace(/\//g,' › '))}${isNew?' <span class="tag">new</span>':''}</div><div class="row">${op?`<button id="tr">${allFiles().includes(op)?'Open '+ol.toUpperCase():'Create '+ol.toUpperCase()+' stub'}</button>`:''}<button id="pp" title="Show this page in the preview pane">Preview page</button><button class="pri" id="sv">Save</button><button id="rv">Discard changes</button><button id="dl">Delete</button><span id="em" class="msg"></span></div></div>
- ${hasFm?`<div class="card pad"><div class="two"><div><label>Title</label><input type="text" id="mt"><label>Tagline</label><input type="text" id="mg"></div><div><label>Evidence grade</label><input type="text" id="mr" list="gl"><datalist id="gl"><option>primary text<option>later compilation<option>archaeology<option>modern scholarship<option>draft</datalist><label>Reviewed</label><div class="row"><input type="text" id="mv"><button id="mn" type="button">Today</button></div><label style="display:flex;gap:8px;align-items:center;margin-top:12px"><input type="checkbox" id="mw" style="width:auto"> Wide layout (for grids, infobox)</label><label style="display:flex;gap:8px;align-items:center;margin-top:8px" title="Uncheck to hide this page from the published site (Hugo draft: true). Culture and section indexes usually stay published."><input type="checkbox" id="mpub" style="width:auto" checked> Published on the site</label></div></div><label>Sources (one per line)</label><textarea id="ms" rows="3"></textarea><details style="margin-top:8px"><summary>Raw front matter</summary><textarea id="fm" rows="8" class="mono"></textarea></details></div>`:''}
+ ${hasFm?`<div class="card pad"><div class="two"><div><label>Title</label><input type="text" id="mt"><label>Tagline</label><input type="text" id="mg"></div><div><label>Evidence grade</label><input type="text" id="mr" list="gl"><datalist id="gl"><option>primary text<option>later compilation<option>archaeology<option>modern scholarship<option>draft</datalist><label>Reviewed</label><div class="row"><input type="text" id="mv"><button id="mn" type="button">Today</button></div><label style="display:flex;gap:8px;align-items:center;margin-top:12px"><input type="checkbox" id="mw" style="width:auto"> Wide layout (for grids, infobox)</label><label style="display:flex;gap:8px;align-items:center;margin-top:8px" title="Uncheck to hide this page from the published site (Hugo draft: true). Culture and section indexes usually stay published."><input type="checkbox" id="mpub" style="width:auto" checked> Published on the site</label></div></div><label>Sources (one per line)</label><textarea id="ms" rows="3"></textarea><label>Related pages <span class="msg">(atlas / mindmap links)</span></label><div class="relbox" id="mrel"></div><details style="margin-top:8px"><summary>Raw front matter</summary><textarea id="fm" rows="8" class="mono"></textarea></details></div>`:''}
  ${md?`<div class="tb"><button id="tH">H2</button><button id="tB">B</button><button id="tI">I</button><button id="tQ">❝</button><button id="tL">Link</button><button id="tA">Attach file…</button><span class="sep"></span><button id="iL">▦ Layout</button><button id="iS">⇆ Slider</button><button id="iI">▤ Infobox</button><button id="iF">🖼 Figure</button><button id="iP">▶ Scroll-play</button><button id="iN">✎ Note</button><button id="iM">🗺 Map</button><button id="iV">❝ Verse</button></div><input type="file" id="fi" hidden>`:''}
  <div class="${svg?'two':''}"><textarea class="ed" id="ta" spellcheck="false"></textarea>${svg?'<div class="card"><img id="sp" style="width:100%"></div>':''}</div>`;
  const ta=$('#ta');ta.value=sp.body;const prev=()=>{if(svg)$('#sp').src='data:image/svg+xml;utf8,'+encodeURIComponent(ta.value)};prev();
@@ -212,8 +269,14 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
  const mark=()=>{setDraft(p,compose());const d=drafts.has(p);$('#em').textContent=d?'● unsaved (preview only)':'';$('#em').className='msg warn'};
  if(drafts.has(p)){$('#em').textContent='● unsaved (preview only)';$('#em').className='msg warn'}
  ta.oninput=()=>{prev();mark()};
- if(hasFm){const FM=$('#fm');FM.value=sp.fm;const fill=()=>{$('#mt').value=getK(FM.value,'title');$('#mg').value=getK(FM.value,'tagline');$('#mr').value=getK(FM.value,'grade');$('#mv').value=getK(FM.value,'reviewed');$('#ms').value=getSrc(FM.value).join('\n');$('#mw').checked=/^wide:\s*true/m.test(FM.value);$('#mpub').checked=!/^draft:\s*true\b/m.test(FM.value)};fill();
-  const sync=()=>{let f=FM.value;f=setK(f,'title',$('#mt').value);f=setK(f,'tagline',$('#mg').value);f=setK(f,'grade',$('#mr').value);f=setK(f,'reviewed',$('#mv').value);f=setSrc(f,$('#ms').value.split('\n').map(s=>s.trim()).filter(Boolean));f=f.replace(/^wide:.*(\n|$)/m,'').replace(/^draft:.*(\n|$)/m,'').replace(/\n+$/,'');if($('#mw').checked)f+=(f?'\n':'')+'wide: true';if(!$('#mpub').checked)f+=(f?'\n':'')+'draft: true';FM.value=f;mark()};
+ if(hasFm){const FM=$('#fm');FM.value=sp.fm;
+  const sync=()=>{let f=FM.value;f=setK(f,'title',$('#mt').value);f=setK(f,'tagline',$('#mg').value);f=setK(f,'grade',$('#mr').value);f=setK(f,'reviewed',$('#mv').value);f=setSrc(f,$('#ms').value.split('\n').map(s=>s.trim()).filter(Boolean));
+   const rel=[...document.querySelectorAll('#mrel input:checked')].map(c=>c.dataset.u);f=setRel(f,rel);
+   f=f.replace(/^wide:.*(\n|$)/m,'').replace(/^draft:.*(\n|$)/m,'').replace(/\n+$/,'');if($('#mw').checked)f+=(f?'\n':'')+'wide: true';if(!$('#mpub').checked)f+=(f?'\n':'')+'draft: true';FM.value=f;mark()};
+  const paintRel=()=>{const box=$('#mrel');if(!box)return;const sel=new Set(getRel(FM.value));const opts=sameCulturePages(p);
+   box.innerHTML=opts.length?opts.map(o=>`<label><input type="checkbox" data-u="${esc(o.url)}" ${sel.has(o.url)?'checked':''}> ${esc(o.label)}</label>`).join(''):'<span class="msg">No other pages in this culture yet.</span>';
+   box.querySelectorAll('input').forEach(c=>c.onchange=sync)};
+  const fill=()=>{$('#mt').value=getK(FM.value,'title');$('#mg').value=getK(FM.value,'tagline');$('#mr').value=getK(FM.value,'grade');$('#mv').value=getK(FM.value,'reviewed');$('#ms').value=getSrc(FM.value).join('\n');$('#mw').checked=/^wide:\s*true/m.test(FM.value);$('#mpub').checked=!/^draft:\s*true\b/m.test(FM.value);paintRel()};fill();
   ['mt','mg','mr','mv','ms','mw','mpub'].forEach(i=>$('#'+i).oninput=sync);$('#mn').onclick=()=>{$('#mv').value=today();sync()};FM.oninput=()=>{fill();mark()}}
  const wrap=(a,b)=>{const s=ta.selectionStart,e=ta.selectionEnd;ta.setRangeText(a+ta.value.slice(s,e)+b,s,e,'end');ta.focus();prev();mark()};
  const save=async()=>{try{setDraft(p,compose());if(drafts.has(p))await commit([p],'Edit '+p.replace('content/',''));else say('No changes to save')}catch(e){$('#em').textContent=e.message;$('#em').className='msg bad'}};
@@ -222,8 +285,26 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
  $('#dl').onclick=async()=>{if(!confirm('Mark '+p+' for deletion? (applied on Save, can be rolled back)'))return;if(files.includes(p)){setDraft(p,null);await push(p)}else{drafts.delete(p);await api('discard?path='+E(p),{method:'POST'});pend()}cur=null;render()};
  if(op)$('#tr').onclick=()=>{if(!allFiles().includes(op)){const t=hasFm?'---\n'+setK($('#fm').value,'title','TODO translate: '+getK($('#fm').value,'title'))+'\n---\n\nTranslate this page.\n':'Translate this page.\n';setDraft(op,t)}openFile(op)};
  if(md){const ins=t=>{const s=ta.selectionStart;ta.setRangeText(t,s,ta.selectionEnd,'end');ta.focus();prev();mark()};const wide=()=>{if(hasFm&&!$('#mw').checked){$('#mw').checked=true;$('#mw').dispatchEvent(new Event('input'))}};
+  const doLink=()=>{const sel=ta.value.slice(ta.selectionStart,ta.selectionEnd)||'title';const opts=sameCulturePages(p);const pick=opts.length?prompt('Internal path (e.g. /cultures/…/) or leave blank for web URL:\n\n'+opts.slice(0,8).map(o=>o.url).join('\n'),opts[0]?opts[0].url:''):prompt('Link URL','https://');
+   if(pick===null)return;if(pick.startsWith('/'))wrap('[',']('+pick.replace(/\/?$/,'/')+')');else wrap('[',']('+(pick||'https://')+')')};
+  ta.oncontextmenu=e=>{e.preventDefault();const sel=ta.value.slice(ta.selectionStart,ta.selectionEnd);
+   showCtx(e.clientX,e.clientY,[
+    {id:'cut',label:'Cut',run:async()=>{try{await navigator.clipboard.writeText(sel);ta.setRangeText('',ta.selectionStart,ta.selectionEnd,'end');mark()}catch(err){document.execCommand('cut')}}},
+    {id:'copy',label:'Copy',run:async()=>{try{await navigator.clipboard.writeText(sel)}catch(err){document.execCommand('copy')}}},
+    {id:'paste',label:'Paste',run:async()=>{try{const t=await navigator.clipboard.readText();ta.setRangeText(t,ta.selectionStart,ta.selectionEnd,'end');mark()}catch(err){say('Paste with Ctrl+V','warn')}}},
+    '-',
+    {id:'h2',label:'Heading',run:()=>wrap('\n## ','\n')},
+    {id:'b',label:'Bold',run:()=>wrap('**','**')},
+    {id:'i',label:'Italic',run:()=>wrap('*','*')},
+    {id:'link',label:'Insert link…',run:doLink},
+    '-',
+    {id:'note',label:'Insert note…',run:()=>bNote(ins,sel)},
+    {id:'fig',label:'Insert figure…',run:()=>bFig(ins)},
+    {id:'map',label:'Insert map…',run:()=>bMap({ins,ta,wide})},
+    {id:'verse',label:'Insert verse…',run:()=>bVerse(ins)}
+   ])};
   $('#iL').onclick=()=>bGrid(t=>{ins(t);wide()});$('#iS').onclick=()=>bSlider(ins);$('#iI').onclick=()=>bInfobox(t=>{ins(t);wide()});$('#iF').onclick=()=>bFig(ins);$('#iP').onclick=()=>bPlay(ins);$('#iN').onclick=()=>bNote(ins,ta.value.slice(ta.selectionStart,ta.selectionEnd));$('#iM').onclick=()=>bMap({ins,ta,wide});$('#iV').onclick=()=>bVerse(ins);
-  $('#tH').onclick=()=>wrap('\n## ','\n');$('#tB').onclick=()=>wrap('**','**');$('#tI').onclick=()=>wrap('*','*');$('#tQ').onclick=()=>wrap('\n> ','\n');$('#tL').onclick=()=>wrap('[','](https://)');
+  $('#tH').onclick=()=>wrap('\n## ','\n');$('#tB').onclick=()=>wrap('**','**');$('#tI').onclick=()=>wrap('*','*');$('#tQ').onclick=()=>wrap('\n> ','\n');$('#tL').onclick=doLink;
   $('#tA').onclick=()=>$('#fi').click();$('#fi').onchange=async()=>{const f=$('#fi').files[0];if(!f)return;const ext=(f.name.split('.').pop()||'').toLowerCase(),n=f.name.toLowerCase().replace(/[^a-z0-9.]+/g,'-');
    const img=['png','jpg','jpeg','gif','webp','svg'].includes(ext),au=['mp3','ogg','wav','m4a','mp4','webm'].includes(ext),dir=img?'img/media/':/^(mp4|webm)$/.test(ext)?'video/':au?'audio/':'library/';
    await putBin('static/'+dir+n,f);wrap(img?`![${n}](/${dir}${n})`:(au||ext==='pdf')?`\n{{< media src="${dir}${n}" >}}\n`:`[${n}](/${dir}${n})`,'');say('Attached '+n+' (unsaved)','warn')}}}
@@ -656,12 +737,17 @@ function staticMode(){
   ['sa','da','bundo','bpv','bchk'].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=true});
   $('#rl').innerHTML='';
   const n=Object.keys(VIEWS).filter(k=>!hiddenPanels.has(k)).length;
-  $('#main').innerHTML='<h2>Static preview</h2>'
-    +'<p>This copy is published for reading, not for editing. It is the editor interface served as a plain file, with no backend behind it, so nothing here can read or change the project.</p>'
-    +'<p>To use the editor, serve it from the repository root:</p>'
+  $('#main').innerHTML='<h2>Editor preview (read-only)</h2>'
+    +'<div class="guide"><b>Want to edit without installing Python?</b>'
+    +'<ol><li>Download the <b>Haoma editor</b> binary from the project&rsquo;s GitHub Releases (Linux, Windows or macOS).</li>'
+    +'<li>Put it in (or next to) your Haoma project folder and run it — a browser window opens.</li>'
+    +'<li>You still need <b>Hugo Extended</b> and <b>git</b> installed for preview and publishing.</li>'
+    +'<li>Or open the repo in a <b>GitHub Codespace</b> — the editor starts for you.</li></ol></div>'
+    +'<p>This page on GitHub Pages is only a look at the interface. It cannot read or change files.</p>'
+    +'<p>If you have Python, from the project folder:</p>'
     +'<pre>python tools/editor.py</pre>'
-    +'<p class="msg">That backend is what provides the file tree, drafts, search, preview, the build check and publishing. Without it those '+n+' views have nothing to show, so they are not offered.</p>'
-    +'<p>Everything the editor writes is summarised in the repository <b>README.md</b> under &ldquo;The local editor\u201d.</p>';
+    +'<p class="msg">The live editor provides the file list, drafts, preview, build check and publishing. Without it those '+n+' views stay hidden.</p>'
+    +'<p>See <b>README.md</b> § &ldquo;The local editor&rdquo; for full steps.</p>';
   say('Static preview — no editor backend here','warn');
 }
 (async()=>{

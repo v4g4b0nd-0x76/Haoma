@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" fill="none">
+  <!-- Padma mandala — lotus as Vedic / epic literary emblem -->
+  <g transform="translate(160 160)" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <circle r="12" stroke-width="1.6"/>
+    <circle r="5" stroke-width="1"/>
+    <circle r="1.8" fill="#fff" stroke="none"/>
+    <g stroke-width="1.35" opacity=".92">
+      <ellipse cx="0" cy="-36" rx="11" ry="22"/>
+      <ellipse cx="0" cy="-36" rx="11" ry="22" transform="rotate(45)"/>
+      <ellipse cx="0" cy="-36" rx="11" ry="22" transform="rotate(90)"/>
+      <ellipse cx="0" cy="-36" rx="11" ry="22" transform="rotate(135)"/>
+      <ellipse cx="0" cy="-36" rx="11" ry="22" transform="rotate(180)"/>
+      <ellipse cx="0" cy="-36" rx="11" ry="22" transform="rotate(225)"/>
+      <ellipse cx="0" cy="-36" rx="11" ry="22" transform="rotate(270)"/>
+      <ellipse cx="0" cy="-36" rx="11" ry="22" transform="rotate(315)"/>
+    </g>
+    <g stroke-width=".55" opacity=".5">
+      <path d="M0-16v-38"/>
+      <path d="M0-16v-38" transform="rotate(45)"/>
+      <path d="M0-16v-38" transform="rotate(90)"/>
+      <path d="M0-16v-38" transform="rotate(135)"/>
+      <path d="M0-16v-38" transform="rotate(180)"/>
+      <path d="M0-16v-38" transform="rotate(225)"/>
+      <path d="M0-16v-38" transform="rotate(270)"/>
+      <path d="M0-16v-38" transform="rotate(315)"/>
+    </g>
+    <g stroke-width="1.15" opacity=".78">
+      <ellipse cx="0" cy="-68" rx="14" ry="26"/>
+      <ellipse cx="0" cy="-68" rx="14" ry="26" transform="rotate(45)"/>
+      <ellipse cx="0" cy="-68" rx="14" ry="26" transform="rotate(90)"/>
+      <ellipse cx="0" cy="-68" rx="14" ry="26" transform="rotate(135)"/>
+      <ellipse cx="0" cy="-68" rx="14" ry="26" transform="rotate(180)"/>
+      <ellipse cx="0" cy="-68" rx="14" ry="26" transform="rotate(225)"/>
+      <ellipse cx="0" cy="-68" rx="14" ry="26" transform="rotate(270)"/>
+      <ellipse cx="0" cy="-68" rx="14" ry="26" transform="rotate(315)"/>
+    </g>
+    <circle r="58" stroke-width=".8" opacity=".45"/>
+    <circle r="96" stroke-width="1.1" opacity=".55"/>
+    <circle r="108" stroke-width=".6" opacity=".35"/>
+    <g fill="#fff" stroke="none" opacity=".6">
+      <circle cx="0" cy="-96" r="2"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(22.5)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(45)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(67.5)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(90)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(112.5)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(135)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(157.5)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(180)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(202.5)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(225)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(247.5)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(270)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(292.5)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(315)"/>
+      <circle cx="0" cy="-96" r="2" transform="rotate(337.5)"/>
+    </g>
+  </g>
+</svg>

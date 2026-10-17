@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" fill="none">
+  <!-- Valknut (triple triangle) as known from Gotland picture stones -->
+  <g transform="translate(160 150)" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <circle r="118" stroke-width="1" opacity=".35"/>
+    <circle r="108" stroke-width="1.5" opacity=".5"/>
+    <!-- three interlinked triangles -->
+    <g stroke-width="2.4" opacity=".92">
+      <path d="M0-78 68 40H-68Z"/>
+      <path d="M-48-28 48-28 72 40 24 78H-24L-72 40Z"/>
+      <path d="M48-28-48-28-72 40-24 78h48l48-38z"/>
+    </g>
+    <g stroke-width="1.1" opacity=".45">
+      <path d="M0-52 40 20H-40Z"/>
+      <path d="M-28-12h56"/>
+      <path d="M0-52v72"/>
+    </g>
+  </g>
+  <!-- Elder Futhark sample under the seal -->
+  <g transform="translate(48 278)" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" opacity=".7">
+    <path d="M16 0v36M16 6l16 10M16 18l14 8"/>
+    <path d="M56 0v36M56 4c14 2 14 12 0 14 14 2 14 14 0 14"/>
+    <path d="M96 0v36M96 4h14c7 0 12 5 12 12s-5 12-12 12H96M110 28l12 8"/>
+    <path d="M156 36V4l-12 12M156 4l12 12"/>
+    <path d="M196 20l14-16 14 16-14 12zm0 0v16m28-16v16"/>
+    <path d="M252 0v36M252 18h20"/>
+  </g>
+</svg>

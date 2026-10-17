@@ -6,7 +6,9 @@ culture: iranian
 grade: پیش‌نویس
 sources: ["اوستا، مهر یشت", "یسنا ۳۰"]
 reviewed: 2026-10-12
-draft: true
+related:
+  - /cultures/iranian/characters/mehr/
+  - /cultures/iranian/characters/zarathustra/
 ---
 یادداشت قسمت: مهر، نگاهبان پیمان‌ها، و زرتشت.
 

@@ -6,7 +6,10 @@ sources:
   - "Mary Boyce, A History of Zoroastrianism (۳ جلد) — پژوهش نوین"
   - "یادداشت: منابع اولیهٔ دورهٔ هخامنشی و ساسانی افزوده شود"
 reviewed: 2026-10-13
-draft: true
+related:
+  - /cultures/iranian/characters/zarathustra/
+  - /cultures/iranian/stories/two-spirits/
+  - /cultures/iranian/characters/mehr/
 ---
 <p class="lead">اندیشه‌های زرتشتی بیش از هزار سال تمدن ایرانی را شکل داد — از امپراتوری هخامنشی تا دودمان ساسانی — و جامعه پس از فتح عرب نیز زنده ماند.</p>
 

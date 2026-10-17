@@ -6,7 +6,10 @@ sources:
   - "اوستا، مهر یشت (یشت ۱۰) — متن اصلی"
   - "Mary Boyce, A History of Zoroastrianism — پژوهش نوین"
 reviewed: 2026-10-13
-draft: true
+related:
+  - /cultures/iranian/characters/zarathustra/
+  - /cultures/iranian/stories/two-spirits/
+  - /episodes/002-lord-of-oaths/
 ---
 <p class="lead">مهر، در اوستایی «میثره»، یَزَت (ایزدی که سزاوار ستایش است) است؛ پاسدار پیمان، راستی و روشنایی روز.</p>
 

@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" fill="none">
+  <!-- Achaemenid palace rosette (Persepolis) — geometric seal -->
+  <g transform="translate(160 160)" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <circle r="14" stroke-width="1.6"/>
+    <circle r="7" stroke-width="1"/>
+    <circle r="2.5" fill="#fff" stroke="none" opacity=".9"/>
+    <g stroke-width="1.25" opacity=".95">
+      <ellipse cx="0" cy="-48" rx="11" ry="28"/>
+      <ellipse cx="0" cy="-48" rx="11" ry="28" transform="rotate(30)"/>
+      <ellipse cx="0" cy="-48" rx="11" ry="28" transform="rotate(60)"/>
+      <ellipse cx="0" cy="-48" rx="11" ry="28" transform="rotate(90)"/>
+      <ellipse cx="0" cy="-48" rx="11" ry="28" transform="rotate(120)"/>
+      <ellipse cx="0" cy="-48" rx="11" ry="28" transform="rotate(150)"/>
+      <ellipse cx="0" cy="-48" rx="11" ry="28" transform="rotate(180)"/>
+      <ellipse cx="0" cy="-48" rx="11" ry="28" transform="rotate(210)"/>
+      <ellipse cx="0" cy="-48" rx="11" ry="28" transform="rotate(240)"/>
+      <ellipse cx="0" cy="-48" rx="11" ry="28" transform="rotate(270)"/>
+      <ellipse cx="0" cy="-48" rx="11" ry="28" transform="rotate(300)"/>
+      <ellipse cx="0" cy="-48" rx="11" ry="28" transform="rotate(330)"/>
+    </g>
+    <g stroke-width=".55" opacity=".55">
+      <path d="M0-22v-50"/>
+      <path d="M0-22v-50" transform="rotate(30)"/>
+      <path d="M0-22v-50" transform="rotate(60)"/>
+      <path d="M0-22v-50" transform="rotate(90)"/>
+      <path d="M0-22v-50" transform="rotate(120)"/>
+      <path d="M0-22v-50" transform="rotate(150)"/>
+      <path d="M0-22v-50" transform="rotate(180)"/>
+      <path d="M0-22v-50" transform="rotate(210)"/>
+      <path d="M0-22v-50" transform="rotate(240)"/>
+      <path d="M0-22v-50" transform="rotate(270)"/>
+      <path d="M0-22v-50" transform="rotate(300)"/>
+      <path d="M0-22v-50" transform="rotate(330)"/>
+    </g>
+    <circle r="78" stroke-width=".9" opacity=".5"/>
+    <circle r="88" stroke-width="1.4" opacity=".7"/>
+    <circle r="96" stroke-width=".5" opacity=".35"/>
+    <g fill="#fff" stroke="none" opacity=".65">
+      <circle cx="0" cy="-88" r="2.2"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(15)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(30)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(45)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(60)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(75)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(90)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(105)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(120)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(135)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(150)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(165)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(180)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(195)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(210)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(225)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(240)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(255)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(270)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(285)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(300)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(315)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(330)"/>
+      <circle cx="0" cy="-88" r="2.2" transform="rotate(345)"/>
+    </g>
+  </g>
+</svg>

@@ -5,6 +5,8 @@ sources: ["Poetic Edda, Voluspa (primary)", "Prose Edda, Gylfaginning (later com
 grade: primary text
 reviewed: 2026-10-12
 draft: true
+related:
+  - /cultures/norse/stories/ragnarok/
 ---
 Odin is the chief of the Aesir, associated with wisdom, poetry, war and death.
 
