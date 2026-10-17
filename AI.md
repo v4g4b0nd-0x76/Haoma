@@ -123,6 +123,7 @@ Preset grids the editor offers: 2/3+1/3, 1/3+2/3, 1/2+1/2, 3 and 4 columns, 2x2,
 New culture checklist: folder + `_index.md` files in both languages (3.1), theme entry, banner, tagline/quote, at least one page per section, translations, Review view clean.
 
 ## 6. Banner and art (SVG) rules
+**Generating characters, posters, card media, hero banners, or GIFs?** Follow [art-gen-ai.md](art-gen-ai.md) (sizes, palettes, bans, prompt templates for weaker image agents). Maps stay in [MAP-DESIGN.md](MAP-DESIGN.md).
 - `viewBox="0 0 1200 300"`, `preserveAspectRatio="xMidYMid slice"`; one file, under ~20 KB.
 - Animation only with CSS `@keyframes` inside the SVG `<style>` (works when loaded via `<img>`). No scripts, no external `href`, no web fonts, no raster embeds.
 - Include `@media (prefers-reduced-motion: reduce){*{animation:none}}` inside the SVG style.

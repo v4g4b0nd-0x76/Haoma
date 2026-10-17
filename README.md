@@ -57,7 +57,7 @@ Every route below exists in both languages (`/fa/…` mirrors `/…`); Farsi is 
 | **About** | `/about/` | What the project is and how it is sourced. |
 | **Editor launcher** | `/tools/` | One-click **Open editor** → GitHub Codespace (real editor). See §5 and §10. |
 
-> **Read next.** This README is the human guide. **Farsi docs:** [`README.fa.md`](README.fa.md) (editor overview) · [`CONTRIBUTING.fa.md`](CONTRIBUTING.fa.md) · on-site [/fa/editor/](https://v4g4b0nd-0x76.github.io/Haoma/fa/editor/). English on-site guide: [/editor/](https://v4g4b0nd-0x76.github.io/Haoma/editor/). `AI.md` is the complete technical reference for agents and deep contributors.
+> **Read next.** This README is the human guide. **Farsi docs:** [`README.fa.md`](README.fa.md) (editor overview) · [`CONTRIBUTING.fa.md`](CONTRIBUTING.fa.md) · on-site [/fa/editor/](https://v4g4b0nd-0x76.github.io/Haoma/fa/editor/). English on-site guide: [/editor/](https://v4g4b0nd-0x76.github.io/Haoma/editor/). `AI.md` is the complete technical reference for agents and deep contributors. **Art generation** (heroes, cards, characters, GIFs): [`art-gen-ai.md`](art-gen-ai.md).
 
 ---
 
