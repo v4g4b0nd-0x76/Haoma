@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="{{ "img/brand/apple-touch-icon.png" | relURL }}">
 <meta name="theme-color" content="#14161a">
 <script src="{{ "js/boot.js" | relURL }}"></script>
-<link rel="stylesheet" href="{{ printf "%s?v=meta-gap-1" ("css/style.css" | relURL) }}">
+<link rel="stylesheet" href="{{ printf "%s?v=scroll-theme-1" ("css/style.css" | relURL) }}">
 <style>{{ range $k, $t := site.Data.themes }}[data-culture="{{ $k }}"]{--accent:{{ $t.accent | safeCSS }};--bg:{{ $t.bg | safeCSS }};--surface:{{ $t.surface | safeCSS }};--border:{{ $t.border | safeCSS }};--text:{{ $t.text | safeCSS }};--muted:{{ $t.muted | safeCSS }};--anim:{{ $t.anim | default "none" | safeCSS }};--meander:var(--m-{{ $t.pattern | default "none" | safeCSS }});--rune:{{ printf "%q" ($t.glyphs | default "") | safeCSS }}}
 {{ end }}</style>
 <link rel="preload" href="{{ "fonts/iransans-400.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>

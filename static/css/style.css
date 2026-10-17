@@ -14,8 +14,16 @@
 --hero-h:clamp(500px,calc(25vw + 120px),700px)}
 /* ---------- base ---------- */
 *{box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;color-scheme:dark}
 body{margin:0;background:var(--bg);color:var(--text);font:17px/1.75 system-ui,-apple-system,"Segoe UI",Inter,sans-serif;-webkit-font-smoothing:antialiased}
+/* Culture-themed scrollbars (page + nested panels like search) */
+*{scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--accent) 55%,var(--border)) color-mix(in srgb,var(--surface) 88%,var(--bg))}
+*::-webkit-scrollbar{width:9px;height:9px}
+*::-webkit-scrollbar-track{background:color-mix(in srgb,var(--surface) 88%,var(--bg));border-radius:99px}
+*::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--accent) 42%,var(--border));border-radius:99px;border:2px solid color-mix(in srgb,var(--surface) 88%,var(--bg));background-clip:padding-box}
+*::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb,var(--accent) 72%,var(--border));border:2px solid color-mix(in srgb,var(--surface) 88%,var(--bg));background-clip:padding-box}
+*::-webkit-scrollbar-thumb:active{background:var(--accent)}
+*::-webkit-scrollbar-corner{background:transparent}
 a{color:var(--accent);text-underline-offset:3px}
 a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 ::selection{background:var(--accent);color:#111}
