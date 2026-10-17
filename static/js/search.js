@@ -15,15 +15,16 @@
   var MIN_Q = 2;
 
   function idxUrl() {
-    var link = document.querySelector('link[rel="alternate"][type="application/json"]');
-    if (link && /search\.json/i.test(link.href)) return link.href;
-    var base = document.querySelector('html').getAttribute("lang") === "fa" ? "fa/" : "";
+    var link = document.querySelector('link[rel="alternate"][type="application/json"][href*="search"]');
+    if (link && link.href) return link.href;
+    /* brand.href is absolute (works under /Haoma/ on Pages). getAttribute +
+       new URL(..., "/fa/") throws and the old catch pointed at /fa/search.json. */
+    var brand = document.querySelector(".brand[href]");
+    var base = (brand && brand.href) || document.baseURI || location.href;
     try {
-      var root = document.querySelector('.brand[href]');
-      var home = root ? root.getAttribute("href") : "/";
-      return new URL("search.json", home.endsWith("/") ? home : home + "/").href;
+      return new URL("search.json", base.endsWith("/") ? base : base.replace(/\/?$/, "/") ).href;
     } catch (e) {
-      return (base ? "/" + base : "/") + "search.json";
+      return new URL("search.json", location.href).href;
     }
   }
 
@@ -31,7 +32,7 @@
     if (data) return Promise.resolve(data);
     if (loading) return loading;
     loading = fetch(idxUrl(), { credentials: "same-origin" })
-      .then(function (r) { if (!r.ok) throw new Error("index"); return r.json(); })
+      .then(function (r) { if (!r.ok) throw new Error("index " + r.status); return r.json(); })
       .then(function (j) { data = j.items || []; return data; })
       .catch(function () { data = []; return data; });
     return loading;

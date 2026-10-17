@@ -15,6 +15,9 @@
 {{ end }}</style>
 <link rel="preload" href="{{ "fonts/iransans-400.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 {{ range .AlternativeOutputFormats }}<link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .Permalink }}">{{ end }}
+{{- with site.Home.OutputFormats.Get "SearchIndex" -}}
+<link rel="alternate" type="application/json" href="{{ .Permalink }}" title="search">
+{{- end }}
 </head>
 <body>
 <div class="bg"></div>
@@ -73,7 +76,7 @@
 <main>{{ block "main" . }}{{ end }}</main>
 <footer>{{ i18n "textLabel" }} CC BY-SA · {{ i18n "codeLabel" }} MIT{{ with site.Home.OutputFormats.Get "rss" }} · <a href="{{ .RelPermalink }}">RSS</a>{{ end }} · <a href="{{ "about/" | relLangURL }}">{{ i18n "sources" }}</a></footer>
 <script src="{{ printf "%s?v=keys-search-1" ("js/site.js" | relURL) }}"></script>
-<script src="{{ printf "%s?v=1" ("js/search.js" | relURL) }}"></script>
+<script src="{{ printf "%s?v=basepath-2" ("js/search.js" | relURL) }}"></script>
 {{ if and .Params.culture (not .Params.sec) }}<script src="{{ printf "%s?v=atlas-tour-1" ("js/mindmap.js" | relURL) }}"></script>{{ end }}
 </body>
 </html>
