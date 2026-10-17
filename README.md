@@ -57,7 +57,7 @@ Every route below exists in both languages (`/fa/…` mirrors `/…`); Farsi is 
 | **About** | `/about/` | What the project is and how it is sourced. |
 | **Editor launcher** | `/tools/` | One-click **Open editor** → GitHub Codespace (real editor). See §5 and §10. |
 
-> **Read next.** This README is the human guide. Persian overview (especially the editor): [`README.fa.md`](README.fa.md). On-site guides: [/editor/](https://v4g4b0nd-0x76.github.io/Haoma/editor/) (EN) · [/fa/editor/](https://v4g4b0nd-0x76.github.io/Haoma/fa/editor/) (FA). `AI.md` is the complete technical reference for agents and deep contributors.
+> **Read next.** This README is the human guide. **Farsi docs:** [`README.fa.md`](README.fa.md) (editor overview) · [`CONTRIBUTING.fa.md`](CONTRIBUTING.fa.md) · on-site [/fa/editor/](https://v4g4b0nd-0x76.github.io/Haoma/fa/editor/). English on-site guide: [/editor/](https://v4g4b0nd-0x76.github.io/Haoma/editor/). `AI.md` is the complete technical reference for agents and deep contributors.
 
 ---
 
@@ -205,7 +205,7 @@ Pages are linked as translations when the relative path is **identical** in `con
 
 ## 5. The editor (web, binary, or Python)
 
-Non-tech walkthroughs (English + Farsi) also live on the site: **[/editor/](https://v4g4b0nd-0x76.github.io/Haoma/editor/)** and **[/fa/editor/](https://v4g4b0nd-0x76.github.io/Haoma/fa/editor/)**. Persian repo summary: [`README.fa.md`](README.fa.md).
+Non-tech walkthroughs also live on the site: **[/editor/](https://v4g4b0nd-0x76.github.io/Haoma/editor/)** (EN) and **[/fa/editor/](https://v4g4b0nd-0x76.github.io/Haoma/fa/editor/)** (FA). Full Farsi repo guide: [`README.fa.md`](README.fa.md) · [`CONTRIBUTING.fa.md`](CONTRIBUTING.fa.md).
 
 ### Start with Python
 

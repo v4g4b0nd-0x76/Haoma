@@ -1,45 +1,45 @@
 # هوم (Haoma) — راهنمای فارسی
 
-سایت دوزبانهٔ پادکست و دانشنامهٔ اسطوره (انگلیسی + فارسی/راست‌به‌چپ)، ساخته‌شده با [Hugo](https://gohugo.io/) و منتشر روی GitHub Pages.
+سایت دوزبانهٔ پادکست و wiki اسطوره (English + فارسی/RTL)، ساخته‌شده با [Hugo](https://gohugo.io/) و deploy روی GitHub Pages.
 
-این پرونده خلاصهٔ **ویرایش سایت** برای خوانندهٔ فارسی است. جزئیات فنی کامل‌تر در [`README.md`](README.md) است. راهنمای روی خودِ سایت: **[/fa/editor/](https://v4g4b0nd-0x76.github.io/Haoma/fa/editor/)**.
+این فایل خلاصهٔ **ویرایش سایت** برای خوانندهٔ فارسی است. جزئیات فنی کامل‌تر در [`README.md`](README.md) است. راهنمای روی خودِ سایت: **[/fa/editor/](https://v4g4b0nd-0x76.github.io/Haoma/fa/editor/)**.
 
 ---
 
 ## ویرایشگر وب (پیشنهاد اگر نصب نمی‌خواهید)
 
-1. صفحهٔ راه‌انداز را باز کنید:  
+1. صفحهٔ launcher را باز کنید:  
    <https://v4g4b0nd-0x76.github.io/Haoma/tools/>  
-   (دکمهٔ **فارسی** را بزنید اگر متن انگلیسی دیدید.)
-2. روی **باز کردن ویرایشگر** / **Open editor** کلیک کنید.
-3. با گیت‌هاب وارد شوید (اگر خواست).
+   (دکمهٔ **فارسی** را بزنید اگر متن English دیدید.)
+2. روی **Open editor** کلیک کنید.
+3. با GitHub وارد شوید (اگر خواست).
 4. صبر کنید تا Codespace بالا بیاید.
-5. ویرایشگر در زبانهٔ جدید مرورگر باز می‌شود.
+5. Editor در tab جدید مرورگر باز می‌شود.
 
-سپس صفحه را ویرایش کنید، با **Save** ذخیره کنید، و با **Publish & PR** شاخه بفرستید و درخواست ادغام باز کنید.
+بعد صفحه را ویرایش کنید، با **Save** ذخیره کنید، و با **Publish & PR** یک branch بفرستید و pull request باز کنید.
 
-اگر پیش‌نمایش خالی بود، در Codespace زبانهٔ **Ports** → درگاه **1313**.
+اگر preview خالی بود، در Codespace تب **Ports** → port **1313**.
 
-سایتِ منتشرشده فقط خواندنی است؛ تغییر پرونده‌ها فقط در Codespace یا ویرایشگر محلی انجام می‌شود.
+سایت live فقط read-only است؛ تغییر فایل‌ها فقط در Codespace یا editor محلی انجام می‌شود.
 
 ---
 
-## برنامهٔ رومیزی (بدون پایتون)
+## Binary دسکتاپ (بدون Python)
 
-### بارگیری
+### Download
 
-1. [Releases](https://github.com/v4g4b0nd-0x76/Haoma/releases) → آخرین برچسب `editor-v…`
-2. از **Assets** پروندهٔ مناسب را بگیرید:
+1. [Releases](https://github.com/v4g4b0nd-0x76/Haoma/releases) → آخرین tag `editor-v…`
+2. از **Assets** فایل مناسب را بگیرید:
 
-| سیستم | پرونده |
+| سیستم | فایل |
 |---|---|
-| لینوکس | `haoma-editor-linux-amd64` |
-| ویندوز | `haoma-editor-windows-amd64.exe` |
-| مک | `haoma-editor-macos-amd64` |
+| Linux | `haoma-editor-linux-amd64` |
+| Windows | `haoma-editor-windows-amd64.exe` |
+| macOS | `haoma-editor-macos-amd64` |
 
 ### کجا بگذارید
 
-پوشهٔ پروژه را کلون کنید (همان که `hugo.toml` دارد) و برنامه را **کنار `hugo.toml`** بگذارید:
+Repo را clone کنید (همان پوشه‌ای که `hugo.toml` دارد) و binary را **کنار `hugo.toml`** بگذارید:
 
 ```text
 Haoma/
@@ -49,11 +49,11 @@ Haoma/
   …
 ```
 
-یا متغیر محیطی `HAOMA_ROOT` را روی مسیر آن پوشه بگذارید.
+یا environment variable `HAOMA_ROOT` را روی مسیر آن پوشه بگذارید.
 
 ### پیش‌نیازها
 
-برنامه فقط جای پایتون را می‌گیرد. همچنان لازم است:
+Binary فقط جای Python را می‌گیرد. همچنان لازم است:
 
 - [Hugo Extended](https://gohugo.io/installation/) ≥ ۰٫۱۳۹
 - git
@@ -61,19 +61,19 @@ Haoma/
 ### اجرا
 
 ```bash
-# لینوکس / مک
+# Linux / macOS
 cd /path/to/Haoma
 chmod +x haoma-editor-linux-amd64
 ./haoma-editor-linux-amd64
 ```
 
-ویندوز: روی `.exe` دوبار کلیک کنید، یا از PowerShell در همان پوشه اجرا کنید.
+Windows: روی `.exe` دوبار کلیک کنید، یا از PowerShell در همان پوشه اجرا کنید.
 
 مرورگر باید `http://localhost:8765/` را باز کند.
 
 ---
 
-## پایتون (اختیاری)
+## Python (اختیاری)
 
 ```bash
 git clone https://github.com/v4g4b0nd-0x76/Haoma
@@ -88,13 +88,13 @@ python tools/editor.py
 | وضعیت | پیشنهاد |
 |---|---|
 | بدون نصب | ویرایشگر وب (`/tools/`) |
-| آفلاین / کلون محلی | برنامهٔ رومیزی |
-| توسعه با پایتون | `python tools/editor.py` |
+| Offline / clone محلی | Binary دسکتاپ |
+| توسعه با Python | `python tools/editor.py` |
 
 ---
 
 ## پیوندهای مفید
 
-- راهنمای روی سایت (فارسی): </fa/editor/>
-- راهنمای روی سایت (انگلیسی): </editor/>
-- مشارکت: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- راهنمای روی سایت (فارسی): [/fa/editor/](https://v4g4b0nd-0x76.github.io/Haoma/fa/editor/)
+- راهنمای روی سایت (English): [/editor/](https://v4g4b0nd-0x76.github.io/Haoma/editor/)
+- مشارکت: [`CONTRIBUTING.fa.md`](CONTRIBUTING.fa.md) · [`CONTRIBUTING.md`](CONTRIBUTING.md)
