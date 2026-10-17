@@ -14,7 +14,8 @@
 {{- range .AllTranslations -}}
 <link rel="alternate" hreflang="{{ .Language.LanguageCode }}" href="{{ .Permalink }}">
 {{- end -}}
-{{- with .Sites.First.Home -}}
+{{- /* Default-language home (Sites[0] since Hugo 0.123); avoids .Sites.First/.Default version split */ -}}
+{{- with (index .Sites 0).Home -}}
 <link rel="alternate" hreflang="x-default" href="{{ .Permalink }}">
 {{- end -}}
 <meta property="og:site_name" content="{{ site.Title }}">
