@@ -324,25 +324,53 @@ Q('.note').forEach(function(n){var p=n.querySelector('.note-pop');function fit()
   else if(pm.addListener)pm.addListener(function(e){e.matches?gifPrintOn():gifPrintOff()})}
 })();
 
-/* ===== v5: interactive myth map — pan, zoom, pin tooltips ===== */
+/* ===== v5: interactive myth map — pan, zoom, eras, dock ===== */
 (function(){
 var Q=function(s,r){return[].slice.call((r||document).querySelectorAll(s))};
+var dragMap=null,dragLast={x:0,y:0},dragStart={x:0,y:0},dragMoved=false;
+document.addEventListener('mousemove',function(e){
+  if(!dragMap||!dragMap._mapPan)return;
+  if(Math.abs(e.clientX-dragStart.x)+Math.abs(e.clientY-dragStart.y)>6)dragMoved=true;
+  dragMap._mapPan(e.clientX-dragLast.x,e.clientY-dragLast.y);dragLast.x=e.clientX;dragLast.y=e.clientY;
+});
+document.addEventListener('mouseup',function(){
+  if(dragMap&&dragMap._mapPanEnd)dragMap._mapPanEnd();
+  dragMap=null;
+});
+
 Q('.myth-map').forEach(function(map){
   /* Regional / small maps must not zoom out past fit: that only letterboxes and
      breaks the engraved frame. The world overview may still go below 1 via
      data-minzoom (default 1). Pan only when zoomed in enough that there is room. */
   var minZ=parseFloat(map.getAttribute('data-minzoom'));if(!(minZ>0))minZ=1;
-  var maxZ=4,z=1,ox=0,oy=0,dragging=false,lastX=0,lastY=0,lastDist=0,inner=null,moved=false,sx=0,sy=0;
+  var maxZ=4,z=1,ox=0,oy=0,lastDist=0,inner=null,sx=0,sy=0;
+  var mapW=0,mapH=0,innerW=0,innerH=0,zBand='',raf=0,dirty=0,dragging=false;
+  var wrap=map.closest('.myth-map-wrap')||map.parentElement;
   var bg=map.querySelector('.myth-map__bg')||map.querySelector('.myth-map__svg');
   var pins=map.querySelector('.myth-map__pins');
   var regions=Q('.myth-region',map);
   var zooms=Q('[data-zm]',map);
+  var dock=map.querySelector('[data-map-dock]');
+  var dockTitle=map.querySelector('[data-map-dock-title]');
+  var dockNote=map.querySelector('[data-map-dock-note]');
+  var dockEra=map.querySelector('[data-map-dock-era]');
+  var dockOpen=map.querySelector('[data-map-dock-open]');
+  var dockClear=map.querySelector('[data-map-dock-clear]');
+  var eraBtns=Q('.myth-map__era',map);
+  var places=wrap?wrap.querySelector('.myth-map__places'):null;
+  var legend=wrap?Q('.myth-map__legend li',wrap):[];
+  var eraLabels={};
+  eraBtns.forEach(function(b){if(b.dataset.era&&b.dataset.era!=='all')eraLabels[b.dataset.era]=b.textContent.trim()});
   inner=document.createElement('div');inner.className='myth-map__inner';
   if(bg)inner.appendChild(bg);
   regions.forEach(function(rg){inner.appendChild(rg)});
   if(pins)inner.appendChild(pins);
   map.insertBefore(inner,map.querySelector('.myth-map__ctrl'));
   function canPan(){return z>1.001}
+  function measure(){
+    mapW=map.clientWidth;mapH=map.clientHeight;
+    innerW=inner.offsetWidth||mapW;innerH=inner.offsetHeight||mapH;
+  }
   function fit(){
     var nw=0,nh=0,tag=bg?bg.tagName.toLowerCase():'';
     if(tag==='img'){nw=bg.naturalWidth;nh=bg.naturalHeight}
@@ -351,16 +379,70 @@ Q('.myth-map').forEach(function(map){
     var ar=nw/nh,cw=map.clientWidth,ch=map.clientHeight,w=cw,h=w/ar;
     if(h>ch){h=ch;w=h*ar}
     inner.style.width=w+'px';inner.style.height=h+'px';
+    measure();
   }
-  /* --izr keeps hover cards the same on-screen size at every zoom */
-  function band(){map.setAttribute('data-zband',z<0.85?'far':(z>1.6?'near':'mid'))}
+  /* --izr keeps hover cards the same on-screen size at every zoom.
+     Pan frames only write the transform; chrome/band sync runs on settle. */
+  function band(){
+    var b=z<0.85?'far':(z>1.6?'near':'mid');
+    if(b!==zBand){zBand=b;map.setAttribute('data-zband',b)}
+  }
   function syncCtrl(){zooms.forEach(function(b){var v=+b.dataset.zm;
     b.disabled=v===0?z<=1.001&&ox===0&&oy===0:(v<0?z<=minZ+0.001:z>=maxZ-0.001)})}
-  function apply(){clamp();inner.style.transform='translate('+ox+'px,'+oy+'px) scale('+z+')';
-    map.style.setProperty('--iz',z);map.style.setProperty('--izr',1/z);band();
-    map.classList.toggle('myth-map--fixed',!canPan());syncCtrl()}
-  function clamp(){if(!canPan()){ox=0;oy=0;return}var mw=map.clientWidth*(z-1)/2,mh=map.clientHeight*(z-1)/2;
-    ox=Math.max(-mw,Math.min(mw,ox));oy=Math.max(-mh,Math.min(mh,oy))}
+  function clamp(){
+    if(!canPan()){ox=0;oy=0;return}
+    if(!mapW)measure();
+    var mw=mapW*(z-1)/2,mh=mapH*(z-1)/2;
+    ox=Math.max(-mw,Math.min(mw,ox));oy=Math.max(-mh,Math.min(mh,oy));
+  }
+  function paint(){
+    clamp();
+    inner.style.transform='translate3d('+ox+'px,'+oy+'px,0) scale('+z+')';
+  }
+  function settle(){
+    paint();
+    map.style.setProperty('--iz',z);
+    map.style.setProperty('--izr',1/z);
+    band();
+    map.classList.toggle('myth-map--fixed',!canPan());
+    syncCtrl();
+  }
+  function apply(){settle()}
+  function schedule(full){
+    dirty|=full?2:1;
+    if(raf)return;
+    raf=requestAnimationFrame(function(){
+      raf=0;
+      var want=dirty;dirty=0;
+      if(want&2)settle();else paint();
+    });
+  }
+  function setDragging(on){
+    dragging=!!on;
+    map.classList.toggle('myth-map--drag',dragging);
+    if(!dragging)schedule(2);
+  }
+  map._mapPan=function(dx,dy){ox+=dx;oy+=dy;schedule(0)};
+  map._mapPanEnd=function(){setDragging(false)};
+  /* Centre a map % point at a neighbour-friendly zoom (not max tight). */
+  function goTo(fx,fy,kind){
+    fx=Math.max(0,Math.min(100,fx))/100;fy=Math.max(0,Math.min(100,fy))/100;
+    var target=kind==='region'?1.35:1.55;
+    target=Math.max(minZ,Math.min(maxZ,target));
+    z=target;
+    if(!innerW)measure();
+    ox=-(fx-0.5)*innerW*z;oy=-(fy-0.5)*innerH*z;settle();
+  }
+  function pointOf(el){
+    if(!el)return null;
+    if(el.classList.contains('myth-pin')){
+      var x=parseFloat(el.style.left),y=parseFloat(el.style.top);
+      if(isFinite(x)&&isFinite(y))return{x:x,y:y,kind:'pin'};
+    }
+    var hx=parseFloat(el.style.getPropertyValue('--hx')),hy=parseFloat(el.style.getPropertyValue('--hy'));
+    if(isFinite(hx)&&isFinite(hy))return{x:hx,y:hy,kind:'region'};
+    return null;
+  }
   var prePrint={z:1,ox:0,oy:0};
   function mapPrintOn(){prePrint={z:z,ox:ox,oy:oy};z=1;ox=0;oy=0;apply()}
   function mapPrintOff(){z=prePrint.z;ox=prePrint.ox;oy=prePrint.oy;apply()}
@@ -368,33 +450,105 @@ Q('.myth-map').forEach(function(map){
   if(window.matchMedia){var mpm=matchMedia('print');
    if(mpm.addEventListener)mpm.addEventListener('change',function(e){e.matches?mapPrintOn():mapPrintOff()});
    else if(mpm.addListener)mpm.addListener(function(e){e.matches?mapPrintOn():mapPrintOff()})}
-  zooms.forEach(function(b){b.onclick=function(){var v=+b.dataset.zm;if(v===0){z=1;ox=0;oy=0}else{z=Math.max(minZ,Math.min(maxZ,z+v*0.4))}apply()}});
-  map.addEventListener('wheel',function(e){e.preventDefault();z=Math.max(minZ,Math.min(maxZ,z-e.deltaY*0.001));apply()},{passive:false});
-  map.addEventListener('mousedown',function(e){if(!canPan())return;sx=e.clientX;sy=e.clientY;moved=false;if(e.target.closest('.myth-pin,.myth-map__zoom'))return;dragging=true;lastX=e.clientX;lastY=e.clientY;e.preventDefault()});
-  document.addEventListener('mousemove',function(e){if(!dragging)return;if(Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)>6)moved=true;ox+=e.clientX-lastX;oy+=e.clientY-lastY;lastX=e.clientX;lastY=e.clientY;apply()});
-  document.addEventListener('mouseup',function(){dragging=false});
-  map.addEventListener('click',function(e){if(moved){e.preventDefault();e.stopPropagation();moved=false}},true);
-  map.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;moved=false;if(e.touches.length===2){lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY)}else if(e.touches.length===1){lastX=e.touches[0].clientX;lastY=e.touches[0].clientY}},{passive:true});
-  map.addEventListener('touchmove',function(e){if(Math.abs(e.touches[0].clientX-sx)+Math.abs(e.touches[0].clientY-sy)>8)moved=true;
-    if(e.touches.length===2){var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);z=Math.max(minZ,Math.min(maxZ,z*(d/lastDist)));lastDist=d;apply()}
-    else if(e.touches.length===1&&canPan()){ox+=e.touches[0].clientX-lastX;oy+=e.touches[0].clientY-lastY;lastX=e.touches[0].clientX;lastY=e.touches[0].clientY;apply()}
-    e.preventDefault()},{passive:false});
-  /* Pin tooltip edge-fitting: slide sideways to stay in the frame, and open below
-     the pin when the frame's top edge would cut the card off */
+  zooms.forEach(function(b){b.onclick=function(){var v=+b.dataset.zm;if(v===0){z=1;ox=0;oy=0}else{z=Math.max(minZ,Math.min(maxZ,z+v*0.4))}settle()}});
+  var wheelT=0;
+  map.addEventListener('wheel',function(e){
+    e.preventDefault();
+    z=Math.max(minZ,Math.min(maxZ,z-e.deltaY*0.001));
+    schedule(1);
+    clearTimeout(wheelT);wheelT=setTimeout(function(){schedule(2)},80);
+  },{passive:false});
+  map.addEventListener('mousedown',function(e){
+    if(e.target.closest('.myth-pin,.myth-region__hit,.myth-map__zoom,.myth-map__era,.myth-map__dock'))return;
+    if(!canPan())return;dragMoved=false;dragStart.x=sx=e.clientX;dragStart.y=sy=e.clientY;
+    dragMap=map;dragLast.x=e.clientX;dragLast.y=e.clientY;setDragging(true);e.preventDefault()});
+  map.addEventListener('click',function(e){if(dragMoved){e.preventDefault();e.stopPropagation();dragMoved=false}},true);
+  map.addEventListener('touchstart',function(e){
+    sx=e.touches[0].clientX;sy=e.touches[0].clientY;dragMoved=false;
+    if(e.touches.length===2){lastDist=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);setDragging(true)}
+    else if(e.touches.length===1){dragLast.x=e.touches[0].clientX;dragLast.y=e.touches[0].clientY;if(canPan())setDragging(true)}
+  },{passive:true});
+  map.addEventListener('touchmove',function(e){
+    if(Math.abs(e.touches[0].clientX-sx)+Math.abs(e.touches[0].clientY-sy)>8)dragMoved=true;
+    if(e.touches.length===2){
+      var d=Math.hypot(e.touches[0].clientX-e.touches[1].clientX,e.touches[0].clientY-e.touches[1].clientY);
+      z=Math.max(minZ,Math.min(maxZ,z*(d/lastDist)));lastDist=d;schedule(1);
+    }else if(e.touches.length===1&&canPan()){
+      ox+=e.touches[0].clientX-dragLast.x;oy+=e.touches[0].clientY-dragLast.y;
+      dragLast.x=e.touches[0].clientX;dragLast.y=e.touches[0].clientY;schedule(0);
+    }
+    e.preventDefault();
+  },{passive:false});
+  map.addEventListener('touchend',function(){setDragging(false)});
+  map.addEventListener('touchcancel',function(){setDragging(false)});
+
+  function setEra(era){
+    era=era||'all';
+    map.setAttribute('data-era',era);
+    eraBtns.forEach(function(b){b.classList.toggle('is-on',b.dataset.era===era)});
+    function vis(el){var e=el.getAttribute('data-era')||'';return era==='all'||!e||e===era}
+    Q('.myth-region,.myth-pin',map).forEach(function(el){el.hidden=!vis(el)});
+    legend.forEach(function(li){li.hidden=!vis(li)});
+  }
+  eraBtns.forEach(function(b){b.addEventListener('click',function(){setEra(b.dataset.era)})});
+
+  function itemCopy(el){
+    var kind=el.getAttribute('data-kind')||'pin';
+    var mid=el.getAttribute('data-mid')||'';
+    var era=el.getAttribute('data-era')||'';
+    var label='',note='';
+    if(kind==='region'){
+      var pop=el.querySelector('.myth-region__pop');
+      if(pop){var b=pop.querySelector('b');var s=pop.querySelector('span');label=b?b.textContent.trim():'';note=s?s.textContent.trim():''}
+    }else{
+      label=(el.querySelector('.myth-pin__label')||{}).textContent||'';
+      note=(el.querySelector('.myth-pin__pop')||{}).textContent||'';
+      label=String(label).trim();note=String(note).trim();
+    }
+    if(!label)label=el.getAttribute('aria-label')||mid;
+    var href=el.tagName==='A'?el.getAttribute('href')||'':'';
+    return{el:el,kind:kind,mid:mid,era:era,label:label,note:note,href:href};
+  }
+  function closeDock(){
+    if(!dock)return;dock.hidden=true;map.classList.remove('myth-map--dock');
+    Q('.myth-pin.is-focus,.myth-region.is-focus',map).forEach(function(el){el.classList.remove('is-focus')});
+  }
+  function openDock(el){
+    if(!dock||!el)return;
+    var info=itemCopy(el);
+    dockTitle.textContent=info.label||'';
+    dockNote.textContent=info.note||'';
+    dockNote.hidden=!info.note;
+    if(info.era&&eraLabels[info.era]){dockEra.hidden=false;dockEra.textContent=eraLabels[info.era]}
+    else{dockEra.hidden=true;dockEra.textContent=''}
+    if(info.href){dockOpen.hidden=false;dockOpen.href=info.href}else{dockOpen.hidden=true;dockOpen.removeAttribute('href')}
+    Q('.myth-pin.is-focus,.myth-region.is-focus',map).forEach(function(n){n.classList.remove('is-focus')});
+    el.classList.add('is-focus');
+    dock.hidden=false;map.classList.add('myth-map--dock');
+    if(info.mid){try{history.replaceState(null,'','#pin-'+info.mid)}catch(err){}}
+  }
+  if(dockClear)dockClear.addEventListener('click',function(){closeDock();try{history.replaceState(null,'',location.pathname+location.search)}catch(err){}});
+
+  function onItemActivate(e){
+    var el=e.target.closest('.myth-pin,.myth-region');
+    if(!el||!map.contains(el))return;
+    if(dragMoved)return;
+    e.preventDefault();
+    flyTo(el);
+  }
+  map.addEventListener('click',onItemActivate);
+  /* Pin tooltip edge-fitting */
   Q('.myth-pin',map).forEach(function(pin){var pop=pin.querySelector('.myth-pin__pop');if(!pop)return;
-   function fit(){pop.style.setProperty('--nx','0px');pin.classList.remove('myth-pin--below');
+   function fitPop(){pop.style.setProperty('--nx','0px');pin.classList.remove('myth-pin--below');
     var mr=map.getBoundingClientRect(),r=pop.getBoundingClientRect(),dx=0;
     if(r.top<mr.top+8){pin.classList.add('myth-pin--below');r=pop.getBoundingClientRect()}
     if(r.left<mr.left+8)dx=mr.left+8-r.left;else if(r.right>mr.right-8)dx=mr.right-8-r.right;pop.style.setProperty('--nx',dx/z+'px')}
-   pin.addEventListener('mouseenter',fit);pin.addEventListener('focusin',fit)});
-  /* Region descriptions. Each region is its own stacking layer, so a card drawn
-     inside one sits under every border painted after it. One shared card above
-     all regions and pins carries the hovered region's text instead; it takes no
-     pointer events, so the pins under it stay hoverable. */
+   pin.addEventListener('mouseenter',fitPop);pin.addEventListener('focusin',fitPop)});
+  /* Shared region hover tip above every border */
   var tip=document.createElement('div');tip.className='myth-region__pop myth-map__tip';tip.setAttribute('aria-hidden','true');
   inner.appendChild(tip);map.classList.add('myth-map--tip');
   Q('.myth-region',map).forEach(function(rg){var pop=rg.querySelector('.myth-region__pop'),hit=rg.querySelector('.myth-region__hit');if(!pop||!hit)return;
-   function show(){tip.innerHTML=pop.innerHTML;tip.style.setProperty('--hx',rg.style.getPropertyValue('--hx'));
+   function show(){if(rg.hidden)return;tip.innerHTML=pop.innerHTML;tip.style.setProperty('--hx',rg.style.getPropertyValue('--hx'));
     tip.style.setProperty('--hy',rg.style.getPropertyValue('--hy'));tip.style.setProperty('--pc',getComputedStyle(rg).getPropertyValue('--pc'));
     tip.style.setProperty('--nx','0px');tip.style.setProperty('--ny','0px');tip.classList.add('on');
     var r=tip.getBoundingClientRect(),mr=map.getBoundingClientRect(),dx=0,dy=0;
@@ -404,11 +558,59 @@ Q('.myth-map').forEach(function(map){
    function hide(){tip.classList.remove('on')}
    hit.addEventListener('mouseenter',show);hit.addEventListener('mouseleave',hide);
    rg.addEventListener('focusin',show);rg.addEventListener('focusout',hide)});
+
+  function flyTo(el){
+    if(!el)return;
+    if(el.hidden){
+      var era=el.getAttribute('data-era')||'';
+      setEra(era||'all');
+    }
+    var pt=pointOf(el);
+    if(pt)goTo(pt.x,pt.y,pt.kind);
+    openDock(el);
+    legend.forEach(function(li){
+      var on=li.getAttribute('data-mid')===(el.getAttribute('data-mid')||'');
+      var b=li.querySelector('.myth-map__leg-btn');if(b)b.classList.toggle('is-on',on);
+    });
+    try{el.focus({preventScroll:true})}catch(err){}
+  }
+  legend.forEach(function(li){
+    var btn=li.querySelector('.myth-map__leg-btn');if(!btn)return;
+    btn.addEventListener('click',function(){
+      var mid=li.getAttribute('data-mid');if(!mid)return;
+      var el=map.querySelector('[data-mid="'+CSS.escape(mid)+'"]')||map.querySelector('[data-mid="'+mid+'"]');
+      if(!el)return;
+      if(places&&!places.open)places.open=true;
+      flyTo(el);
+    });
+  });
+
+  function focusHash(){
+    var h=location.hash||'';
+    var m=/^#pin-(.+)$/.exec(h);if(!m)return;
+    var el=map.querySelector('[data-mid="'+CSS.escape(m[1])+'"]')||map.querySelector('[data-mid="'+m[1]+'"]');
+    if(!el)return;
+    var era=el.getAttribute('data-era')||'';
+    if(era)setEra(era);else setEra('all');
+    if(places)places.open=true;
+    flyTo(el);
+  }
+
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){map.classList.toggle('myth-map--off',!e.isIntersecting)});
+    },{rootMargin:'60px',threshold:0.01});
+    io.observe(map);
+  }
+
   fit();
   if(bg&&bg.tagName.toLowerCase()==='img'){if(bg.complete&&bg.naturalWidth)fit();else bg.addEventListener('load',fit)}
-  var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(fit,120)});
-  if(window.ResizeObserver){new ResizeObserver(fit).observe(map)}/* refit if shown from a hidden tab */
-  apply();
+  var rt;window.addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(function(){fit();settle()},120)});
+  if(window.ResizeObserver){new ResizeObserver(function(){fit();settle()}).observe(map)}
+  setEra(map.getAttribute('data-era')||'all');
+  settle();
+  focusHash();
+  window.addEventListener('hashchange',focusHash);
 });
 })();
 

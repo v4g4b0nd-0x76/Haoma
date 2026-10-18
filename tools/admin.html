@@ -1074,9 +1074,9 @@ function parseMap(txt){
  const h=/\{\{<\s*map\b([\s\S]*?)>\}\}/.exec(txt),A=mattrs(h?h[1]:''),st=h?h[0].length:0;
  const cl=txt.indexOf('{{<',st),body=txt.slice(st,cl<0?txt.length:cl),pins=[],regions=[];
  body.split('\n').forEach(l=>{const t=l.trim();
-  if(/^pin\b/.test(t)){const a=mattrs(t);pins.push({x:parseFloat(a.x)||50,y:parseFloat(a.y)||50,label:a.label||'',note:a.note||'',href:a.href||'',color:a.color||'gold'})}
-  else if(/^region\b/.test(t)){const a=mattrs(t);regions.push({pts:(a.points||'').split(/\s+/).map(s=>s.split(',').map(Number)).filter(p=>p.length===2&&isFinite(p[0])&&isFinite(p[1])),label:a.label||'',note:a.note||'',href:a.href||'',color:a.color||'gold'})}});
- return{id:A.id||'',src:A.src||'',width:A.width||'100%',height:A.height||'480px',theme:A.theme||'dark',route:A.route||'',pulse:A.pulse!=='false',caption:A.caption||'',pins,regions};
+  if(/^pin\b/.test(t)){const a=mattrs(t);pins.push({x:parseFloat(a.x)||50,y:parseFloat(a.y)||50,label:a.label||'',note:a.note||'',href:a.href||'',color:a.color||'gold',era:a.era||'',mid:a.id||''})}
+  else if(/^region\b/.test(t)){const a=mattrs(t);regions.push({pts:(a.points||'').split(/\s+/).map(s=>s.split(',').map(Number)).filter(p=>p.length===2&&isFinite(p[0])&&isFinite(p[1])),label:a.label||'',note:a.note||'',href:a.href||'',color:a.color||'gold',era:a.era||'',mid:a.id||''})}});
+ return{id:A.id||'',src:A.src||'',width:A.width||'100%',height:A.height||'480px',theme:A.theme||'dark',route:A.route||'',pulse:A.pulse!=='false',caption:A.caption||'',eras:A.eras||'',pins,regions};
 }
 async function mapDims(src){
  if(!src)return{w:800,h:480};
@@ -1091,7 +1091,7 @@ function bMap(env){
  /* every map shortcode already on this page */
  const blocks=[];{const re=/\{\{<\s*map\b[\s\S]*?\{\{<\s*\/map\s*>\}\}/g;let g;while((g=re.exec(ta.value)))blocks.push({s:g.index,e:g.index+g[0].length,t:g[0]})}
  const pos=ta.selectionStart;let idx=blocks.findIndex(b=>pos>=b.s&&pos<=b.e);
- const blank=()=>({id:'',src:'',width:'100%',height:'480px',theme:'dark',route:'',pulse:true,caption:'',pins:[],regions:[]});
+ const blank=()=>({id:'',src:'',width:'100%',height:'480px',theme:'dark',route:'',pulse:true,caption:'',eras:'',pins:[],regions:[]});
  let S=idx<0?blank():parseMap(blocks[idx].t);
  let mode='pin',sel=null,draft=null,lastAdd=0,AR=5/3,langFA=/^content\/fa\//.test(cur||'');
  /* ready-made artwork, grouped into EN / FA pairs */
@@ -1125,7 +1125,9 @@ function bMap(env){
   <input type="text" id="mp_rc" placeholder="58,54 54,47 28,38" style="margin-top:6px;font-family:ui-monospace,Menlo,monospace;display:${ROV==='custom'?'block':'none'}">
   <label class="lab">Caption</label><input type="text" id="mp_cap" placeholder="What this map shows" value="${esc(S.caption)}">
   <label class="lab">Map id</label><input type="text" id="mp_id" placeholder="generated automatically" value="${esc(S.id)}">
-  <datalist id="mp_pages">${pages.map(p=>`<option value="${esc(p)}">`).join('')}</datalist>`;
+  <label class="lab">Era order (optional)</label><input type="text" id="mp_eras" placeholder="lands,achaemenid,parthian,myth" value="${esc(S.eras||'')}">
+  <datalist id="mp_pages">${pages.map(p=>`<option value="${esc(p)}">`).join('')}</datalist>
+  <datalist id="mp_eras_list"><option value="lands"><option value="achaemenid"><option value="parthian"><option value="assyrian"><option value="myth"></datalist>`;
  const HTML=`
   ${blocks.length?`<div class="row" style="margin:0 0 12px;gap:8px"><label style="margin:0;white-space:nowrap">Map on this page</label><select id="mp_which" style="flex:1"><option value="-1">＋ New map</option>${blocks.map((b,i)=>{const a=parseMap(b.t);return `<option value="${i}"${i===idx?' selected':''}>${esc(a.id||'map #'+(i+1))} — ${a.pins.length} pin(s), ${a.regions.length} region(s)</option>`}).join('')}</select></div>`:''}
   <div class="ms-grid">
@@ -1209,7 +1211,7 @@ function bMap(env){
    if(pn){sel={t:'pin',i:+pn.dataset.i};mode='pin';draft=null;dg={k:'p',i:+pn.dataset.i};cv.setPointerCapture(e.pointerId);redraw();return}
    const p=at(e);
    if(mode==='region'){if(!draft)draft=[];draft.push(p);lastAdd=Date.now();sel=null;redraw()}
-   else{S.pins.push({x:p[0],y:p[1],label:'',note:'',href:'',color:'gold'});sel={t:'pin',i:S.pins.length-1};redraw()}
+   else{S.pins.push({x:p[0],y:p[1],label:'',note:'',href:'',color:'gold',era:'',mid:''});sel={t:'pin',i:S.pins.length-1};redraw()}
   });
   cv.addEventListener('pointermove',e=>{
    if(dg){const p=at(e);
@@ -1225,16 +1227,18 @@ function bMap(env){
  }
  function finish(){
   if(!draft||draft.length<3){stErr('A border needs at least 3 corners.');return}
-  S.regions.push({pts:draft.map(p=>[p[0],p[1]]),label:'',note:'',href:'',color:'gold'});
+  S.regions.push({pts:draft.map(p=>[p[0],p[1]]),label:'',note:'',href:'',color:'gold',era:'',mid:''});
   sel={t:'reg',i:S.regions.length-1};draft=null;mode='region';redraw();
- }
+}
 
  /* ---------- panels ---------- */
  const sw=o=>`<div class="msw">${Object.keys(MAPCOL).map(c=>`<button type="button" class="${o.color===c?'on':''}" data-c="${c}" style="--c:${MAPCOL[c]}" title="${c}"></button>`).join('')}</div>`;
  const formFor=(o,t)=>`<div class="mform">
   <label>Label</label><input type="text" data-f="label" value="${esc(o.label)}" placeholder="${t==='pin'?'Place name':'Region name'}">
-  <label>Description shown on hover</label><input type="text" data-f="note" value="${esc(o.note)}" placeholder="What happens there">
+  <label>Description (hover + dock)</label><input type="text" data-f="note" value="${esc(o.note)}" placeholder="What happens there">
   <label>Link (optional)</label><input type="text" data-f="href" list="mp_pages" value="${esc(o.href)}" placeholder="/cultures/iranian/">
+  <div class="two" style="gap:10px"><div><label>Era (optional)</label><input type="text" data-f="era" list="mp_eras_list" value="${esc(o.era||'')}" placeholder="lands"></div>
+  <div><label>Id (deep link)</label><input type="text" data-f="mid" value="${esc(o.mid||'')}" placeholder="persepolis"></div></div>
   <label>Colour</label>${sw(o)}
   ${t==='pin'?`<label>Position on the map</label><div class="row" style="gap:6px;flex-wrap:wrap"><span class="mp-read" id="mp_pos">${o.x.toFixed(1)}%, ${o.y.toFixed(1)}%</span><button type="button" class="mp-posbtn" data-nud="x-">−X</button><button type="button" class="mp-posbtn" data-nud="x+">+X</button><button type="button" class="mp-posbtn" data-nud="y-">−Y</button><button type="button" class="mp-posbtn" data-nud="y+">+Y</button></div>`
    :`<label>Corners</label><div class="row" style="gap:6px;flex-wrap:wrap"><span class="mp-read">${o.pts.length} corners (need 3+)</span><button type="button" class="mp-posbtn" data-addv="1">＋ Corner</button></div>`}
@@ -1264,7 +1268,7 @@ function bMap(env){
   box.querySelectorAll('[data-nud]').forEach(x=>x.onclick=()=>{const o=curObj();if(!o)return;const d=x.dataset.nud,s=d[1]==='+'?1:-1;
    if(d[0]==='x')o.x=clamp(o.x+s);else o.y=clamp(o.y+s);syncGeom()});
   box.querySelectorAll('[data-addv]').forEach(x=>x.onclick=()=>{const o=curObj();if(!o)return;o.pts.push([50,50]);redraw()});
-  const ap=q('#mp_ap');if(ap)ap.onclick=()=>{S.pins.push({x:50,y:50,label:'',note:'',href:'',color:'gold'});sel={t:'pin',i:S.pins.length-1};mode='pin';redraw()};
+  const ap=q('#mp_ap');if(ap)ap.onclick=()=>{S.pins.push({x:50,y:50,label:'',note:'',href:'',color:'gold',era:'',mid:''});sel={t:'pin',i:S.pins.length-1};mode='pin';redraw()};
   const ag=q('#mp_ag');if(ag)ag.onclick=startDraw;
  }
  function drawArt(){
@@ -1301,7 +1305,7 @@ function bMap(env){
  const startDraw=()=>{draft=[];sel=null;mode='region';redraw()};
  function syncSet(){
   q('#mp_h').value=S.height;q('#mp_w').value=S.width;q('#mp_t').value=S.theme;q('#mp_pu').value=S.pulse?'1':'0';
-  q('#mp_cap').value=S.caption;q('#mp_id').value=S.id;
+  q('#mp_cap').value=S.caption;q('#mp_id').value=S.id;const er=q('#mp_eras');if(er)er.value=S.eras||'';
   const v=!S.route?'none':S.route==='auto'?'auto':'custom',rc=q('#mp_rc');
   q('#mp_ro').value=v;rc.style.display=v==='custom'?'block':'none';rc.value=v==='custom'?S.route:'';
   const lg=q('#mp_lang');if(lg)lg.value=langFA?'fa':'en';
@@ -1319,13 +1323,14 @@ function bMap(env){
   if(S.theme!=='dark')a+=` theme="${S.theme}"`;
   if(S.route==='auto')a+=' route="auto"';else if(S.route)a+=` route="${S.route}"`;
   if(S.caption)a+=` caption="${qv(S.caption)}"`;
+  if(S.eras)a+=` eras="${qv(S.eras)}"`;
   if(!S.pulse)a+=' pulse="false"';
   const body=[];
   S.regions.forEach(R=>{if(R.pts.length<3)return;
    let l=`region points="${R.pts.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')}" label="${qv(R.label||'Region')}"`;
-   if(R.note)l+=` note="${qv(R.note)}"`;if(R.href)l+=` href="${qv(R.href)}"`;if(R.color!=='gold')l+=` color="${R.color}"`;body.push(l+' /')});
+   if(R.note)l+=` note="${qv(R.note)}"`;if(R.href)l+=` href="${qv(R.href)}"`;if(R.era)l+=` era="${qv(R.era)}"`;if(R.mid)l+=` id="${qv(R.mid)}"`;if(R.color!=='gold')l+=` color="${R.color}"`;body.push(l+' /')});
   S.pins.forEach(P=>{let l=`pin x="${P.x.toFixed(1)}%" y="${P.y.toFixed(1)}%" label="${qv(P.label||'Place')}"`;
-   if(P.note)l+=` note="${qv(P.note)}"`;if(P.href)l+=` href="${qv(P.href)}"`;if(P.color!=='gold')l+=` color="${P.color}"`;body.push(l+' /')});
+   if(P.note)l+=` note="${qv(P.note)}"`;if(P.href)l+=` href="${qv(P.href)}"`;if(P.era)l+=` era="${qv(P.era)}"`;if(P.mid)l+=` id="${qv(P.mid)}"`;if(P.color!=='gold')l+=` color="${P.color}"`;body.push(l+' /')});
   const out=`{{< map ${a} >}}\n${body.join('\n')}\n{{< /map >}}`;
   if(idx>=0){ta.setRangeText(out,blocks[idx].s,blocks[idx].e,'end');ta.focus();ins('')}
   else ins('\n'+out+'\n');
@@ -1353,6 +1358,7 @@ function bMap(env){
  q('#mp_rc').oninput=e=>{S.route=e.target.value;syncGeom()};
  q('#mp_cap').oninput=e=>S.caption=e.target.value;
  q('#mp_id').oninput=e=>S.id=e.target.value;
+ const erasEl=q('#mp_eras');if(erasEl)erasEl.oninput=e=>S.eras=e.target.value;
  const wsel=q('#mp_which');
  if(wsel)wsel.onchange=()=>{idx=+wsel.value;S=idx<0?blank():parseMap(blocks[idx].t);sel=null;draft=null;mode='pin';syncSet();redraw();refit()};
  const kd=e=>{if(!document.body.contains(m)){document.removeEventListener('keydown',kd);return}

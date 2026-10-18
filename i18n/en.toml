@@ -77,6 +77,26 @@
   other = "Map locations"
 [mapControls]
   other = "Map controls"
+[mapEras]
+  other = "Map eras"
+[mapEraAll]
+  other = "All"
+[mapEra_lands]
+  other = "Lands"
+[mapEra_achaemenid]
+  other = "Achaemenid"
+[mapEra_parthian]
+  other = "Parthian"
+[mapEra_assyrian]
+  other = "Assyrian"
+[mapEra_myth]
+  other = "Myth"
+[mapDockClose]
+  other = "Close"
+[mapDockOpen]
+  other = "Open page"
+[mapLegend]
+  other = "Places on this map"
 [zoomIn]
   other = "Zoom in"
 [zoomOut]

@@ -23,24 +23,21 @@
     minzoom — lowest zoom (default "1"). At 1 the map cannot zoom out past fit, which
               keeps regional maps from letterboxing; pass a value below 1 only when the
               overview should pull farther back. Pan is off until the view is zoomed in.
+    eras    — optional comma list ordering era layers, e.g. eras="lands,achaemenid,parthian,myth"
+              (discovered from body when omitted).
 
   Pin lines (inside the shortcode body):
-    pin x="25%" y="60%" label="Place name" note="Hover text" color="gold|fire|blood|teal|silver" href="/optional/page/" /
-    label is optional; note shows on hover/focus.
-    href is optional: when present the pin becomes a link to that page (for a fuller
-    description elsewhere). Internal paths get the current-language prefix applied
-    (/cultures/x/ -> /fa/cultures/x/ on Farsi pages); http(s)://, mailto: and #anchor
-    values pass through untouched.
+    pin x="25%" y="60%" label="Place name" note="Hover text" color="gold|fire|blood|teal|silver"
+        href="/optional/page/" era="myth" id="damavand" /
+    label is optional; note shows on hover/focus and in the click dock.
+    href is optional: dock "Open" links there (language-prefixed for internal paths).
+    era / id optional — era filters with the era strip; id enables #pin-<id> deep links.
 
   Region lines (inside the shortcode body, before the pins):
     region points="49.7,35.9 52.8,37 52.8,30 46,28" label="Mesopotamia" note="Hover text"
-            color="gold" href="/cultures/mesopotamian/" /
-    Draws the border of a country or civilization: a dashed outline you can hover or
-    focus for the description, and (when href is there) click through to that culture's
-    own page. points are "x,y" pairs in % of the map box, three or more, in order.
-    label is the region's name (it sits in the tooltip as a heading); note is the
-    description. Without href the region is hover/focus only. href is language-prefixed
-    exactly like a pin's.
+            color="gold" href="/cultures/mesopotamian/" era="lands" id="mesopotamia" /
+    Draws the border of a country, civilization, or reign. points are "x,y" pairs in %
+    of the map box, three or more, in order. Generate them with tools/regions.py.
 
   Coordinates are % from the top-left of the map image.
   No external JS/CSS dependencies.
@@ -58,14 +55,48 @@
 {{- $route   := .Get "route"   | default ""  | printf "%v" -}}
 {{- $pulse   := .Get "pulse"   | default "true" | printf "%v" -}}
 {{- $minzoom := .Get "minzoom" | default "1" | printf "%v" -}}
+{{- $erasIn  := .Get "eras"    | default ""  | printf "%v" -}}
 {{- /* Regional maps stay at fit: zooming out only letterboxes. The world overview
        may pass minzoom="0.4" if a wider pull-back is wanted. */ -}}
 {{- if not (findRE `^[0-9]+(\.[0-9]+)?$` $minzoom) }}{{ $minzoom = "1" }}{{ end -}}
 {{- $pts     := slice -}}
 {{- $inner   := .Inner -}}
+{{- $eraSeen := slice -}}
+{{- $legend  := slice -}}
+{{- range split $inner "\n" -}}
+  {{- $line := trim . " \t\r" -}}
+  {{- if or (hasPrefix $line "pin ") (hasPrefix $line "region ") -}}
+    {{- $elab := "" -}}{{- $enote := "" -}}{{- $eera := "" -}}{{- $eid := "" -}}
+    {{- range findRE `[a-z]+=".+?"` $line -}}
+      {{- $kv := split . "=" -}}
+      {{- $key := printf "%v" (index $kv 0) -}}
+      {{- $val := trim (index $kv 1) "\"" -}}
+      {{- if eq $key "label" -}}{{- $elab = $val -}}{{- end -}}
+      {{- if eq $key "note"  -}}{{- $enote = $val -}}{{- end -}}
+      {{- if eq $key "era"   -}}{{- $eera = $val -}}{{- end -}}
+      {{- if eq $key "id"    -}}{{- $eid = $val -}}{{- end -}}
+    {{- end -}}
+    {{- if and $eera (not (in $eraSeen $eera)) -}}{{- $eraSeen = $eraSeen | append $eera -}}{{- end -}}
+    {{- if or $elab $enote -}}
+      {{- $kind := cond (hasPrefix $line "pin ") "pin" "region" -}}
+      {{- if not $eid -}}{{- $eid = $elab | urlize -}}{{- end -}}
+      {{- $legend = $legend | append (dict "kind" $kind "id" $eid "label" $elab "note" $enote "era" $eera) -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $eras := slice -}}
+{{- if $erasIn -}}
+  {{- range split $erasIn "," -}}
+    {{- $e := trim . " \t" -}}
+    {{- if and $e (in $eraSeen $e) -}}{{- $eras = $eras | append $e -}}{{- end -}}
+  {{- end -}}
+  {{- range $eraSeen -}}{{- if not (in $eras .) -}}{{- $eras = $eras | append . -}}{{- end -}}{{- end -}}
+{{- else -}}
+  {{- $eras = $eraSeen -}}
+{{- end -}}
 
 <figure class="myth-map-wrap" style="width:{{ $w }}">
-<div class="myth-map myth-map--fixed{{ if eq $theme "sepia" }} myth-map--sepia{{ end }}{{ if eq $pulse "false" }} myth-map--still{{ end }}" id="{{ $id }}" style="height:{{ $h }}" data-minzoom="{{ $minzoom }}" role="region" aria-label="{{ i18n "mapLabel" | default "Interactive myth map" }}" tabindex="0">
+<div class="myth-map myth-map--fixed{{ if eq $theme "sepia" }} myth-map--sepia{{ end }}{{ if eq $pulse "false" }} myth-map--still{{ end }}{{ if gt (len $eras) 0 }} myth-map--eras{{ end }}" id="{{ $id }}" style="height:{{ $h }}" data-minzoom="{{ $minzoom }}" data-era="all" role="region" aria-label="{{ i18n "mapLabel" | default "Interactive myth map" }}" tabindex="0">
 
   {{- if $src }}
   <img class="myth-map__bg" src="{{ $src | relURL }}" alt="" aria-hidden="true" draggable="false">
@@ -156,6 +187,8 @@
       {{- $rnote := "" -}}
       {{- $rcolor := "gold" -}}
       {{- $rhref := "" -}}
+      {{- $rera := "" -}}
+      {{- $rid := "" -}}
       {{- range findRE `[a-z]+=".+?"` $line -}}
         {{- $kv := split . "=" -}}
         {{- $key := printf "%v" (index $kv 0) -}}
@@ -165,7 +198,10 @@
         {{- if eq $key "note"   -}}{{- $rnote = $val -}}{{- end -}}
         {{- if eq $key "color"  -}}{{- $rcolor = $val -}}{{- end -}}
         {{- if eq $key "href"   -}}{{- $rhref = $val -}}{{- end -}}
+        {{- if eq $key "era"    -}}{{- $rera = $val -}}{{- end -}}
+        {{- if eq $key "id"     -}}{{- $rid = $val -}}{{- end -}}
       {{- end -}}
+      {{- if not $rid -}}{{- $rid = $rlab | urlize -}}{{- end -}}
       {{- /* parse the outline: "x,y x,y ..." in % of the map box, >= 3 points.
             Two flat parallel lists - `append` merges a nested slice, so pairs do
             not survive an `append (slice $x $y)`. */ -}}
@@ -205,12 +241,12 @@
         {{- end -}}
         {{- $rname := $rlab -}}{{- if not $rname -}}{{- $rname = $rnote -}}{{- end -}}
 {{- if $rlink }}
-<a class="myth-region myth-region--{{ $rcolor }}" style="--hx:{{ $hx }}%;--hy:{{ $hy }}%" href="{{ $rlink }}" aria-label="{{ $rname }}">
+<a class="myth-region myth-region--{{ $rcolor }}" style="--hx:{{ $hx }}%;--hy:{{ $hy }}%" href="{{ $rlink }}" id="{{ $id }}-{{ $rid }}" data-mid="{{ $rid }}" data-kind="region" data-era="{{ $rera }}" aria-label="{{ $rname }}">
   <span class="myth-region__hit" style="clip-path:polygon({{ $poly }})" aria-hidden="true"><svg class="myth-region__line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="{{ $path }}"/></svg></span>
   {{- if or $rlab $rnote }}<span class="myth-region__pop" role="tooltip">{{ if $rlab }}<b>{{ $rlab }}</b>{{ end }}{{ if $rnote }}<span>{{ $rnote }}</span>{{ end }}</span>{{ end }}
 </a>
 {{- else }}
-<span class="myth-region myth-region--{{ $rcolor }}" style="--hx:{{ $hx }}%;--hy:{{ $hy }}%" tabindex="0" role="img" aria-label="{{ $rname }}">
+<span class="myth-region myth-region--{{ $rcolor }}" style="--hx:{{ $hx }}%;--hy:{{ $hy }}%" id="{{ $id }}-{{ $rid }}" tabindex="0" role="button" data-mid="{{ $rid }}" data-kind="region" data-era="{{ $rera }}" aria-label="{{ $rname }}">
   <span class="myth-region__hit" style="clip-path:polygon({{ $poly }})" aria-hidden="true"><svg class="myth-region__line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path d="{{ $path }}"/></svg></span>
   {{- if or $rlab $rnote }}<span class="myth-region__pop" role="tooltip">{{ if $rlab }}<b>{{ $rlab }}</b>{{ end }}{{ if $rnote }}<span>{{ $rnote }}</span>{{ end }}</span>{{ end }}
 </span>
@@ -231,6 +267,8 @@
         {{- $note  := "" -}}
         {{- $color := "gold" -}}
         {{- $href  := "" -}}
+        {{- $pera  := "" -}}
+        {{- $pid   := "" -}}
         {{- range findRE `[a-z]+=".+?"` $line -}}
           {{- $kv  := split . "=" -}}
           {{- $key := printf "%v" (index $kv 0) -}}
@@ -241,7 +279,10 @@
           {{- if eq $key "note"  -}}{{- $note  = $val -}}{{- end -}}
           {{- if eq $key "color" -}}{{- $color = $val -}}{{- end -}}
           {{- if eq $key "href"  -}}{{- $href  = $val -}}{{- end -}}
+          {{- if eq $key "era"   -}}{{- $pera  = $val -}}{{- end -}}
+          {{- if eq $key "id"    -}}{{- $pid   = $val -}}{{- end -}}
         {{- end -}}
+        {{- if not $pid -}}{{- $pid = $label | urlize -}}{{- end -}}
         {{- /* optional link: internal paths are language-prefixed, absolute and
                anchor URLs pass through */ -}}
         {{- $link := "" -}}
@@ -255,14 +296,14 @@
         {{- if and $px $py -}}
           {{- if eq $route "auto" -}}{{- $pts = $pts | append (printf "%s,%s" (replace $px "%" "") (replace $py "%" "")) -}}{{- end -}}
 {{- if $link }}
-<a class="myth-pin myth-pin--{{ $color }}" style="left:{{ $px }};top:{{ $py }}" href="{{ $link }}" aria-label="{{ with $label }}{{ . }}{{ else }}{{ $note }}{{ end }}">
+<a class="myth-pin myth-pin--{{ $color }}" style="left:{{ $px }};top:{{ $py }}" href="{{ $link }}" id="{{ $id }}-{{ $pid }}" data-mid="{{ $pid }}" data-kind="pin" data-era="{{ $pera }}" aria-label="{{ with $label }}{{ . }}{{ else }}{{ $note }}{{ end }}">
   <span class="myth-pin__dot" aria-hidden="true"></span>
   <span class="myth-pin__ring" aria-hidden="true"></span>
   {{- if $label }}<span class="myth-pin__label">{{ $label }}</span>{{ end }}
   {{- if $note }}<span class="myth-pin__pop" role="tooltip">{{ $note }}</span>{{- end }}
 </a>
 {{- else }}
-<button class="myth-pin myth-pin--{{ $color }}" style="left:{{ $px }};top:{{ $py }}" aria-label="{{ with $label }}{{ . }}{{ else }}{{ $note }}{{ end }}" type="button">
+<button class="myth-pin myth-pin--{{ $color }}" style="left:{{ $px }};top:{{ $py }}" id="{{ $id }}-{{ $pid }}" data-mid="{{ $pid }}" data-kind="pin" data-era="{{ $pera }}" aria-label="{{ with $label }}{{ . }}{{ else }}{{ $note }}{{ end }}" type="button">
   <span class="myth-pin__dot" aria-hidden="true"></span>
   <span class="myth-pin__ring" aria-hidden="true"></span>
   {{- if $label }}<span class="myth-pin__label">{{ $label }}</span>{{ end }}
@@ -293,28 +334,38 @@
     <button type="button" class="myth-map__zoom" data-zm="-1" aria-label="{{ i18n "zoomOut"   | default "Zoom out"   }}">−</button>
     <button type="button" class="myth-map__zoom" data-zm="0"  aria-label="{{ i18n "zoomReset" | default "Reset view" }}">⌂</button>
   </div>
+  {{- if gt (len $eras) 0 }}
+  <div class="myth-map__eras" role="toolbar" aria-label="{{ i18n "mapEras" | default "Map eras" }}">
+    <button type="button" class="myth-map__era is-on" data-era="all">{{ i18n "mapEraAll" | default "All" }}</button>
+    {{- range $eras -}}
+      {{- $ek := . -}}
+      {{- $el := i18n (printf "mapEra_%s" $ek) | default (title $ek) -}}
+    <button type="button" class="myth-map__era" data-era="{{ $ek }}">{{ $el }}</button>
+    {{- end }}
+  </div>
+  {{- end }}
+  <aside class="myth-map__dock" data-map-dock hidden>
+    <button type="button" class="myth-map__dock-x" data-map-dock-clear aria-label="{{ i18n "mapDockClose" | default "Close" }}">×</button>
+    <p class="myth-map__dock-era" data-map-dock-era hidden></p>
+    <h3 class="myth-map__dock-title" data-map-dock-title></h3>
+    <p class="myth-map__dock-note" data-map-dock-note></p>
+    <a class="myth-map__dock-open" data-map-dock-open hidden href="#">{{ i18n "mapDockOpen" | default "Open page" }}</a>
+  </aside>
 </div>
+{{- if gt (len $legend) 0 }}
+<details class="myth-map__places">
+  <summary class="myth-map__places-btn"><span class="myth-map__places-label">{{ i18n "mapLegend" | default "Places and regions" }}</span></summary>
+  <ul class="myth-map__legend">
+  {{- range $legend }}
+    <li data-mid="{{ .id }}"{{ with .era }} data-era="{{ . }}"{{ end }}><button type="button" class="myth-map__leg-btn"><b>{{ with .label }}{{ . }}{{ else }}{{ .note }}{{ end }}</b>{{ if and .label .note }} — {{ end }}{{ with .note }}{{ . }}{{ end }}</button></li>
+  {{- end }}
+  </ul>
+</details>
+{{- end }}
 {{- /* Print-only note list: pin/region descriptions readable without hover */ -}}
-{{- $printNotes := slice -}}
-{{- range split $inner "\n" -}}
-  {{- $line := trim . " \t\r" -}}
-  {{- if or (hasPrefix $line "pin ") (hasPrefix $line "region ") -}}
-    {{- $plabel := "" -}}{{- $pnote := "" -}}
-    {{- range findRE `[a-z]+=".+?"` $line -}}
-      {{- $kv := split . "=" -}}
-      {{- $key := printf "%v" (index $kv 0) -}}
-      {{- $val := trim (index $kv 1) "\"" -}}
-      {{- if eq $key "label" -}}{{- $plabel = $val -}}{{- end -}}
-      {{- if eq $key "note"  -}}{{- $pnote  = $val -}}{{- end -}}
-    {{- end -}}
-    {{- if or $plabel $pnote -}}
-      {{- $printNotes = $printNotes | append (dict "label" $plabel "note" $pnote) -}}
-    {{- end -}}
-  {{- end -}}
-{{- end -}}
-{{- if gt (len $printNotes) 0 -}}
+{{- if gt (len $legend) 0 -}}
 <ul class="myth-map__print-notes" aria-hidden="true">
-  {{- range $printNotes -}}
+  {{- range $legend -}}
   <li>{{ with .label }}<b>{{ . }}</b>{{ end }}{{ if and .label .note }} — {{ end }}{{ with .note }}{{ . }}{{ end }}</li>
   {{- end -}}
 </ul>

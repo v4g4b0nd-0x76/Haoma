@@ -77,6 +77,26 @@
   other = "مکان‌های نقشه"
 [mapControls]
   other = "کنترل‌های نقشه"
+[mapEras]
+  other = "دوره‌های نقشه"
+[mapEraAll]
+  other = "همه"
+[mapEra_lands]
+  other = "سرزمین‌ها"
+[mapEra_achaemenid]
+  other = "هخامنشی"
+[mapEra_parthian]
+  other = "اشکانی"
+[mapEra_assyrian]
+  other = "آشور"
+[mapEra_myth]
+  other = "اسطوره"
+[mapDockClose]
+  other = "بستن"
+[mapDockOpen]
+  other = "گشودن صفحه"
+[mapLegend]
+  other = "مکان‌های این نقشه"
 [zoomIn]
   other = "بزرگ‌نمایی"
 [zoomOut]

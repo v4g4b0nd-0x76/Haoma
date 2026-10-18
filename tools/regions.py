@@ -3,18 +3,16 @@
 
     python3 tools/regions.py <world|middle-east|persia|india|aegean|scandinavia> <en|fa>
 
-Every country or civilization drawn on a map is a ring of lon/lat points here, so
-it re-derives against the map's own projection - the same projection
-tools/genmaps.py draws the coast with, padding included.  Paste the printed line
-into that culture page's map shortcode body (both languages):
+Every country, civilization, or reign layer drawn on a map is a ring of lon/lat
+points here, re-derived against the map's own projection (same as genmaps.py,
+padding included). Paste the printed line into that culture page's map body
+(both languages):
 
-    region points="47.5,32.9 48.7,32.1 ..." label="Mesopotamia" note="..."
-            href="/cultures/mesopotamian/" color="gold" /
+    region points="47.5,32.9 ..." label="Mesopotamia" note="..."
+            href="/cultures/mesopotamian/" era="lands" id="mesopotamia" color="gold" /
 
-points are "x,y" pairs in % of the map image, three or more, in order.  href is
-the culture's own page (the shortcode applies the language prefix); leave it off
-and the region is hover-only.  Note and label live in one table entry so English
-and Farsi stay in step: translate the pair, never just one of them.
+points are "x,y" pairs in % of the map image. Optional era filters with the map
+era strip; id enables #pin-<id> deep links. Translate label/note pairs together.
 """
 import os
 import sys
@@ -24,8 +22,10 @@ import genmaps  # noqa: E402
 
 PAD = 16  # the inset genmaps' project() uses inside the SVG
 
-# map -> [ (key, label_en, label_fa, note_en, note_fa, href|None, ring) ]
+# map -> [ (key, label_en, label_fa, note_en, note_fa, href|None, ring[, era]) ]
 # ring = 3+ (lon, lat) points in order, roughly hugging the region.
+# Optional era (slug): lands | achaemenid | parthian | myth | … — omit for always-on.
+# The map shortcode filters by era; "all" shows every layer.
 R = {
     "world": [
         ("mesopotamia", "Mesopotamia", "بین‌النهرین",
@@ -64,74 +64,107 @@ R = {
     ],
     "middle-east": [
         ("anatolia", "Anatolia", "آناتولی",
-         "The mountainous peninsula north of the Mediterranean, later called Asia Minor.",
-         "شبه‌جزیرهٔ کوهستانی شمال مدیترانه که بعدها آسیای صغیر خوانده شد.",
+         "Mountain peninsula north of the Mediterranean (Asia Minor); Hittite and later Phrygian lands.",
+         "شبه‌جزیرهٔ کوهستانی شمال مدیترانه (آسیای صغیر)؛ سرزمین هیتی و بعدها فریگیه.",
          None,
          [(26.5, 40.4), (29.0, 40.8), (32.0, 40.9), (35.5, 40.9), (38.5, 40.6), (41.5, 39.8),
           (43.5, 38.6), (44.0, 37.4), (42.0, 36.6), (38.5, 36.2), (34.5, 36.0), (31.0, 36.4),
-          (28.5, 37.2), (26.8, 38.4), (26.4, 39.4)]),
+          (28.5, 37.2), (26.8, 38.4), (26.4, 39.4)],
+         "lands"),
         ("levant", "Levant", "شام",
-         "The coast between Anatolia and Egypt, crossed by the oldest trade roads.",
-         "ساحل میان آناتولی و مصر، با کهن‌ترین راه‌های تجاری.",
+         "Coast between Anatolia and Egypt — cedar country of the Gilgamesh epic and oldest trade roads.",
+         "ساحل میان آناتولی و مصر — سرزمین سرو حماسهٔ گیلگمش و کهن‌ترین راه‌های تجاری.",
          None,
          [(34.4, 36.8), (36.0, 36.8), (37.6, 36.5), (38.4, 35.2), (38.5, 33.8), (37.8, 32.4),
-          (36.8, 31.4), (35.6, 30.9), (34.4, 31.2), (33.6, 32.0), (33.2, 33.2), (33.4, 34.6), (33.8, 35.8)]),
+          (36.8, 31.4), (35.6, 30.9), (34.4, 31.2), (33.6, 32.0), (33.2, 33.2), (33.4, 34.6), (33.8, 35.8)],
+         "lands"),
         ("mesopotamia", "Mesopotamia", "بین‌النهرین",
-         "The plain between the Tigris and Euphrates; the first cities rose here.",
-         "دشت میان دجله و فرات؛ نخستین شهرها در همین‌جا برخاستند.",
+         "Land between the Tigris and Euphrates — Sumer, Akkad, Babylon and Assyria.",
+         "سرزمین میان دجله و فرات — سومر، اکد، بابل و آشور.",
          "/cultures/mesopotamian/",
          [(38.4, 37.6), (40.8, 37.8), (43.2, 37.6), (45.6, 36.8), (47.4, 35.6), (48.2, 33.6),
           (48.2, 31.6), (47.0, 30.2), (44.8, 29.4), (42.4, 29.8), (40.4, 31.0), (39.0, 32.8),
-          (38.2, 34.6), (38.2, 36.2)]),
+          (38.2, 34.6), (38.2, 36.2)],
+         "lands"),
         ("arabia", "Arabia", "عربستان",
-         "The desert peninsula south of the Fertile Crescent.",
-         "شبه‌جزیرهٔ بیابانی جنوبِ هلال حاصلخیز.",
+         "Desert peninsula south of the Fertile Crescent; incense roads ran its western edge.",
+         "شبه‌جزیرهٔ بیابانی جنوبِ هلال حاصلخیز؛ راه‌های بخور از لبهٔ باختری‌اش می‌گذشت.",
          None,
          [(34.8, 29.6), (37.5, 30.4), (40.5, 30.9), (43.5, 30.4), (46.5, 29.4), (49.5, 28.0),
           (52.5, 26.2), (55.0, 25.0), (57.0, 24.0), (54.5, 23.4), (50.5, 23.3), (46.0, 23.3),
-          (41.5, 23.4), (37.5, 24.2), (35.2, 26.0), (34.5, 27.8)]),
+          (41.5, 23.4), (37.5, 24.2), (35.2, 26.0), (34.5, 27.8)],
+         "lands"),
         ("persia", "Persia", "ایران",
-         "The plateau east of the Zagros, the wider Iranian world.",
-         "فلات شرق زاگرس، جهان پهناور ایرانی.",
+         "Plateau east of the Zagros — Avestan and Shahnameh country, neighbour to the two rivers.",
+         "فلات شرق زاگرس — سرزمین اوستا و شاهنامه، همسایهٔ دو رود.",
          "/cultures/iranian/",
          [(48.2, 37.4), (50.5, 38.2), (53.0, 38.5), (55.5, 37.8), (57.5, 36.4), (59.0, 34.2),
           (59.5, 31.6), (59.5, 28.8), (58.0, 26.6), (55.5, 25.4), (52.5, 26.2), (50.2, 28.0),
-          (48.6, 30.4), (48.0, 32.8), (48.0, 35.2)]),
+          (48.6, 30.4), (48.0, 32.8), (48.0, 35.2)],
+         "lands"),
+        ("assyria", "Assyrian heartland", "قلب آشور",
+         "Upper Tigris — Assur, Nineveh and Kalhu; Neo-Assyrian power (c. 900–612 BCE).",
+         "بالادست دجله — آشور، نینوا و کالح؛ قدرت آشور نو (حدود ۹۰۰–۶۱۲ پ.م).",
+         "/cultures/mesopotamian/",
+         [(41.5, 37.2), (43.5, 37.4), (45.5, 37.0), (46.5, 35.8), (46.0, 34.2), (44.5, 33.4),
+          (42.5, 33.6), (41.2, 34.8), (41.0, 36.2)],
+         "assyrian"),
     ],
     "persia": [
         ("media", "Media", "ماد",
-         "The north-western highlands, home of Ecbatana (Hamadan).",
-         "ارتفاعات شمال‌غربی، سرزمین اکباتان (همدان).",
+         "Highlands of the Medes; Ecbatana (Hamadan) is their legendary capital in Greek and Iranian memory.",
+         "ارتفاعات مادها؛ اکباتان (همدان) پایتخت افسانه‌ای‌شان در یاد ایرانی و یونانی است.",
          None,
          [(44.4, 37.4), (46.2, 38.2), (48.0, 38.5), (49.8, 38.0), (51.0, 36.8), (51.5, 35.2),
-          (51.2, 33.6), (50.0, 32.2), (48.4, 31.8), (46.6, 32.4), (45.2, 33.6), (44.4, 35.2), (44.2, 36.4)]),
+          (51.2, 33.6), (50.0, 32.2), (48.4, 31.8), (46.6, 32.4), (45.2, 33.6), (44.4, 35.2), (44.2, 36.4)],
+         "lands"),
         ("persia", "Persia", "پارس",
-         "The southern heartland of Fars, where Persepolis stands.",
-         "قلب جنوبی فارس، جایی که تخت جمشید برپاست.",
+         "Fars — Persis — heartland of the Achaemenids; Persepolis and Pasargadae stand here.",
+         "فارس — پارس — قلب هخامنشیان؛ تخت جمشید و پاسارگاد این‌جا برپاست.",
          "/cultures/iranian/",
          [(49.0, 32.4), (50.6, 32.8), (52.2, 33.0), (53.8, 33.3), (55.2, 33.2), (56.4, 32.0),
           (57.0, 30.4), (56.8, 28.8), (56.2, 27.4), (54.4, 26.6), (52.4, 26.5), (50.6, 27.4),
-          (49.4, 28.6), (48.8, 30.0), (48.8, 31.4)]),
+          (49.4, 28.6), (48.8, 30.0), (48.8, 31.4)],
+         "lands"),
         ("parthia", "Parthia", "پارت",
-         "The north-eastern march, later the realm of the Parthians.",
-         "مرز شمال‌شرقی، بعدها قلمرو پارتیان.",
+         "North-eastern march that later gave the Arsacid (Parthian) dynasty its name.",
+         "مرز شمال‌شرقی که بعدها نام دودمان اشکانی (پارتی) از آن آمد.",
          None,
          [(53.8, 38.2), (55.6, 38.8), (57.6, 39.0), (59.8, 38.8), (61.6, 37.8), (62.8, 36.4),
           (63.0, 34.8), (61.8, 33.6), (60.0, 33.2), (58.0, 33.8), (56.2, 34.6), (54.6, 35.4),
-          (53.6, 36.4), (53.6, 37.4)]),
+          (53.6, 36.4), (53.6, 37.4)],
+         "lands"),
         ("aria", "Aria", "آریا",
-         "The eastern highlands around Herat.",
-         "ارتفاعات شرقی پیرامون هرات.",
+         "Eastern highlands around Herat (Haraiva); a satrapy on the road to India.",
+         "ارتفاعات شرقی پیرامون هرات (هَرَیو)؛ ساتراپی بر راه هند.",
          None,
          [(59.8, 35.8), (61.4, 36.4), (63.2, 36.6), (65.0, 36.2), (66.4, 35.2), (67.0, 33.6),
           (66.8, 32.0), (65.6, 30.8), (64.0, 30.4), (62.2, 30.8), (60.8, 31.8), (59.8, 33.0),
-          (59.6, 34.4)]),
+          (59.6, 34.4)],
+         "lands"),
         ("transoxiana", "Transoxiana", "فرارود",
-         "The plain beyond the Oxus (Amu Darya), the eastern edge of the Iranian world.",
-         "دشت آن‌سوی جیحون (آمودریا)، شرقی‌ترین بخش جهان ایرانی.",
+         "Beyond the Oxus (Amu Darya) — Sogdiana and the eastern edge of the Iranian world.",
+         "آن‌سوی جیحون (آمودریا) — سغد و شرقی‌ترین بخش جهان ایرانی.",
          None,
          [(62.4, 39.4), (64.2, 39.8), (66.0, 39.8), (67.8, 39.4), (69.2, 38.6), (69.5, 37.4),
-          (69.2, 36.6), (67.6, 36.2), (65.8, 36.2), (64.0, 36.6), (62.8, 37.4), (62.4, 38.4)]),
+          (69.2, 36.6), (67.6, 36.2), (65.8, 36.2), (64.0, 36.6), (62.8, 37.4), (62.4, 38.4)],
+         "lands"),
+        # Schematic reign outlines (clipped to this map's plateau frame).
+        ("achaemenid", "Achaemenid realm", "قلمرو هخامنشی",
+         "c. 550–330 BCE — from the Zagros to the Oxus on this frame; the empire reached far beyond.",
+         "حدود ۵۵۰–۳۳۰ پ.م — از زاگرس تا جیحون در این قاب؛ امپراتوری بسیار فراتر می‌رفت.",
+         "/cultures/iranian/history/zoroastrianism-in-persia/",
+         [(43.2, 38.2), (48.0, 39.0), (54.0, 39.2), (60.0, 38.8), (66.0, 37.8), (70.0, 36.0),
+          (71.0, 33.0), (70.5, 29.5), (67.0, 26.5), (60.0, 25.5), (52.0, 26.0), (46.0, 27.5),
+          (43.5, 30.5), (43.0, 34.5)],
+         "achaemenid"),
+        ("parthian-realm", "Parthian realm", "قلمرو اشکانی",
+         "c. 247 BCE–224 CE — Arsacid power centred on Parthia and Media, reaching Mesopotamia west of this map.",
+         "حدود ۲۴۷ پ.م–۲۲۴ م — قدرت اشکانی بر پارت و ماد، با میان‌رودان در باختر این نقشه.",
+         None,
+         [(47.5, 38.0), (53.0, 38.8), (59.0, 38.6), (65.0, 37.5), (68.5, 35.5), (68.0, 32.5),
+          (64.0, 30.5), (58.0, 30.0), (52.0, 31.0), (48.0, 33.0), (47.0, 35.5)],
+         "parthian"),
     ],
     "india": [
         ("himalaya", "Himalaya", "هیمالیا",
@@ -252,12 +285,33 @@ def pct_art(lon, lat, box, w):
             (PAD + fy * (h - 2 * PAD)) / h * 100)
 
 
+def unpack(row):
+    """(key, le, lf, ne, nf, href, ring) or same + era slug."""
+    if len(row) == 8:
+        return row
+    if len(row) == 7:
+        return row + ("",)
+    raise ValueError("bad region row length %d" % len(row))
+
+
+ERA_COLOR = {
+    "achaemenid": "teal",
+    "parthian": "silver",
+    "assyrian": "blood",
+    "myth": "fire",
+}
+
+
 def line(row, box, w, lang):
-    key, le, lf, ne, nf, href, ring = row
+    key, le, lf, ne, nf, href, ring, era = unpack(row)
     label, note = (le, ne) if lang == "en" else (lf, nf)
     pts = " ".join("%.1f,%.1f" % pct_art(lo, la, box, w) for lo, la in ring)
     h = ' href="%s"' % href if href else ""
-    return 'region points="%s" label="%s" note="%s"%s color="gold" /' % (pts, label, note, h)
+    e = ' era="%s"' % era if era else ""
+    i = ' id="%s"' % key
+    color = ERA_COLOR.get(era, "gold")
+    return 'region points="%s" label="%s" note="%s"%s%s%s color="%s" /' % (
+        pts, label, note, h, e, i, color)
 
 
 def lines_for(name, lang):

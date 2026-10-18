@@ -182,9 +182,27 @@
     var scale = 1;
     var DRAG_THRESHOLD = 5;
     var lastTap = { id: null, t: 0 };
+    var viewRaf = 0;
 
-    function applyView() {
+    function paintView() {
       gWorld.setAttribute("transform", "translate(" + panX + "," + panY + ") scale(" + scale + ")");
+    }
+    /* Pan/zoom paint is rAF-coalesced. Do not kick the force sim on pan —
+       that was O(n²) every pointermove and crushed FPS on culture hubs. */
+    function applyView(opts) {
+      opts = opts || {};
+      if (opts.now) {
+        if (viewRaf) { cancelAnimationFrame(viewRaf); viewRaf = 0; }
+        paintView();
+      } else if (!viewRaf) {
+        viewRaf = requestAnimationFrame(function () {
+          viewRaf = 0;
+          paintView();
+        });
+      }
+      if (opts.sim && typeof kickSim === "function") {
+        kickSim(opts.sim === true ? 0.25 : opts.sim);
+      }
     }
 
     function openNode(n) {
@@ -556,7 +574,7 @@
 
     function setZoom(next) {
       scale = Math.min(2.4, Math.max(0.5, next));
-      applyView();
+      applyView({ now: true });
     }
     root.addEventListener("wheel", function (e) {
       e.preventDefault();
@@ -572,7 +590,7 @@
       scale = 1; panX = 0; panY = 0;
       nodes.forEach(function (n) { n.fx = null; n.fy = null; });
       layoutTargets();
-      applyView();
+      applyView({ now: true, sim: 0.55 });
     };
 
     document.addEventListener("keydown", function (e) {
@@ -607,9 +625,18 @@
     }
 
     var alpha = 1;
+    var simOn = false;
+    var atlasVisible = true;
+    function kickSim(boost) {
+      alpha = Math.max(alpha, boost || 0.55);
+      if (!simOn && atlasVisible) {
+        simOn = true;
+        requestAnimationFrame(tick);
+      }
+    }
     function tick() {
+      if (!atlasVisible && !drag) { simOn = false; return; }
       alpha *= 0.94;
-      if (alpha < 0.015 && !drag) alpha = 0.015;
       var i, j, n, m, dx, dy, d2, d, f;
       /* soft pull toward column slots — keeps points aligned */
       for (i = 0; i < nodes.length; i++) {
@@ -663,11 +690,26 @@
       for (i = 0; i < nodes.length; i++) {
         nodeEls[i].setAttribute("transform", "translate(" + nodes[i].x + "," + nodes[i].y + ")");
       }
+      if (alpha < 0.018 && !drag) { simOn = false; return; }
       requestAnimationFrame(tick);
     }
-    applyView();
+    if ("IntersectionObserver" in window) {
+      var simIo = new IntersectionObserver(function (es) {
+        es.forEach(function (e) {
+          atlasVisible = e.isIntersecting;
+          if (atlasVisible) kickSim(0.35);
+          else simOn = false;
+        });
+      }, { rootMargin: "40px", threshold: 0.02 });
+      simIo.observe(wrap);
+    }
+    svg.addEventListener("pointerdown", function (e) {
+      /* Wake sim for node drags only — panning the canvas needs no physics. */
+      if (nodeFromEvent(e)) kickSim(0.5);
+    }, true);
+    applyView({ now: true });
     paintFocus();
-    requestAnimationFrame(tick);
+    kickSim(1);
   }
 
   function boot() {
