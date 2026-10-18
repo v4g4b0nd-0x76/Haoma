@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice"><!-- Refs: ziggurat (Ur / Etemenanki) with temple fire; Ishtar/Inanna eight-pointed star; Sin crescent; Bull of Heaven constellation (Gilgamesh); cedar forest (Humbaba); Tigris and Euphrates; Tiamat serpent in the water; cuneiform wedges; date palms --><style>
+.pu{animation:pl 6s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes pl{to{opacity:.55;transform:scale(1.12)}}
+.lamp{animation:pl 3.5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+.beam{animation:bm 8s ease-in-out infinite alternate}@keyframes bm{from{opacity:.04}to{opacity:.14}}
+.cr{stroke-dasharray:6 12;animation:cw 6s linear infinite}@keyframes cw{to{stroke-dashoffset:-36}}
+.ds{animation:dr 18s linear infinite;opacity:0}.d2{animation-duration:26s;animation-delay:-9s}@keyframes dr{0%{transform:translateX(0);opacity:0}15%{opacity:.5}100%{transform:translateX(260px);opacity:0}}
+.t0{animation:tw 4s ease-in-out infinite alternate}.t1{animation:tw 6s ease-in-out infinite alternate-reverse}@keyframes tw{to{opacity:.15}}@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style>
+<defs><linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0f2a"/><stop offset=".6" stop-color="#1f2a58"/><stop offset="1" stop-color="#8f6a3c"/></linearGradient>
+<linearGradient id="r" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fb0f0"/><stop offset="1" stop-color="#3b5ba5"/></linearGradient>
+<radialGradient id="g"><stop offset="0" stop-color="#f3e3b0"/><stop offset="1" stop-color="#f3e3b0" stop-opacity="0"/></radialGradient>
+<pattern id="w" width="24" height="14" patternUnits="userSpaceOnUse"><path d="M2 2L11 6L2 10zM11 6H22M14 1v10" fill="#c9b07a" stroke="#c9b07a" stroke-width=".8"/></pattern><g id="pm" fill="none" stroke="#0d0a08" stroke-linecap="round"><path d="M0 0Q5-34 0-78" stroke-width="4.5"/><path d="M0-78Q-23 -86 -46 -64" stroke-width="2.6"/><path d="M0-78Q-19 -114 -38 -92" stroke-width="2.6"/><path d="M0-78Q-7 -128 -14 -106" stroke-width="2.6"/><path d="M0-78Q7 -128 14 -106" stroke-width="2.6"/><path d="M0-78Q19 -114 38 -92" stroke-width="2.6"/><path d="M0-78Q23 -86 46 -64" stroke-width="2.6"/></g></defs>
+<rect width="1200" height="300" fill="url(#s)"/><g fill="#dfe8ff" opacity="0.7"><circle class="t0" cx="936" cy="127" r="1.6"/><circle class="t1" cx="1050" cy="56" r="1"/><circle class="t0" cx="1058" cy="129" r="1"/><circle class="t1" cx="202" cy="122" r="1.3"/><circle class="t0" cx="300" cy="31" r="0.8"/><circle class="t1" cx="821" cy="123" r="1"/><circle class="t0" cx="40" cy="143" r="0.8"/><circle class="t1" cx="71" cy="126" r="1.3"/><circle class="t0" cx="912" cy="58" r="1"/><circle class="t1" cx="612" cy="135" r="0.8"/><circle class="t0" cx="184" cy="125" r="1.3"/><circle class="t1" cx="843" cy="149" r="0.8"/><circle class="t1" cx="480" cy="139" r="1.3"/><circle class="t0" cx="70" cy="25" r="0.8"/><circle class="t1" cx="830" cy="35" r="1.3"/><circle class="t0" cx="801" cy="25" r="0.8"/><circle class="t1" cx="11" cy="62" r="1"/><circle class="t0" cx="117" cy="128" r="1.6"/><circle class="t1" cx="823" cy="115" r="0.8"/><circle class="t0" cx="1169" cy="58" r="1.3"/><circle class="t1" cx="699" cy="30" r="1.3"/><circle class="t0" cx="691" cy="11" r="1.6"/><circle class="t1" cx="251" cy="42" r="1"/><circle class="t1" cx="132" cy="127" r="1.6"/><circle class="t0" cx="373" cy="56" r="1.6"/><circle class="t1" cx="1052" cy="56" r="1"/><circle class="t0" cx="868" cy="106" r="0.8"/><circle class="t1" cx="818" cy="115" r="1"/><circle class="t0" cx="10" cy="77" r="1.3"/><circle class="t1" cx="50" cy="61" r="1"/><circle class="t0" cx="817" cy="33" r="0.8"/><circle class="t1" cx="309" cy="62" r="1.6"/><circle class="t1" cx="683" cy="83" r="1.6"/><circle class="t1" cx="765" cy="103" r="1.6"/><circle class="t0" cx="270" cy="131" r="1"/><circle class="t1" cx="800" cy="54" r="1"/></g>
+<g stroke="#9fb4e8" stroke-opacity=".4" stroke-width=".9" fill="none"><path d="M400 46L430 70L462 86L470 110"/><path d="M470 110L478 86L510 70L540 46"/></g>
+<g fill="#cfdcff"><circle class="t0" cx="400" cy="46" r="1.7"/><circle class="t1" cx="430" cy="70" r="1.7"/><circle class="t0" cx="462" cy="86" r="1.7"/><circle class="t1" cx="470" cy="110" r="1.7"/><circle class="t0" cx="478" cy="86" r="1.7"/><circle class="t1" cx="510" cy="70" r="1.7"/><circle class="t0" cx="540" cy="46" r="1.7"/></g>
+<circle class="pu" cx="170" cy="62" r="46" fill="url(#g)" opacity=".35"/>
+<g transform="translate(170 62)"><polygon class="pu" points="0 -20 2 -6 14 -14 6 -2 20 0 6 2 14 14 2 6 0 20 -2 6 -14 14 -6 2 -20 0 -6 -2 -14 -14 -2 -6" fill="#f3e3b0"/><circle r="11" fill="none" stroke="#f3e3b0" stroke-width="1" opacity=".6"/></g>
+<path d="M980 40a22 22 0 1 0 15 41a17 17 0 1 1-15-41z" fill="#e8dcc0" opacity=".88"/><circle cx="984" cy="63" r="3.4" fill="#e8dcc0" opacity=".8"/>
+<!-- cedar forest cue (Lebanon / Humbaba) - soft trunks, keep warm sky -->
+<path d="M900 232Q920 178 935 220Q950 165 968 218Q985 160 1005 222Q1020 172 1040 228" fill="#142018" opacity=".75"/>
+<path d="M14 238l7-16l7 16zM29 238l7-22l7 22zM44 238l7-18l7 18zM59 238l7-26l7 26zM74 238l7-20l7 20zM89 238l7-24l7 24zM104 238l7-17l7 17zM119 238l7-21l7 21z" fill="#10222a"/>
+<path d="M0 238Q200 224 400 236T800 234T1200 238V300H0Z" fill="#2a2018"/>
+<rect y="244" width="1200" height="40" fill="url(#w)" opacity=".09"/>
+<!-- Great Ziggurat of Ur: battered mudbrick terraces + summit shrine (keep warm sand dusk) -->
+<g fill="#1a1410">
+<path d="M490 238L505 208H695L710 238Z"/>
+<path d="M528 208L540 184H660L672 208Z"/>
+<path d="M560 184L570 164H630L640 184Z"/>
+<rect x="582" y="146" width="36" height="18"/>
+<rect x="596" y="154" width="8" height="10" fill="#0c0a08"/>
+</g>
+<path d="M588 238L596 146H604L612 238z" fill="#2a2018"/>
+<path class="beam" d="M597 146L580 20H620L603 146z" fill="#f3e3b0" opacity=".06"/><circle class="lamp" cx="600" cy="142" r="3.5" fill="#ffc86a"/>
+<path d="M230 300C380 278 520 262 596 238L612 238C540 268 440 288 370 300Z" fill="url(#r)" opacity=".62"/>
+<path d="M970 300C820 278 680 262 604 238L588 238C660 268 760 288 830 300Z" fill="url(#r)" opacity=".62"/>
+<g fill="none" stroke="#c9dcff" stroke-width="1.2" stroke-linecap="round" opacity=".5"><path class="cr" d="M300 286C400 268 500 258 586 244"/><path class="cr" d="M900 286C800 268 700 258 614 244"/></g>
+<path class="cr" d="M300 292q28-12 56-2t56-4t52-8" fill="none" stroke="#0c1530" stroke-width="4" stroke-linecap="round" opacity=".55"/>
+<path d="M0 300V270Q120 254 236 300Z M1200 300V270Q1080 254 964 300Z" fill="#120d0a"/>
+<use href="#pm" transform="translate(70 276) scale(1.2)"/><use href="#pm" transform="translate(1134 276) scale(1.05)"/>
+<g fill="#e8d3a0"><circle class="ds" cx="80" cy="262" r="1.6"/><circle class="ds d2" cx="140" cy="250" r="1.2"/><circle class="ds" cx="300" cy="256" r="1.4"/><circle class="ds d2" cx="840" cy="258" r="1.4"/></g></svg>

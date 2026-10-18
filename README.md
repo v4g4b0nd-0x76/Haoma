@@ -344,7 +344,7 @@ Each culture has a theme entry in `data/themes.json`:
   "anim": "fall",
   "pattern": "none",
   "glyphs": "ᚠ ᚢ ᚦ ...",
-  "banner": "norse.svg"
+  "banner": "norse-fjord.svg"
 }
 ```
 

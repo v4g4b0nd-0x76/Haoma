@@ -9,7 +9,7 @@
     "anim": "fall",
     "pattern": "none",
     "glyphs": "",
-    "banner": "base.svg"
+    "banner": "base-night.svg"
   },
   "norse": {
     "accent": "#7fa8c9",
@@ -21,7 +21,7 @@
     "anim": "fall",
     "pattern": "none",
     "glyphs": "ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ",
-    "banner": "norse.svg"
+    "banner": "norse-fjord.svg"
   },
   "greek": {
     "accent": "#c98a5a",
@@ -33,7 +33,7 @@
     "anim": "drift",
     "pattern": "meander",
     "glyphs": "",
-    "banner": "greek.svg"
+    "banner": "greek-olympus.svg"
   },
   "iranian": {
     "accent": "#e0a03a",
@@ -45,7 +45,7 @@
     "anim": "rise",
     "pattern": "rosette",
     "glyphs": "•  𐎠𐎪𐎥 𐎡𐎠𐎼𐎾𐎥𐎢𐏃 𐎿𐎦𐎠𐎹𐎡𐎡𐎹 𐎥𐎪𐎼𐎥 𐎿𐎦𐎠𐎹𐎡𐎡𐎹 𐎿𐎦𐎠𐎹𐎡𐎡𐎹𐎠𐎾𐎠𐎥 𐎿𐎦𐎠𐎹𐎡𐎡𐎹 𐎢𐎠𐎼𐎿𐎡𐎹",
-    "banner": "iranian-epic-derafsh.svg"
+    "banner": "iranian-alborz.svg"
   },
   "mesopotamian": {
     "accent": "#6f8fd6",
@@ -57,7 +57,7 @@
     "anim": "drift",
     "pattern": "zigzag",
     "glyphs": "",
-    "banner": "mesopotamian.svg"
+    "banner": "mesopotamian-ur.svg"
   },
   "indian": {
     "accent": "#d9708f",
@@ -69,6 +69,6 @@
     "anim": "fall",
     "pattern": "waves",
     "glyphs": "",
-    "banner": "indian.svg"
+    "banner": "indian-setu.svg"
   }
 }

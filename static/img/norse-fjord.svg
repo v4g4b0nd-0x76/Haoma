@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice"><!-- Norse: keep vivid teal aurora + soft Q-curve fjords + warm red sail from original; add animal stem, aurora sea reflection, soft pine fringe, wave shimmer. --><style>
+.au{animation:sh 9s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+.au2{animation-duration:13s;animation-delay:-5s}
+@keyframes sh{from{opacity:.2;transform:translateX(-40px) scaleY(.85)}to{opacity:.65;transform:translateX(40px) scaleY(1.1)}}
+.ship{animation:bob 6s ease-in-out infinite;transform-box:fill-box;transform-origin:center}
+@keyframes bob{50%{transform:translateY(5px) rotate(-1.5deg)}}
+.tw{animation:tw 4s ease-in-out infinite alternate}.tw2{animation-delay:-2s}
+@keyframes tw{to{opacity:.15}}
+.gl{animation:pl 8s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes pl{to{opacity:.7;transform:scale(1.08)}}
+.wav{animation:wv 5s ease-in-out infinite alternate}.w2{animation-delay:-2.4s}@keyframes wv{to{transform:translateX(12px)}}
+.rv{animation:fly 16s ease-in-out infinite alternate}@keyframes fly{to{transform:translate(-18px,-5px)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<defs>
+<linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a101c"/><stop offset="1" stop-color="#1f3045"/></linearGradient>
+<linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5fe0b0" stop-opacity="0"/><stop offset=".5" stop-color="#5fe0b0"/><stop offset="1" stop-color="#7fa8c9" stop-opacity="0"/></linearGradient>
+<filter id="b"><feGaussianBlur stdDeviation="14"/></filter>
+</defs>
+<rect width="1200" height="300" fill="url(#s)"/>
+<g fill="#cfe3f5"><circle class="tw" cx="90" cy="40" r="1.5"/><circle class="tw tw2" cx="240" cy="90" r="1.2"/><circle class="tw" cx="420" cy="30" r="1.4"/><circle class="tw tw2" cx="700" cy="50" r="1.2"/><circle class="tw" cx="930" cy="35" r="1.6"/><circle class="tw tw2" cx="1100" cy="85" r="1.3"/><circle class="tw" cx="800" cy="95" r="1"/><circle class="tw tw2" cx="160" cy="120" r="1"/><circle class="tw" cx="540" cy="75" r="1.1"/></g>
+<!-- vivid teal-steel aurora (joy kept) -->
+<g filter="url(#b)" fill="url(#a)"><path class="au" d="M150 30 Q400 120 650 40 L700 170 Q420 190 170 160Z"/><path class="au au2" d="M600 20 Q850 100 1100 30 L1120 150 Q850 170 620 140Z"/></g>
+<circle class="gl" cx="1010" cy="70" r="36" fill="#dfe9f3" opacity=".25"/>
+<circle cx="1010" cy="70" r="20" fill="#dfe9f3" opacity=".85"/>
+<!-- soft pine fringe on far ridge -->
+<path d="M40 175Q48 158 52 175Q60 150 68 175Q78 155 86 175Q96 148 104 175" fill="#121c2a" opacity=".55"/>
+<path d="M1080 168Q1088 150 1094 168Q1102 142 1110 168Q1120 152 1128 168" fill="#121c2a" opacity=".5"/>
+<!-- soft rolling fjord ridges (Q curves only) -->
+<path d="M0 220 Q90 150 150 190 Q260 110 360 200 Q470 140 560 210 Q700 120 800 200 Q920 135 1040 205 Q1130 160 1200 200 V300 H0Z" fill="#17263a"/>
+<path d="M0 255 Q120 205 230 245 Q360 200 500 250 Q640 215 780 255 Q930 210 1070 250 Q1200 220 1200 220 V300 H0Z" fill="#0e1928"/>
+<!-- aurora reflection on sea -->
+<ellipse cx="600" cy="270" rx="220" ry="10" fill="#5fe0b0" opacity=".08"/>
+<rect y="262" width="1200" height="38" fill="#0a121e"/>
+<path class="wav" d="M0 268Q60 262 120 268T240 268T360 268T480 268T600 268T720 268T840 268T960 268T1080 268T1200 268" fill="none" stroke="#5fe0b0" stroke-opacity=".18" stroke-width="1.2"/>
+<path class="wav w2" d="M0 276Q50 270 100 276T200 276T300 276T400 276T500 276T600 276T700 276T800 276T900 276T1000 276T1100 276T1200 276" fill="none" stroke="#7fa8c9" stroke-opacity=".12" stroke-width="1"/>
+<!-- raven cue -->
+<g class="rv" fill="#050a12" opacity=".7" transform="translate(260 78)"><path d="M0 6Q7-1 16 1Q11 5 8 10Q14 8 20 12Q11 12 3 15Q-2 11 0 6Z"/></g>
+<!-- longship: warm red sail kept + animal stem -->
+<g class="ship" fill="#050a12">
+<path d="M520 246 Q570 276 660 276 Q750 276 800 246 L792 240 Q820 222 806 200 Q826 206 824 232 L812 246 Q740 262 660 262 Q580 262 528 240Z"/>
+<path d="M520 246 Q508 236 506 224 Q504 214 512 210 Q518 208 520 216" fill="none" stroke="#050a12" stroke-width="2.2" stroke-linecap="round"/>
+<path d="M512 210 Q506 204 510 198" fill="none" stroke="#050a12" stroke-width="1.5" stroke-linecap="round"/>
+<rect x="656" y="170" width="3" height="76"/>
+<path d="M600 176 L716 176 L706 226 L610 226Z" fill="#7a2f2f"/>
+<path d="M608 190h100M606 204h96" stroke="#c9ccd3" stroke-opacity=".35" stroke-width="3"/>
+</g>
+</svg>

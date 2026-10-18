@@ -62,11 +62,11 @@ Use these accents for glows, small ornaments, and particle colour. Do not invent
 | Culture | Accent | Mood notes | Motif cues |
 |---|---|---|---|
 | **base** (general) | `#9aa3b5` | Neutral steel | Star / pearl, no culture seal |
-| **iranian** | `#e0a03a` | Ember gold, dusk violet→amber sky | Rosette, Derafsh geometry, Mehr disc, cypress, Simorgh line-work |
-| **norse** | `#7fa8c9` | Cold sea steel | Longship silhouette, aurora wash, sparse stars, fjord ridges |
-| **greek** | `#c98a5a` | Warm bronze | Meander strip, temple silhouette, olive / sea |
-| **mesopotamian** | `#6f8fd6` | Lapis dusk | Zigzag / reed, cedar trunks, night blue-green |
-| **indian** | `#d9708f` | Lotus dusk rose | Waves / mandala hint, soft pink accent only as glow |
+| **iranian** | `#e0a03a` | Ember gold, violet→**amber** sky | Rosette, Derafsh, Mehr disc, Damavand, cypress, Simorgh |
+| **norse** | `#7fa8c9` | Cold sea + **teal aurora** joy | Soft fjord ridges, longship + red sail, aurora wash |
+| **greek** | `#c98a5a` | Warm bronze horizon | Olympus, **twelve Olympians**, temple, olive, meander |
+| **mesopotamian** | `#6f8fd6` | Lapis + warm sand dusk | Ziggurat, Ishtar star, twin rivers, cedars |
+| **indian** | `#d9708f` | Lotus dusk **rose-orange** | Kailash, Setu, Lanka, Sudarshana, lotus, diyas |
 
 Page particle anim (site chrome, not the image file): `fall` · `drift` · `rise` · `none` — see themes. Card fallback uses the same particle idea + culture lattice/seal from `static/img/atlas/*-motifs.svg`.
 
@@ -93,7 +93,18 @@ Logo art stays gold-on-night. Culture page art uses **culture accent**, not logo
 6. Tiny secondary story details at edges (eyes in rock, mist, sparks) — low contrast.
 7. Keep the **horizontal centre** interesting: hero CSS uses `object-fit: contain` with a blurred duplicate behind — empty centre looks broken.
 
-**Reference files:** `static/img/norse.svg`, `static/img/iranian-epic-derafsh.svg`, `static/img/greek.svg`, `static/img/mesopotamian.svg`, `static/img/indian.svg`, `static/img/base.svg`.
+**Reference files (current heroes in `themes.json`):** `static/img/norse-fjord.svg`, `static/img/iranian-alborz.svg`, `static/img/greek-olympus.svg`, `static/img/mesopotamian-ur.svg`, `static/img/indian-setu.svg`, `static/img/base-night.svg`. Older banners (`norse.svg`, `greek.svg`, …) stay in the repo for history — do not point themes at them unless a human asks.
+
+### 4.1a Improve heroes — never drain them
+
+When asked to improve culture heroes: **edit the existing joyful banner**, do not rewrite it as a greyer scene and do not “fix” by deleting the cast.
+
+1. **Colour & joy are sacred.** Keep warm horizons and accent glows (Greek `#b08a5e`, Iranian `#a8672f`, Indian `#c4793a`, Mesopotamian `#8f6a3c`, Norse teal aurora `#5fe0b0` + red sail). Never unify cultures into cold steel.
+2. **Soft ridges only.** Soften mountains with **Q curves** — never replace rolling peaks with sharp zigzags.
+3. **Keep the story cast.** Greek keeps all **twelve Olympians** + phalanx + Homer; Iranian keeps Mehr, Derafsh, Rostam, Zarathustra, Simorgh, etc. Accuracy = better props/terrain, not fewer characters.
+4. **Add accuracy as layers.** Examples already shipped: Doric hexastyle temple; Ur battered terraces; Damavand snow cone; Kailash pyramid + amalaka; Sudarshana teeth; Norse animal stem + aurora sea reflection. Add — don’t subtract.
+5. **Literary ornament OK** when already on that banner (Iliad lines). No modern UI text.
+6. **Gold/bronze/rose** may fill small divine silhouettes (Olympians, Mehr disc, lotus).
 
 ### 4.2 Engraved night atlas (maps only)
 
@@ -194,10 +205,12 @@ card_bg_kind: gif          # static | gif
 
 ```
 Haoma myth banner, 1200x300 extreme landscape, dark night manuscript style,
-{culture} accent glow {accent_hex}, 2-3 silhouette layers of {terrain},
-centred {subject from primary texts}, sparse stars, soft radial glow,
-engraved silhouette not cartoon, no text, no watermark, no photoreal face,
-big empty dusk sky, serious tone, slow epic atmosphere
+{culture} accent glow {accent_hex}, 2-3 silhouette layers of {accurate terrain},
+centred {subject from primary texts / archaeology}, sparse stars, soft radial glow,
+engraved silhouette not cartoon, soft rolling terrain not sharp zigzags,
+keep culture warmth and accent glow, no watermark, no photoreal face,
+serious but colourful night manuscript, slow epic atmosphere,
+match existing hero file {culture hero svg} colours, cast, and layering
 ```
 
 ### 7.2 Character card media (16:9)
@@ -237,16 +250,29 @@ purple gradient SaaS, oversaturated, busy collage
 
 ## 8. Per-culture subject bank (safe defaults)
 
-Use primary-text cues; do not invent pop-culture mashups.
+Use primary-text cues; do not invent pop-culture mashups. Match the **current hero file** when extending a culture’s look.
 
-| Culture | Safe banner / card subjects |
+| Culture | Hero file | Safe banner / card subjects | Accuracy notes (do / don’t) |
+|---|---|---|---|
+| **Iranian** | `iranian-alborz.svg` | Mehr sun disc & rays; Simorgh line-work; Damavand + smoke + coils; Derafsh Kaviani (Ferdowsi / Enc. Iranica); Rostam on Rakhsh; Zarathustra fire with three sparks; Ahriman serpent line; White Div; cypress; amber dusk sky | Do: keep warm `#a8672f` horizon and full cast. Don’t: grey the sky or drop the Derafsh. |
+| **Norse** | `norse-fjord.svg` | Soft rolling fjord ridges; **vivid teal** aurora `#5fe0b0` + steel; longship with warm red sail; pale moon; optional animal stem | Do: keep aurora joy and soft Q-curve mountains. Don’t: sharp zigzags or cold desaturated steel-only palettes. |
+| **Greek** | `greek-olympus.svg` | Olympus + snow + cloud terrace; **twelve Olympians** with attributes; Spartan phalanx; Doric temple; Homer + Iliad lines; Achaean galley; Trojan horse; olives; meander; warm bronze horizon `#b08a5e` | Do: keep all twelve gods and the warm sky. Don’t: strip the pantheon or flatten colour. |
+| **Mesopotamian** | `mesopotamian-ur.svg` | Ziggurat + temple fire; Ishtar eight-pointed star; Sin crescent; Bull of Heaven; twin rivers; cedars; Tiamat line; date palms; sand-warm horizon `#8f6a3c` | Do: keep lapis rivers and warm dusk. Don’t: drain to grey-blue only. |
+| **Indian** | `indian-setu.svg` | Kailash + Ganga + crescent; Sudarshana; peacock; Lanka spires + Setu; shikhara; lotus; diyas; marigold petals; rose-orange dusk `#c4793a` | Do: keep saturated dusk and living motion. Don’t: mute to purple-grey. |
+| **Base** | `base-night.svg` | Abstract night + steel pearl/star; rings; constellation | Do: neutral `#9aa3b5`. Don’t: any culture seal or deity. |
+
+### 8.1 Approved hero motions (keep when regenerating)
+
+| Culture | CSS motions (slow) |
 |---|---|
-| Iranian | Mehr disc & rays; Simorgh line; Damavand; Derafsh Kaviani geometry; cypress; fire with three sparks; serpent Ahriman as **line**, not gore |
-| Norse | Longship on dark sea; aurora; ridge line; sparse runes as **tiny** ornaments only |
-| Greek | Temple / column silhouette; meander border hint; olive / dark sea; bronze accent |
-| Mesopotamian | Cedar trunks & mist; reed zigzag; night river; lapis accent (not gold-filled beasts) |
-| Indian | Lotus dusk geometry; soft wave motif; temple silhouette; rose accent glow |
-| Base | Abstract night + steel accent; star / pearl; no culture-specific deity |
+| Iranian | Mehr ray spin (~140s); flag wave; Simorgh drift; Damavand smoke; Rostam bob; three sparks rise; mist crawl; ember rise; Ahriman slide; div eyes blink |
+| Norse | Aurora shimmer; ship bob; wave drift; raven fly; star twinkle; moon pulse |
+| Greek | Cloud terrace drift; moon pulse; galley bob; bronze haze breathe; star twinkle |
+| Mesopotamian | Temple fire pulse + beam; river dash flow; Tiamat slide; dust drift; star/Venus pulse |
+| Indian | Chakra spin; Ganga dash flow; peacock sway; diya flicker + float; petal fall; lotus still |
+| Base | Slow ring rotate (forward/reverse); pearl pulse; star twinkle |
+
+Always include `@media (prefers-reduced-motion: reduce){*{animation:none!important}}`.
 
 ---
 
@@ -269,7 +295,7 @@ Use primary-text cues; do not invent pop-culture mashups.
 
 - **Fewer objects.** One subject + ground + sky beats five heroes.
 - **Silhouette first.** If the face fails, drop to profile/silhouette + attribute.
-- **Match a reference file.** Open `static/img/norse.svg` or `iranian-epic-derafsh.svg` and copy layering (sky → glow → far ridge → near ridge → subject).
+- **Match a reference file.** Open the current hero in §8 (e.g. `norse-fjord.svg`, `iranian-alborz.svg`) and copy layering (sky → glow → far ridge → near ridge → subject) plus its accuracy notes.
 - **Desaturate.** If output looks like a game splash, multiply a dark night overlay and keep only accent highlights.
 - **Crop for cards.** Export 16:9; do not squeeze a 4:5 poster into the card slot.
 - **When unsure:** generate a **static** 800×450 card plate; skip GIF until the still reads clearly at 200 px height.

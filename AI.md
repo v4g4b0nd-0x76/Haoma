@@ -118,7 +118,7 @@ Preset grids the editor offers: 2/3+1/3, 1/3+2/3, 1/2+1/2, 3 and 4 columns, 2x2,
 ```json
 "norse": {"accent":"#7fa8c9","bg":"#12161c","surface":"#1a2029","border":"#273241",
           "text":"#c9ccd3","muted":"#8a8f9a","anim":"fall","pattern":"none",
-          "glyphs":"ᚠ ᚢ ᚦ ...","banner":"norse.svg"}
+          "glyphs":"ᚠ ᚢ ᚦ ...","banner":"norse-fjord.svg"}
 ```
 - `anim`: `fall` (snow), `drift`, `rise` (embers), `none`.
 - `pattern`: `none | meander | rosette | zigzag | waves` (top strip, tinted with `accent`).

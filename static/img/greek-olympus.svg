@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice"><!-- Original art for this project: moonlit Greek night - Mount Olympus with snow caps and cloud terrace, the twelve gods assembled above the summit (Zeus with the bolt, Hera sceptred, Poseidon tridented, Athena helmeted with spear and shield, Apollo with the lyre, Artemis with the bow, Ares plumed, Aphrodite veiled, Hermes caduceused, Hephaestus with the hammer, Demeter torch-bearing, Dionysus thyrsus-bearing), a Spartan phalanx marching with crested Corinthian helmets and lambda shields, a Doric temple, Homer seated with his lyre beneath the opening words of the Iliad (public domain), an Achaean galley and the horse of Troy on the far shore, olive trees, and a meander frieze. One accent glow: the moon. --><style>
+.t0{animation:tw 4s ease-in-out infinite alternate}.t1{animation:tw 6s ease-in-out infinite-reverse alternate}@keyframes tw{to{opacity:.15}}
+.gl{animation:pl 7s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes pl{to{opacity:.5;transform:scale(1.1)}}
+.cl{animation:cd 24s ease-in-out infinite alternate}.c2{animation-duration:30s;animation-delay:-11s}.c3{animation-duration:27s;animation-delay:-6s}@keyframes cd{to{transform:translateX(22px)}}
+.gd{animation:gf 8s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center bottom}.g2{animation-duration:9.5s;animation-delay:-3s}.g3{animation-duration:7.4s;animation-delay:-5s}.g4{animation-duration:10s;animation-delay:-7s}@keyframes gf{to{transform:translateY(-2px)}}
+.hp{animation:hb 3.4s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center bottom}.h2{animation-delay:-1.7s}@keyframes hb{to{transform:translateY(-1.4px)}}
+.sh{animation:shb 5s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes shb{to{transform:translateY(-1.6px) rotate(.6deg)}}
+.il{opacity:.45}.i2{animation-delay:-3s}.i3{animation-delay:-6s}@keyframes ilf{to{opacity:.7}}.il{animation:ilf 9s ease-in-out infinite alternate}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}</style>
+<defs>
+<linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0c1128"/><stop offset=".5" stop-color="#262c55"/><stop offset=".8" stop-color="#5b4a6b"/><stop offset="1" stop-color="#b08a5e"/></linearGradient>
+<radialGradient id="mg"><stop offset="0" stop-color="#f4ecd2"/><stop offset="1" stop-color="#f4ecd2" stop-opacity="0"/></radialGradient>
+<radialGradient id="haze"><stop offset="0" stop-color="#e8c87a" stop-opacity=".3"/><stop offset="1" stop-color="#e8c87a" stop-opacity="0"/></radialGradient>
+<pattern id="meander" patternUnits="userSpaceOnUse" width="12" height="8"><path d="M0 7V1h9v4H3V3h4" fill="none" stroke="#242b4a" stroke-width=".9"/></pattern>
+</defs>
+<rect width="1200" height="300" fill="url(#sky)"/>
+<g fill="#fff" opacity=".6"><circle class="t0" cx="90" cy="36" r="1"/><circle class="t1" cx="205" cy="70" r="1.3"/><circle class="t0" cx="320" cy="26" r=".8"/><circle class="t1" cx="430" cy="58" r="1"/><circle class="t0" cx="545" cy="30" r="1.4"/><circle class="t1" cx="650" cy="64" r=".8"/><circle class="t0" cx="760" cy="22" r="1"/><circle class="t1" cx="860" cy="52" r="1.3"/><circle class="t0" cx="150" cy="104" r=".8"/><circle class="t1" cx="270" cy="130" r="1"/><circle class="t0" cx="60" cy="150" r="1.2"/><circle class="t1" cx="380" cy="96" r=".8"/><circle class="t0" cx="700" cy="90" r="1"/><circle class="t1" cx="240" cy="40" r="1.2"/><circle class="t0" cx="905" cy="28" r=".8"/><circle class="t1" cx="120" cy="66" r="1.4"/><circle class="t0" cx="480" cy="82" r=".8"/><circle class="t1" cx="820" cy="86" r="1"/><circle class="t0" cx="35" cy="90" r="1"/><circle class="t1" cx="600" cy="112" r=".8"/><circle class="t0" cx="170" cy="12" r="1"/><circle class="t1" cx="520" cy="120" r=".8"/><circle class="t0" cx="960" cy="72" r="1.2"/><circle class="t1" cx="740" cy="40" r=".8"/><circle class="t0" cx="640" cy="140" r=".8"/><circle class="t1" cx="300" cy="150" r=".8"/></g>
+<!-- moon: the one accent glow -->
+<circle class="gl" cx="1010" cy="58" r="72" fill="url(#mg)"/>
+<circle cx="1010" cy="58" r="17" fill="#efe8cf"/><circle cx="1004" cy="53" r="3" fill="#d8cfb0" opacity=".8"/><circle cx="1015" cy="63" r="2.2" fill="#d8cfb0" opacity=".7"/><circle cx="1012" cy="50" r="1.5" fill="#d8cfb0" opacity=".6"/>
+<!-- Iliad: opening words, sung by Homer -->
+<g font-family="Georgia,'Times New Roman',serif" font-size="15.5" fill="#e8cf9a" text-anchor="end" letter-spacing=".06em">
+<text class="il" x="1174" y="120">μῆνιν ἄειδε θεά</text>
+<text class="il i2" x="1174" y="142">Πηληϊάδεω Ἀχιλῆος</text>
+<text class="il i3" x="1174" y="164">οὐλομένην ἣ μυρί'</text></g>
+<!-- distant shore with the horse of Troy -->
+<path d="M0 246L44 236L82 244L128 238L176 246L224 241L262 247L300 244L330 252H0Z" fill="#171a2e"/>
+<g fill="#10121f"><path d="M238 251v-7h9l3-4h3v4l-2 1v6zM239 251v-3M243 251v-3M247 251v-3M251 251v-3" stroke="#10121f" stroke-width="1.4"/><circle cx="241" cy="252.5" r="1.6"/><circle cx="249" cy="252.5" r="1.6"/></g>
+<!-- Mount Olympus: soft rolling multi-peak massif (Q curves) with snow - gods stay on the terrace -->
+<path d="M200 240Q280 214 340 178Q392 142 438 104Q472 128 506 96Q520 84 536 98Q566 120 596 106Q622 122 668 160Q720 196 772 226Q810 244 810 244Z" fill="#262b4a"/>
+<path d="M506 98L520 84L534 98L528 95L520 90L512 96Z" fill="#cfd6e8" opacity=".85"/>
+<path d="M438 106L452 96L466 110L458 105L450 108Z" fill="#cfd6e8" opacity=".7"/>
+<path d="M596 108L608 100L620 112L612 107L604 110Z" fill="#cfd6e8" opacity=".65"/>
+<!-- soft foothill wash for depth -->
+<path d="M220 242Q300 218 380 228Q480 212 560 224Q660 214 760 228Q820 236 840 244Z" fill="#222844" opacity=".85"/>
+<path d="M260 240Q340 208 420 224Q520 210 640 228Q740 214 830 244Z" fill="#1d2138"/>
+<circle cx="520" cy="120" r="86" fill="url(#haze)"/>
+<!-- warm bronze valley haze (culture accent) -->
+<ellipse cx="520" cy="200" rx="160" ry="28" fill="#c98a5a" opacity=".08"/>
+<!-- cloud terrace drifting around the summit -->
+<g fill="#59609a" opacity=".5"><ellipse class="cl" cx="470" cy="105" rx="90" ry="7"/><ellipse class="cl c2" cx="610" cy="104" rx="105" ry="8"/><ellipse class="cl c3" cx="730" cy="106" rx="75" ry="6"/><ellipse class="cl c2" cx="390" cy="107" rx="62" ry="5.5"/></g>
+<g fill="#6e76b4" opacity=".4"><ellipse class="cl c3" cx="430" cy="100" rx="34" ry="4.5"/><ellipse class="cl" cx="545" cy="99" rx="42" ry="4"/><ellipse class="cl c2" cx="672" cy="101" rx="38" ry="4.5"/><ellipse class="cl c3" cx="765" cy="102" rx="28" ry="3.5"/></g>
+<ellipse class="cl c3" cx="570" cy="98" rx="200" ry="3" fill="#8a92cc" opacity=".3"/>
+<!-- the twelve gods assembled above the summit -->
+<g fill="#e6c070" stroke="#e6c070" stroke-linecap="round">
+<!-- Dionysus, thyrsus -->
+<g class="gd"><path d="M376.6 100L377.8 83.5Q380 81.5 382.2 83.5L383.4 100Z"/><circle cx="380" cy="77.5" r="2.5" stroke="none"/><path d="M384.5 98V72" stroke-width="1.15" fill="none"/><ellipse cx="384.5" cy="70.5" rx="1.3" ry="2" stroke="none"/></g>
+<!-- Demeter, torch -->
+<g class="gd g2"><path d="M412.6 100L413.8 83.5Q416 81.5 418.2 83.5L419.4 100Z"/><circle cx="416" cy="77.5" r="2.5" stroke="none"/><path d="M420 96V76" stroke-width="1.15" fill="none"/><path d="M420 70q-2 2.6 0 4q2.5-1.4 0-4Z" fill="#f0d088" stroke="none"/></g>
+<!-- Artemis, bow -->
+<g class="gd g3"><path d="M448.6 100L449.8 83.5Q452 81.5 454.2 83.5L455.4 100Z"/><circle cx="452" cy="77.5" r="2.5" stroke="none"/><path d="M457 74Q461 82 457 90" stroke-width="1.2" fill="none"/></g>
+<!-- Apollo, lyre -->
+<g class="gd g4"><path d="M484.6 100L485.8 83.5Q488 81.5 490.2 83.5L491.4 100Z"/><circle cx="488" cy="77.5" r="2.5" stroke="none"/><path d="M491 86q3.6 3.6 7.2 0M491 86h7.2" stroke-width="1.1" fill="none"/><path d="M493 86v3M496.4 86v3" stroke-width=".7"/></g>
+<!-- Athena, helmet, spear and shield -->
+<g class="gd"><path d="M520.6 100L521.8 83.5Q524 81.5 526.2 83.5L527.4 100Z"/><circle cx="524" cy="77.5" r="2.5" stroke="none"/><path d="M521.5 74.5q2.5-3 5 0Z" fill="#e6c070" stroke="none"/><path d="M528.5 99V69" stroke-width="1.15" fill="none"/><circle cx="519.5" cy="87" r="3.4" fill="#131524" stroke-width="1"/></g>
+<!-- Zeus, thunderbolt -->
+<g class="gd g2"><path d="M556.6 100L557.8 83Q560 81 562.2 83L563.4 100Z"/><circle cx="560" cy="77" r="2.6" stroke="none"/><path d="M562 84L564.5 77" stroke-width="1.2" fill="none"/><path d="M563 80l2.6-2.6-1.6-1 2.6-2.6" stroke-width="1.3" fill="none"/></g>
+<!-- Hera, sceptre and polos -->
+<g class="gd g3"><path d="M592.6 100L593.8 83.5Q596 81.5 598.2 83.5L599.4 100Z"/><circle cx="596" cy="77.5" r="2.5" stroke="none"/><rect x="593.8" y="73.9" width="4.4" height="1.4" stroke="none"/><path d="M600.5 98V73" stroke-width="1.15" fill="none"/><circle cx="600.5" cy="71.5" r="1.3" stroke="none"/></g>
+<!-- Poseidon, trident -->
+<g class="gd g4"><path d="M628.6 100L629.8 83.5Q632 81.5 634.2 83.5L635.4 100Z"/><circle cx="632" cy="77.5" r="2.5" stroke="none"/><path d="M636.5 98V70M634 70v3M636.5 68v5M639 70v3" stroke-width="1.1" fill="none"/></g>
+<!-- Ares, plumed helmet and shield -->
+<g class="gd"><path d="M664.6 100L665.8 83.5Q668 81.5 670.2 83.5L671.4 100Z"/><circle cx="668" cy="77.5" r="2.5" stroke="none"/><path d="M665 74.5q3-3.5 6-.5Z" fill="#7a2a35" stroke="none"/><path d="M672.5 99V69" stroke-width="1.15" fill="none"/><circle cx="664.5" cy="88" r="2.8" fill="#131524" stroke-width="1"/></g>
+<!-- Aphrodite, veil -->
+<g class="gd g2"><path d="M700.6 100L701.8 83.5Q704 81.5 706.2 83.5L707.4 100Z"/><circle cx="704" cy="77.5" r="2.5" stroke="none"/><path d="M702.5 76.5Q697 84 698 100" stroke-width="1.1" fill="none"/></g>
+<!-- Hermes, caduceus and petasos -->
+<g class="gd g3"><path d="M736.6 100L737.8 83.5Q740 81.5 742.2 83.5L743.4 100Z"/><circle cx="740" cy="77.5" r="2.5" stroke="none"/><path d="M736.5 75h7" stroke-width="1" fill="none"/><path d="M744.5 96V71M742.8 73.5L744.5 72l1.7 1.5" stroke-width="1.05" fill="none"/></g>
+<!-- Hephaestus, hammer -->
+<g class="gd g4"><path d="M772.6 100L773.8 83.5Q776 81.5 778.2 83.5L779.4 100Z"/><circle cx="776" cy="77.5" r="2.5" stroke="none"/><path d="M778 83L780.5 77" stroke-width="1.2" fill="none"/><rect x="778.6" y="70.5" width="4.4" height="3" stroke="none"/></g>
+</g>
+<!-- mid ridge with the Spartan phalanx -->
+<path d="M690 252Q840 226 980 219T1200 212V300H690Z" fill="#14162a"/>
+<!-- Doric hexastyle temple on the ridge (entablature + pediment) -->
+<g fill="#101220">
+<rect x="1078" y="228" width="72" height="2.8"/>
+<rect x="1084" y="204" width="2.6" height="24"/><rect x="1095" y="204" width="2.6" height="24"/><rect x="1106" y="204" width="2.6" height="24"/><rect x="1117" y="204" width="2.6" height="24"/><rect x="1128" y="204" width="2.6" height="24"/><rect x="1139" y="204" width="2.6" height="24"/>
+<rect x="1080" y="200" width="68" height="4.2"/>
+<path d="M1080 200L1114 184L1148 200Z"/>
+</g>
+<path d="M1080 200L1114 184L1148 200" stroke="#c98a5a" stroke-width=".85" opacity=".65" fill="none"/>
+<!-- six hoplites marching -->
+<g fill="#0d0e18" stroke="#c3ac83" stroke-linecap="round">
+<g class="hp"><path d="M808.5 224l1.5-9M813.5 224l-1-9" stroke-width="1.4" fill="none" stroke="none"/><path d="M808.5 216L809.5 207L814.5 207L815.5 216Z" stroke="none"/><circle cx="812" cy="203" r="2.8" stroke="none"/><path d="M808.4 202q0-4.5 3.6-4.5t3.6 4.5v2q-1.8 1-3.6 1t-3.6-1Z" stroke="none"/><path d="M808.4 199.5Q812 194.5 815.6 199.5L814 199.9Q812 197.6 810 199.9Z" fill="#7a2a35" stroke="none"/><path d="M817 227V186" stroke-width="1.3" fill="none"/><path d="M817 183l1.7 3.6h-3.4Z" fill="#b9a988" stroke="none"/><circle cx="813" cy="211" r="5.6" fill="#12141f" stroke-width="1"/><path d="M810.8 214.5L813 207.5M815.2 214.5L813 207.5" stroke-width="1.1" fill="none"/></g>
+<g class="hp h2"><path d="M852.5 222l1.5-9M857.5 222l-1-9" stroke-width="1.4" fill="none" stroke="none"/><path d="M852.5 214L853.5 205L858.5 205L859.5 214Z" stroke="none"/><circle cx="856" cy="201" r="2.8" stroke="none"/><path d="M852.4 200q0-4.5 3.6-4.5t3.6 4.5v2q-1.8 1-3.6 1t-3.6-1Z" stroke="none"/><path d="M852.4 197.5Q856 192.5 859.6 197.5L858 197.9Q856 195.6 854 197.9Z" fill="#7a2a35" stroke="none"/><path d="M861 225V184" stroke-width="1.3" fill="none"/><path d="M861 181l1.7 3.6h-3.4Z" fill="#b9a988" stroke="none"/><circle cx="857" cy="209" r="5.6" fill="#12141f" stroke-width="1"/><path d="M854.8 212.5L857 205.5M859.2 212.5L857 205.5" stroke-width="1.1" fill="none"/></g>
+<g class="hp"><path d="M896.5 221l1.5-9M901.5 221l-1-9" stroke-width="1.4" fill="none" stroke="none"/><path d="M896.5 213L897.5 204L902.5 204L903.5 213Z" stroke="none"/><circle cx="900" cy="200" r="2.8" stroke="none"/><path d="M896.4 199q0-4.5 3.6-4.5t3.6 4.5v2q-1.8 1-3.6 1t-3.6-1Z" stroke="none"/><path d="M896.4 196.5Q900 191.5 903.6 196.5L902 196.9Q900 194.6 898 196.9Z" fill="#7a2a35" stroke="none"/><path d="M905 224V183" stroke-width="1.3" fill="none"/><path d="M905 180l1.7 3.6h-3.4Z" fill="#b9a988" stroke="none"/><circle cx="901" cy="208" r="5.6" fill="#12141f" stroke-width="1"/><path d="M898.8 211.5L901 204.5M903.2 211.5L901 204.5" stroke-width="1.1" fill="none"/></g>
+<g class="hp h2"><path d="M940.5 220l1.5-9M945.5 220l-1-9" stroke-width="1.4" fill="none" stroke="none"/><path d="M940.5 212L941.5 203L946.5 203L947.5 212Z" stroke="none"/><circle cx="944" cy="199" r="2.8" stroke="none"/><path d="M940.4 198q0-4.5 3.6-4.5t3.6 4.5v2q-1.8 1-3.6 1t-3.6-1Z" stroke="none"/><path d="M940.4 195.5Q944 190.5 947.6 195.5L946 195.9Q944 193.6 942 195.9Z" fill="#7a2a35" stroke="none"/><path d="M949 223V182" stroke-width="1.3" fill="none"/><path d="M949 179l1.7 3.6h-3.4Z" fill="#b9a988" stroke="none"/><circle cx="945" cy="207" r="5.6" fill="#12141f" stroke-width="1"/><path d="M942.8 210.5L945 203.5M947.2 210.5L945 203.5" stroke-width="1.1" fill="none"/></g>
+<g class="hp"><path d="M984.5 219l1.5-9M989.5 219l-1-9" stroke-width="1.4" fill="none" stroke="none"/><path d="M984.5 211L985.5 202L990.5 202L991.5 211Z" stroke="none"/><circle cx="988" cy="198" r="2.8" stroke="none"/><path d="M984.4 197q0-4.5 3.6-4.5t3.6 4.5v2q-1.8 1-3.6 1t-3.6-1Z" stroke="none"/><path d="M984.4 194.5Q988 189.5 991.6 194.5L990 194.9Q988 192.6 986 194.9Z" fill="#7a2a35" stroke="none"/><path d="M993 222V181" stroke-width="1.3" fill="none"/><path d="M993 178l1.7 3.6h-3.4Z" fill="#b9a988" stroke="none"/><circle cx="989" cy="206" r="5.6" fill="#12141f" stroke-width="1"/><path d="M986.8 209.5L989 202.5M991.2 209.5L989 202.5" stroke-width="1.1" fill="none"/></g>
+<g class="hp h2"><path d="M1028.5 217l1.5-9M1033.5 217l-1-9" stroke-width="1.4" fill="none" stroke="none"/><path d="M1028.5 209L1029.5 200L1034.5 200L1035.5 209Z" stroke="none"/><circle cx="1032" cy="196" r="2.8" stroke="none"/><path d="M1028.4 195q0-4.5 3.6-4.5t3.6 4.5v2q-1.8 1-3.6 1t-3.6-1Z" stroke="none"/><path d="M1028.4 192.5Q1032 187.5 1035.6 192.5L1034 192.9Q1032 190.6 1030 192.9Z" fill="#7a2a35" stroke="none"/><path d="M1037 220V179" stroke-width="1.3" fill="none"/><path d="M1037 176l1.7 3.6h-3.4Z" fill="#b9a988" stroke="none"/><circle cx="1033" cy="204" r="5.6" fill="#12141f" stroke-width="1"/><path d="M1030.8 207.5L1033 200.5M1035.2 207.5L1033 200.5" stroke-width="1.1" fill="none"/></g>
+</g>
+<!-- Aegean water and the Achaean galley -->
+<path d="M0 252Q120 246 240 254L340 266V300H0Z" fill="#10131f"/>
+<path d="M40 262q10-2 20 0t20 0M180 270q10-2 20 0t20 0" stroke="#3f4a6e" stroke-width="1" opacity=".6" fill="none"/>
+<g class="sh" fill="#0b0c14"><path d="M102 251Q113 261 142 261Q170 261 179 250L183 247L176 251L100 249Z"/><path d="M102 251q-6-2-4-7q1 4 4 4"/><path d="M140 249V228" stroke="#0b0c14" stroke-width="1.6"/><rect x="126" y="230" width="28" height="15" fill="#171a2c" stroke="#b9a988" stroke-width=".7"/><path d="M126 235h28M126 240h28" stroke="#b9a988" stroke-width=".5" opacity=".5" fill="none"/><path d="M112 258l-6 5M122 260l-6 5M132 261l-6 5M152 261l6 5M162 260l6 5" stroke="#0b0c14" stroke-width="1.2"/></g>
+<!-- foreground: olive trees and the ground with a meander frieze -->
+<path d="M300 300L344 274Q420 262 520 268L700 276L900 262L1100 268L1200 258V300Z" fill="#0b0c14"/>
+<g fill="#0e1020"><path d="M305 276l3-16 3 16zM306 262q-9-5-13 1q7-1 13 3zM308 260q-4-9-12-11q9 1 12 8zM310 261q4-8 13-9q-8 2-12 9zM311 263q9-4 14 2q-8-1-14 1z" opacity=".95"/><path d="M1043 270l3-14 3 14zM1044 258q-8-4-11 1q6-1 11 2zM1046 256q-3-8-11-9q8 1 11 7zM1048 257q4-7 11-8q-7 2-10 8zM1049 259q8-3 12 2q-7-1-12 1z" opacity=".95"/></g>
+<!-- Homer, seated with his lyre -->
+<g fill="#0b0c14"><path d="M1120 285Q1128 268 1146 267Q1164 268 1172 285Z"/><path d="M1124 283Q1132 270 1146 268.4" stroke="#cbbd97" stroke-width="1" fill="none" opacity=".5"/><path d="M1150 267L1148 248Q1149 244 1152 244Q1155 244 1155.5 248L1156 267Z"/><circle cx="1152" cy="239.5" r="3.4"/><path d="M1149.5 241Q1147 247 1150 250Q1153 247 1153.5 242Z"/><path d="M1148 258L1136 264L1137 267.5L1150 263Z"/></g>
+<g stroke="#cbbd97" fill="none" opacity=".9"><path d="M1155.5 247Q1156.6 256 1156 266" stroke-width="1.2"/><path d="M1139 255q-3.5 4 0 7.5M1136.5 255h5.5" stroke-width="1"/><path d="M1138.4 255v6.5M1140.6 255v6.5" stroke-width=".6"/><path d="M1150 251L1142 254.5" stroke-width="1.5" stroke="#0b0c14"/><path d="M1149 236q3-2.5 6.5 0" stroke-width=".9"/></g>
+<rect y="291" width="1200" height="9" fill="#08090f"/><rect y="291" width="1200" height="8" fill="url(#meander)"/>
+</svg>
