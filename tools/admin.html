@@ -201,6 +201,10 @@ textarea.ed.note__body::placeholder{color:var(--m);opacity:.75}
 .ap-refs .ri button{position:absolute;top:2px;right:2px;padding:0 5px;font-size:11px;line-height:1.4;border-radius:4px}
 pre.ap-out{white-space:pre-wrap;max-height:42vh;font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace;user-select:text}
 .ap-tip{background:color-mix(in srgb,var(--a) 10%,var(--s));border:1px solid var(--b);border-radius:10px;padding:10px 12px;margin:0 0 14px;color:var(--m);font-size:13px}
+.pg-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 14px}
+.pg-tabs button{appearance:none;border:1px solid var(--b);background:var(--s);color:var(--t);border-radius:999px;padding:7px 14px;font:600 13px/1 var(--font,system-ui);cursor:pointer}
+.pg-tabs button.on{border-color:var(--a);background:color-mix(in srgb,var(--a) 16%,var(--s));color:var(--a)}
+.pg-pane[hidden]{display:none!important}
 </style></head><body>
 <div id="ctx" hidden></div>
 <div id="app"><nav id="rail"><div class="logo"><svg class="lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6cf7a"/><stop offset="1" stop-color="#d9972c"/></linearGradient></defs><rect x="3" y="3" width="94" height="94" rx="3" fill="none" stroke="url(#hg)" stroke-width="1.6"/><rect x="9" y="9" width="82" height="82" rx="1.5" fill="none" stroke="url(#hg)" stroke-width=".8" opacity=".75"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(20.14 62.81) scale(0.07303)" fill="#0b0a0c" opacity=".55"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(18.93 61.36) scale(0.07303)" fill="#fff4cf" opacity=".3"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(19.25 61.69) scale(0.07303)" fill="url(#hg)"/></svg>Haoma editor</div><div id="rl"></div><div class="rbot"><div id="pend" class="pend" hidden><b></b><div class="row"><button class="pri" id="sa">Save all to files</button><button id="da">Discard</button></div></div><div id="branch"></div><button id="bundo">↶ Undo last change</button><button id="bpv">▶ Preview</button><button id="bchk">Check build</button><div id="hmsg" class="msg"></div></div></nav>
@@ -231,7 +235,7 @@ async function discardPaths(paths){for(const p of paths){drafts.delete(p);clearT
 async function loadDrafts(){const r=await api('drafts');drafts.clear();r.items.forEach(i=>drafts.set(i.path,i.kind==='del'?null:i.kind==='bin'?{bin:true,name:i.path.split('/').pop(),size:i.size}:i.text))}
 async function load(){files=await api('tree');for(const p of DATA){try{orig[p]=await get(p)}catch(e){}}git=await api('git');$('#branch').textContent=git.ok?'⎇ '+git.branch:'not a git repo';audit=(await api('audit')).items;pend()}
 function refresh(){const c=cur;render();if(c&&VIEWS[view][3]&&allFiles().includes(c)&&view!=='themes'&&view!=='nav')openFile(c)}
-const VIEWS={dash:['🏠','Dashboard',pDash,0],content:['📝','Content',pContent,1],drafts:['🗒','Drafts',pDrafts,0],themes:['🎨','Themes',pThemes,1],art:['🖌','Art prompt',pArtPrompt,0],nav:['🧭','Navigation',pNav,1],review:['🔎','Review',pReview,0],files:['🗂','Files',pFiles,1],history:['↶','History',pHistory,0],publish:['🚀','Publish & PR',pPublish,0],settings:['⚙️','Settings',pSettings,0]};
+const VIEWS={dash:['🏠','Dashboard',pDash,0],content:['📝','Content',pContent,1],drafts:['🗒','Drafts',pDrafts,0],themes:['🎨','Themes',pThemes,1],art:['🖌','Prompt generator',pPrompts,0],nav:['🧭','Navigation',pNav,1],review:['🔎','Review',pReview,0],files:['🗂','Files',pFiles,1],history:['↶','History',pHistory,0],publish:['🚀','Publish & PR',pPublish,0],settings:['⚙️','Settings',pSettings,0]};
 /* ===== panel visibility (persisted to localStorage) ===== */
 let hiddenPanels=new Set();
 try{const h=JSON.parse(localStorage.getItem('editor_hidden_panels')||'[]');hiddenPanels=new Set(h)}catch(e){}
@@ -277,7 +281,7 @@ function openPalette(){
   {t:'Dashboard',s:'view',run:()=>{view='dash';render()}},
   {t:'Content',s:'view',run:()=>{view='content';render()}},
   {t:'Review',s:'view',run:()=>{view='review';render()}},
-  {t:'Art prompt',s:'view',run:()=>{view='art';render()}},
+  {t:'Prompt generator',s:'view',run:()=>{view='art';render()}},
   {t:'Publish & PR',s:'view',run:()=>{view='publish';render()}},
   {t:'New page',s:'action',run:()=>{view='content';render();wizPage()}},
   {t:'Preview site',s:'action',run:()=>$('#bpv').click()}
@@ -1509,12 +1513,86 @@ function buildArtPrompt(o){
  }
  return{prompt,howto,neg:ART_NEG,spec:`${f.label} · ${c.key} · ${f.w}×${f.h} (${f.ar}) · ${isGif?'GIF':'static'} · accent ${c.accent}`,kind:isGif?'gif':'static',form:f,cult:c};
 }
-function pArtPrompt(){
- $('#panel').innerHTML='<p class="msg" style="padding:8px">Built from <code>art-gen-ai.md</code> + live <code>themes.json</code> colours.</p>';
+/* ===== prompt generator hub (Art + Translation) ===== */
+let promptTab='art'; // art | translate
+async function loadPageText(p){
+ if(drafts.has(p)){const v=drafts.get(p);if(typeof v==='string')return v;if(v===null)throw Error('deleted draft: '+p)}
+ return await get(p);
+}
+function srcLangOf(p){const m=String(p||'').match(/^content\/(\w+)\//);return m?m[1]:''}
+function twinPath(p,target){const m=String(p||'').match(/^content\/(\w+)\/(.+)$/);if(!m)return'';return`content/${target}/${m[2]}`}
+function buildTranslatePrompt(o){
+ const srcLang=o.srcLang,tgtLang=o.tgtLang,path=o.path,body=o.body,notes=(o.notes||'').trim(),agent=o.agent||'claude';
+ const srcName=srcLang==='fa'?'Farsi (Persian)':srcLang==='en'?'English':srcLang;
+ const tgtName=tgtLang==='fa'?'Farsi (Persian)':tgtLang==='en'?'English':tgtLang;
+ const outPath=twinPath(path,tgtLang);
+ const rules=[
+  'Follow translate-ai.md (Haoma translation brief).',
+  'Return ONE complete Markdown file: YAML front matter + body.',
+  'Keep front-matter keys in English; translate human strings (title, tagline, quote, body prose).',
+  'Do NOT change: culture, sec, subculture, card_bg, related paths, themes keys, audio/youtube/spotify IDs.',
+  'Preserve shortcodes ({{< >}} / {{% %}}); translate only visible caption/note/text values and prose between tags.',
+  'Set grade: draft after machine translation until a native reader verifies.',
+  'No new unsourced claims; keep scholarly hedging.',
+  srcLang==='en'&&tgtLang==='fa'?'English→Farsi: natural encyclopedia Persian; established FA names (زرتشت, مهر, …) when the FA tree already uses them.':'',
+  srcLang==='fa'&&tgtLang==='en'?'Farsi→English: clear literary English; names consistent with the English content tree.':''
+ ].filter(Boolean);
+ let agentNote='';
+ if(agent==='claude')agentNote='Claude: keep the checklist; output only the finished Markdown file (optionally wrap in a single ```markdown fence). Do not summarise — translate everything.';
+ else if(agent==='gpt')agentNote='ChatGPT / GPT: same contract as Claude. If the model truncates, ask it to continue from the last heading without repeating earlier sections.';
+ else if(agent==='gemini')agentNote='Gemini: paste as one brief + the full source. Ask for the complete file back; if length-limited, continue section by section in order.';
+ else agentNote='Generic agent: follow the rules, return the full translated Markdown file for the target path.';
+ const prompt=[
+  `# Haoma translation brief (follow translate-ai.md)`,
+  ``,
+  `## Task`,
+  `Translate the Haoma page below from **${srcName}** (\`${srcLang}\`) to **${tgtName}** (\`${tgtLang}\`).`,
+  ``,
+  `## Paths`,
+  `- Source: \`${path}\``,
+  `- Write result as: \`${outPath}\``,
+  ``,
+  `## Model notes`,
+  agentNote,
+  ``,
+  notes?`## Extra instructions from the editor\n${notes}\n`:'',
+  `## Rules`,
+  ...rules.map(r=>`- ${r}`),
+  ``,
+  `## Checklist before accept`,
+  `- [ ] Full front matter + body`,
+  `- [ ] Shortcodes still valid; site-root paths unchanged`,
+  `- [ ] grade: draft (machine-assisted)`,
+  `- [ ] Title/tagline in ${tgtName}; structural keys untouched`,
+  ``,
+  `## Source document (translate in full)`,
+  ``,
+  '```markdown',
+  body.replace(/\s+$/,''),
+  '```'
+ ].filter(v=>v!==undefined).join('\n');
+ const howto=`Paste into your ${agent} agent with translate-ai.md in context if possible. Save the reply to ${outPath} (create stub from Content if missing, then replace). Keep grade: draft until a native check.`;
+ return{prompt,howto,spec:`${srcLang} → ${tgtLang} · ${path} → ${outPath} · agent ${agent}`,outPath,srcLang,tgtLang};
+}
+function pPrompts(){
+ $('#panel').innerHTML='<p class="msg" style="padding:8px">Multi-section prompts for agents. Art → <code>art-gen-ai.md</code>. Translation → <code>translate-ai.md</code>.</p>';
+ $('#main').innerHTML=`<h2>Prompt generator</h2>
+ <div class="pg-tabs" role="tablist">
+  <button type="button" data-pg="art" class="${promptTab==='art'?'on':''}">Art generation</button>
+  <button type="button" data-pg="translate" class="${promptTab==='translate'?'on':''}">Translation</button>
+ </div>
+ <div class="pg-pane" id="pg_art" ${promptTab==='art'?'':'hidden'}></div>
+ <div class="pg-pane" id="pg_tr" ${promptTab==='translate'?'':'hidden'}></div>`;
+ const switchTab=t=>{promptTab=t;document.querySelectorAll('.pg-tabs button').forEach(b=>b.classList.toggle('on',b.dataset.pg===t));
+  $('#pg_art').hidden=t!=='art';$('#pg_tr').hidden=t!=='translate';
+  if(t==='art')mountArtPromptPane($('#pg_art'));else mountTranslatePromptPane($('#pg_tr'))};
+ document.querySelectorAll('.pg-tabs button').forEach(b=>b.onclick=()=>switchTab(b.dataset.pg));
+ if(promptTab==='art')mountArtPromptPane($('#pg_art'));else mountTranslatePromptPane($('#pg_tr'));
+}
+function mountArtPromptPane(root){
  const cults=Object.keys(themes());
  artRefs=[];
- $('#main').innerHTML=`<h2>Art prompt generator</h2>
- <div class="ap-tip"><b>Beginner path:</b> pick the slot → culture → static or GIF → describe what you want → optional reference images → <b>Generate</b> → copy into your agent.<br>
+ root.innerHTML=`<div class="ap-tip"><b>Beginner path:</b> pick the slot → culture → static or GIF → describe what you want → optional reference images → <b>Generate</b> → copy into your agent.<br>
  Claude + this brief usually stays on-style; Gemini needs the <b>Gemini</b> agent mode (narrative + aspect words). Always attach Haoma refs when you have them.</div>
  <div class="card pad">
   <div class="two">
@@ -1587,6 +1665,90 @@ function pArtPrompt(){
  $('#ap_copyall').onclick=()=>last&&clip(last.prompt+'\n\n---\nHOW TO USE\n'+last.howto+'\n\n---\nAVOID\n'+last.neg+'\n\n---\n'+last.spec);
  $('#ap_dl').onclick=()=>{if(!last)return;const blob=new Blob([`# Haoma art prompt\n\n${last.spec}\n\n## Prompt\n\n${last.prompt}\n\n## How to use\n\n${last.howto}\n\n## Avoid\n\n${last.neg}\n\n## Refs\n\n${artRefs.map(r=>`- ${r.name}${r.path?' → '+r.path:''}`).join('\n')||'(none)'}\n`],{type:'text/markdown'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='haoma-art-prompt.md';a.click();URL.revokeObjectURL(a.href)};
+}
+function mountTranslatePromptPane(root){
+ const pages=allFiles().filter(f=>/^content\/(en|fa)\//.test(f)&&f.endsWith('.md'));
+ const opts=pages.map(p=>{const lang=srcLangOf(p);const label=p.replace(/^content\//,'');return`<option value="${esc(p)}" data-lang="${lang}">${esc(label)}</option>`}).join('');
+ root.innerHTML=`<div class="ap-tip"><b>Translation path:</b> pick an existing page → target language (English or Farsi) → model → optional notes → <b>Generate</b>. The prompt includes the <b>full source file</b> plus rules from <code>translate-ai.md</code> for the agent.</div>
+ <div class="card pad">
+  <div class="two">
+   <div>
+    <label>Filter pages</label>
+    <input type="search" id="tr_filter" placeholder="Filter by path or title…" autocomplete="off">
+    <label>Source document</label>
+    <select id="tr_src" size="12" style="height:220px">${opts||'<option value="">(no content pages)</option>'}</select>
+    <p class="msg" id="tr_meta" style="margin-top:8px"></p>
+   </div>
+   <div>
+    <label>Target language</label>
+    <select id="tr_tgt">
+     <option value="fa">Farsi (Persian) — fa</option>
+     <option value="en">English — en</option>
+    </select>
+    <label>Model / agent</label>
+    <select id="tr_agent">
+     <option value="claude">Claude (recommended)</option>
+     <option value="gpt">ChatGPT / GPT</option>
+     <option value="gemini">Gemini</option>
+     <option value="generic">Generic / other</option>
+    </select>
+    <label>Extra explanation <span class="msg">(optional)</span></label>
+    <textarea id="tr_notes" rows="8" placeholder="e.g. Keep Avestan miθra in parentheses; prefer مهر over میترا for the Iranian figure; match tone of nearby FA characters pages."></textarea>
+   </div>
+  </div>
+  <p style="margin:14px 0 0"><button class="pri" id="tr_go">Generate prompt</button>
+   <button type="button" id="tr_copy" disabled>Copy prompt</button>
+   <button type="button" id="tr_copyall" disabled>Copy all</button>
+   <button type="button" id="tr_dl" disabled>Download .md</button>
+   <span id="tr_msg" class="msg"></span></p>
+ </div>
+ <div class="card pad" id="tr_outwrap" hidden>
+  <div class="row" style="justify-content:space-between;flex-wrap:wrap"><b id="tr_spec"></b></div>
+  <label>Prompt (agent brief + full article)</label><pre class="ap-out" id="tr_prompt"></pre>
+  <label>How to use</label><pre class="ap-out" id="tr_howto" style="max-height:12vh"></pre>
+ </div>`;
+ let last=null;
+ const paintMeta=()=>{
+  const p=$('#tr_src').value,lang=srcLangOf(p);
+  if(!p){$('#tr_meta').textContent='Select a source page.';return}
+  const other=lang==='en'?'fa':lang==='fa'?'en':'';
+  if(other&&$('#tr_tgt').value===lang)$('#tr_tgt').value=other;
+  [...$('#tr_tgt').options].forEach(o=>{o.disabled=!!lang&&o.value===lang});
+  const twin=other?twinPath(p,other):'';
+  const twinExists=twin&&allFiles().includes(twin);
+  $('#tr_meta').innerHTML=`Source lang: <b>${esc(lang||'?')}</b> · Target file: <code>${esc(twin||'—')}</code>${twinExists?' · <span class="ok">translation exists (will be replaced if you save agent output)</span>':' · <span class="warn">no twin yet — create stub or new file after translate</span>'}`;
+ };
+ const applyFilter=()=>{
+  const q=($('#tr_filter').value||'').toLowerCase().trim();
+  [...$('#tr_src').options].forEach(o=>{
+   if(!o.value){o.hidden=false;return}
+   o.hidden=!!q&&!o.textContent.toLowerCase().includes(q)&&!o.value.toLowerCase().includes(q);
+  });
+ };
+ if(cur&&pages.includes(cur))$('#tr_src').value=cur;
+ else if(pages.length)$('#tr_src').selectedIndex=0;
+ paintMeta();
+ $('#tr_src').onchange=paintMeta;$('#tr_tgt').onchange=paintMeta;$('#tr_filter').oninput=applyFilter;
+ $('#tr_go').onclick=async()=>{
+  const path=$('#tr_src').value;if(!path){say('Pick a source document','warn');return}
+  const srcLang=srcLangOf(path),tgtLang=$('#tr_tgt').value;
+  if(!srcLang||(srcLang!=='en'&&srcLang!=='fa')){say('Source must be under content/en or content/fa','bad');return}
+  if(tgtLang===srcLang){say('Target language must differ from source','warn');return}
+  $('#tr_msg').textContent='Loading source…';$('#tr_msg').className='msg';
+  try{
+   const body=await loadPageText(path);
+   last=buildTranslatePrompt({path,body,srcLang,tgtLang,agent:$('#tr_agent').value,notes:$('#tr_notes').value});
+   $('#tr_outwrap').hidden=false;$('#tr_spec').textContent=last.spec;
+   $('#tr_prompt').textContent=last.prompt;$('#tr_howto').textContent=last.howto;
+   ['tr_copy','tr_copyall','tr_dl'].forEach(id=>$('#'+id).disabled=false);
+   $('#tr_msg').textContent='Ready — full article is inside the prompt';$('#tr_msg').className='msg ok';
+  }catch(err){$('#tr_msg').textContent=err.message;$('#tr_msg').className='msg bad'}
+ };
+ const clip=async t=>{try{await navigator.clipboard.writeText(t);$('#tr_msg').textContent='Copied';$('#tr_msg').className='msg ok'}catch(e){say('Copy failed — select the text manually','warn')}};
+ $('#tr_copy').onclick=()=>last&&clip(last.prompt);
+ $('#tr_copyall').onclick=()=>last&&clip(last.prompt+'\n\n---\nHOW TO USE\n'+last.howto+'\n\n---\n'+last.spec);
+ $('#tr_dl').onclick=()=>{if(!last)return;const blob=new Blob([`# Haoma translation prompt\n\n${last.spec}\n\n## Prompt\n\n${last.prompt}\n\n## How to use\n\n${last.howto}\n`],{type:'text/markdown'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='haoma-translate-prompt.md';a.click();URL.revokeObjectURL(a.href)};
 }
 /* ===== settings ===== */
 function pSettings(){const s=site();$('#main').innerHTML=`<h2>Settings</h2><div class="card pad"><h3>GitHub project</h3><p class="msg" style="margin:0">Adds "Edit this page", "Report a correction" and "Page history" links under every article.</p>

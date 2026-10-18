@@ -669,9 +669,13 @@ html[dir=rtl] .read-progress{transform-origin:100% 50%}
 /* Article sheet */
 .sheet{margin:0 0 var(--s3);padding:16px 18px;border:1px solid color-mix(in srgb,var(--accent) 30%,var(--border));border-radius:12px;background:color-mix(in srgb,var(--surface) 92%,var(--accent))}
 .sheet__def{margin:0 0 12px;font-size:1.05rem;line-height:1.5;color:var(--text);text-align:center}
-.sheet__chips{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px;margin:0 auto 12px;padding:0;width:100%;max-width:100%}
+.sheet__chips{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;align-content:flex-start;
+  gap:8px;margin:0 auto;padding:0;width:fit-content;max-width:min(36rem,100%);box-sizing:border-box}
+.sheet__chips--meta{margin-bottom:8px}
+.sheet__chips--themes{margin-bottom:12px}
+.sheet__chips--meta:only-child,.sheet__chips--themes:last-of-type{margin-bottom:12px}
 /* One height for every chip — FA + Latin theme labels share the same box */
-.sheet__chip{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-height:30px;padding:0 12px;border-radius:999px;border:1px solid var(--border);font-family:var(--ui);font-weight:600;font-size:.78rem;line-height:1;color:var(--muted);text-decoration:none;background:transparent;cursor:var(--cur-ptr,pointer);appearance:none;-webkit-appearance:none;unicode-bidi:isolate;vertical-align:middle;white-space:nowrap}
+.sheet__chip{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;min-height:30px;padding:0 12px;border-radius:999px;border:1px solid var(--border);font-family:var(--ui);font-weight:600;font-size:.78rem;line-height:1;color:var(--muted);text-decoration:none;background:transparent;cursor:var(--cur-ptr,pointer);appearance:none;-webkit-appearance:none;unicode-bidi:isolate;vertical-align:middle;white-space:nowrap;flex:0 1 auto}
 html[lang=en] .sheet__chip{letter-spacing:.04em;text-transform:uppercase}
 html[lang=fa] .sheet__chip{letter-spacing:0;text-transform:none;min-height:32px;padding:0 14px;font-size:.82rem}
 a.sheet__chip:hover,button.sheet__chip:hover{border-color:var(--accent);color:var(--accent)}

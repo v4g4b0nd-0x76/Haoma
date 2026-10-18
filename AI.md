@@ -87,6 +87,8 @@ Culture `_index.md` also takes `quote`, `quoteSource` (hero line, paraphrase unl
 ### 3.3 Translations
 Pages are linked as translations when the relative path is identical in `content/en` and `content/fa`. A stub should have the title `TODO translate: ...` and be flagged by the editor's Review view. Machine-translated text must be marked `grade: draft` until a native reader checks it.
 
+**Agent translation briefs:** follow [translate-ai.md](translate-ai.md). In the editor, **Prompt generator → Translation** builds a prompt that includes the full source file, target language (`en` / `fa`), model wording, and optional notes.
+
 ### 3.4 Evidence and honesty rules for agents
 - Every factual claim needs a source in `sources`. If you cannot source it, say so in the page and set `grade: draft`.
 - Quote at most a short phrase of any copyrighted text; paraphrase otherwise.
@@ -128,7 +130,9 @@ Preset grids the editor offers: 2/3+1/3, 1/3+2/3, 1/2+1/2, 3 and 4 columns, 2x2,
 New culture checklist: folder + `_index.md` files in both languages (3.1), theme entry, banner, tagline/quote, at least one page per section, translations, Review view clean.
 
 ## 6. Banner and art (SVG) rules
-**Generating characters, posters, card media, hero banners, or GIFs?** Follow [art-gen-ai.md](art-gen-ai.md). In the editor, **Art prompt** builds a polished prompt (culture colours, exact size, static/GIF, agent-specific wording, optional reference attachments). Maps stay in [MAP-DESIGN.md](MAP-DESIGN.md).
+**Generating characters, posters, card media, hero banners, or GIFs?** Follow [art-gen-ai.md](art-gen-ai.md). In the editor, **Prompt generator → Art** builds a polished prompt (culture colours, exact size, static/GIF, agent-specific wording, optional reference attachments). Maps stay in [MAP-DESIGN.md](MAP-DESIGN.md).
+
+**Translating pages between English and Farsi?** Follow [translate-ai.md](translate-ai.md). In the editor, **Prompt generator → Translation**.
 - `viewBox="0 0 1200 300"`, `preserveAspectRatio="xMidYMid slice"`; one file, under ~20 KB.
 - Animation only with CSS `@keyframes` inside the SVG `<style>` (works when loaded via `<img>`). No scripts, no external `href`, no web fonts, no raster embeds.
 - Include `@media (prefers-reduced-motion: reduce){*{animation:none}}` inside the SVG style.

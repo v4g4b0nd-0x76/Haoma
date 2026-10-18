@@ -1,22 +1,33 @@
 {{- /* Scannable article sheet: definition, chips, key facts, cite. */ -}}
 {{- $isLeaf := or (and (eq .Section "cultures") .Params.sec) (eq .Section "episodes") -}}
 {{- if $isLeaf -}}
+{{- $sec := .Params.sec | default "" -}}
 <header class="sheet">
   {{- with .Params.tagline -}}<p class="sheet__def">{{ . }}</p>{{- end -}}
-  <div class="sheet__chips">
+  <div class="sheet__chips sheet__chips--meta">
     {{- with .Params.culture -}}
       {{- $cu := site.GetPage (printf "/cultures/%s" .) -}}
       {{- if $cu -}}<a class="sheet__chip" href="{{ $cu.RelPermalink }}">{{ $cu.Title }}</a>
       {{- else -}}<span class="sheet__chip">{{ . }}</span>{{- end -}}
     {{- end -}}
-    {{- with .Params.sec -}}<span class="sheet__chip sheet__chip--sec">{{ i18n . | default . }}</span>{{- end -}}
+    {{- with $sec -}}<span class="sheet__chip sheet__chip--sec">{{ i18n . | default . }}</span>{{- end -}}
     {{- if eq .Section "episodes" -}}<span class="sheet__chip sheet__chip--sec">{{ i18n "episodes" }}</span>{{- end -}}
-    {{- if and .Params.subculture (ne .Params.sec "traditions") -}}{{ partial "subculture-chip.html" . }}{{- end -}}
+    {{- if and .Params.subculture (ne $sec "traditions") -}}{{ partial "subculture-chip.html" . }}{{- end -}}
     {{- with .Params.grade -}}<span class="sheet__chip sheet__chip--grade">{{ partial "grade.html" . }}</span>{{- end -}}
-    {{- range (.Params.themes | default slice) -}}
-      <a class="sheet__chip sheet__chip--theme" href="{{ printf "%s#%s" ("themes/" | relLangURL) (. | urlize) }}">{{ . }}</a>
+  </div>
+  {{- $themes := .Params.themes | default slice -}}
+  {{- if $themes -}}
+  <div class="sheet__chips sheet__chips--themes">
+    {{- range $themes -}}
+      {{- $t := . -}}
+      {{- /* Skip theme chips that duplicate the section key */ -}}
+      {{- if and $sec (eq ($t | lower) ($sec | lower)) -}}
+      {{- else -}}
+      <a class="sheet__chip sheet__chip--theme" href="{{ printf "%s#%s" ("themes/" | relLangURL) ($t | urlize) }}">{{ $t }}</a>
+      {{- end -}}
     {{- end -}}
   </div>
+  {{- end -}}
   {{- with .Params.pronounce -}}
   <p class="sheet__pron muted"><span class="sheet__pron-label">{{ i18n "pronounce" }}</span> {{ . }}</p>
   {{- end -}}
