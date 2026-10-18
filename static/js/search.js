@@ -46,6 +46,7 @@
     var t = (item.t || "").toLowerCase();
     var g = (item.g || "").toLowerCase();
     var b = (item.b || "").toLowerCase();
+    var m = (item.m || "").toLowerCase();
     var s = 0;
     for (var i = 0; i < toks.length; i++) {
       var w = toks[i];
@@ -54,6 +55,7 @@
       else if (t.indexOf(w) === 0) { s += 90; hit = true; }
       else if (t.indexOf(w) >= 0) { s += 55; hit = true; }
       if (g.indexOf(w) >= 0) { s += 28; hit = true; }
+      if (m.indexOf(w) >= 0) { s += 35; hit = true; }
       if (b.indexOf(w) >= 0) { s += 10; hit = true; }
       if (!hit) return 0; /* AND: every token must match somewhere */
     }

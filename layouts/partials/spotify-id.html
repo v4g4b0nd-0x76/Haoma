@@ -1,0 +1,10 @@
+{{- /* Print a Spotify embed path (type/id) from open.spotify.com URL or type:id. */ -}}
+{{- $raw := trim (. | default "") " \t\n\r" -}}
+{{- $out := "" -}}
+{{- if findRE `(?i)^(episode|track|album|playlist|show):[A-Za-z0-9]+$` $raw -}}
+  {{- $out = replaceRE `:` `/` $raw -}}
+{{- else if findRE `(?i)open\.spotify\.com` $raw -}}
+  {{- $out = replaceRE `(?i)^.*open\.spotify\.com/(embed/)?(episode|track|album|playlist|show)/([A-Za-z0-9]+).*$` `$2/$3` $raw -}}
+  {{- if not (findRE `^(episode|track|album|playlist|show)/[A-Za-z0-9]+$` $out) }}{{ $out = "" }}{{ end -}}
+{{- end -}}
+{{- $out -}}

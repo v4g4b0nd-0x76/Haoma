@@ -4,6 +4,9 @@ culture: greek
 quote: ""
 quoteSource: ""
 tagline: Olympus, heroes and fate
+atlas_path:
+  - /cultures/greek/characters/zeus/
+  - /cultures/greek/characters/athena/
 cascade:
   culture: greek
 ---

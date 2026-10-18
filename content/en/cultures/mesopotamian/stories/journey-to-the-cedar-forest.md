@@ -2,13 +2,28 @@
 title: "The Cedar Forest"
 tagline: "Gilgamesh and Enkidu walk to the forests of the Amanus"
 grade: "primary text"
+reviewed: 2026-10-18
+themes:
+  - friendship
+  - journey
+  - forest
+facts:
+  - "Tablet V of the Standard Babylonian Gilgamesh epic"
+  - "Route follows Euphrates north, then west into Amanus / Lebanon cedars"
+  - "Huwawa (Humbaba) guards timber reserved for the gods"
 sources:
   - "Epic of Gilgamesh (Standard Babylonian version), Tablet V — primary text, paraphrased here"
   - "Andrew George, The Epic of Gilgamesh (Penguin, 2003) — modern translation and scholarship"
-reviewed: 2026-10-13
-draft: true
+related:
+  - /cultures/mesopotamian/characters/enkidu/
 ---
 <p class="lead">In Tablet V the heroes set out to cut cedar in the forests beyond the western mountains, where the demon Huwawa guards the trees. This page follows their road across the map — the geography is real, the story is myth.</p>
+
+{{< art-strip >}}
+img/media/meso-seal-strip.svg | Cylinder-seal strip — heroes, reed water, cedar and Huwawa
+img/media/cedar-departure.svg | Leaving Uruk
+img/media/cedar-pass.svg | Passes of the Amanus
+{{< /art-strip >}}
 
 ## The route
 

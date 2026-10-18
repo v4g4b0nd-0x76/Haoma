@@ -4,6 +4,9 @@ culture: mesopotamian
 quote: "Gilgamesh wept for Enkidu and set out to find the secret of life."
 quoteSource: "Epic of Gilgamesh (paraphrase)"
 tagline: "Two rivers, clay tablets and the first gods"
+atlas_path:
+  - /cultures/mesopotamian/characters/enkidu/
+  - /cultures/mesopotamian/stories/journey-to-the-cedar-forest/
 cascade:
   culture: mesopotamian
 wide: true

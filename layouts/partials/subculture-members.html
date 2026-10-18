@@ -1,0 +1,17 @@
+{{- /* On a traditions/* page: list culture leaves tagged with this subculture id. */ -}}
+{{- if and (eq .Section "cultures") (eq .Params.sec "traditions") (not .IsSection) -}}
+{{- $id := .File.ContentBaseName -}}
+{{- $cu := .Params.culture -}}
+{{- $pages := slice -}}
+{{- range where site.RegularPages "Params.culture" $cu -}}
+  {{- if and .Params.sec (ne .Params.sec "traditions") (eq .Params.subculture $id) -}}
+    {{- $pages = $pages | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- if $pages -}}
+<section class="subcult-members" aria-label="{{ i18n "traditionsIn" }}">
+  <h2>{{ i18n "traditionsIn" }}</h2>
+  <ul class="cards">{{ range $pages }}{{ partial "card.html" . }}{{ end }}</ul>
+</section>
+{{- end -}}
+{{- end -}}

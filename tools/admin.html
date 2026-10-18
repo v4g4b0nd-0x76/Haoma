@@ -16,16 +16,23 @@ input:focus,textarea:focus,select:focus{outline:2px solid var(--a);outline-offse
 .rb{display:flex;gap:10px;align-items:center;width:100%;text-align:left;border:0;background:none;border-radius:8px;padding:9px 10px;margin:1px 0;color:var(--m)}
 .rb span{width:22px;text-align:center}.rb:hover{background:var(--s2);color:var(--t)}.rb.on{background:var(--s2);color:var(--a);box-shadow:inset 3px 0 var(--a)}
 .rbot{border-top:1px solid var(--b);padding-top:10px;display:grid;gap:6px}.rbot button{width:100%}#branch{color:var(--m);font-size:12px;padding:0 4px}
-#panel{background:var(--s);border-right:1px solid var(--b);overflow:auto;padding:12px}#main{overflow:auto;padding:22px 26px;min-width:0}
+#panel{background:var(--s);border-right:1px solid var(--b);overflow:auto;padding:12px;scrollbar-width:thin;scrollbar-color:color-mix(in srgb,var(--a) 40%,var(--b)) var(--bg)}
+#panel::-webkit-scrollbar{width:8px}#panel::-webkit-scrollbar-track{background:var(--bg)}
+#panel::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--a) 35%,var(--b));border-radius:99px;border:2px solid var(--bg)}
+#main{overflow:auto;padding:22px 26px;min-width:0}
 .vault-tools{display:flex;gap:6px;margin-bottom:8px}.vault-tools button{flex:1;padding:7px 8px;font-size:12.5px}
 .vault-search{width:100%;margin:0 0 10px;padding:9px 12px;border-radius:10px;background:var(--bg);border:1px solid var(--b)}
 .vault-search:focus{border-color:var(--a)}
 #ct details{margin:0 0 2px}#ct>details>summary{font-size:11px;letter-spacing:.08em;padding:8px 8px 4px;color:var(--m)}
 #ct summary.s2{padding:6px 10px;border-radius:8px;font-weight:600;color:var(--t)}
-#ct summary.s2:hover{background:var(--s2)}
+#ct summary.s2:hover,#ct summary.s3:hover{background:var(--s2)}
+#ct summary.s3{padding:5px 10px 5px 16px;border-radius:8px;font-weight:550;font-size:12.5px;color:var(--m);text-transform:none;letter-spacing:0}
+#ct details.sec{margin-inline-start:6px;border-inline-start:1px solid var(--b);padding-inline-start:4px}
 #ct .item{padding:7px 12px 7px 18px;border-radius:8px;font-size:13px;margin:1px 0;line-height:1.35;white-space:normal}
+#ct details.sec .item{padding-inline-start:22px}
 #ct .item .path{display:block;font-size:11px;color:var(--m);margin-top:1px}
 #ct .item.on{box-shadow:inset 3px 0 var(--a)}
+#ct .item.hub{color:var(--a);font-weight:600}
 #pvwrap{display:none;border-left:1px solid var(--b);flex-direction:column;min-width:0}#app.pv #pvwrap{display:flex}#pvwrap iframe{flex:1;border:0;background:#fff}#pvwrap .row{padding:8px;background:var(--s)}
 label{display:block;margin:10px 0 3px;color:var(--m);font-size:12px}input[type=text],select,textarea{width:100%}
 .row{display:flex;gap:8px;align-items:center}.row>input,.row>select{flex:1}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -122,6 +129,40 @@ textarea.ed{height:calc(100vh - 340px);min-height:240px}textarea.mono,textarea.e
 .relchip .tick{width:1.1em;text-align:center;font-weight:700}
 .relchip:hover{border-color:var(--a);color:var(--t)}
 .relchip.on{border-color:var(--ok);color:var(--ok);background:color-mix(in srgb,var(--ok) 10%,transparent)}
+.relchip.reladd{border-style:dashed;color:var(--a)}
+.atlasbox{display:flex;flex-direction:column;gap:6px;margin:4px 0 2px;max-height:280px;overflow:auto;padding:2px 0}
+.atlasstep{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:6px 10px;align-items:center;padding:8px 10px;border:1px solid var(--b);border-radius:10px;background:var(--s2)}
+.atlasstep__n{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font:700 12px/1 system-ui,sans-serif;color:var(--a);border:1px solid color-mix(in srgb,var(--a) 45%,var(--b));background:color-mix(in srgb,var(--a) 12%,transparent)}
+.atlasstep__meta{min-width:0}.atlasstep__meta b{display:block;font-size:13px;font-weight:600;color:var(--t);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.atlasstep__meta span{display:block;font-size:11.5px;color:var(--m);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.atlasstep__acts{display:flex;gap:4px;flex-shrink:0}
+.atlasstep__acts button{padding:4px 8px;font-size:12px;min-width:32px}
+.atlasbox .reladd{align-self:flex-start;margin-top:2px}
+.relgrp{width:100%;margin:6px 0 2px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--m)}
+.pairbox{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:6px 0 4px}
+.pairslot{appearance:none;display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:12px 14px;border:1px dashed var(--b);border-radius:12px;background:var(--bg);color:var(--m);cursor:pointer;text-align:left;min-height:72px}
+.pairslot:hover{border-color:var(--a);color:var(--t)}
+.pairslot.has{border-style:solid;border-color:color-mix(in srgb,var(--a) 55%,var(--b));color:var(--t)}
+.pairslot b{font-size:14px;color:var(--t)}.pairslot span{font-size:12px;color:var(--m);word-break:break-all}
+.azhint{margin:8px 0 0;padding:8px 12px;border-radius:10px;border:1px solid var(--b);background:var(--bg);color:var(--m);font-size:13px}
+.azhint b{color:var(--a);font-size:1.1em}
+.listenbox{margin:12px 0 4px;padding:12px 14px;border-radius:12px;border:1px solid color-mix(in srgb,var(--a) 40%,var(--b));background:color-mix(in srgb,var(--a) 8%,var(--s))}
+.listenbox__h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 8px}
+.listenbox__h b{font-size:13px;color:var(--a);letter-spacing:.04em;text-transform:uppercase}
+.listenbox__meta{margin:0 0 8px;font-size:13px;color:var(--t)}
+.listenbox__meta code{font-size:12px}
+.listenbox__row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.listenbox audio{width:100%;max-width:420px;height:36px;margin-top:8px}
+.ppick-tools{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 10px;align-items:center}
+.ppick-tools input{flex:1;min-width:160px}
+.ppick-filters{display:flex;gap:6px;flex-wrap:wrap}
+.ppick-filters button{border-radius:99px;padding:3px 12px;font-size:12.5px}
+.ppick-filters button.on{background:var(--a);color:#0b0d10;border-color:var(--a)}
+.ppick-list{list-style:none;margin:0;padding:0;max-height:48vh;overflow:auto;border:1px solid var(--b);border-radius:10px}
+.ppick-list li{display:flex;justify-content:space-between;gap:12px;padding:10px 12px;border-bottom:1px solid color-mix(in srgb,var(--b) 80%,transparent);cursor:pointer}
+.ppick-list li:last-child{border-bottom:0}
+.ppick-list li:hover,.ppick-list li.on{background:var(--s2)}
+.ppick-list li b{font-weight:600}.ppick-list li span{color:var(--m);font-size:12px;text-align:end}
 .chklist{display:flex;flex-wrap:wrap;gap:8px;margin:0;font-size:12px;color:var(--m)}
 .chklist span{border:1px solid var(--b);border-radius:99px;padding:2px 10px}
 .chklist span.ok{border-color:var(--ok);color:var(--ok)}
@@ -204,8 +245,16 @@ function render(){$('#rl').innerHTML='';for(const k in VIEWS){if(hiddenPanels.ha
  if(hiddenPanels.has(view)){view='dash'}
  $('#app').classList.toggle('nolist',!VIEWS[view][3]);$('#app').classList.remove('note-mode');$('#panel').innerHTML='';$('#main').innerHTML='';VIEWS[view][2]()}
 function list(paths,filter=''){return paths.filter(p=>p.includes(filter)).map(p=>`<button class="item ${p===cur?'on':''}" data-p="${esc(p)}" title="${esc(p)}">${drafts.has(p)?'● ':''}${esc(p.replace(/^content\//,''))}</button>`).join('')}
-function bindItems(){document.querySelectorAll('#panel .item').forEach(b=>{b.onclick=()=>openFile(b.dataset.p);b.oncontextmenu=e=>{e.preventDefault();showCtx(e.clientX,e.clientY,treeCtx(b.dataset.p))}})}
+function bindItems(){
+ document.querySelectorAll('#panel .item').forEach(b=>{b.onclick=()=>openFile(b.dataset.p);b.oncontextmenu=e=>{e.preventDefault();showCtx(e.clientX,e.clientY,treeCtx(b.dataset.p))}});
+ document.querySelectorAll('#panel details[data-ctx]').forEach(d=>{
+  const sum=d.querySelector(':scope > summary');if(!sum)return;
+  sum.oncontextmenu=e=>{e.preventDefault();e.stopPropagation();showCtx(e.clientX,e.clientY,folderCtx(d))};
+ });
+}
 function leafLabel(p){const leaf=p.split('/').pop().replace(/\.md$/,'').replace(/^index$/,'');const parts=p.replace(/^content\/\w+\//,'').split('/');
+ if(parts[0]==='cultures'&&parts.length===3&&leaf==='_index')return{title:'Culture hub',sub:parts[1]};
+ if(parts[0]==='cultures'&&parts.length===4&&leaf==='_index')return{title:'Overview',sub:parts[2]};
  if(parts[0]==='cultures'&&parts.length>=4)return{title:leaf.replace(/-/g,' '),sub:parts[2]};
  if(parts[0]==='episodes')return{title:leaf.replace(/-/g,' '),sub:'episode'};
  return{title:leaf.replace(/-/g,' '),sub:parts.slice(0,-1).join(' / ')||'page'}}
@@ -248,18 +297,58 @@ function openPalette(){
   if(e.key==='Enter'){e.preventDefault();const h=hits[ai];closePalette();if(h)h.run()}};
  paint();setTimeout(()=>{q.focus();q.select()},10)}
 function closePalette(){const el=$('#pal');if(el)el.classList.remove('on')}
-function treeCtx(p){const dir=p.replace(/\/[^/]+$/,'');
- return[
+function treeCtx(p){
+ const cultHub=p.match(/^content\/(\w+)\/cultures\/([^/]+)\/_index\.md$/);
+ const secHub=p.match(/^content\/(\w+)\/cultures\/([^/]+)\/([^/]+)\/_index\.md$/);
+ const cultLeaf=p.match(/^content\/(\w+)\/cultures\/([^/]+)\/([^/]+)\/(?!_index)([^/]+)\.md$/);
+ const items=[
   {id:'open',label:'Open',run:()=>openFile(p)},
   {id:'prev',label:'Reveal in Preview',run:async()=>{if(!pvOn)await pv('start');show(pageUrl(p))}},
-  '-',
-  {id:'new',label:'New note here…',run:()=>{view='content';render();wizPage()}},
+  '-'
+ ];
+ if(cultHub){
+  items.push(
+   {id:'addpage',label:'Add page to this culture…',run:()=>wizPage({lang:cultHub[1],culture:cultHub[2]})},
+   {id:'addsec',label:'Create section…',run:()=>wizNewSection(cultHub[1],cultHub[2])}
+  );
+ }else if(secHub){
+  items.push({id:'addpage',label:'Add page to this section…',run:()=>wizPage({lang:secHub[1],culture:secHub[2],section:secHub[3]})});
+ }else if(cultLeaf){
+  items.push({id:'addsib',label:'Add page in '+cultLeaf[3]+'…',run:()=>wizPage({lang:cultLeaf[1],culture:cultLeaf[2],section:cultLeaf[3]})});
+ }else{
+  items.push({id:'new',label:'New page…',run:()=>wizPage()});
+ }
+ items.push(
   {id:'dup',label:'Duplicate',run:()=>dupPath(p)},
   {id:'ren',label:'Rename…',run:()=>renamePath(p)},
   {id:'copy',label:'Copy path',run:()=>navigator.clipboard.writeText(p).then(()=>say('Path copied','ok'),()=>say(p,'ok'))},
   '-',
   {id:'del',label:'Delete…',bad:1,run:async()=>{if(!confirm('Mark '+p+' for deletion? (applied on Save)'))return;if(files.includes(p)){setDraft(p,null);await push(p)}else{drafts.delete(p);await api('discard?path='+E(p),{method:'POST'});pend()}if(cur===p)cur=null;render()}}
- ];
+ );
+ return items;
+}
+function folderCtx(d){
+ const kind=d.dataset.ctx,lang=d.dataset.lang,cu=d.dataset.cu,sec=d.dataset.sec;
+ if(kind==='cult'){
+  const hub=`content/${lang}/cultures/${cu}/_index.md`;
+  return[
+   {id:'open',label:'Open culture hub',run:()=>openFile(hub)},
+   {id:'prev',label:'Reveal in Preview',run:async()=>{if(!pvOn)await pv('start');show(pageUrl(hub))}},
+   '-',
+   {id:'addpage',label:'Add page…',run:()=>wizPage({lang,culture:cu})},
+   {id:'addsec',label:'Create section…',run:()=>wizNewSection(lang,cu)}
+  ];
+ }
+ if(kind==='sec'){
+  const hub=`content/${lang}/cultures/${cu}/${sec}/_index.md`;
+  return[
+   {id:'open',label:'Open section overview',run:()=>openFile(hub)},
+   {id:'prev',label:'Reveal in Preview',run:async()=>{if(allFiles().includes(hub)){if(!pvOn)await pv('start');show(pageUrl(hub))}else say('Create the section overview first','warn')}},
+   '-',
+   {id:'addpage',label:'Add page to this section…',run:()=>wizPage({lang,culture:cu,section:sec})}
+  ];
+ }
+ return[];
 }
 async function dupPath(p){try{const txt=drafts.has(p)?drafts.get(p):await get(p);if(txt===null||(txt&&txt.bin))throw Error('cannot duplicate this entry');
  const base=p.replace(/\.md$/,'');let n=base+'-copy.md',i=2;while(allFiles().includes(n)){n=base+'-copy'+i+'.md';i++}
@@ -271,20 +360,63 @@ async function renamePath(p){try{const leaf=p.split('/').pop().replace(/\.md$/,'
  const txt=drafts.has(p)?drafts.get(p):(files.includes(p)?await get(p):null);if(txt===null||(txt&&txt.bin))throw Error('cannot rename this entry');
  setDraft(np,txt);if(files.includes(p)){setDraft(p,null);await push(p)}else{drafts.delete(p);await api('discard?path='+E(p),{method:'POST'}).catch(()=>{})}
  view='content';render();openFile(np);say('Renamed as draft — Save to apply','warn')}catch(e){say(e.message,'bad')}}
-function ctree(paths,filter){const f=filter.toLowerCase(),g={};paths.filter(p=>p.toLowerCase().includes(f)||leafLabel(p).title.toLowerCase().includes(f)).forEach(p=>{const m=p.match(/^content\/(\w+)\/(.*)$/),l=m?m[1]:'other',rest=m?m[2]:p,pt=rest.split('/'),k=pt[0]==='cultures'&&pt.length>2?pt[1]:pt[0].replace(/\.md$/,'');g[l]=g[l]||{};(g[l][k]=g[l][k]||[]).push(p)});
- return Object.keys(g).sort().map(l=>`<details open><summary>${l==='en'?'English':l==='fa'?'فارسی':l}</summary>${Object.keys(g[l]).sort().map(k=>`<details ${f||(cur&&cur.includes('/'+k+'/'))?'open':''}><summary class="s2">${esc(k)}</summary>${g[l][k].map(p=>{const lb=leafLabel(p);return`<button class="item ${p===cur?'on':''}" data-p="${esc(p)}" title="${esc(p)}">${drafts.has(p)?'● ':''}${esc(lb.title)}${lb.sub?`<span class="path">${esc(lb.sub)}</span>`:''}</button>`}).join('')}</details>`).join('')}</details>`).join('')}
-function pContent(){const md=allFiles().filter(f=>f.startsWith('content/'));$('#panel').innerHTML=`<div class="vault-tools"><button class="pri" id="np">+ Page</button><button id="nc">+ Culture</button></div><input type="search" class="vault-search" id="cs" placeholder="Find a page…" autocomplete="off"><div id="ct">${ctree(md,'')}</div>`;bindItems();$('#np').onclick=wizPage;$('#nc').onclick=wizCulture;$('#cs').oninput=()=>{$('#ct').innerHTML=ctree(md,$('#cs').value);bindItems()}}
+function ctree(paths,filter){
+ const f=filter.toLowerCase();
+ const langs={};
+ const keep=p=>!f||p.toLowerCase().includes(f)||leafLabel(p).title.toLowerCase().includes(f);
+ paths.filter(keep).forEach(p=>{
+  const m=p.match(/^content\/(\w+)\/(.*)$/);const lang=m?m[1]:'other';const parts=(m?m[2]:p).split('/');
+  langs[lang]=langs[lang]||{cultures:{},tops:{}};
+  if(parts[0]==='cultures'&&parts[1]&&parts[1]!=='_index.md'){
+   const cu=parts[1];
+   const b=langs[lang].cultures[cu]=langs[lang].cultures[cu]||{hub:null,secs:{},loose:[]};
+   if(parts.length===3&&parts[2]==='_index.md')b.hub=p;
+   else if(parts.length>=4){(b.secs[parts[2]]=b.secs[parts[2]]||[]).push(p)}
+   else b.loose.push(p);
+  }else{
+   const k=parts[0].replace(/\.md$/,'');
+   (langs[lang].tops[k]=langs[lang].tops[k]||[]).push(p);
+  }
+ });
+ const itemBtn=p=>{const lb=leafLabel(p);const hub=lb.title==='Culture hub'||lb.title==='Overview';
+  return`<button class="item ${hub?'hub':''} ${p===cur?'on':''}" data-p="${esc(p)}" title="${esc(p)}">${drafts.has(p)?'● ':''}${esc(lb.title)}${hub?'':''}</button>`};
+ const sortPaths=arr=>arr.slice().sort((a,b)=>{
+  const ai=a.endsWith('/_index.md')?0:1,bi=b.endsWith('/_index.md')?0:1;
+  if(ai!==bi)return ai-bi;return a.localeCompare(b);
+ });
+ return Object.keys(langs).sort().map(lang=>{
+  const L=langs[lang];
+  const cultHtml=Object.keys(L.cultures).sort().map(cu=>{
+   const b=L.cultures[cu];
+   const open=f||(cur&&cur.includes('/cultures/'+cu+'/'));
+   const secOrder=[...SECS.filter(s=>b.secs[s]),...Object.keys(b.secs).filter(s=>!SECS.includes(s)).sort()];
+   const secs=secOrder.map(sec=>{
+    const pages=sortPaths(b.secs[sec]||[]);
+    const sOpen=open&&cur&&cur.includes('/cultures/'+cu+'/'+sec+'/');
+    return`<details class="sec" data-ctx="sec" data-lang="${esc(lang)}" data-cu="${esc(cu)}" data-sec="${esc(sec)}" ${sOpen?'open':''}><summary class="s3">${esc(sec)}</summary>${pages.map(itemBtn).join('')}</details>`;
+   }).join('');
+   return`<details data-ctx="cult" data-lang="${esc(lang)}" data-cu="${esc(cu)}" ${open?'open':''}><summary class="s2">${esc(cu)}</summary>${b.hub?itemBtn(b.hub):''}${secs}${b.loose.map(itemBtn).join('')}</details>`;
+  }).join('');
+  const topHtml=Object.keys(L.tops).sort().map(k=>{
+   const pages=sortPaths(L.tops[k]);
+   const open=f||(cur&&cur.includes('/'+k));
+   return`<details ${open?'open':''}><summary class="s2">${esc(k)}</summary>${pages.map(itemBtn).join('')}</details>`;
+  }).join('');
+  return`<details open><summary>${lang==='en'?'English':lang==='fa'?'فارسی':lang}</summary>${cultHtml}${topHtml}</details>`;
+ }).join('');
+}
+function pContent(){const md=allFiles().filter(f=>f.startsWith('content/'));$('#panel').innerHTML=`<div class="vault-tools"><button class="pri" id="np">+ Page</button><button id="nc">+ Culture</button></div><input type="search" class="vault-search" id="cs" placeholder="Find a page…" autocomplete="off"><div id="ct">${ctree(md,'')}</div>`;bindItems();$('#np').onclick=()=>wizPage();$('#nc').onclick=wizCulture;$('#cs').oninput=()=>{$('#ct').innerHTML=ctree(md,$('#cs').value);bindItems()}}
 /* ===== dashboard / review ===== */
 const issues={drafts:a=>a.draft&&!a.index,stale:a=>a.stale,nosrc:a=>!a.sources&&!a.index,untr:a=>a.missing.length&&!a.index,stubs:a=>a.stub&&!a.index,orphan:a=>a.orphan&&!a.index};
 function pDash(){const pg=audit.filter(a=>!a.index),n=k=>audit.filter(issues[k]).length,ch=(git.status||'').split('\n').filter(Boolean);
  $('#main').innerHTML=`<h2>Dashboard</h2>
  <div class="guide"><b>How to edit (no coding needed)</b>
  <ol><li>Open <b>Content</b> in the left menu (or press <b>+ New page</b> below).</li>
- <li>Pick a culture page from the list — right-click for Open, Duplicate, Rename, Delete.</li>
+ <li>Pick a culture in the list — <b>right-click</b> a culture for <i>Create section</i> / <i>Add page</i>, or a section for <i>Add page to this section</i>.</li>
  <li>Open a page, set title / related / sources in <b>Properties</b>.</li>
  <li><b>Paste</b> your article from Obsidian (or any editor) into the big space — you do not need to write here.</li>
  <li>Press <b>Preview</b>, then <b>Save</b>. Use <b>Publish &amp; PR</b> when ready.</li></ol>
- <p class="msg" style="margin:10px 0 0">Tip: <b>Ctrl+K</b> jumps to any page. Related links use the same ✓ ticks as the checklist.</p></div>
+ <p class="msg" style="margin:10px 0 0">Tip: <b>Ctrl+K</b> jumps to any page. Use <b>+ Add page…</b> for related / compare links across cultures. A–Z is auto from titles.</p></div>
  <div class="guide" style="margin-top:12px"><b>Onboarding checklist</b>
  <ol><li>Theme colours look right for your culture</li><li>At least one character, story and history page</li><li>Card art (or culture animation) + sources + related links</li><li>EN/FA pair (or a <code>TODO translate:</code> stub)</li><li>Publish &amp; PR</li></ol></div>
  <p class="msg" style="margin:0">Counts describe saved files. Unsaved edits live only in the editor and the preview.</p><div class="stats" style="margin-top:12px">${[['all','Pages',pg.length],['drafts','Drafts',n('drafts')],['stubs','Stubs',n('stubs')],['stale','Need review',n('stale')],['nosrc','Without sources',n('nosrc')],['orphan','No related',n('orphan')],['untr','Untranslated',n('untr')]].map(([k,l,v])=>`<button class="stat" data-r="${k}"><b>${v}</b><span>${l}</span></button>`).join('')}<button class="stat" data-v="publish"><b>${ch.length}</b><span>Uncommitted files</span></button></div>
@@ -300,30 +432,71 @@ function pReview(){const L={all:'All',drafts:'Drafts',stubs:'TODO translate stub
  <table><tr><th>Page</th><th>Lang</th><th>Grade</th><th>Reviewed</th><th>Flags</th></tr>${rows.map(a=>`<tr class="go" data-p="${esc(a.path)}"><td>${esc(a.title)}<br><span class="msg" style="margin:0">${esc(a.path.replace('content/',''))}</span></td><td>${a.lang}</td><td>${esc(a.grade)}</td><td>${esc(a.reviewed||'-')}</td><td>${a.stub?'<span class="tag">stub</span>':''}${a.draft&&!a.stub?'<span class="tag">draft</span>':''}${a.stale?'<span class="tag">review</span>':''}${a.sources?'':'<span class="tag">no sources</span>'}${a.orphan?'<span class="tag">no related</span>':''}${a.missing.map(m=>`<span class="tag">no ${m}</span>`).join('')}</td></tr>`).join('')||'<tr><td colspan=5 class="ok">Nothing to fix here.</td></tr>'}</table>`;
  document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{rf=b.dataset.r;pReview()});document.querySelectorAll('tr.go').forEach(r=>r.onclick=()=>openFile(r.dataset.p))}
 /* ===== new page / culture wizards (create DRAFTS, not files) ===== */
-const cultures=()=>Object.keys(themes()).filter(k=>k!=='base'),SECS=['characters','stories','history'],SECFA={characters:'شخصیت‌ها',stories:'داستان‌ها',history:'تاریخ'};
+const cultures=()=>Object.keys(themes()).filter(k=>k!=='base'),SECS=['characters','stories','history','traditions'],SECFA={characters:'شخصیت‌ها',stories:'داستان‌ها',history:'تاریخ',traditions:'سنت‌ها'};
+const SEC_LABEL={characters:'Characters',stories:'Stories',history:'History',traditions:'Traditions'};
 const cap=s=>s[0].toUpperCase()+s.slice(1);
 const cultIdx=(cu,title,tag)=>`---\ntitle: ${q(title)}\nculture: ${cu}\nquote: ""\nquoteSource: ""\ntagline: ${q(tag||'')}\ncascade:\n  culture: ${cu}\n---\n\nAbout ${title}.\n`;
-const secIdx=(l,s)=>`---\ntitle: ${q(l==='fa'&&SECFA[s]?SECFA[s]:cap(s))}\ncascade:\n  sec: ${s}\n---\n`;
+const secIdx=(l,s)=>`---\ntitle: ${q(l==='fa'&&SECFA[s]?SECFA[s]:(SEC_LABEL[s]||cap(s)))}\ncascade:\n  sec: ${s}\n---\n`;
 const fm=o=>'---\n'+Object.entries(o).filter(([k,v])=>v!==''&&v!==undefined&&!(Array.isArray(v)&&!v.length)).map(([k,v])=>Array.isArray(v)?k+':\n'+v.map(x=>'  - '+q(x)).join('\n'):k+': '+(typeof v==='string'&&!/^\d{4}-\d\d-\d\d$/.test(v)?q(v):v)).join('\n')+'\n---\n';
 const ensure=(p,t)=>{if(!allFiles().includes(p))setDraft(p,t)};
-function wizPage(){$('#main').innerHTML=`<h2>New page</h2><p class="msg" style="margin:0">Created as an unsaved draft. Nothing is written to the project until you press Save.</p><div class="two"><div><label>Type</label><select id="ty"><option value="culture">Culture page (character, story, history…)</option><option value="episode">Podcast episode</option><option value="plain">Plain page</option></select>
-<label>Language</label><select id="lg"><option value="en">English</option><option value="fa">فارسی</option></select><label>Culture</label><select id="cu">${cultures().map(c=>`<option>${c}</option>`).join('')}</select>
-<label>Section</label><input type="text" id="se" list="sl" value="characters"><datalist id="sl">${SECS.map(s=>`<option>${s}</option>`).join('')}</datalist><label>Title</label><input type="text" id="ti"><label>URL name (a-z, 0-9, dashes)</label><input type="text" id="sg"></div>
+const sectionKeyOf=()=>{const se=$('#se');if(!se)return'characters';if(se.value==='__other__'){const custom=slug(($('#se_custom')&&$('#se_custom').value)||'');return custom||'characters'}return se.value||'characters'};
+function wizPage(opts){
+ opts=opts||{};
+ const ty0=opts.type||'culture',lg0=opts.lang||'en',cu0=opts.culture||cultures()[0]||'',se0=opts.section||'characters';
+ const seOpts=SECS.map(s=>`<option value="${s}" ${s===se0?'selected':''}>${SEC_LABEL[s]||cap(s)}</option>`).join('')
+  +(se0&&!SECS.includes(se0)?`<option value="${esc(se0)}" selected>${esc(cap(se0))} (custom)</option>`:'')
+  +`<option value="__other__">Other…</option>`;
+ $('#main').innerHTML=`<h2>New page</h2><p class="msg" style="margin:0">Created as an unsaved draft. Nothing is written to the project until you press Save.</p><div class="two"><div><label>Type</label><select id="ty"><option value="culture" ${ty0==='culture'?'selected':''}>Culture page (character, story, history, tradition…)</option><option value="episode" ${ty0==='episode'?'selected':''}>Podcast episode</option><option value="plain" ${ty0==='plain'?'selected':''}>Plain page</option></select>
+<label>Language</label><select id="lg"><option value="en" ${lg0==='en'?'selected':''}>English</option><option value="fa" ${lg0==='fa'?'selected':''}>فارسی</option></select>
+<label id="cu_lab">Culture</label><select id="cu">${cultures().map(c=>`<option value="${esc(c)}" ${c===cu0?'selected':''}>${esc(c)}</option>`).join('')}</select>
+<label id="se_lab">Section</label><select id="se">${seOpts}</select>
+<input type="text" id="se_custom" placeholder="custom section key (a-z, dashes)" hidden value="${se0&&!SECS.includes(se0)?esc(se0):''}">
+<label>Title</label><input type="text" id="ti"><label>URL name (a-z, 0-9, dashes)</label><input type="text" id="sg"></div>
 <div><label>Tagline</label><input type="text" id="tg"><label>Evidence grade</label><select id="gr"><option>primary text</option><option>later compilation</option><option>archaeology</option><option>modern scholarship</option><option>draft</option></select>
 <label>Sources (one per line)</label><textarea id="so" rows="4"></textarea><label><input type="checkbox" id="st" checked> also create a stub in the other language</label></div></div><p><button class="pri" id="go">Create draft</button><span id="wm" class="msg"></span></p>`;
- $('#ti').oninput=()=>{if(!$('#sg').dataset.m)$('#sg').value=slug($('#ti').value)};$('#sg').oninput=()=>$('#sg').dataset.m=1;$('#go').onclick=createPage}
+ const toggle=()=>{const ty=$('#ty').value;const cult=ty==='culture',ep=ty==='episode';
+  ['cu_lab','cu','se_lab','se'].forEach(id=>{const el=$('#'+id);if(el)el.hidden=ty==='plain'});
+  if($('#se'))$('#se').hidden=!cult;if($('#se_lab'))$('#se_lab').hidden=!cult;
+  if($('#cu'))$('#cu').hidden=!(cult||ep);if($('#cu_lab'))$('#cu_lab').hidden=!(cult||ep);
+  const other=cult&&$('#se').value==='__other__';if($('#se_custom'))$('#se_custom').hidden=!other};
+ const syncOther=()=>{if($('#se').value==='__other__'){$('#se_custom').hidden=false;$('#se_custom').focus()}else{$('#se_custom').hidden=true}};
+ $('#ty').onchange=toggle;$('#se').onchange=syncOther;toggle();syncOther();
+ $('#ti').oninput=()=>{if(!$('#sg').dataset.m)$('#sg').value=slug($('#ti').value)};$('#sg').oninput=()=>$('#sg').dataset.m=1;$('#go').onclick=createPage;
+ if(opts.section||opts.culture)$('#ti').focus();
+}
 function createPage(){try{const g=id=>$('#'+id).value.trim(),ty=g('ty'),lg=g('lg'),cu=g('cu'),sg=g('sg');if(!g('ti'))throw Error('a title is required');if(!/^[a-z0-9-]+$/.test(sg))throw Error('URL name: use a-z, 0-9 and dashes only');
+ if((ty==='culture'||ty==='episode')&&!cu)throw Error('pick a culture');
+ const se=ty==='culture'?sectionKeyOf():'';
+ if(ty==='culture'&&!/^[a-z0-9-]+$/.test(se))throw Error('section: use a-z, 0-9 and dashes only');
  const base={tagline:g('tg'),grade:g('gr'),sources:g('so').split('\n').map(s=>s.trim()).filter(Boolean),reviewed:today()};
- const mk=(l,title)=>{let path,front;if(ty==='culture'){const se=slug(g('se'))||'characters';ensure(`content/${l}/cultures/${cu}/_index.md`,cultIdx(cu,cap(cu)));ensure(`content/${l}/cultures/${cu}/${se}/_index.md`,secIdx(l,se));path=`content/${l}/cultures/${cu}/${se}/${sg}.md`;front=fm({title,...base})}
+ const mk=(l,title)=>{let path,front;if(ty==='culture'){ensure(`content/${l}/cultures/${cu}/_index.md`,cultIdx(cu,cap(cu)));ensure(`content/${l}/cultures/${cu}/${se}/_index.md`,secIdx(l,se));path=`content/${l}/cultures/${cu}/${se}/${sg}.md`;front=fm({title,...base})}
   else if(ty==='episode'){path=`content/${l}/episodes/${sg}/index.md`;front=fm({title,date:today(),culture:cu,grade:g('gr'),sources:base.sources,reviewed:today()})}
   else{path=`content/${l}/${sg}/_index.md`;front=fm({title})}
   if(allFiles().includes(path))throw Error('already exists: '+path);setDraft(path,front+'\nWrite here.\n');return path};
  const first=mk(lg,g('ti'));if($('#st').checked){const ol=lg==='en'?'fa':'en';const stubTitle='TODO translate: '+g('ti');
-  if(ty==='culture'){const se=slug(g('se'))||'characters';ensure(`content/${ol}/cultures/${cu}/_index.md`,cultIdx(cu,cap(cu)));ensure(`content/${ol}/cultures/${cu}/${se}/_index.md`,secIdx(ol,se));
+  if(ty==='culture'){ensure(`content/${ol}/cultures/${cu}/_index.md`,cultIdx(cu,cap(cu)));ensure(`content/${ol}/cultures/${cu}/${se}/_index.md`,secIdx(ol,se));
    const sp=`content/${ol}/cultures/${cu}/${se}/${sg}.md`;if(!allFiles().includes(sp))setDraft(sp,fm({title:stubTitle,tagline:g('tg'),grade:'draft',sources:base.sources,reviewed:today()})+'\nTranslate this page.\n')}
   else if(ty==='episode'){const sp=`content/${ol}/episodes/${sg}/index.md`;if(!allFiles().includes(sp))setDraft(sp,fm({title:stubTitle,date:today(),culture:cu,grade:'draft',sources:base.sources,reviewed:today()})+'\nTranslate this page.\n')}
   else{const sp=`content/${ol}/${sg}/_index.md`;if(!allFiles().includes(sp))setDraft(sp,fm({title:stubTitle})+'\nTranslate this page.\n')}}
- view='content';render();openFile(first)}catch(e){$('#wm').textContent=e.message;$('#wm').className='msg bad'}}
+ view='content';render();openFile(first);say('Draft created — Save to write files','warn')}catch(e){$('#wm').textContent=e.message;$('#wm').className='msg bad'}}
+function wizNewSection(lang,cu){
+ const known=SECS.map(s=>`${s}`).join(', ');
+ const raw=prompt('New section key under '+cu+'/\n\nKnown: '+known+'\nOr type a custom key (a-z, dashes):','');
+ if(raw===null)return;
+ const se=slug(raw);if(!se){say('enter a section key','bad');return}
+ if(!/^[a-z0-9-]+$/.test(se)){say('section: use a-z, 0-9 and dashes only','bad');return}
+ const both=confirm('Also create the Farsi (or English) twin section index?\n\nOK = both languages · Cancel = '+lang+' only');
+ const langs=both?[lang,(lang==='en'?'fa':'en')]:[lang];
+ let made=[];
+ for(const l of langs){
+  ensure(`content/${l}/cultures/${cu}/_index.md`,cultIdx(cu,cap(cu)));
+  const path=`content/${l}/cultures/${cu}/${se}/_index.md`;
+  if(allFiles().includes(path)){say(path+' already exists','warn');continue}
+  setDraft(path,secIdx(l,se)+'\n');made.push(path);
+ }
+ if(!made.length){say('Section already exists','warn');return}
+ view='content';render();openFile(made[0]);say('Section draft'+(made.length>1?'s':'')+' ready — Save to keep. Right-click the section to add a page.','warn');
+}
 function wizCulture(){$('#main').innerHTML=`<h2>New culture</h2><p class="msg" style="margin:0">Created as unsaved drafts (folders, theme and banner).</p><div class="two"><div><label>Key (a-z, e.g. egyptian)</label><input type="text" id="k"><label>English name</label><input type="text" id="n1"><label>Farsi name</label><input type="text" id="n2" dir="rtl"><label>Tagline (English)</label><input type="text" id="t1"><label>Tagline (Farsi)</label><input type="text" id="t2" dir="rtl"></div>
 <div><div class="sw"><div><label>Accent</label><input type="color" id="ac" value="#c9a45a"></div><div><label>Background</label><input type="color" id="bg" value="#15171a"></div></div><label>Background animation</label><select id="an"><option>fall</option><option>drift</option><option>rise</option><option>none</option></select><label>Top strip pattern</label><select id="pa"><option>none</option><option>meander</option><option>rosette</option><option>zigzag</option><option>waves</option></select>
 <label>Banner art</label><select id="bs"><option value="mountains">Mountains + moon</option><option value="waves">Waves</option><option value="">None</option></select></div></div><p><button class="pri" id="go">Create draft</button><span id="wm" class="msg"></span></p>`;
@@ -339,17 +512,150 @@ const getSrc=f=>{const m=(f+'\n').match(/^sources:\s*\n((?:[ \t]+- .*\n?)*)/m);i
 const setSrc=(f,a)=>{f=(f+'\n').replace(/^sources:\s*\n(?:[ \t]+- .*\n?)*/m,'').replace(/^sources:\s*\[.*\]\n?/m,'').replace(/\n+$/,'');return a.length?f+'\nsources:\n'+a.map(s=>'  - '+JSON.stringify(s)).join('\n'):f};
 const getRel=f=>{const m=(f+'\n').match(/^related:\s*\n((?:[ \t]+- .*\n?)*)/m);if(m&&m[1])return m[1].split('\n').filter(Boolean).map(l=>{let v=l.replace(/^\s*-\s*/,'').trim();try{v=JSON.parse(v)}catch(e){}return String(v).replace(/\/?$/,'/')});return[]};
 const setRel=(f,a)=>{f=(f+'\n').replace(/^related:\s*\n(?:[ \t]+- .*\n?)*/m,'').replace(/^related:\s*\[.*\]\n?/m,'').replace(/\n+$/,'');return a.length?f+'\nrelated:\n'+a.map(s=>'  - '+JSON.stringify(s.replace(/\/?$/,'/'))).join('\n'):f};
+/* Culture-hub reading-path tour (Atlas ▶ Tour). Same YAML list shape as related. */
+const getAtlasPath=f=>{const m=(f+'\n').match(/^atlas_path:\s*\n((?:[ \t]+- .*\n?)*)/m);if(m&&m[1])return m[1].split('\n').filter(Boolean).map(l=>{let v=l.replace(/^\s*-\s*/,'').trim();try{v=JSON.parse(v)}catch(e){}return String(v).replace(/\/?$/,'/')});return[]};
+const setAtlasPath=(f,a)=>{f=(f+'\n').replace(/^atlas_path:\s*\n(?:[ \t]+- .*\n?)*/m,'').replace(/^atlas_path:\s*\[.*\]\n?/m,'').replace(/\n+$/,'');return a.length?f+'\natlas_path:\n'+a.map(s=>'  - '+JSON.stringify(s.replace(/\/?$/,'/'))).join('\n'):f};
+const getPair=f=>{const m=(f+'\n').match(/^pair:\s*\n((?:[ \t]+- .*\n?)*)/m);if(m&&m[1])return m[1].split('\n').filter(Boolean).map(l=>{let v=l.replace(/^\s*-\s*/,'').trim();try{v=JSON.parse(v)}catch(e){}return String(v).replace(/\/?$/,'/')});return[]};
+const setPair=(f,a)=>{f=(f+'\n').replace(/^pair:\s*\n(?:[ \t]+- .*\n?)*/m,'').replace(/^pair:\s*\[.*\]\n?/m,'').replace(/\n+$/,'');return a.length?f+'\npair:\n'+a.map(s=>'  - '+JSON.stringify(s.replace(/\/?$/,'/'))).join('\n'):f};
 const pathToUrl=p=>{const m=p.match(/^content\/\w+\/(.+?)(?:\.md|\/index\.md)$/);if(!m)return'';let u='/'+m[1].replace(/\/_index$/,'');if(!u.endsWith('/'))u+='/';return u};
 const fmOf=f=>{const t=drafts.get(f)!==undefined?drafts.get(f):(orig[f]||'');return typeof t==='string'?t:''};
-const cultureOf=f=>{const t=fmOf(f);const m=t.match(/^culture:\s*["']?([\w-]+)/m);return m?m[1]:''};
+const cultureOf=f=>{const t=fmOf(f);const m=t.match(/^culture:\s*["']?([\w-]+)/m);return m?m[1]:(f.match(/^content\/\w+\/cultures\/([^/]+)\//)||[])[1]||''};
+const titleOf=f=>{const a=audit.find(x=>x.path===f);if(a&&a.title)return a.title;const t=getK(fmOf(f),'title');if(t)return t;return leafLabel(f).title};
+const isCompareFile=p=>/^content\/\w+\/compare\/(?!_index).+\.md$/.test(p);
+const isCultureLeaf=p=>/^content\/\w+\/cultures\/[^/]+\/[^/]+\/(?!_index)[^/]+\.md$/.test(p);
+const isTraditionLeaf=p=>/^content\/\w+\/cultures\/[^/]+\/traditions\/(?!_index)[^/]+\.md$/.test(p);
+const traditionIds=cu=>{const re=new RegExp('^content/\\w+/cultures/'+cu+'/traditions/(?!_index)([^/]+)\\.md$');const ids=[];
+ for(const f of allFiles()){const m=f.match(re);if(m&&!ids.includes(m[1]))ids.push(m[1])}return ids.sort()};
+const isCultureIndex=p=>/^content\/\w+\/cultures\/[^/]+\/_index\.md$/.test(p);
+const isEpisodeFile=p=>/^content\/\w+\/episodes\/.+\/index\.md$/.test(p);
+const audioFiles=()=>allFiles().filter(f=>/^static\/audio\/.+\.(mp3|ogg|wav|m4a)$/i.test(f)).map(f=>f.slice(7));
+const audioOk=rel=>{if(!rel)return false;if(/^https?:\/\//i.test(rel))return true;const r=rel.replace(/^\//,'');return allFiles().includes('static/'+r)};
+const episodePathFromUrl=(lang,url)=>{const m=String(url||'').replace(/\/$/,'').match(/(?:^|\/)episodes\/([^/]+)$/);return m?`content/${lang}/episodes/${m[1]}/index.md`:''};
+const ytIdOf=u=>{const s=String(u||'').trim();if(/^[A-Za-z0-9_-]{11}$/.test(s))return s;const m=s.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|shorts\/|live\/|watch\?(?:[^#]*&)?v=))([A-Za-z0-9_-]{11})/i);return m?m[1]:''};
+async function episodeAudioMeta(lang,url){
+ const path=episodePathFromUrl(lang,url);if(!path)return null;
+ let raw=await loadText(path);if(typeof raw!=='string')return{url,path,title:titleOf(path),audio:'',youtube:'',ok:false};
+ const fm=split(raw.replace(/\r\n/g,'\n')).fm,audio=getK(fm,'audio'),youtube=getK(fm,'youtube'),yt=ytIdOf(youtube);
+ return{url,path,title:getK(fm,'title')||titleOf(path),audio,youtube,yt,ok:audioOk(audio)||!!yt};
+}
+const cultureKeyFromPath=p=>((p.match(/^content\/\w+\/cultures\/([^/]+)\//)||[])[1]||'');
+const azLetter=t=>{const s=String(t||'').trim();return s?s[0].toLocaleUpperCase():'—'};
+/* Culture off → cascade draft on the whole tree (sections + leaves) + matching episodes. */
+function setCultureCascadeDraft(fm,published,cu){
+ fm=String(fm||'').replace(/\n+$/,'');
+ const re=/^cascade:\s*\n((?:[ \t]+[^\n]*\n?)*)/m;
+ const m=fm.match(re);
+ let lines=(m?m[1]:'').split('\n').map(l=>l.replace(/\s+$/,'')).filter(l=>l.trim());
+ lines=lines.filter(l=>!/^\s*draft:\s*/.test(l));
+ if(!lines.some(l=>/^\s*culture:\s*/.test(l)))lines.unshift('  culture: '+cu);
+ lines=lines.map(l=>/^\s*culture:\s*/.test(l)?('  culture: '+cu):l);
+ if(!published)lines.push('  draft: true');
+ const block='cascade:\n'+lines.join('\n')+(lines.length?'\n':'');
+ if(m)fm=fm.replace(re,block);else fm=fm+'\n'+block;
+ fm=fm.replace(/^draft:\s*.+(\n|$)/gm,'').replace(/\n{3,}/g,'\n\n').replace(/\n+$/,'');
+ if(!published)fm+='\ndraft: true';
+ return fm;
+}
+function setPageDraft(fm,on){
+ fm=String(fm||'').replace(/^draft:\s*.+(\n|$)/gm,'').replace(/\n+$/,'');
+ return on?fm+'\ndraft: true':fm;
+}
+async function loadText(path){
+ if(drafts.has(path)){const v=drafts.get(path);if(v===null||(v&&v.bin))return null;return v}
+ if(!files.includes(path)&&!allFiles().includes(path))return null;
+ try{const t=await get(path);if(files.includes(path)&&orig[path]===undefined)orig[path]=t;return t}catch(e){return null}
+}
+async function cascadeCulturePublish(culturePath,published){
+ const cu=cultureKeyFromPath(culturePath);if(!cu)throw Error('not a culture index');
+ const touched=[];
+ for(const lang of ['en','fa']){
+  const idx=`content/${lang}/cultures/${cu}/_index.md`;
+  const raw=await loadText(idx);if(typeof raw!=='string')continue;
+  const sp=split(raw.replace(/\r\n/g,'\n'));
+  const f=setCultureCascadeDraft(sp.fm,published,cu);
+  setDraft(idx,'---\n'+f+'\n---\n'+sp.body);touched.push(idx);
+ }
+ /* Episodes sit outside the culture folder — set draft explicitly. */
+ for(const ep of allFiles().filter(f=>/^content\/\w+\/episodes\/.+\/index\.md$/.test(f))){
+  const raw=await loadText(ep);if(typeof raw!=='string')continue;
+  if(cultureOf(ep)!==cu && getK(split(raw).fm,'culture')!==cu)continue;
+  const sp=split(raw.replace(/\r\n/g,'\n'));
+  const f=setPageDraft(sp.fm,!published);
+  setDraft(ep,'---\n'+f+'\n---\n'+sp.body);touched.push(ep);
+ }
+ return{cu,touched};
+}
+const pageKind=p=>{
+ if(/^content\/\w+\/episodes\//.test(p))return'episodes';
+ if(/^content\/\w+\/compare\//.test(p))return'compare';
+ if(/^content\/\w+\/themes\//.test(p))return'themes';
+ if(/^content\/\w+\/az\//.test(p))return'az';
+ const m=p.match(/^content\/\w+\/cultures\/[^/]+\/([^/]+)\//);return m?m[1]:'other'};
+function catalogPages(lang){
+ const out=[],pref='content/'+lang+'/';
+ allFiles().filter(f=>f.startsWith(pref)&&f.endsWith('.md')&&!f.endsWith('/_index.md')).forEach(f=>{
+  if(/\/cultures\/[^/]+\/[^/]+\/_index\.md$/.test(f))return;
+  const url=pathToUrl(f);if(!url||url==='/')return;
+  const kind=pageKind(f),cu=cultureOf(f),title=titleOf(f);
+  const label=kind==='episodes'?('episode · '+(f.split('/')[3]||title)):(cu?cu+' · ':'')+title;
+  out.push({path:f,url,title,label,lang,kind,culture:cu,group:kind==='episodes'?'episodes':kind==='compare'?'compare':(cu||'other')});
+ });
+ return out.sort((a,b)=>a.label.localeCompare(b.label));
+}
 const sameCulturePages=p=>{const m=p.match(/^content\/(\w+)\/cultures\/([^/]+)\//);const em=p.match(/^content\/(\w+)\/episodes\//);let lang,cu;
  if(m){lang=m[1];cu=m[2]}else if(em){lang=em[1];cu=cultureOf(p);if(!cu)return[]}else return[];
- const out=[];
- allFiles().filter(f=>f.startsWith(`content/${lang}/cultures/${cu}/`)&&f.endsWith('.md')&&!f.endsWith('/_index.md')&&f!==p).forEach(f=>{const u=pathToUrl(f);if(u)out.push({path:f,url:u,label:f.split('/').slice(-2).join('/').replace(/\.md$/,'')})});
- allFiles().filter(f=>f.match(new RegExp('^content/'+lang+'/episodes/.+/index\\.md$'))&&f!==p).forEach(f=>{
-  const ec=cultureOf(f);if(ec&&ec!==cu)return; /* unloaded episodes stay listed until culture is known */
-  out.push({path:f,url:pathToUrl(f),label:'episode · '+f.split('/')[3]})});
- return out};
+ return catalogPages(lang).filter(o=>o.path!==p&&((o.culture===cu&&o.kind!=='episodes'&&o.kind!=='compare'&&o.kind!=='other')||(o.kind==='episodes'&&(!o.culture||o.culture===cu))))};
+function pickPage(opts,onPick){
+ opts=opts||{};const lang=opts.lang||'en';const exclude=new Set((opts.exclude||[]).map(u=>String(u).replace(/\/?$/,'/')));
+ let filter=opts.filter||'all';
+ const cuFilter=opts.culture||'';
+ const all=catalogPages(lang).filter(o=>{
+  if(o.path===opts.excludePath||exclude.has(o.url))return false;
+  if(!cuFilter)return true;
+  if(o.kind==='episodes')return !o.culture||o.culture===cuFilter;
+  return o.culture===cuFilter&&o.kind!=='compare'&&o.kind!=='other';
+ });
+ const filters=[['all','All'],['characters','Characters'],['stories','Stories'],['history','History'],['traditions','Traditions'],['episodes','Episodes'],['compare','Compare'],['other','Other']];
+ const m=modal(opts.title||'Pick a page',
+  `<div class="ppick-tools"><input type="search" id="ppq" placeholder="Search title or path…" autocomplete="off"></div>
+   <div class="ppick-filters" id="ppf">${filters.map(([k,l])=>`<button type="button" data-f="${k}" class="${k===filter?'on':''}">${l}</button>`).join('')}</div>
+   <ul class="ppick-list" id="ppl"></ul>
+   ${opts.allowExternal?`<label style="margin-top:12px">Or paste a web URL</label><input type="text" id="ppext" placeholder="https://…">`:''}`,
+  root=>{
+   const on=root.querySelector('.ppick-list li.on');
+   const ext=opts.allowExternal&&root.querySelector('#ppext')?root.querySelector('#ppext').value.trim():'';
+   if(ext){onPick(ext);return}
+   if(!on)throw Error('Pick a page from the list');
+   onPick(on.dataset.u);
+  },{ok:opts.ok||'Choose'});
+ const q=m.querySelector('#ppq'),list=m.querySelector('#ppl'),filt=m.querySelector('#ppf');
+ let hits=[],ai=0;
+ const paint=()=>{
+  const needle=(q.value||'').toLowerCase().trim();
+  hits=all.filter(o=>{
+   if(filter && filter!=='all'){
+    if(filter==='other'){if(['characters','stories','history','traditions','episodes','compare'].includes(o.kind))return false}
+    else if(o.kind!==filter)return false;
+   }
+   if(!needle)return true;
+   return(o.title+' '+o.label+' '+o.url+' '+o.path).toLowerCase().includes(needle);
+  }).slice(0,80);
+  ai=0;
+  list.innerHTML=hits.map((o,i)=>`<li class="${i===0?'on':''}" data-i="${i}" data-u="${esc(o.url)}"><b>${esc(o.title)}</b><span>${esc(o.label)}<br>${esc(o.url)}</span></li>`).join('')||'<li><span>No matches</span></li>';
+  list.querySelectorAll('li[data-u]').forEach(li=>{
+   li.onmouseenter=()=>{ai=+li.dataset.i;list.querySelectorAll('li').forEach((x,i)=>x.classList.toggle('on',i===ai))};
+   li.onclick=()=>{list.querySelectorAll('li').forEach(x=>x.classList.remove('on'));li.classList.add('on');ai=+li.dataset.i};
+   li.ondblclick=()=>{onPick(li.dataset.u);m.remove()};
+  });
+ };
+ filt.querySelectorAll('button').forEach(b=>b.onclick=()=>{filter=b.dataset.f;filt.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));paint()});
+ q.oninput=paint;q.onkeydown=e=>{
+  if(e.key==='ArrowDown'){e.preventDefault();ai=Math.min(hits.length-1,ai+1);list.querySelectorAll('li').forEach((x,i)=>x.classList.toggle('on',i===ai));return}
+  if(e.key==='ArrowUp'){e.preventDefault();ai=Math.max(0,ai-1);list.querySelectorAll('li').forEach((x,i)=>x.classList.toggle('on',i===ai));return}
+  if(e.key==='Enter'){e.preventDefault();if(hits[ai]){onPick(hits[ai].url);m.remove()}}};
+ paint();setTimeout(()=>{q.focus()},30);
+ return m;
+}
 const eolOf={};
 async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;document.querySelectorAll('#panel .item').forEach(b=>b.classList.toggle('on',b.dataset.p===p));
  let txt;try{const d=drafts.get(p);
@@ -359,7 +665,7 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
  catch(e){$('#app').classList.remove('note-mode');$('#main').innerHTML=`<p class="bad">${esc(e.message)}</p>`;return}
  eolOf[p]=txt.includes('\r\n')?'\r\n':'\n';txt=txt.replace(/\r\n/g,'\n');
  const md=p.endsWith('.md'),svg=p.endsWith('.svg'),sp=md?split(txt):{fm:'',body:txt},hasFm=md&&sp.fm!=='';
- const lm=p.match(/^content\/(\w+)\//),ol=lm&&(lm[1]==='en'?'fa':lm[1]==='fa'?'en':null),op=ol&&p.replace('content/'+lm[1]+'/','content/'+ol+'/'),isNew=!files.includes(p);
+ const lm=p.match(/^content\/(\w+)\//),langOf=lm?lm[1]:'en',ol=lm&&(lm[1]==='en'?'fa':lm[1]==='fa'?'en':null),op=ol&&p.replace('content/'+lm[1]+'/','content/'+ol+'/'),isNew=!files.includes(p);
  $('#app').classList.toggle('note-mode',md&&!svg);
  $('#main').innerHTML=`<div class="note">
  <div class="note__top"><div class="note__crumb">${esc(p.replace(/\//g,' › '))}${isNew?' <span class="tag">new</span>':''}</div>
@@ -367,18 +673,41 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
  <div class="note__scroll">
  ${hasFm?`<input type="text" class="note__title" id="mt" placeholder="Title" spellcheck="true">
  <p class="note__hint">Write in Obsidian (or anywhere), then paste below. Use Properties for title, sources and related links.</p>
- <details class="note__props"><summary>Properties <span class="msg" style="margin:0;font-weight:400">tagline · grade · sources · related · card</span></summary>
+ <details class="note__props" ${isEpisodeFile(p)||isCultureLeaf(p)||isCultureIndex(p)?'open':''}><summary>Properties <span class="msg" style="margin:0;font-weight:400">${isCultureIndex(p)?'tagline · atlas tour · publish':'tagline · listen · audio · related · card'}</span></summary>
  <div class="inner"><div class="two"><div><label>Tagline</label><input type="text" id="mg"><label>Evidence grade</label><input type="text" id="mr" list="gl"><datalist id="gl"><option>primary text<option>later compilation<option>archaeology<option>modern scholarship<option>draft</datalist>
  <label>Reviewed</label><div class="row"><input type="text" id="mv"><button id="mn" type="button">Today</button></div>
  <label style="display:flex;gap:8px;align-items:center;margin-top:12px"><input type="checkbox" id="mw" style="width:auto"> Wide layout</label>
- <label style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="mpub" style="width:auto" checked> Published on the site</label></div>
- <div><label>Card background</label>
+ <label style="display:flex;gap:8px;align-items:center;margin-top:8px"><input type="checkbox" id="mpub" style="width:auto" checked> ${isCultureIndex(p)?'Published culture (all sections, articles, episodes)':'Published on the site'}</label>
+ <p class="azhint" id="mcultpub" hidden></p>
+ <p class="azhint" id="maz" hidden>A–Z letter: <b>—</b> <span class="msg">(auto from title — index is generated)</span></p></div>
+ <div>${isEpisodeFile(p)?`<label>Culture</label><select id="mcu"><option value="">—</option>${cultures().map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}</select>
+ <label>Episode audio <span class="msg">powers the sticky Listen bar</span></label>
+ <div class="row"><select id="maud"><option value="">— no audio —</option></select>
+  <button type="button" id="uaud">Upload MP3…</button><button type="button" id="xaud">Clear</button></div>
+ <input type="file" id="faud" accept="audio/mpeg,audio/mp3,audio/*,.mp3,.ogg,.wav,.m4a" hidden>
+ <div id="maudprev" class="msg" style="margin-top:6px"></div>
+ <label>YouTube <span class="msg">themed click-to-play preview on the episode page</span></label>
+ <input type="url" id="myt" placeholder="https://www.youtube.com/watch?v=… or 11-char id">
+ <label>Spotify <span class="msg">optional embed if you host there instead</span></label>
+ <input type="url" id="msp" placeholder="https://open.spotify.com/episode/…">`:`<label>Card background</label>
  <div class="row"><select id="mcbgk"><option value="">Culture animation (default)</option><option value="static">Static image</option><option value="gif">Animated GIF</option></select></div>
  <div class="row" id="mcbgrow"><select id="mcbg"><option value="">— choose file —</option></select>
   <button type="button" id="ucbg">Upload…</button><button type="button" id="xcbg">Clear</button></div>
- <input type="file" id="fcbg" hidden><div id="mcbgprev" class="msg" style="margin-top:6px"></div>
+ <input type="file" id="fcbg" hidden><div id="mcbgprev" class="msg" style="margin-top:6px"></div>`}
+ ${isCultureLeaf(p)&&!isTraditionLeaf(p)?`<label>Sub-culture / tradition <span class="msg">links this page into traditions/&lt;id&gt;</span></label>
+ <select id="msub"><option value="">— none —</option>${traditionIds(cultureOf(p)||cultureKeyFromPath(p)||'').map(id=>`<option value="${esc(id)}">${esc(id)}</option>`).join('')}</select>
+ <p class="msg" style="margin:4px 0 0">Add branches under <code>cultures/…/traditions/</code> (New page → section <b>traditions</b>).</p>`:''}
  <label>Sources (one per line)</label><textarea id="ms" rows="3" placeholder="Paste citations, one per line"></textarea></div></div>
- <label>Related pages <span class="msg">tap to link — same ✓ style as below</span></label><div class="relbox" id="mrel"></div>
+ ${!isEpisodeFile(p)&&!isCultureIndex(p)&&!isTraditionLeaf(p)?`<div class="listenbox" id="mlisten">
+  <div class="listenbox__h"><b>Listen</b><span class="msg">Sticky player on this article</span></div>
+  <p class="listenbox__meta" id="mlistenmeta">No episode linked yet.</p>
+  <div class="listenbox__row"><button type="button" class="pri" id="mlistenpick">Choose episode…</button><button type="button" id="mlistenclear" hidden>Remove listen</button><button type="button" id="mlistenopen" hidden>Open episode</button></div>
+ </div>`:''}
+ ${isCompareFile(p)?`<label>Compare pair <span class="msg">two pages, any culture</span></label><div class="pairbox" id="mpair"><button type="button" class="pairslot" data-i="0"><span>Side A</span><b>Pick a page…</b></button><button type="button" class="pairslot" data-i="1"><span>Side B</span><b>Pick a page…</b></button></div>`:''}
+ ${isCultureIndex(p)?`<label>Atlas reading path <span class="msg">ordered Tour steps on the culture hub</span></label>
+ <p class="msg" style="margin:0 0 6px">Nodes = every character / story / history / tradition + matching episodes. Edges = each leaf’s <b>Related</b>. This list is only the guided Tour order.</p>
+ <div class="atlasbox" id="matlas"></div>`:''}
+ <label>Related pages <span class="msg">${isCultureIndex(p)?'optional on the hub · atlas edges come from leaf Related':'this culture · add any page'}</span></label><div class="relbox" id="mrel"></div>
  <details style="margin-top:10px"><summary>Raw front matter</summary><textarea id="fm" rows="6" class="mono"></textarea></details></div></details>
  <div class="chklist" id="mchk"></div>`:`${md?`<p class="note__hint">Paste Markdown below. This file has no front matter.</p>`:''}`}
  ${md?`<div class="note__bodywrap">
@@ -398,16 +727,136 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
  ta.oninput=()=>{prev();mark()};wordCount();
  if(hasFm){const FM=$('#fm');FM.value=sp.fm;
   const sync=()=>{let f=FM.value;f=setK(f,'title',$('#mt').value);f=setK(f,'tagline',$('#mg').value);f=setK(f,'grade',$('#mr').value);f=setK(f,'reviewed',$('#mv').value);f=setSrc(f,$('#ms').value.split('\n').map(s=>s.trim()).filter(Boolean));
-   const rel=[...document.querySelectorAll('#mrel .relchip.on')].map(c=>c.dataset.u);f=setRel(f,rel);
-   const kind=($('#mcbgk')&&$('#mcbgk').value)||'';const cbg=kind?(($('#mcbg')&&$('#mcbg').value)||''):'';
-   f=f.replace(/^card_bg:.*(\n|$)/m,'').replace(/^card_bg_kind:.*(\n|$)/m,'');
-   if(kind&&cbg){f=setK(f,'card_bg',cbg);f=setK(f,'card_bg_kind',kind)}
-   f=f.replace(/^wide:.*(\n|$)/m,'').replace(/^draft:.*(\n|$)/m,'').replace(/\n+$/,'');if($('#mw').checked)f+=(f?'\n':'')+'wide: true';if(!$('#mpub').checked)f+=(f?'\n':'')+'draft: true';FM.value=f;mark();paintCbgPrev();paintChk()};
-  const paintRel=()=>{const box=$('#mrel');if(!box)return;const sel=new Set(getRel(FM.value));const opts=sameCulturePages(p);
-   box.innerHTML=opts.length?opts.map(o=>`<button type="button" class="relchip ${sel.has(o.url)?'on':''}" data-u="${esc(o.url)}"><span class="tick">${sel.has(o.url)?'✓':'·'}</span>${esc(o.label)}</button>`).join(''):'<span class="msg">No other pages in this culture yet.</span>';
-   box.querySelectorAll('.relchip').forEach(b=>b.onclick=()=>{b.classList.toggle('on');const on=b.classList.contains('on');b.querySelector('.tick').textContent=on?'✓':'·';sync()});paintChk()};
+   const rel=[...document.querySelectorAll('#mrel .relchip.on')].map(c=>c.dataset.u).filter(Boolean);f=setRel(f,rel);
+   if($('#matlas')){const steps=[...document.querySelectorAll('#matlas .atlasstep')].map(el=>el.dataset.u).filter(Boolean);f=setAtlasPath(f,steps)}
+   if($('#mpair')){const pair=[...document.querySelectorAll('#mpair .pairslot')].map(b=>b.dataset.u||'').filter(Boolean);f=setPair(f,pair)}
+   if(isEpisodeFile(p)){
+    const cu=($('#mcu')&&$('#mcu').value)||'';f=cu?setK(f,'culture',cu):f.replace(/^culture:.*(\n|$)/m,'');
+    const aud=($('#maud')&&$('#maud').value)||'';f=f.replace(/^audio:.*(\n|$)/m,'');if(aud)f=setK(f,'audio',aud);
+    const yt=($('#myt')&&$('#myt').value.trim())||'';f=f.replace(/^youtube:.*(\n|$)/m,'');if(yt)f=setK(f,'youtube',yt);
+    const sp=($('#msp')&&$('#msp').value.trim())||'';f=f.replace(/^spotify:.*(\n|$)/m,'');if(sp)f=setK(f,'spotify',sp);
+   }else if(isCultureLeaf(p)&&!isTraditionLeaf(p)){
+    const sub=($('#msub')&&$('#msub').value)||'';f=f.replace(/^subculture:.*(\n|$)/m,'');if(sub)f=setK(f,'subculture',sub);
+   }
+   if(!isEpisodeFile(p)){
+    const kind=($('#mcbgk')&&$('#mcbgk').value)||'';const cbg=kind?(($('#mcbg')&&$('#mcbg').value)||''):'';
+    f=f.replace(/^card_bg:.*(\n|$)/m,'').replace(/^card_bg_kind:.*(\n|$)/m,'');
+    if(kind&&cbg){f=setK(f,'card_bg',cbg);f=setK(f,'card_bg_kind',kind)}
+   }
+   f=f.replace(/^wide:.*(\n|$)/m,'').replace(/^draft:.*(\n|$)/gm,'').replace(/\n+$/,'');if($('#mw').checked)f+=(f?'\n':'')+'wide: true';
+   /* Culture indexes: draft + cascade.draft are owned by cascadeCulturePublish — do not strip cascade here. */
+   if(isCultureIndex(p)){
+    const cu=cultureKeyFromPath(p)||getK(f,'culture');
+    f=setCultureCascadeDraft(f,$('#mpub').checked,cu);
+   }else if(!$('#mpub').checked){f+='\ndraft: true'}
+   FM.value=f;mark();if(!isEpisodeFile(p))paintCbgPrev();else paintAudPrev();paintAz();paintCultHint();paintListen();paintChk()};
+  const paintAudPrev=()=>{const el=$('#maudprev');if(!el)return;const rel=($('#maud')&&$('#maud').value)||'';
+   const yt=($('#myt')&&$('#myt').value.trim())||'',ytid=ytIdOf(yt);
+   let bits=[];
+   if(!rel&&!ytid){el.innerHTML='<span class="warn">No audio or YouTube — add one so the episode stage / sticky Listen can appear.</span>';return}
+   if(rel){if(!audioOk(rel))bits.push('<span class="bad">Missing audio:</span> <code>'+esc(rel)+'</code>');
+    else{const src='/api/raw?path='+E('static/'+rel)+'&ws=1&t='+T+'&v='+Date.now();
+     bits.push(`<span class="ok">Audio ready</span> · <code>${esc(rel)}</code><br><audio controls preload="none" src="${src}" style="margin-top:8px;width:100%;max-width:420px;height:36px"></audio>`)}}
+   if(yt){bits.push(ytid
+    ?`<span class="ok">YouTube ready</span> · <code>${esc(ytid)}</code><br><img src="https://i.ytimg.com/vi/${esc(ytid)}/mqdefault.jpg" alt="" style="margin-top:8px;width:100%;max-width:320px;border-radius:10px;aspect-ratio:16/9;object-fit:cover;display:block">`
+    :`<span class="bad">Could not parse YouTube URL</span> · <code>${esc(yt)}</code>`)}
+   el.innerHTML=bits.join('<br style="margin:8px 0">')};
+  const paintAudio=()=>{const sel=$('#maud');if(!sel)return;
+   const cur=getK(FM.value,'audio');const files=audioFiles();
+   if(cur&&!files.includes(cur)&&!/^https?:\/\//i.test(cur))files.unshift(cur);
+   sel.innerHTML='<option value="">— no audio —</option>'+files.map(x=>`<option value="${esc(x)}" ${x===cur?'selected':''}>${esc(x)}</option>`).join('');
+   if($('#mcu'))$('#mcu').value=getK(FM.value,'culture')||'';
+   if($('#myt'))$('#myt').value=getK(FM.value,'youtube')||'';
+   if($('#msp'))$('#msp').value=getK(FM.value,'spotify')||'';
+   paintAudPrev()};
+  const paintListen=async()=>{const box=$('#mlisten');if(!box)return;
+   const rel=getRel(FM.value);const epUrl=rel.find(u=>u.includes('/episodes/'));
+   const meta=epUrl?await episodeAudioMeta(langOf,epUrl):null;
+   const line=$('#mlistenmeta'),clr=$('#mlistenclear'),opn=$('#mlistenopen');
+   if(!meta){line.innerHTML='No episode linked. Choose one to show the sticky <b>Listen</b> bar on this article.';clr.hidden=true;opn.hidden=true;paintChk();return}
+   const bits=[`<code>${esc(meta.url)}</code>`];
+   if(meta.audio)bits.push(`<code>${esc(meta.audio)}</code>`);
+   if(meta.yt)bits.push(`YouTube <code>${esc(meta.yt)}</code>`);
+   line.innerHTML=meta.ok
+    ?`<span class="ok">Listen ready</span> — <b>${esc(meta.title)}</b><br>${bits.join(' · ')}`
+    :`<span class="warn">Episode linked, but no playable audio/YouTube</span> — <b>${esc(meta.title)}</b><br>${bits.join(' · ')}. Open the episode and set Audio or YouTube.`;
+   clr.hidden=false;opn.hidden=false;opn.onclick=()=>openFile(meta.path);
+   const a=box.querySelector('audio');if(a)a.remove();
+   const thumb=box.querySelector('.listenbox__yt');if(thumb)thumb.remove();
+   if(meta.audio&&audioOk(meta.audio)){const el=document.createElement('audio');el.controls=true;el.preload='none';
+    el.src='/api/raw?path='+E('static/'+meta.audio)+'&ws=1&t='+T+'&v='+Date.now();box.appendChild(el)}
+   if(meta.yt){const img=document.createElement('img');img.className='listenbox__yt';img.alt='';img.src='https://i.ytimg.com/vi/'+meta.yt+'/mqdefault.jpg';
+    img.style.cssText='margin-top:8px;width:100%;max-width:240px;border-radius:10px;aspect-ratio:16/9;object-fit:cover;display:block';box.appendChild(img)}
+   paintChk()};
+  const paintAz=()=>{const el=$('#maz');if(!el)return;const show=isCultureLeaf(p);el.hidden=!show;if(show){const L=azLetter($('#mt').value||getK(FM.value,'title'));el.querySelector('b').textContent=L}};
+  const paintCultHint=()=>{const el=$('#mcultpub');if(!el)return;
+   if(isCultureIndex(p)){el.hidden=false;el.innerHTML=$('#mpub').checked
+    ?'<span class="ok">Culture is live.</span> <span class="msg">Uncheck to hide this culture, all its characters/stories/history, and its episodes (EN+FA) from the built site.</span>'
+    :'<span class="warn">Culture disabled.</span> <span class="msg">Cascade sets <code>draft</code> on every page under this culture (both languages) and matching episodes.</span>';return}
+   const cu=cultureKeyFromPath(p);if(!cu){el.hidden=true;return}
+   const idx=`content/${langOf}/cultures/${cu}/_index.md`;
+   const raw=fmOf(idx)||'';const off=/^draft:\s*true\b/m.test(raw)||/^cascade:\s*\n(?:[ \t]+.*\n)*?[ \t]+draft:\s*true\b/m.test(raw+'\n');
+   el.hidden=!off;if(off)el.innerHTML='<span class="warn">Parent culture is disabled.</span> <span class="msg">This page stays hidden with it until the culture index is published again.</span>'};
+  const paintPair=()=>{const box=$('#mpair');if(!box)return;
+   const saved=getPair(FM.value);const slots=[box.querySelector('[data-i="0"]').dataset.u||saved[0]||'',box.querySelector('[data-i="1"]').dataset.u||saved[1]||''];
+   if(!slots[0]&&!slots[1]&&saved.length){saved.forEach((u,i)=>{if(i<2)slots[i]=u})}
+   const cat=catalogPages(langOf);const by=new Map(cat.map(o=>[o.url,o]));
+   box.querySelectorAll('.pairslot').forEach(b=>{const i=+b.dataset.i;const u=slots[i]||'';const o=u&&by.get(u);b.dataset.u=u;b.classList.toggle('has',!!u);
+    b.innerHTML=u?`<span>Side ${i?'B':'A'}</span><b>${esc(o?o.title:u)}</b><span>${esc(u)}</span>`:`<span>Side ${i?'B':'A'}</span><b>Pick a page…</b>`;
+    b.onclick=()=>pickPage({lang:langOf,excludePath:p,exclude:slots.filter((x,j)=>x&&j!==i),title:'Compare side '+(i?'B':'A')},url=>{
+     const next=[box.querySelector('[data-i="0"]').dataset.u||'',box.querySelector('[data-i="1"]').dataset.u||''];
+     next[i]=url;box.querySelector('[data-i="0"]').dataset.u=next[0];box.querySelector('[data-i="1"]').dataset.u=next[1];
+     FM.value=setPair(FM.value,next.filter(Boolean));paintPair();sync()})})};
+  const paintRel=()=>{const box=$('#mrel');if(!box)return;const sel=getRel(FM.value);const selSet=new Set(sel);
+   const cat=catalogPages(langOf);const by=new Map(cat.map(o=>[o.url,o]));
+   const same=sameCulturePages(p);const rows=[];
+   sel.forEach(u=>{const o=by.get(u)||{url:u,label:u,title:u,group:'linked'};rows.push({...o,on:true,section:'linked'})});
+   same.forEach(o=>{if(!selSet.has(o.url))rows.push({...o,on:false,section:'same'})});
+   let html='';
+   if(rows.some(r=>r.section==='linked'))html+=`<div class="relgrp">Linked</div>`+rows.filter(r=>r.section==='linked').map(o=>`<button type="button" class="relchip on" data-u="${esc(o.url)}"><span class="tick">✓</span>${esc(o.title||o.label)}</button>`).join('');
+   if(rows.some(r=>r.section==='same'))html+=`<div class="relgrp">This culture</div>`+rows.filter(r=>r.section==='same').map(o=>`<button type="button" class="relchip" data-u="${esc(o.url)}"><span class="tick">·</span>${esc(o.title||o.label)}</button>`).join('');
+   if(!html)html='<span class="msg">No related pages yet.</span>';
+   html+=`<button type="button" class="relchip reladd" id="mreladd">+ Add page…</button>`;
+   box.innerHTML=html;
+   box.querySelectorAll('.relchip:not(.reladd)').forEach(b=>b.onclick=()=>{b.classList.toggle('on');b.querySelector('.tick').textContent=b.classList.contains('on')?'✓':'·';sync();paintRel()});
+   const add=$('#mreladd');if(add)add.onclick=()=>pickPage({lang:langOf,excludePath:p,exclude:getRel(FM.value),title:'Add related page'},url=>{FM.value=setRel(FM.value,[...new Set([...getRel(FM.value),url])]);paintRel();paintListen();sync()});
+   paintListen();paintChk()};
+  const paintAtlas=()=>{const box=$('#matlas');if(!box)return;
+   const steps=getAtlasPath(FM.value);const cat=catalogPages(langOf);const by=new Map(cat.map(o=>[o.url,o]));
+   const cu=cultureKeyFromPath(p)||getK(FM.value,'culture')||'';
+   if(!steps.length){box.innerHTML='<span class="msg">No tour yet — add 3–6 pages for a guided reading path.</span><button type="button" class="relchip reladd" id="matlasadd">+ Add step…</button>'}
+   else{box.innerHTML=steps.map((u,i)=>{const o=by.get(u);const title=o?o.title:u;const kind=o?(o.kind==='episodes'?'episode':o.kind):'';
+    return`<div class="atlasstep" data-u="${esc(u)}"><span class="atlasstep__n">${i+1}</span><div class="atlasstep__meta"><b>${esc(title)}</b><span>${esc(kind?kind+' · ':'')}${esc(u)}</span></div>
+     <div class="atlasstep__acts"><button type="button" data-act="up" title="Move up" ${i===0?'disabled':''}>↑</button><button type="button" data-act="dn" title="Move down" ${i===steps.length-1?'disabled':''}>↓</button><button type="button" data-act="rm" title="Remove">×</button></div></div>`}).join('')+`<button type="button" class="relchip reladd" id="matlasadd">+ Add step…</button>`}
+   const rewrite=next=>{FM.value=setAtlasPath(FM.value,next);paintAtlas();sync()};
+   box.querySelectorAll('.atlasstep').forEach((el,i)=>{
+    el.querySelectorAll('button[data-act]').forEach(btn=>btn.onclick=()=>{
+     const next=steps.slice();const act=btn.dataset.act;
+     if(act==='rm')next.splice(i,1);
+     else if(act==='up'&&i>0){[next[i-1],next[i]]=[next[i],next[i-1]]}
+     else if(act==='dn'&&i<next.length-1){[next[i+1],next[i]]=[next[i],next[i+1]]}
+     else return;
+     rewrite(next);
+    });
+   });
+   const add=$('#matlasadd');if(add)add.onclick=()=>pickPage({lang:langOf,excludePath:p,exclude:steps,culture:cu,title:'Add atlas tour step'},url=>{
+    const u=url.replace(/\/?$/,'/');if(steps.includes(u)){say('Already in the tour','warn');return}
+    rewrite([...steps,u]);
+   });
+   paintChk()};
   const paintChk=()=>{const el=$('#mchk');if(!el)return;const f=FM.value,body=ta.value||'';
-   const bits=[['Title',!!getK(f,'title')],['Sources',getSrc(f).length>0],['Related',getRel(f).length>0],['Grade',!!getK(f,'grade')],['Card art',!!getK(f,'card_bg')||!/cultures\//.test(p)],['Body',body.trim().length>40]];
+   const epListen=getRel(f).some(u=>u.includes('/episodes/'));
+   const bits=[['Title',!!getK(f,'title')]];
+   if(isCultureIndex(p)){
+    bits.push(['Tagline',!!getK(f,'tagline')],['Atlas tour',getAtlasPath(f).length>=2],['Body',body.trim().length>40]);
+   }else{
+    bits.push(['Sources',getSrc(f).length>0],
+     [isCompareFile(p)?'Pair':'Related',isCompareFile(p)?getPair(f).length>=2:getRel(f).length>0],
+     ['Grade',!!getK(f,'grade')]);
+    if(isEpisodeFile(p))bits.push(['Audio / YouTube',audioOk(getK(f,'audio'))||!!ytIdOf(getK(f,'youtube'))],['Culture',!!getK(f,'culture')]);
+    else{bits.push(['Card art',!!getK(f,'card_bg')||!/cultures\//.test(p)]);if(isCultureLeaf(p)||$('#mlisten'))bits.push(['Listen',epListen])}
+    bits.push(['Body',body.trim().length>40]);
+   }
    el.innerHTML=bits.map(([l,ok])=>`<span class="${ok?'ok':'bad'}">${ok?'✓':'·'} ${l}</span>`).join('')};
   const cbgKindOf=(f,path)=>{const k=getK(f,'card_bg_kind');if(k==='gif'||k==='static')return k;return /\.gif$/i.test(path||'')?'gif':(path?'static':'')};
   const paintCbgPrev=()=>{const el=$('#mcbgprev');if(!el)return;const kind=$('#mcbgk').value,rel=$('#mcbg').value;
@@ -430,18 +879,47 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
    if(row){row.hidden=!kind;row.style.display=kind?'flex':'none'}
    const up=$('#ucbg');if(up){up.hidden=!kind;up.textContent=kind==='gif'?'Upload GIF…':kind==='static'?'Upload image…':'Upload…'}
    paintCbgPrev()};
-  const fill=()=>{$('#mt').value=getK(FM.value,'title');$('#mg').value=getK(FM.value,'tagline');$('#mr').value=getK(FM.value,'grade');$('#mv').value=getK(FM.value,'reviewed');$('#ms').value=getSrc(FM.value).join('\n');$('#mw').checked=/^wide:\s*true/m.test(FM.value);$('#mpub').checked=!/^draft:\s*true\b/m.test(FM.value);paintCbg(cbgKindOf(FM.value,getK(FM.value,'card_bg')));paintRel()};fill();
+  const fill=()=>{$('#mt').value=getK(FM.value,'title');$('#mg').value=getK(FM.value,'tagline');$('#mr').value=getK(FM.value,'grade');$('#mv').value=getK(FM.value,'reviewed');$('#ms').value=getSrc(FM.value).join('\n');$('#mw').checked=/^wide:\s*true/m.test(FM.value);$('#mpub').checked=!/^draft:\s*true\b/m.test(FM.value);
+   if($('#msub'))$('#msub').value=getK(FM.value,'subculture')||'';
+   if(isEpisodeFile(p))paintAudio();else if(!isCultureIndex(p))paintCbg(cbgKindOf(FM.value,getK(FM.value,'card_bg')));
+   paintRel();paintAtlas();paintPair();paintAz();paintCultHint();paintListen()};fill();
   ta.oninput=()=>{prev();mark();paintChk()};
-  ['mt','mg','mr','mv','ms','mw','mpub','mcbg'].forEach(i=>{const el=$('#'+i);if(el)el.oninput=sync});
-  $('#mcbgk').onchange=()=>{const k=$('#mcbgk').value;if(!k){$('#mcbg').value='';paintCbg('');sync();return}
+  ['mt','mg','mr','mv','ms','mw','mcbg','mcu','maud','myt','msp','msub'].forEach(i=>{const el=$('#'+i);if(el)el.oninput=()=>{sync();if(i==='mt')paintAz();if(i==='maud'||i==='myt')paintAudPrev()}});
+  if($('#mlistenpick'))$('#mlistenpick').onclick=()=>pickPage({lang:langOf,excludePath:p,filter:'episodes',title:'Choose Listen episode'},url=>{
+   let rel=getRel(FM.value).filter(u=>!u.includes('/episodes/'));rel.push(url.replace(/\/?$/,'/'));
+   FM.value=setRel(FM.value,rel);paintRel();paintListen();sync();say('Listen episode linked — Save to keep','warn')});
+  if($('#mlistenclear'))$('#mlistenclear').onclick=()=>{FM.value=setRel(FM.value,getRel(FM.value).filter(u=>!u.includes('/episodes/')));paintRel();paintListen();sync()};
+  if($('#xaud'))$('#xaud').onclick=()=>{if($('#maud'))$('#maud').value='';sync()};
+  if($('#uaud'))$('#uaud').onclick=()=>$('#faud')&&$('#faud').click();
+  if($('#faud'))$('#faud').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+   try{const n=f.name.toLowerCase().replace(/[^a-z0-9.]+/g,'-');let path='static/audio/'+n,i=2;while(allFiles().includes(path)){path='static/audio/'+n.replace(/(\.[^.]+)$/,'-'+i+'$1');i++}
+    await putBin(path,f);paintAudio();$('#maud').value=path.replace(/^static\//,'');sync();say('Audio uploaded — Save to keep: '+path.replace(/^static\//,''),'warn')}catch(err){say(err.message,'bad')}};
+  if($('#mpub'))$('#mpub').onchange=async()=>{
+   if(isCultureIndex(p)){
+    const pub=$('#mpub').checked,cu=cultureKeyFromPath(p)||'this culture';
+    const msg=pub
+     ?('Publish '+cu+' again?\n\nThis clears cascade draft on the culture index (EN+FA) and un-drafts its episodes. Leaves that still have their own draft: true stay hidden.')
+     :('Disable '+cu+'?\n\nHides the culture and every character / story / history page under it (EN+FA) via cascade draft, and drafts matching episodes. Save to apply.');
+    if(!confirm(msg)){$('#mpub').checked=!pub;return}
+    try{
+     sync();
+     const r=await cascadeCulturePublish(p,pub);
+     say((pub?'Published':'Disabled')+' '+r.cu+' — '+r.touched.length+' file(s) in temporary drafts. Save to apply.','warn');
+     openFile(p);
+    }catch(e){$('#mpub').checked=!pub;say(e.message,'bad')}
+    return;
+   }
+   sync();paintCultHint();
+  };
+  if($('#mcbgk'))$('#mcbgk').onchange=()=>{const k=$('#mcbgk').value;if(!k){$('#mcbg').value='';paintCbg('');sync();return}
    const cur=$('#mcbg').value;if(cur&&((k==='gif')!==/\.gif$/i.test(cur)))$('#mcbg').value='';
    paintCbg(k);sync()};
   $('#mn').onclick=()=>{$('#mv').value=today();sync()};
-  $('#xcbg').onclick=()=>{$('#mcbg').value='';paintCbg('');sync()};
-  $('#ucbg').onclick=()=>{const k=$('#mcbgk').value;if(!k){say('Pick Static image or Animated GIF first','warn');return}
+  if($('#xcbg'))$('#xcbg').onclick=()=>{$('#mcbg').value='';paintCbg('');sync()};
+  if($('#ucbg'))$('#ucbg').onclick=()=>{const k=$('#mcbgk').value;if(!k){say('Pick Static image or Animated GIF first','warn');return}
    const inp=$('#fcbg');if(!inp){say('Upload control missing — reload the editor','bad');return}
    inp.accept=k==='gif'?'.gif,image/gif':'image/png,image/jpeg,image/webp,image/svg+xml,.png,.jpg,.jpeg,.webp,.svg';inp.click()};
-  $('#fcbg').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
+  if($('#fcbg'))$('#fcbg').onchange=async e=>{const f=e.target.files&&e.target.files[0];e.target.value='';if(!f)return;
    const k=$('#mcbgk').value||(/\.(gif)$/i.test(f.name)?'gif':'static');
    if(k==='gif'&&!/\.gif$/i.test(f.name)){say('Animated GIF kind needs a .gif file','bad');return}
    if(k==='static'&&/\.gif$/i.test(f.name)){say('For a GIF, set kind to Animated GIF','bad');return}
@@ -457,14 +935,16 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
  if(md){const ins=t=>{const s=ta.selectionStart;ta.setRangeText(t,s,ta.selectionEnd,'end');ta.focus();prev();mark()};const wide=()=>{if(hasFm&&!$('#mw').checked){$('#mw').checked=true;$('#mw').dispatchEvent(new Event('input'))}};
   const doPaste=async(replace)=>{try{const t=await navigator.clipboard.readText();if(!t){say('Clipboard is empty','warn');return}
    const empty=!ta.value.trim();if(replace||empty)ta.value=t;else ta.setRangeText(t,ta.selectionStart,ta.selectionEnd,'end');
-   ta.focus();prev();mark();if(hasFm){const el=$('#mchk');if(el){const f=$('#fm').value,body=ta.value||'';
-    const bits=[['Title',!!getK(f,'title')],['Sources',getSrc(f).length>0],['Related',getRel(f).length>0],['Grade',!!getK(f,'grade')],['Card art',!!getK(f,'card_bg')||!/cultures\//.test(p)],['Body',body.trim().length>40]];
-    el.innerHTML=bits.map(([l,ok])=>`<span class="${ok?'ok':'bad'}">${ok?'✓':'·'} ${l}</span>`).join('')}}
+   ta.focus();prev();mark();if(hasFm)paintChk();
    say(replace||empty?'Pasted article':'Pasted at cursor','ok')}catch(err){say('Allow clipboard access, or use Ctrl+V','warn')}};
   if($('#tPaste'))$('#tPaste').onclick=()=>doPaste(true);
   if($('#tClear'))$('#tClear').onclick=()=>{if(ta.value&&!confirm('Clear the article body?'))return;ta.value='';prev();mark();say('Body cleared — paste when ready','warn')};
-  const doLink=()=>{const sel=ta.value.slice(ta.selectionStart,ta.selectionEnd)||'title';const opts=sameCulturePages(p);const pick=opts.length?prompt('Internal path (e.g. /cultures/…/) or leave blank for web URL:\n\n'+opts.slice(0,8).map(o=>o.url).join('\n'),opts[0]?opts[0].url:''):prompt('Link URL','https://');
-   if(pick===null)return;if(pick.startsWith('/'))wrap('[',']('+pick.replace(/\/?$/,'/')+')');else wrap('[',']('+(pick||'https://')+')')};
+  const doLink=()=>{const sel=ta.value.slice(ta.selectionStart,ta.selectionEnd)||'title';
+   pickPage({lang:langOf,excludePath:p,title:'Insert link',allowExternal:true,ok:'Insert'},pick=>{
+    if(!pick)return;
+    const href=pick.startsWith('/')?pick.replace(/\/?$/,'/'):pick;
+    const s=ta.selectionStart,e=ta.selectionEnd;const text=ta.value.slice(s,e)||sel;
+    ta.setRangeText('['+text+']('+href+')',s,e,'end');ta.focus();prev();mark()})};
   if($('#iMore'))$('#iMore').onclick=e=>{const r=e.target.getBoundingClientRect();showCtx(r.left,r.bottom+4,[
    {id:'layout',label:'Layout grid…',run:()=>bGrid(t=>{ins(t);wide()})},
    {id:'slider',label:'Slider…',run:()=>bSlider(ins)},
@@ -474,6 +954,11 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
    {id:'note',label:'Note…',run:()=>bNote(ins,ta.value.slice(ta.selectionStart,ta.selectionEnd))},
    {id:'map',label:'Map…',run:()=>bMap({ins,ta,wide})},
    {id:'verse',label:'Verse…',run:()=>bVerse(ins)},
+   '-',
+   {id:'disagree',label:'Sources disagree…',run:()=>{const t=ta.value.slice(ta.selectionStart,ta.selectionEnd)||'- Point from source A\n- Point from source B';ins('\n{{< disagree >}}\n'+t+'\n{{< /disagree >}}\n')}},
+   {id:'recon',label:'Modern reconstruction…',run:()=>ins('\n{{< recon >}}\nThis diagram is a modern teaching reconstruction — not a primary source map.\n{{< /recon >}}\n')},
+   {id:'artstrip',label:'Art strip…',run:()=>bArtStrip(ins)},
+   {id:'tree',label:'Genealogy tree…',run:()=>ins('\n{{< tree caption="Mini-tree" >}}\nParent = Consort > Child\nParent > Child\n{{< /tree >}}\n')},
    '-',
    {id:'quote',label:'Block quote',run:()=>wrap('\n> ','\n')}
   ])};
@@ -549,6 +1034,12 @@ function wirePicker(root,sel,multi,filter,onChange){const g=root.querySelector('
   g.querySelectorAll('.mi').forEach(b=>b.onclick=()=>{const p=b.dataset.p,k=sel.indexOf(p);if(k>=0)sel.splice(k,1);else{if(!multi)sel.length=0;sel.push(p)}draw();onChange&&onChange()})};
  s.oninput=draw;root.querySelector('.pu').onclick=()=>root.querySelector('.pfi').click();
  root.querySelector('.pfi').onchange=async e=>{const ps=await uploadMedia([...e.target.files]);ps.forEach(p=>{if(!multi)sel.length=0;if(!sel.includes(p))sel.push(p)});draw();onChange&&onChange()};draw();return{redraw:draw}}
+function bArtStrip(ins){const sel=[],caps={};
+ const m=modal('Insert art strip',`<p class="msg" style="margin:0">Pick images with captions — culture visual packs, seal strips, reconstruction plates.</p>${pickerHtml(true)}<div id="m_as"></div>`,
+  m=>{if(!sel.length)throw Error('Select at least one image');ins(`\n{{< art-strip >}}\n${sel.map(p=>relp(p)+' | '+qv(caps[p]||'').replace(/\|/g,'/')).join('\n')}\n{{< /art-strip >}}\n`)});
+ let pk;const list=()=>{const box=m.querySelector('#m_as');box.innerHTML=sel.map((p,i)=>`<div class="row" style="margin:4px 0"><span class="msg" style="width:150px;margin:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${i+1}. ${esc(p.split('/').pop())}</span><input type="text" data-p="${esc(p)}" placeholder="Caption" value="${esc(caps[p]||'')}"></div>`).join('');
+  box.querySelectorAll('input').forEach(e=>e.oninput=()=>caps[e.dataset.p]=e.value)};
+ pk=wirePicker(m.querySelector('.mp'),sel,true,x=>!isVid(x),list)}
 function bSlider(ins){const sel=[],caps={};
  const m=modal('Insert slider',`<p class="msg" style="margin:0">Click items to add them in order. Images, GIFs and MP4/WebM videos work. GIFs and videos play when their slide is in view.</p>${pickerHtml(true)}<div id="m_sl"></div><div class="two"><div><label>Autoplay every N seconds (0 = off)</label><input type="text" id="m_sa" value="0"></div><div><label>Aspect ratio</label><select id="m_sr"><option>16/9</option><option>4/3</option><option>3/2</option><option>1/1</option></select></div></div>`,
   m=>{if(!sel.length)throw Error('Select at least one item');const a=parseInt(m.querySelector('#m_sa').value)||0;ins(`\n{{< slider${a>0?` autoplay="${a}"`:''} ratio="${m.querySelector('#m_sr').value}" >}}\n${sel.map(p=>relp(p)+' | '+qv(caps[p]||'').replace(/\|/g,'/')).join('\n')}\n{{< /slider >}}\n`)});

@@ -2,4 +2,6 @@ User-agent: *
 Allow: /
 Disallow: /tools/
 
-Sitemap: {{ "sitemap.xml" | absURL }}
+{{- $root := site.Params.publicURL | default "https://v4g4b0nd-0x76.github.io/Haoma" -}}
+{{- if hasSuffix $root "/" }}{{ $root = slicestr $root 0 (sub (len $root) 1) }}{{ end }}
+Sitemap: {{ $root }}/sitemap.xml

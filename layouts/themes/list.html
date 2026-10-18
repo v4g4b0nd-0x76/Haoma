@@ -1,0 +1,48 @@
+{{ define "main" }}
+{{- $pages := where site.RegularPages "Params.themes" "!=" nil -}}
+{{- $themes := slice -}}
+{{- range $pages -}}
+  {{- range (.Params.themes | default slice) -}}
+    {{- if not (in $themes .) }}{{ $themes = $themes | append . }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+{{- $themes = sort $themes -}}
+<div class="layout solo"><article>
+{{ partial "tools.html" . }}{{ partial "crumbs.html" . }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+<div class="theme-browse" data-theme-browse>
+  <div class="theme-browse__chips" role="group" aria-label="{{ i18n "themesLabel" }}">
+    <button type="button" class="sheet__chip sheet__chip--theme is-on" data-theme="all" aria-pressed="true">{{ i18n "libraryAll" }}</button>
+    {{- range $themes -}}
+    <button type="button" class="sheet__chip sheet__chip--theme" data-theme="{{ . | urlize }}" aria-pressed="false">{{ . }}</button>
+    {{- end -}}
+  </div>
+  <ul class="cards" data-theme-cards>
+    {{- range $pages }}{{ partial "card.html" . }}{{ end -}}
+  </ul>
+  <p class="msg" data-theme-empty hidden>{{ i18n "themeEmpty" }}</p>
+</div>
+</article></div>
+<script>
+(function(){
+  var root=document.querySelector("[data-theme-browse]"); if(!root)return;
+  var chips=[].slice.call(root.querySelectorAll("[data-theme]"));
+  var cards=[].slice.call(root.querySelectorAll(".cards > .card"));
+  var empty=root.querySelector("[data-theme-empty]");
+  function go(key){
+    var n=0;
+    cards.forEach(function(li){
+      var on=key==="all"||((" "+(li.getAttribute("data-themes")||"")+" ").indexOf(" "+key+" ")>=0);
+      li.hidden=!on; if(on)n++;
+    });
+    chips.forEach(function(c){var on=c.getAttribute("data-theme")===key;c.classList.toggle("is-on",on);c.setAttribute("aria-pressed",on?"true":"false")});
+    if(empty)empty.hidden=n>0;
+    try{history.replaceState(null,"",key==="all"?location.pathname+location.search:("#"+key))}catch(e){}
+  }
+  chips.forEach(function(c){c.addEventListener("click",function(){go(c.getAttribute("data-theme")||"all")})});
+  var h=(location.hash||"").replace(/^#/,"");
+  if(h)go(h); else go("all");
+})();
+</script>
+{{ end }}

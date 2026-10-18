@@ -1,0 +1,16 @@
+{{- /* Cite script is inlined once via sheet; this partial is a no-op hook for tools. */ -}}
+<script>
+(function(){
+  document.querySelectorAll("[data-cite]").forEach(function(btn){
+    if(btn.dataset.bound)return; btn.dataset.bound="1";
+    btn.addEventListener("click",function(){
+      var t=btn.getAttribute("data-title")||"", u=btn.getAttribute("data-url")||location.href,
+          d=btn.getAttribute("data-date")||"", s=btn.getAttribute("data-site")||"Haoma";
+      var line=s+". \""+t+".\" Accessed "+d+". "+u;
+      function ok(){var n=btn.parentElement&&btn.parentElement.querySelector("[data-cite-ok]");if(n){n.hidden=false;setTimeout(function(){n.hidden=true},2000)}}
+      if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(line).then(ok,function(){window.prompt("Copy citation",line)});
+      else window.prompt("Copy citation",line);
+    });
+  });
+})();
+</script>

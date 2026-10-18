@@ -10,6 +10,12 @@
   other = "داستان‌ها"
 [history]
   other = "تاریخ"
+[traditions]
+  other = "سنت‌ها"
+[traditionsLead]
+  other = "زیر‌فرهنگ‌ها و شاخه‌های دینی این جهان."
+[traditionsIn]
+  other = "در این سنت"
 [choose]
   other = "جهان خود را برگزینید"
 [media]
@@ -90,9 +96,15 @@
 [atlasLabel]
   other = "نقشهٔ پیوندهای فرهنگ"
 [atlasHint]
-  other = "بکشید تا جابه‌جا شود · چرخ موش برای بزرگ‌نمایی · یک گره را کلیک کنید تا پیوندها روشن شود · دوبار کلیک برای گشودن · مسیر خواندن برای تور راهنما"
+  other = "نقطه‌ها در ستون‌های هم‌تراز بر پایهٔ نوع · کلیک برای تمرکز و کارت · دوبار کلیک یا «باز کردن» برای رفتن · پس‌زمینه را بکشید · اسکرول یا ± برای بزرگ‌نمایی"
 [atlasEmpty]
-  other = "هنوز صفحه‌ای پیوند نخورده — شخصیت‌ها، داستان‌ها یا تاریخ را با related: اضافه کنید تا اینجا دیده شوند."
+  other = "هنوز صفحه‌ای پیوند نخورده — شخصیت، داستان، تاریخ یا سنت با related: بیفزایید تا اینجا دیده شوند."
+[atlasZoom]
+  other = "بزرگ‌نمایی اطلس"
+[atlasReset]
+  other = "بازنشانی نما"
+[atlasClear]
+  other = "پاک کردن تمرکز"
 [cardCat]
   other = "دسته"
 [cardArt]
@@ -155,3 +167,61 @@
   other = "جابه‌جایی بین کارت‌ها در فهرست"
 [keysOk]
   other = "متوجه شدم"
+[pronounce]
+  other = "تلفظ"
+[citePage]
+  other = "استناد به این صفحه"
+[citeCopied]
+  other = "استناد کپی شد"
+[disagreeTitle]
+  other = "منبع‌ها هم‌نظر نیستند"
+[reconLabel]
+  other = "بازسازی مدرن"
+[listenSticky]
+  other = "بشنوید"
+[listenClose]
+  other = "پنهان کردن پخش‌کننده"
+[listenPlay]
+  other = "پخش"
+[listenPause]
+  other = "مکث"
+[listenSeek]
+  other = "جابه‌جایی"
+[watchPlay]
+  other = "پخش ویدیو"
+[watchOnPage]
+  other = "تماشا"
+[themesLabel]
+  other = "مضامین"
+[themes]
+  other = "مضامین"
+[themeEmpty]
+  other = "هنوز صفحه‌ای با این مضمون نیست."
+[az]
+  other = "الفبا"
+[azNav]
+  other = "پرش به حرف"
+[compare]
+  other = "سنجش"
+[exploreThemes]
+  other = "مرور بر پایهٔ مضمون"
+[homeEmptyCulture]
+  other = "هنوز مقاله‌ای برای این فرهنگ نیست — «همهٔ فرهنگ‌ها» را برگزینید، یا وارد این جهان شوید."
+[cookieKicker]
+  other = "این جهان به یاد می‌سپارد"
+[cookieTitle]
+  other = "کوکی برای این بازدید مجاز باشد؟"
+[cookieText]
+  other = "اگر بپذیرید، فرهنگ، اندازهٔ متن و آخرین صفحه‌ای که گشودید فقط روی همین دستگاه با کوکی ذخیره می‌شود. اگر رد کنید، پس از ترک سایت چیزی نمی‌ماند."
+[cookieAllow]
+  other = "اجازه بده"
+[cookieDeny]
+  other = "رد کن"
+[cookieSettings]
+  other = "کوکی"
+[cookieResume]
+  other = "از جایی که بودید ادامه دهید؟"
+[cookieResumeGo]
+  other = "باز کردن آخرین صفحه"
+[cookieResumeDismiss]
+  other = "بستن"

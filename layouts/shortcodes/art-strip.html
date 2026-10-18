@@ -1,0 +1,16 @@
+{{- /* Captioned image strip for culture visual packs. Inner lines: src | caption */ -}}
+{{- $class := .Get "class" | default "" -}}
+<div class="art-strip{{ with $class }} {{ . }}{{ end }}">
+{{- range split (trim .Inner "\r\n ") "\n" -}}
+  {{- $p := split . "|" -}}
+  {{- $src := trim (index $p 0) " \r\t" -}}
+  {{- $cap := "" -}}{{- if gt (len $p) 1 }}{{ $cap = trim (index $p 1) " \r\t" }}{{ end -}}
+  {{- if $src -}}
+  <figure>
+    {{- /* ?v= busts stale broken SVG/GIF caches after asset fixes */ -}}
+    <img src="{{ printf "%s?v=media-2" ($src | relURL) }}" alt="{{ $cap }}" loading="lazy" decoding="async">
+    {{- with $cap -}}<figcaption>{{ . }}</figcaption>{{- end -}}
+  </figure>
+  {{- end -}}
+{{- end -}}
+</div>

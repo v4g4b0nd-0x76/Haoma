@@ -1,0 +1,6 @@
+{{- /* Sources disagree — plurality without graph noise. */ -}}
+{{- $title := .Get "title" | default (i18n "disagreeTitle") -}}
+<div class="disagree" role="note" aria-label="{{ $title }}">
+  <h3 class="disagree__title">{{ $title }}</h3>
+  <div class="disagree__body">{{ .Inner | markdownify }}</div>
+</div>

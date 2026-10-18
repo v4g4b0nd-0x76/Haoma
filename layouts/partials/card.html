@@ -4,7 +4,8 @@
 {{ $bgKind := .Params.card_bg_kind | default "" }}
 {{ if and $bg (not $bgKind) }}{{ $bgKind = cond (strings.HasSuffix (lower $bg) ".gif") "gif" "static" }}{{ end }}
 {{ $isGif := and $bg (eq $bgKind "gif") }}
-<li class="card card--{{ $kind }}{{ if $bg }} card--media{{ end }}{{ if $isGif }} card--gif{{ end }}" data-culture="{{ $cult }}" data-kind="{{ $kind }}">
+{{ $tkeys := slice }}{{ range (.Params.themes | default slice) }}{{ $tkeys = $tkeys | append (. | urlize) }}{{ end }}
+<li class="card card--{{ $kind }}{{ if $bg }} card--media{{ end }}{{ if $isGif }} card--gif{{ end }}" data-culture="{{ $cult }}" data-kind="{{ $kind }}"{{ if $tkeys }} data-themes="{{ delimit $tkeys " " }}"{{ end }}>
 <a class="art{{ if not $bg }} art--fall{{ end }}" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true">
 {{- if $bg -}}
 {{- $src := printf "img/%s" $bg | relURL -}}
@@ -19,7 +20,7 @@
 <span class="art-seal" aria-hidden="true"></span>
 </a>
 <div class="body">
-<span class="card-kind">{{ if .IsSection }}{{ i18n "cardCat" }}{{ else }}{{ i18n "cardArt" }}{{ end }}</span>
+<span class="card-kind">{{ if .IsSection }}{{ i18n "cardCat" }}{{ else if eq .Params.sec "traditions" }}{{ i18n "traditions" }}{{ else }}{{ i18n "cardArt" }}{{ end }}</span>
 <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
 <p>{{ with .Params.tagline }}{{ . }}{{ else }}{{ .Summary | plainify | truncate 120 }}{{ end }}</p>
 </div>

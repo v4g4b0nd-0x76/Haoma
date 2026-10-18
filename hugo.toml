@@ -34,3 +34,7 @@ enableRobotsTXT = true
     name = "دربارهٔ ما"
     pageRef = "/about"
     weight = 4
+# Absolute origin for canonical / hreflang / og / robots when baseURL has no host.
+# CI overrides baseURL to the Pages URL; this remains the SEO fallback.
+[params]
+  publicURL = "https://v4g4b0nd-0x76.github.io/Haoma"

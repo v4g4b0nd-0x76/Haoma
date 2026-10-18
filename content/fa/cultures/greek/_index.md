@@ -4,6 +4,9 @@ culture: greek
 quote: "پاندورا در کوزه‌ای نگهبان همهٔ بدبختی‌ها بود، و امید را در آن جا گذاشتند."
 quoteSource: "اسطورهٔ پاندورا (برگردان آزاد)"
 tagline: المپ، قهرمانان و سرنوشت
+atlas_path:
+  - /cultures/greek/characters/zeus/
+  - /cultures/greek/characters/athena/
 cascade:
   culture: greek
 ---

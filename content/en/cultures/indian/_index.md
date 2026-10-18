@@ -4,6 +4,9 @@ culture: indian
 quote: "When the sea would not part, the vanara army built a bridge of stones to Lanka."
 quoteSource: "Ramayana (paraphrase)"
 tagline: "Rivers, epics and a thousand names of the divine"
+atlas_path:
+  - /cultures/indian/characters/rama/
+  - /cultures/indian/stories/rama-and-the-bridge/
 cascade:
   culture: indian
 ---

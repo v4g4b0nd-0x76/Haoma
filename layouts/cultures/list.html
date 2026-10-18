@@ -5,8 +5,25 @@
 <h1>{{ .Title }}</h1>
 {{ .Content }}
 {{ partial "lang-status.html" . }}
+{{- /* Culture hub: traditions (sub-cultures) first, then section portals. */ -}}
+{{- if and .Params.culture (not .Params.sec) -}}
+  {{- $tr := .GetPage "traditions" -}}
+  {{- with $tr -}}
+    {{- if gt (len .Pages) 0 -}}
+<section class="trad-hub" aria-label="{{ i18n "traditions" }}">
+  <h2>{{ i18n "traditions" }}</h2>
+  <p class="trad-hub__lead">{{ i18n "traditionsLead" }}</p>
+  <ul class="cards">{{ range .Pages }}{{ partial "card.html" . }}{{ end }}</ul>
+</section>
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
 {{ partial "mindmap.html" . }}
+{{- if eq .Params.sec "traditions" -}}
 <ul class="cards">{{ range .Pages }}{{ partial "card.html" . }}{{ end }}</ul>
+{{- else -}}
+<ul class="cards">{{ range .Pages }}{{ if not (in .RelPermalink "/traditions/") }}{{ partial "card.html" . }}{{ end }}{{ end }}</ul>
+{{- end -}}
 </article></div>
 {{ end }}
 

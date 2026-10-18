@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270" preserveAspectRatio="xMidYMid slice">
+  <title>Cypress and fire — asha in the night</title>
+  <defs>
+    <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1a1520"/>
+      <stop offset="100%" stop-color="#0a0c12"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="270" fill="url(#sky2)"/>
+  <g fill="#d1c9c0" opacity=".35">
+    <circle cx="60" cy="40" r="1.2"/><circle cx="120" cy="55" r="1"/><circle cx="380" cy="35" r="1.1"/>
+    <circle cx="420" cy="70" r="0.9"/><circle cx="300" cy="28" r="1"/>
+  </g>
+  <ellipse cx="240" cy="210" rx="120" ry="18" fill="#0d0910"/>
+  <path d="M240 40 C210 90 205 140 215 190 L265 190 C275 140 270 90 240 40 Z" fill="#17263a"/>
+  <path d="M240 55 C220 95 218 140 226 185 L254 185 C262 140 260 95 240 55 Z" fill="#0d0910"/>
+  <ellipse cx="240" cy="198" rx="14" ry="6" fill="#1b1120"/>
+  <path d="M228 205 Q240 175 252 205 Q240 215 228 205 Z" fill="#e0a03a" opacity=".75"/>
+  <path d="M232 208 Q240 188 248 208 Q240 214 232 208 Z" fill="#f6cf7a" opacity=".55"/>
+</svg>

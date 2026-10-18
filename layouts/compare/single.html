@@ -1,0 +1,25 @@
+{{ define "main" }}
+<div class="layout solo"><article class="wide">
+{{ partial "tools.html" . }}{{ partial "crumbs.html" . }}
+<h1>{{ .Title }}</h1>
+{{- with .Params.tagline -}}<p class="sheet__def">{{ . }}</p>{{- end -}}
+{{- with .Params.pair -}}
+<div class="compare-pair">
+  {{- range . -}}
+    {{- $p := site.GetPage . -}}
+    {{- if not $p }}{{ $p = site.GetPage (printf "%s/" (strings.TrimSuffix "/" .)) }}{{ end -}}
+    {{- with $p -}}
+    <a class="compare-pair__card" href="{{ .RelPermalink }}">
+      <span class="compare-pair__k">{{ with .Params.culture }}{{ . }}{{ end }}</span>
+      <strong>{{ .Title }}</strong>
+      {{- with .Params.tagline -}}<span class="muted">{{ . }}</span>{{- end -}}
+    </a>
+    {{- end -}}
+  {{- end -}}
+</div>
+{{- end -}}
+{{ .Content }}
+{{ with .Params.sources }}<div class="sources"><h2>{{ i18n "sources" }}</h2><ul>{{ range . }}<li>{{ . }}</li>{{ end }}</ul></div>{{ end }}
+</article></div>
+{{ partial "cite.html" . }}
+{{ end }}

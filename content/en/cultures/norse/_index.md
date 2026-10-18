@@ -4,6 +4,9 @@ culture: norse
 quote: "Odin hung nine nights on the windswept tree, and learned the runes."
 quoteSource: "Havamal, stanza 138 (paraphrase)"
 tagline: Ice, runes and the end of the world
+atlas_path:
+  - /cultures/norse/characters/odin/
+  - /cultures/norse/stories/ragnarok/
 cascade:
   culture: norse
 ---

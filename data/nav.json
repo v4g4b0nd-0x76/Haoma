@@ -1,38 +1,20 @@
 {
   "en": [
-    {
-      "name": "Cultures",
-      "url": "cultures/"
-    },
-    {
-      "name": "Library",
-      "url": "library/"
-    },
-    {
-      "name": "About",
-      "url": "about/"
-    },
-    {
-      "name": "Edit",
-      "url": "editor/"
-    }
+    { "name": "Cultures", "url": "cultures/" },
+    { "name": "Themes", "url": "themes/" },
+    { "name": "A–Z", "url": "az/" },
+    { "name": "Compare", "url": "compare/" },
+    { "name": "Library", "url": "library/" },
+    { "name": "About", "url": "about/" },
+    { "name": "Edit", "url": "editor/" }
   ],
   "fa": [
-    {
-      "name": "فرهنگ‌ها",
-      "url": "cultures/"
-    },
-    {
-      "name": "کتابخانه",
-      "url": "library/"
-    },
-    {
-      "name": "دربارهٔ ما",
-      "url": "about/"
-    },
-    {
-      "name": "ویرایش",
-      "url": "editor/"
-    }
+    { "name": "فرهنگ‌ها", "url": "cultures/" },
+    { "name": "مضامین", "url": "themes/" },
+    { "name": "الفبا", "url": "az/" },
+    { "name": "سنجش", "url": "compare/" },
+    { "name": "کتابخانه", "url": "library/" },
+    { "name": "دربارهٔ ما", "url": "about/" },
+    { "name": "ویرایش", "url": "editor/" }
   ]
 }

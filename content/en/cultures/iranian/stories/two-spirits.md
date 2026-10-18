@@ -2,15 +2,30 @@
 title: "The Two Spirits"
 tagline: "The choice between truth and the lie at the heart of existence"
 grade: "primary text"
+reviewed: 2026-10-18
+subculture: zoroastrian
+themes:
+  - dualism
+  - asha
+  - ethics
+facts:
+  - "Yasna 30 in the Gathas — twin spirits choose good and bad"
+  - "Humans repeat that choice in thought, word and deed"
+  - "Later texts name Angra Mainyu / Ahriman — not in this Gathic core"
 sources:
   - "Avesta, Yasna 30 (Gathas) — primary"
   - "Mary Boyce, A History of Zoroastrianism — modern scholarship"
-reviewed: 2026-10-13
 related:
   - /cultures/iranian/characters/zarathustra/
   - /cultures/iranian/history/zoroastrianism-in-persia/
+  - /cultures/iranian/characters/mehr/
 ---
 <p class="lead">In Yasna 30 — one of the Gathas directly attributed to Zarathustra — two primal spirits appear, twin in origin, who chose their natures at the beginning of existence.</p>
+
+{{< art-strip >}}
+img/media/iranian-cypress.svg | Twin paths — fire of asha in the dark
+img/media/iranian-mehr-disc.svg | Light that judges the covenant of truth
+{{< /art-strip >}}
 
 ## The text
 
@@ -26,13 +41,11 @@ One spirit chose *asha* — truth, order, life — and the other chose *druj* �
 
 The passage frames existence as an ethical contest, not a fixed cosmic fate. Every human being repeats that primal choice in thought, word and deed — the three ethical pillars of Zoroastrian practice.
 
-Later Zoroastrian tradition names the destructive spirit **Angra Mainyu** (Middle Persian: *Ahriman*) and developed a full cosmology: a bounded struggle lasting twelve thousand years, ending in the renovation of the world (*Frashegird*). That expanded narrative is from later texts — the *Bundahishn*, *Denkard* and others — not from the Gathas themselves.
+{{< disagree >}}
+- **Gathas (Yasna 30):** twin spirits and human choice; names and full cosmology stay spare.
+- **Later Pahlavi texts:** name Angra Mainyu (Ahriman), map a twelve-thousand-year struggle and *Frashegird* — elaboration beyond this hymn.
+{{< /disagree >}}
 
 ## The ethical triad
 
 Good thoughts (*humata*), good words (*hukhta*), good deeds (*hvarshta*) — the three-fold formula appears across the Avesta as the practical expression of choosing *asha*. It remains the most widely recognised Zoroastrian teaching today.
-
-## Related
-
-- [Zarathustra](/cultures/iranian/characters/zarathustra/) — the prophet of the Gathas
-- [Zoroastrianism in Persia](/cultures/iranian/history/zoroastrianism-in-persia/) — how these ideas shaped empires

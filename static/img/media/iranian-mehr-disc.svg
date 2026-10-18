@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270" preserveAspectRatio="xMidYMid slice">
+  <title>Mehr disc — covenant light ahead of the sun</title>
+  <defs>
+    <radialGradient id="sky" cx="50%" cy="40%" r="70%">
+      <stop offset="0%" stop-color="#2a1830"/>
+      <stop offset="55%" stop-color="#120e18"/>
+      <stop offset="100%" stop-color="#0a0c12"/>
+    </radialGradient>
+    <radialGradient id="glow" cx="50%" cy="48%" r="35%">
+      <stop offset="0%" stop-color="#e0a03a" stop-opacity=".55"/>
+      <stop offset="100%" stop-color="#e0a03a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="480" height="270" fill="url(#sky)"/>
+  <circle cx="240" cy="130" r="90" fill="url(#glow)"/>
+  <circle cx="240" cy="130" r="38" fill="none" stroke="#e0a03a" stroke-width="2.2"/>
+  <circle cx="240" cy="130" r="22" fill="none" stroke="#d4b86e" stroke-width="1.2" opacity=".85"/>
+  <g stroke="#e0a03a" stroke-width="1.4" opacity=".9">
+    <line x1="240" y1="62" x2="240" y2="78"/>
+    <line x1="240" y1="182" x2="240" y2="198"/>
+    <line x1="172" y1="130" x2="188" y2="130"/>
+    <line x1="292" y1="130" x2="308" y2="130"/>
+    <line x1="191" y1="81" x2="202" y2="92"/>
+    <line x1="278" y1="168" x2="289" y2="179"/>
+    <line x1="191" y1="179" x2="202" y2="168"/>
+    <line x1="278" y1="92" x2="289" y2="81"/>
+  </g>
+  <path d="M40 220 L120 190 L200 210 L280 175 L360 205 L440 170 L480 185 L480 270 L0 270 Z" fill="#0d0910"/>
+  <path d="M0 235 L90 215 L170 228 L260 200 L350 222 L480 195 L480 270 L0 270 Z" fill="#17101c" opacity=".9"/>
+</svg>

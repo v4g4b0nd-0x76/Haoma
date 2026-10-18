@@ -1,0 +1,14 @@
+{{- /* Link a leaf’s subculture: to its traditions/<id>/ page when present. */ -}}
+{{- with .Params.subculture -}}
+  {{- $id := . -}}
+  {{- $cu := $.Params.culture -}}
+  {{- $p := false -}}
+  {{- if $cu -}}
+    {{- $p = site.GetPage (printf "/cultures/%s/traditions/%s" $cu $id) -}}
+  {{- end -}}
+  {{- if $p -}}
+  <a class="sheet__chip sheet__chip--sub" href="{{ $p.RelPermalink }}">{{ $p.Title }}</a>
+  {{- else -}}
+  <span class="sheet__chip sheet__chip--sub">{{ $id }}</span>
+  {{- end -}}
+{{- end -}}

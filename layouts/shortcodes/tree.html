@@ -1,0 +1,13 @@
+{{- /* Simple genealogy tree (Greek-first). Lines: Parent > Child or Parent = Consort > Child */ -}}
+{{- $caption := .Get "caption" | default "" -}}
+<figure class="myth-tree">
+  <ul class="myth-tree__list">
+  {{- range split .Inner "\n" -}}
+    {{- $line := trim . " \t\r\n" -}}
+    {{- if $line -}}
+    <li class="myth-tree__row">{{ $line }}</li>
+    {{- end -}}
+  {{- end -}}
+  </ul>
+  {{- with $caption -}}<figcaption class="myth-tree__cap muted">{{ . }}</figcaption>{{- end -}}
+</figure>

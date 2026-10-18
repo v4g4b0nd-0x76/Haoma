@@ -2,7 +2,17 @@
 title: "Mehr (Mithra)"
 tagline: "Lord of oaths, covenants and light"
 grade: "primary text"
-reviewed: 2026-10-13
+reviewed: 2026-10-18
+pronounce: "mehr / mee-thra"
+subculture: mehr
+themes:
+  - oath
+  - solar
+  - covenant
+facts:
+  - "Avestan *miθra* means contract or agreement"
+  - "Guards covenants; rides ahead of the sun in the Mihr Yasht"
+  - "Related by name to Roman Mithras — not the same cult"
 sources:
   - "Avesta, Mihr Yasht (Yasht 10) — primary"
   - "Mary Boyce, A History of Zoroastrianism — modern scholarship"
@@ -10,8 +20,15 @@ related:
   - "/cultures/iranian/characters/zarathustra/"
   - "/cultures/iranian/stories/two-spirits/"
   - "/episodes/002-lord-of-oaths/"
+  - "/compare/mehr-mithras/"
 ---
 <p class="lead">Mehr, Avestan <em>Miθra</em>, is the yazata (divine being worthy of worship) who guards covenants, truth and the light of day.</p>
+
+{{< art-strip >}}
+img/media/iranian-mehr-disc.svg | Mehr disc — light ahead of the sun
+img/media/iranian-derafsh.svg | Banner geometry of the Iranian night atlas
+img/media/iranian-cypress.svg | Cypress and fire — order against the dark
+{{< /art-strip >}}
 
 ## Name and meaning
 
@@ -35,9 +52,9 @@ The seventh month of the Iranian calendar is named Mehr, and its sixteenth day i
 
 ## Relation to Roman Mithras
 
-The Roman mystery cult of Mithras shares the name and some imagery (the bull-slaying *tauroctony*, solar symbolism), but scholars disagree about how much of Mehr's character carried over and how much was reinterpreted in a Hellenistic context. The two traditions are related by name and origin, not identical religions.
+{{< disagree >}}
+- **Iranian Mehr (Avesta):** covenant guardian; solar chariot; no bull-slaying scene in the Yasht.
+- **Roman Mithras:** cave mysteries and the *tauroctony*; how much is Iranian inheritance versus Hellenistic invention remains debated.
+{{< /disagree >}}
 
-## Related
-
-- [Zarathustra](/cultures/iranian/characters/zarathustra/) — the prophet who articulated Ahura Mazda's supremacy
-- [The Two Spirits](/cultures/iranian/stories/two-spirits/) — the foundational ethical choice in the Gathas
+See the side-by-side page [Mehr and Roman Mithras](/compare/mehr-mithras/).

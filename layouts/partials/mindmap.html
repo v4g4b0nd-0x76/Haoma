@@ -85,15 +85,35 @@
 {{- end -}}
 <section id="atlas" class="atlas wrap" data-atlas data-culture="{{ $culture }}" aria-label="{{ i18n "atlasLabel" }}">
   <div class="atlas__head">
-    <h2>{{ i18n "atlasTitle" }}</h2>
-    <p class="atlas__hint">{{ if gt (len $nodes) 0 }}{{ i18n "atlasHint" }}{{ else }}{{ i18n "atlasEmpty" }}{{ end }}</p>
+    <div class="atlas__head-row">
+      <div>
+        <h2>{{ i18n "atlasTitle" }}</h2>
+        <p class="atlas__hint">{{ if gt (len $nodes) 0 }}{{ i18n "atlasHint" }}{{ else }}{{ i18n "atlasEmpty" }}{{ end }}</p>
+      </div>
+      {{- if gt (len $nodes) 0 -}}
+      <div class="atlas__zoom" role="group" aria-label="{{ i18n "atlasZoom" }}">
+        <button type="button" class="atlas__zoom-btn" data-atlas-zoom-out aria-label="−">−</button>
+        <button type="button" class="atlas__zoom-btn" data-atlas-reset aria-label="{{ i18n "atlasReset" }}">⟲</button>
+        <button type="button" class="atlas__zoom-btn" data-atlas-zoom-in aria-label="+">+</button>
+      </div>
+      {{- end -}}
+    </div>
+    {{- if gt (len $nodes) 0 -}}
+    <ul class="atlas__legend" data-atlas-legend>
+      <li data-sec="characters" data-label="{{ i18n "characters" }}"><span class="atlas__swatch" aria-hidden="true"></span>{{ i18n "characters" }}</li>
+      <li data-sec="traditions" data-label="{{ i18n "traditions" }}"><span class="atlas__swatch" aria-hidden="true"></span>{{ i18n "traditions" }}</li>
+      <li data-sec="stories" data-label="{{ i18n "stories" }}"><span class="atlas__swatch" aria-hidden="true"></span>{{ i18n "stories" }}</li>
+      <li data-sec="history" data-label="{{ i18n "history" }}"><span class="atlas__swatch" aria-hidden="true"></span>{{ i18n "history" }}</li>
+      <li data-sec="episode" data-label="{{ i18n "episodes" }}"><span class="atlas__swatch" aria-hidden="true"></span>{{ i18n "episodes" }}</li>
+    </ul>
+    {{- end -}}
     {{- if and (gt (len $nodes) 0) (gt (len $path) 0) -}}
     <div class="atlas__tourbar" data-atlas-tour hidden>
       <button type="button" class="atlas__tour-btn" data-tour-start>{{ i18n "atlasTourStart" }}</button>
       <div class="atlas__tour-run" data-tour-run hidden>
-        <button type="button" class="atlas__tour-btn" data-tour-prev aria-label="{{ i18n "prev" }}">←</button>
+        <button type="button" class="atlas__tour-btn atlas__tour-nav" data-tour-prev aria-label="{{ i18n "prev" }}"></button>
         <p class="atlas__tour-step" data-tour-step></p>
-        <button type="button" class="atlas__tour-btn" data-tour-next aria-label="{{ i18n "next" }}">→</button>
+        <button type="button" class="atlas__tour-btn atlas__tour-nav" data-tour-next aria-label="{{ i18n "next" }}"></button>
         <button type="button" class="atlas__tour-btn" data-tour-open>{{ i18n "atlasTourOpen" }}</button>
         <button type="button" class="atlas__tour-btn" data-tour-end>{{ i18n "atlasTourEnd" }}</button>
       </div>
@@ -101,7 +121,19 @@
     {{- end -}}
   </div>
   {{- if gt (len $nodes) 0 -}}
-  <div class="atlas__canvas" data-atlas-root role="img" aria-label="{{ i18n "atlasLabel" }}"></div>
+  <div class="atlas__stage">
+    <div class="atlas__canvas" data-atlas-root role="img" aria-label="{{ i18n "atlasLabel" }}"></div>
+    <aside class="atlas__dock" data-atlas-dock hidden>
+      <p class="atlas__dock-sec" data-atlas-dock-sec></p>
+      <h3 class="atlas__dock-title" data-atlas-dock-title></h3>
+      <p class="atlas__dock-tag" data-atlas-dock-tag hidden></p>
+      <div class="atlas__dock-neigh" data-atlas-dock-neigh></div>
+      <div class="atlas__dock-acts">
+        <a class="atlas__dock-open" data-atlas-dock-open href="#">{{ i18n "atlasTourOpen" }}</a>
+        <button type="button" class="atlas__dock-clear" data-atlas-dock-clear>{{ i18n "atlasClear" }}</button>
+      </div>
+    </aside>
+  </div>
   <script type="application/json" data-atlas-json>{{ dict "nodes" $nodes "edges" $edges "path" $path | jsonify | safeJS }}</script>
   {{- else -}}
   <div class="atlas__canvas atlas__canvas--empty" role="img" aria-label="{{ i18n "atlasEmpty" }}">

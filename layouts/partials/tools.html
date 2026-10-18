@@ -1,9 +1,9 @@
 <div class="tools" role="toolbar">
-<button type="button" data-act="nav" title="{{ i18n "tNav" }}">☰</button>
-<button type="button" data-act="dock" title="{{ i18n "tDock" }}">⇄</button>
-<button type="button" data-act="minus" title="{{ i18n "tSmaller" }}">A−</button>
-<button type="button" data-act="plus" title="{{ i18n "tBigger" }}">A+</button>
-<button type="button" data-act="focus" title="{{ i18n "tFocus" }}">◐</button>
+<button type="button" data-act="nav" title="{{ i18n "tNav" }}" aria-label="{{ i18n "tNav" }}">☰</button>
+<button type="button" data-act="dock" title="{{ i18n "tDock" }}" aria-label="{{ i18n "tDock" }}">⇄</button>
+<button type="button" data-act="minus" title="{{ i18n "tSmaller" }}" aria-label="{{ i18n "tSmaller" }}">A−</button>
+<button type="button" data-act="plus" title="{{ i18n "tBigger" }}" aria-label="{{ i18n "tBigger" }}">A+</button>
+<button type="button" data-act="focus" title="{{ i18n "tFocus" }}" aria-label="{{ i18n "tFocus" }}">◐</button>
 {{- /* PDF export: culture leaf articles (characters/stories/history) and episodes only. */ -}}
 {{- if or (and (eq .Section "cultures") .IsPage .Params.sec) (eq .Section "episodes") -}}
 <button type="button" class="tools__pdf" data-act="pdf" title="{{ i18n "exportPdfHint" }}" aria-label="{{ i18n "exportPdf" }}">{{ i18n "exportPdf" }}</button>

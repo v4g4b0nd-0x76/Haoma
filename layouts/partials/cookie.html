@@ -1,0 +1,22 @@
+{{- /* Culture-themed cookie consent + resume-where-you-left-off. Storage gated in boot.js / site.js. */ -}}
+<aside class="cookie" id="cookie-banner" hidden role="dialog" aria-modal="false" aria-labelledby="cookie-title" aria-describedby="cookie-text">
+  <div class="cookie__glow" aria-hidden="true"></div>
+  <div class="cookie__inner wrap">
+    <div class="cookie__copy">
+      <p class="cookie__kicker">{{ i18n "cookieKicker" }}</p>
+      <h2 class="cookie__title" id="cookie-title">{{ i18n "cookieTitle" }}</h2>
+      <p class="cookie__text" id="cookie-text">{{ i18n "cookieText" }}</p>
+    </div>
+    <div class="cookie__acts">
+      <button type="button" class="cookie__deny" data-cookie="deny">{{ i18n "cookieDeny" }}</button>
+      <button type="button" class="cookie__allow" data-cookie="allow">{{ i18n "cookieAllow" }}</button>
+    </div>
+  </div>
+</aside>
+<aside class="resume" id="resume-bar" hidden role="status">
+  <div class="resume__inner wrap">
+    <p class="resume__text">{{ i18n "cookieResume" }}</p>
+    <a class="resume__go" id="resume-link" href="#">{{ i18n "cookieResumeGo" }}</a>
+    <button type="button" class="resume__x" id="resume-dismiss" aria-label="{{ i18n "cookieResumeDismiss" }}">×</button>
+  </div>
+</aside>

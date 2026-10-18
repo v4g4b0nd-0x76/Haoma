@@ -1,0 +1,35 @@
+{{ define "main" }}
+{{- $pages := where site.RegularPages "Section" "cultures" -}}
+{{- $pages = where $pages "Params.sec" "!=" nil -}}
+{{- $pages = sort $pages "Title" -}}
+<div class="layout solo"><article>
+{{ partial "tools.html" . }}{{ partial "crumbs.html" . }}
+<h1>{{ .Title }}</h1>
+{{ .Content }}
+{{- $letters := slice -}}
+{{- range $pages -}}
+  {{- $L := substr .Title 0 1 | upper -}}
+  {{- /* Persian: use first rune as-is */ -}}
+  {{- if not (in $letters $L) }}{{ $letters = $letters | append $L }}{{ end -}}
+{{- end -}}
+<nav class="az-nav" aria-label="{{ i18n "azNav" }}">
+  {{- range $letters -}}<a href="#az-{{ . | urlize }}">{{ . }}</a>{{- end -}}
+</nav>
+{{- range $letters -}}
+  {{- $L := . -}}
+  <section class="az-block" id="az-{{ $L | urlize }}">
+    <h2>{{ $L }}</h2>
+    <ul class="az-list">
+      {{- range $pages -}}
+        {{- if eq (substr .Title 0 1 | upper) $L -}}
+        <li><a href="{{ .RelPermalink }}">{{ .Title }}</a>
+          {{- with .Params.tagline -}}<span class="muted"> — {{ . }}</span>{{- end -}}
+          {{- with .Params.culture -}}<span class="az-cu muted"> · {{ . }}</span>{{- end -}}
+        </li>
+        {{- end -}}
+      {{- end -}}
+    </ul>
+  </section>
+{{- end -}}
+</article></div>
+{{ end }}

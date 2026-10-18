@@ -4,6 +4,9 @@ culture: indian
 quote: "هنگامی که دریا راه نداد، سپاه وانارها پلی از سنگ تا لانکا ساختند."
 quoteSource: "رامایانه (برگردان آزاد)"
 tagline: "رودها، حماسه‌ها و هزار نام امر قدسی"
+atlas_path:
+  - /cultures/indian/characters/rama/
+  - /cultures/indian/stories/rama-and-the-bridge/
 cascade:
   culture: indian
 ---

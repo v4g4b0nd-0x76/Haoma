@@ -4,6 +4,9 @@ culture: norse
 quote: "اودین نُه شب بر درختی بادخیز آویخت و رازِ رون‌ها را آموخت."
 quoteSource: "هاوامال، بند ۱۳۸ (برگردان آزاد)"
 tagline: یخ، رون‌ها و پایان جهان
+atlas_path:
+  - /cultures/norse/characters/odin/
+  - /cultures/norse/stories/ragnarok/
 cascade:
   culture: norse
 ---

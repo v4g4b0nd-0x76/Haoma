@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 200" preserveAspectRatio="xMidYMid slice">
+  <title>Cylinder-seal style strip — heroes, reed and cedar</title>
+  <rect width="720" height="200" fill="#0b1020"/>
+  <rect x="8" y="8" width="704" height="184" fill="none" stroke="#6f8fd6" stroke-width="1.5" opacity=".7"/>
+  <!-- zigzag water / reed band -->
+  <path d="M20 160 L40 145 L60 160 L80 145 L100 160 L120 145 L140 160 L160 145 L180 160 L200 145 L220 160 L240 145 L260 160 L280 145 L300 160 L320 145 L340 160 L360 145 L380 160 L400 145 L420 160 L440 145 L460 160 L480 145 L500 160 L520 145 L540 160 L560 145 L580 160 L600 145 L620 160 L640 145 L660 160 L680 145 L700 160" fill="none" stroke="#6f8fd6" stroke-width="1.2" opacity=".55"/>
+  <!-- Gilgamesh silhouette -->
+  <g fill="#17263a" stroke="#6f8fd6" stroke-width="1.2">
+    <ellipse cx="120" cy="70" rx="18" ry="20"/>
+    <path d="M95 95 L145 95 L150 145 L90 145 Z"/>
+    <line x1="150" y1="100" x2="175" y2="70"/>
+  </g>
+  <!-- Enkidu -->
+  <g fill="#1a1520" stroke="#8aa4e0" stroke-width="1.1">
+    <ellipse cx="260" cy="72" rx="17" ry="19"/>
+    <path d="M238 96 L282 96 L286 148 L234 148 Z"/>
+    <path d="M234 110 Q220 120 230 140" fill="none"/>
+  </g>
+  <!-- Huwawa / cedar guardian mask -->
+  <g fill="none" stroke="#6f8fd6" stroke-width="1.3">
+    <circle cx="420" cy="95" r="36"/>
+    <circle cx="408" cy="88" r="4" fill="#6f8fd6"/>
+    <circle cx="432" cy="88" r="4" fill="#6f8fd6"/>
+    <path d="M405 110 Q420 122 435 110"/>
+    <path d="M390 70 L400 55 M450 70 L440 55 M420 55 L420 45"/>
+  </g>
+  <!-- cedar trunks -->
+  <g stroke="#4a6ab0" stroke-width="3" fill="none">
+    <path d="M560 150 L560 50"/>
+    <path d="M590 150 L590 60"/>
+    <path d="M620 150 L620 45"/>
+    <path d="M650 150 L650 70"/>
+  </g>
+  <g fill="#6f8fd6" opacity=".35">
+    <ellipse cx="560" cy="48" rx="14" ry="8"/>
+    <ellipse cx="590" cy="55" rx="16" ry="9"/>
+    <ellipse cx="620" cy="42" rx="18" ry="10"/>
+    <ellipse cx="650" cy="65" rx="14" ry="8"/>
+  </g>
+</svg>

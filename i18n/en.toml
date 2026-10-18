@@ -10,6 +10,12 @@
   other = "Stories"
 [history]
   other = "History"
+[traditions]
+  other = "Traditions"
+[traditionsLead]
+  other = "Sub-cultures and religious branches inside this world."
+[traditionsIn]
+  other = "In this tradition"
 [choose]
   other = "Choose your world"
 [media]
@@ -90,9 +96,15 @@
 [atlasLabel]
   other = "Culture relationship atlas"
 [atlasHint]
-  other = "Drag to rearrange · scroll to zoom · click a node to highlight links · double-click to open · use Reading path for a guided tour"
+  other = "Points sit in aligned columns by type · click to focus and open the card · double-click or Open to visit · drag background to pan · scroll or ± to zoom"
 [atlasEmpty]
-  other = "No linked pages yet — add characters, stories or history with related: links and they will appear here."
+  other = "No linked pages yet — add characters, stories, history or traditions with related: links and they will appear here."
+[atlasZoom]
+  other = "Zoom atlas"
+[atlasReset]
+  other = "Reset view"
+[atlasClear]
+  other = "Clear focus"
 [cardCat]
   other = "Category"
 [cardArt]
@@ -155,3 +167,61 @@
   other = "Move between cards on a list page"
 [keysOk]
   other = "Got it"
+[pronounce]
+  other = "Say"
+[citePage]
+  other = "Cite this page"
+[citeCopied]
+  other = "Citation copied"
+[disagreeTitle]
+  other = "Sources disagree"
+[reconLabel]
+  other = "Modern reconstruction"
+[listenSticky]
+  other = "Listen"
+[listenClose]
+  other = "Hide player"
+[listenPlay]
+  other = "Play"
+[listenPause]
+  other = "Pause"
+[listenSeek]
+  other = "Seek"
+[watchPlay]
+  other = "Play video"
+[watchOnPage]
+  other = "Watch"
+[themesLabel]
+  other = "Themes"
+[themes]
+  other = "Themes"
+[themeEmpty]
+  other = "No pages with this theme yet."
+[az]
+  other = "A–Z"
+[azNav]
+  other = "Jump to letter"
+[compare]
+  other = "Compare"
+[exploreThemes]
+  other = "Browse by theme"
+[homeEmptyCulture]
+  other = "No articles for this culture yet — pick All cultures, or enter this world to add some."
+[cookieKicker]
+  other = "This world remembers"
+[cookieTitle]
+  other = "Allow cookies for this visit?"
+[cookieText]
+  other = "If you allow, we save your culture, reading size, and the last page you opened — only on this device, using cookies. Refuse and nothing is stored after you leave."
+[cookieAllow]
+  other = "Allow"
+[cookieDeny]
+  other = "Refuse"
+[cookieSettings]
+  other = "Cookies"
+[cookieResume]
+  other = "Continue where you left off?"
+[cookieResumeGo]
+  other = "Open last page"
+[cookieResumeDismiss]
+  other = "Dismiss"

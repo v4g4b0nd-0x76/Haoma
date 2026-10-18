@@ -1,0 +1,71 @@
+{{- /* Sticky mini-player when a related episode has audio and/or YouTube. */ -}}
+{{- $ep := false -}}
+{{- range (.Params.related | default slice) -}}
+  {{- if and (not $ep) (hasPrefix . "/episodes/") -}}
+    {{- $p := site.GetPage . -}}
+    {{- if not $p }}{{ $p = site.GetPage (strings.TrimSuffix "/" .) }}{{ end -}}
+    {{- with $p -}}
+      {{- $audio := "" -}}
+      {{- with .Params.audio -}}
+        {{- if or (hasPrefix . "http://") (hasPrefix . "https://") (fileExists (printf "static/%s" .)) -}}
+          {{- $audio = . -}}
+        {{- end -}}
+      {{- end -}}
+      {{- $yt := partial "yt-id.html" (.Params.youtube | default "") -}}
+      {{- if or $audio $yt -}}
+        {{- $ep = dict "page" $p "audio" $audio "yt" $yt -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- /* Episode pages: sticky only when we did not already render the stage above
+     (stage covers in-page play; sticky is for article pages linking an episode). */ -}}
+{{- if and (not $ep) (eq .Section "episodes") (ne .Kind "section") -}}
+  {{- /* skip sticky on the episode itself — ep-stage is the main player */ -}}
+{{- end -}}
+{{- with $ep -}}
+<aside class="listen" data-listen aria-label="{{ i18n "listenSticky" }}">
+  <div class="listen__inner wrap">
+    <div class="listen__glow" aria-hidden="true"></div>
+    <div class="listen__lead">
+      <div class="listen__meta">
+        <span class="listen__kicker">{{ i18n "listenSticky" }}</span>
+        <a class="listen__title" href="{{ .page.RelPermalink }}">{{ .page.Title }}</a>
+      </div>
+      {{- if .audio -}}
+        {{ partial "ha-player.html" (dict "src" .audio "compact" true) }}
+      {{- end -}}
+    </div>
+    <div class="listen__side">
+      {{- if .yt -}}
+      <a class="listen__watch" href="{{ .page.RelPermalink }}#ep-watch" data-listen-yt="{{ .yt }}">
+        <span class="listen__watch-thumb" style="background-image:url(https://i.ytimg.com/vi/{{ .yt }}/mqdefault.jpg)" aria-hidden="true">
+          <svg class="listen__watch-play" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.14v13.72L19 12 8 5.14z"/></svg>
+        </span>
+        <span class="listen__watch-label">{{ i18n "watchOnPage" }}</span>
+      </a>
+      {{- end -}}
+      <button type="button" class="listen__close" data-listen-close aria-label="{{ i18n "listenClose" }}">
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M6.4 5l5.6 5.6L17.6 5 19 6.4 13.4 12 19 17.6 17.6 19 12 13.4 6.4 19 5 17.6 10.6 12 5 6.4z"/></svg>
+      </button>
+    </div>
+  </div>
+</aside>
+<script>
+(function(){
+  var box=document.querySelector("[data-listen]"); if(!box)return;
+  var key="haoma-listen-hide:"+location.pathname;
+  var btn=box.querySelector("[data-listen-close]");
+  var root=document.documentElement;
+  function syncPad(){
+    if(box.hidden){root.style.removeProperty("--listen-h"); return;}
+    root.style.setProperty("--listen-h", Math.ceil(box.getBoundingClientRect().height)+"px");
+  }
+  if(btn)btn.onclick=function(){box.hidden=true; syncPad(); try{sessionStorage.setItem(key,"1")}catch(e){}};
+  try{if(sessionStorage.getItem(key)==="1")box.hidden=true}catch(e){}
+  syncPad();
+  if(typeof ResizeObserver!=="undefined"){new ResizeObserver(syncPad).observe(box);}
+  else{window.addEventListener("resize",syncPad);}
+})();
+</script>
+{{- end -}}

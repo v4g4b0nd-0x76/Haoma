@@ -2,10 +2,19 @@
 title: دین زرتشتی در ایران
 tagline: از سرودهای اوستایی تا کلیسای دولتی ساسانی
 grade: پژوهش نوین
+reviewed: 2026-10-18
+subculture: zoroastrian
+themes:
+  - history
+  - dualism
+  - empire
+facts:
+  - "شاهان هخامنشی در سنگ‌نوشته‌ها اهورامزدا را می‌خوانند"
+  - "ساسانیان دین را نهادی کردند و اوستا را نوشتند"
+  - "جوامع پارسی و زرتشتی ایران امروز ادامه دارند"
 sources:
   - "Mary Boyce, A History of Zoroastrianism (۳ جلد) — پژوهش نوین"
   - "یادداشت: منابع اولیهٔ دورهٔ هخامنشی و ساسانی افزوده شود"
-reviewed: 2026-10-13
 related:
   - /cultures/iranian/characters/zarathustra/
   - /cultures/iranian/stories/two-spirits/

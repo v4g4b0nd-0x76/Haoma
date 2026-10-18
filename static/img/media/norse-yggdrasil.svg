@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 270" preserveAspectRatio="xMidYMid slice">
+  <title>Yggdrasil — modern reconstruction of the world tree</title>
+  <defs>
+    <linearGradient id="nsk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0e1a28"/>
+      <stop offset="100%" stop-color="#070a10"/>
+    </linearGradient>
+  </defs>
+  <rect width="480" height="270" fill="url(#nsk)"/>
+  <ellipse cx="240" cy="40" rx="160" ry="20" fill="#7fa8c9" opacity=".12"/>
+  <path d="M240 50 C200 90 190 140 200 200 L280 200 C290 140 280 90 240 50 Z" fill="#0d1520" stroke="#7fa8c9" stroke-width="1.4"/>
+  <path d="M200 200 Q180 230 140 245 M280 200 Q300 230 340 245 M240 200 L240 250" fill="none" stroke="#5a7a98" stroke-width="1.5"/>
+  <circle cx="140" cy="248" r="5" fill="none" stroke="#7fa8c9" stroke-width="1"/>
+  <circle cx="340" cy="248" r="5" fill="none" stroke="#7fa8c9" stroke-width="1"/>
+  <circle cx="240" cy="252" r="5" fill="none" stroke="#7fa8c9" stroke-width="1"/>
+  <g fill="#cfd2d9" opacity=".4">
+    <circle cx="80" cy="30" r="1"/><circle cx="400" cy="45" r="1.1"/><circle cx="350" cy="20" r="0.8"/>
+  </g>
+</svg>

@@ -1,0 +1,6 @@
+{{- /* Label modern reconstructions (Norse cosmos maps, etc.). */ -}}
+{{- $label := .Get "label" | default (i18n "reconLabel") -}}
+<div class="recon" role="note">
+  <p class="recon__label">{{ $label }}</p>
+  <div class="recon__body">{{ .Inner | markdownify }}</div>
+</div>

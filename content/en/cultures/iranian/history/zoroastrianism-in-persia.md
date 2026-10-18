@@ -2,10 +2,19 @@
 title: "Zoroastrianism in Persia"
 tagline: "From the Avestan hymns to the Sasanian state church"
 grade: "modern scholarship"
+reviewed: 2026-10-18
+subculture: zoroastrian
+themes:
+  - history
+  - dualism
+  - empire
+facts:
+  - "Achaemenid kings invoke Ahura Mazda in royal inscriptions"
+  - "Sasanian state made Zoroastrianism institutional and wrote the Avesta down"
+  - "Parsi and Iranian Zoroastrian communities continue today"
 sources:
   - "Mary Boyce, A History of Zoroastrianism (3 vols.) — modern scholarship"
   - "Placeholder: add Achaemenid and Sasanian primary source references"
-reviewed: 2026-10-13
 related:
   - /cultures/iranian/characters/zarathustra/
   - /cultures/iranian/stories/two-spirits/

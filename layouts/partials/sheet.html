@@ -1,0 +1,35 @@
+{{- /* Scannable article sheet: definition, chips, key facts, cite. */ -}}
+{{- $isLeaf := or (and (eq .Section "cultures") .Params.sec) (eq .Section "episodes") -}}
+{{- if $isLeaf -}}
+<header class="sheet">
+  {{- with .Params.tagline -}}<p class="sheet__def">{{ . }}</p>{{- end -}}
+  <div class="sheet__chips">
+    {{- with .Params.culture -}}
+      {{- $cu := site.GetPage (printf "/cultures/%s" .) -}}
+      {{- if $cu -}}<a class="sheet__chip" href="{{ $cu.RelPermalink }}">{{ $cu.Title }}</a>
+      {{- else -}}<span class="sheet__chip">{{ . }}</span>{{- end -}}
+    {{- end -}}
+    {{- with .Params.sec -}}<span class="sheet__chip sheet__chip--sec">{{ i18n . | default . }}</span>{{- end -}}
+    {{- if eq .Section "episodes" -}}<span class="sheet__chip sheet__chip--sec">{{ i18n "episodes" }}</span>{{- end -}}
+    {{- if and .Params.subculture (ne .Params.sec "traditions") -}}{{ partial "subculture-chip.html" . }}{{- end -}}
+    {{- with .Params.grade -}}<span class="sheet__chip sheet__chip--grade">{{ . }}</span>{{- end -}}
+    {{- range (.Params.themes | default slice) -}}
+      <a class="sheet__chip sheet__chip--theme" href="{{ printf "%s#%s" ("themes/" | relLangURL) (. | urlize) }}">{{ . }}</a>
+    {{- end -}}
+  </div>
+  {{- with .Params.pronounce -}}
+  <p class="sheet__pron muted"><span class="sheet__pron-label">{{ i18n "pronounce" }}</span> {{ . }}</p>
+  {{- end -}}
+  {{- with .Params.facts -}}
+  <ul class="sheet__facts">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
+  {{- end -}}
+  <div class="sheet__tools">
+    <button type="button" class="sheet__cite" data-cite
+      data-title="{{ .Title }}"
+      data-url="{{ .Permalink }}"
+      data-date="{{ .Params.reviewed | default (now.Format "2006-01-02") }}"
+      data-site="{{ site.Title }}">{{ i18n "citePage" }}</button>
+    <span class="sheet__cite-ok muted" data-cite-ok hidden>{{ i18n "citeCopied" }}</span>
+  </div>
+</header>
+{{- end -}}

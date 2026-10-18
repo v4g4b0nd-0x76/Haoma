@@ -1,0 +1,37 @@
+{{- /* Episode watch/listen stage: YouTube preview, Spotify embed, and/or audio. */ -}}
+{{- $ytRaw := .Params.youtube | default "" -}}
+{{- $spRaw := .Params.spotify | default "" -}}
+{{- $yt := partial "yt-id.html" $ytRaw -}}
+{{- $sp := partial "spotify-id.html" $spRaw -}}
+{{- $audio := "" -}}
+{{- with .Params.audio -}}
+  {{- if or (hasPrefix . "http://") (hasPrefix . "https://") (fileExists (printf "static/%s" .)) -}}
+    {{- $audio = . -}}
+  {{- end -}}
+{{- end -}}
+{{- if or $yt $sp $audio -}}
+<section class="ep-stage" id="ep-watch" aria-label="{{ i18n "listen" }}">
+  {{- if $yt -}}
+  <div class="yt-card" data-yt-card data-yt-id="{{ $yt }}">
+    <button type="button" class="yt-card__hit" data-yt-play aria-label="{{ i18n "watchPlay" }}">
+      <img class="yt-card__thumb" src="https://i.ytimg.com/vi/{{ $yt }}/hqdefault.jpg" alt="" width="480" height="360" loading="lazy" decoding="async">
+      <span class="yt-card__veil" aria-hidden="true"></span>
+      <span class="yt-card__play" aria-hidden="true">
+        <svg viewBox="0 0 68 48" width="68" height="48"><path class="yt-card__tri-bg" d="M66.5 7.7c-.8-2.9-2.5-5.4-5.4-6.2C55.8.1 34 0 34 0S12.2.1 6.9 1.5C4 2.3 2.3 4.8 1.5 7.7 0 13.1 0 24 0 24s0 10.9 1.5 16.3c.8 2.9 2.5 5.4 5.4 6.2C12.2 47.9 34 48 34 48s21.8-.1 27.1-1.5c2.9-.8 4.6-3.3 5.4-6.2C68 34.9 68 24 68 24s0-10.9-1.5-16.3z"/><path fill="#fff" d="M45 24 27 14v20"/></svg>
+      </span>
+      <span class="yt-card__badge">YouTube</span>
+    </button>
+  </div>
+  {{- else if $sp -}}
+  <div class="sp-card" data-sp-card>
+    <iframe class="sp-card__frame" title="{{ .Title }}" src="https://open.spotify.com/embed/{{ $sp }}?utm_source=generator&theme=0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+  </div>
+  {{- end -}}
+  {{- if $audio -}}
+  <div class="ep-stage__audio">
+    <span class="ep-stage__kicker">{{ i18n "listenSticky" }}</span>
+    {{ partial "ha-player.html" (dict "src" $audio "title" .Title) }}
+  </div>
+  {{- end -}}
+</section>
+{{- end -}}

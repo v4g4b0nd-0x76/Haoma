@@ -1,0 +1,27 @@
+{{- /* Custom themed audio control. Dict: src, title, href (optional), compact (bool). */ -}}
+{{- $src := .src -}}
+{{- $title := .title | default "" -}}
+{{- $href := .href | default "" -}}
+{{- $compact := .compact | default false -}}
+<div class="ha-player{{ if $compact }} ha-player--compact{{ end }}" data-ha-player>
+  <audio preload="none" src="{{ $src | relURL }}"></audio>
+  <button type="button" class="ha-player__play" data-ha-play aria-label="{{ i18n "listenPlay" }}">
+    <svg class="ha-player__ico ha-player__ico--play" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M8 5.14v13.72L19 12 8 5.14z"/></svg>
+    <svg class="ha-player__ico ha-player__ico--pause" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 5h4v14H6zm8 0h4v14h-4z"/></svg>
+  </button>
+  <div class="ha-player__body">
+    {{- if $title -}}
+    <div class="ha-player__meta">
+      {{- if $href -}}
+      <a class="ha-player__title" href="{{ $href }}">{{ $title }}</a>
+      {{- else -}}
+      <span class="ha-player__title">{{ $title }}</span>
+      {{- end -}}
+    </div>
+    {{- end -}}
+    <div class="ha-player__track" data-ha-seek role="slider" tabindex="0" aria-label="{{ i18n "listenSeek" }}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+      <div class="ha-player__rail"><div class="ha-player__fill" data-ha-fill></div><div class="ha-player__knob" data-ha-knob></div></div>
+    </div>
+    <div class="ha-player__times"><span data-ha-cur>0:00</span><span data-ha-dur>—:—</span></div>
+  </div>
+</div>

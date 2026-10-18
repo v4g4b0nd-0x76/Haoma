@@ -6,6 +6,8 @@
   {{- if .Params.sec }}{{ $kind = .Params.sec }}{{ end -}}
   {{- $body := trim (.Plain | replaceRE `\s+` " ") " \n\t" -}}
   {{- $body = $body | truncate 480 "" -}}
+  {{- $th := "" -}}
+  {{- with .Params.themes }}{{ $th = delimit . " " }}{{ end -}}
   {{- $items = $items | append (dict
     "t" .Title
     "g" (.Params.tagline | default "")
@@ -13,6 +15,7 @@
     "u" .RelPermalink
     "c" (.Params.culture | default "")
     "k" $kind
+    "m" $th
   ) -}}
 {{- end -}}
 {{- range where site.Pages "Kind" "section" -}}

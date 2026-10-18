@@ -4,6 +4,9 @@ culture: mesopotamian
 quote: "گیلگمش برای انکیدو گریست و به جست‌وجوی راز زندگی رفت."
 quoteSource: "حماسهٔ گیلگمش (برگردان آزاد)"
 tagline: "دو رود، لوح‌های گِلی و نخستین خدایان"
+atlas_path:
+  - /cultures/mesopotamian/characters/enkidu/
+  - /cultures/mesopotamian/stories/journey-to-the-cedar-forest/
 cascade:
   culture: mesopotamian
 wide: true

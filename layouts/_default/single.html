@@ -3,13 +3,24 @@
 <article class="{{ if .Params.wide }}wide{{ end }}{{ if .Params.dropcap }} dc{{ end }}">
 {{ partial "tools.html" . }}{{ partial "crumbs.html" . }}
 <h1>{{ .Title }}</h1>
-{{- if or .Params.grade .Params.reviewed -}}
+{{ partial "sheet.html" . }}
+{{- if and (not (or (and (eq .Section "cultures") .Params.sec) (eq .Section "episodes"))) (or .Params.grade .Params.reviewed) -}}
 <p class="meta-line">{{ with .Params.grade }}<span class="chip">{{ . }}</span>{{ end }}{{ with .Params.reviewed }}<span class="muted">{{ i18n "reviewed" }} {{ . }}</span>{{ end }}</p>
 {{- end -}}
+{{- if and (eq .Section "cultures") (eq .Params.sec "traditions") (or .Params.grade .Params.reviewed) -}}
+<p class="meta-line">{{ with .Params.grade }}<span class="chip">{{ . }}</span>{{ end }}{{ with .Params.reviewed }}<span class="muted">{{ i18n "reviewed" }} {{ . }}</span>{{ end }}</p>
+{{- end -}}
+{{- if eq .Section "episodes" -}}
+{{ partial "ep-stage.html" . }}
+{{- else -}}
 {{- /* audio only when the file is really there (or it is an external URL) -
        never render a player that would 404 */ -}}
-{{ with .Params.audio }}{{ if or (hasPrefix . "http://") (hasPrefix . "https://") (fileExists (printf "static/%s" .)) }}<audio controls preload="none" src="{{ . | relURL }}"></audio>{{ end }}{{ end }}
+{{ with .Params.audio }}{{ if or (hasPrefix . "http://") (hasPrefix . "https://") (fileExists (printf "static/%s" .)) }}
+{{ partial "ha-player.html" (dict "src" .) }}
+{{ end }}{{ end }}
+{{- end -}}
 {{ .Content }}
+{{ partial "subculture-members.html" . }}
 {{ partial "related.html" . }}
 {{ with .Params.sources }}<div class="sources"><h2>{{ i18n "sources" }}</h2><ul>{{ range . }}<li>{{ . }}</li>{{ end }}</ul></div>{{ end }}
 {{ with site.Data.site.repo }}{{ $b := $.Site.Data.site.branch | default "master" }}{{ $f := printf "content/%s/%s" site.Language.Lang $.File.Path }}
@@ -17,5 +28,6 @@
 </article>
 {{ if gt (len .TableOfContents) 40 }}<aside class="toc"><h3>{{ i18n "onPage" }}</h3>{{ .TableOfContents }}</aside>{{ end }}
 </div>
+{{ partial "listen.html" . }}
+{{ partial "cite.html" . }}
 {{ end }}
-

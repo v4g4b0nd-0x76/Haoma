@@ -1,0 +1,23 @@
+{{- /* Production-absolute URL from RelPermalink, Permalink, or a root-relative path.
+     When baseURL includes a subdir (e.g. /Haoma/), RelPermalink already contains it —
+     join against the origin only so we don't emit /Haoma/Haoma/…. */ -}}
+{{- $root := site.Params.publicURL | default "https://v4g4b0nd-0x76.github.io/Haoma" -}}
+{{- if hasSuffix $root "/" }}{{ $root = slicestr $root 0 (sub (len $root) 1) }}{{ end -}}
+{{- $origin := replaceRE `^(https?://[^/]+).*$` `$1` $root -}}
+{{- $basePath := replaceRE `^https?://[^/]+` "" $root -}}
+{{- $in := printf "%s" . -}}
+{{- if and (or (hasPrefix $in "http://") (hasPrefix $in "https://")) (not (or (in $in "localhost") (in $in "127.0.0.1"))) -}}
+{{- $in -}}
+{{- else -}}
+{{- $path := $in -}}
+{{- if or (hasPrefix $path "http://") (hasPrefix $path "https://") -}}
+{{- $path = replaceRE `^https?://[^/]+` "" $path -}}
+{{- end -}}
+{{- $path = replaceRE `^/+` "/" $path -}}
+{{- if not (hasPrefix $path "/") }}{{ $path = printf "/%s" $path }}{{ end -}}
+{{- if and $basePath (ne $basePath "/") (hasPrefix $path $basePath) -}}
+{{- printf "%s%s" $origin $path -}}
+{{- else -}}
+{{- printf "%s%s" $root $path -}}
+{{- end -}}
+{{- end -}}
