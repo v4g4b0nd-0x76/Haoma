@@ -205,12 +205,114 @@ pre.ap-out{white-space:pre-wrap;max-height:42vh;font:12.5px/1.5 ui-monospace,Men
 .pg-tabs button{appearance:none;border:1px solid var(--b);background:var(--s);color:var(--t);border-radius:999px;padding:7px 14px;font:600 13px/1 var(--font,system-ui);cursor:pointer}
 .pg-tabs button.on{border-color:var(--a);background:color-mix(in srgb,var(--a) 16%,var(--s));color:var(--a)}
 .pg-pane[hidden]{display:none!important}
+
+/* Farsi UI: rail on the right, soft RTL for chrome; code/paths stay LTR */
+html[dir=rtl] #app{direction:rtl}
+html[dir=rtl] #rail{border-right:0;border-left:1px solid var(--b)}
+html[dir=rtl] #panel{border-right:0;border-left:1px solid var(--b)}
+html[dir=rtl] #pvwrap{border-left:0;border-right:1px solid var(--b)}
+html[dir=rtl] .rb{text-align:right}
+html[dir=rtl] .rb.on{box-shadow:inset -3px 0 var(--a)}
+html[dir=rtl] #ct .item.on{box-shadow:inset -3px 0 var(--a)}
+html[dir=rtl] th,td{text-align:right}
+html[dir=rtl] .pairslot,.atlasstep,.note__crumb{text-align:right}
+html[dir=rtl] .logo{flex-direction:row-reverse}
+html[dir=rtl] .guide ol{padding-inline-start:1.3rem}
+html[dir=rtl] code,pre,textarea.ed,textarea.mono,.crumb,#purl,.vault-search,#cs,#ff{direction:ltr;text-align:left;unicode-bidi:isolate}
+#blang{width:100%;font-size:12.5px}
+html[dir=rtl] body{font-family:Tahoma,"Segoe UI",system-ui,sans-serif}
+
 </style></head><body>
 <div id="ctx" hidden></div>
-<div id="app"><nav id="rail"><div class="logo"><svg class="lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6cf7a"/><stop offset="1" stop-color="#d9972c"/></linearGradient></defs><rect x="3" y="3" width="94" height="94" rx="3" fill="none" stroke="url(#hg)" stroke-width="1.6"/><rect x="9" y="9" width="82" height="82" rx="1.5" fill="none" stroke="url(#hg)" stroke-width=".8" opacity=".75"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(20.14 62.81) scale(0.07303)" fill="#0b0a0c" opacity=".55"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(18.93 61.36) scale(0.07303)" fill="#fff4cf" opacity=".3"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(19.25 61.69) scale(0.07303)" fill="url(#hg)"/></svg>Haoma editor</div><div id="rl"></div><div class="rbot"><div id="pend" class="pend" hidden><b></b><div class="row"><button class="pri" id="sa">Save all to files</button><button id="da">Discard</button></div></div><div id="branch"></div><button id="bundo">↶ Undo last change</button><button id="bpv">▶ Preview</button><button id="bchk">Check build</button><div id="hmsg" class="msg"></div></div></nav>
+<div id="app"><nav id="rail"><div class="logo"><svg class="lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6cf7a"/><stop offset="1" stop-color="#d9972c"/></linearGradient></defs><rect x="3" y="3" width="94" height="94" rx="3" fill="none" stroke="url(#hg)" stroke-width="1.6"/><rect x="9" y="9" width="82" height="82" rx="1.5" fill="none" stroke="url(#hg)" stroke-width=".8" opacity=".75"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(20.14 62.81) scale(0.07303)" fill="#0b0a0c" opacity=".55"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(18.93 61.36) scale(0.07303)" fill="#fff4cf" opacity=".3"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(19.25 61.69) scale(0.07303)" fill="url(#hg)"/></svg><span id="logoTxt">Haoma editor</span></div><div id="rl"></div><div class="rbot"><div id="pend" class="pend" hidden><b id="pendb"></b><div class="row"><button class="pri" id="sa" data-i18n="save_all">Save all to files</button><button id="da" data-i18n="discard">Discard</button></div></div><div id="branch"></div><button type="button" id="blang" title="UI language">فارسی</button><button id="bundo" data-i18n="undo_last">↶ Undo last change</button><button id="bpv" data-i18n="preview_btn">▶ Preview</button><button id="bchk" data-i18n="check_build">Check build</button><div id="hmsg" class="msg"></div></div></nav>
 <div id="panel"></div><div id="main"></div>
-<div id="pvwrap"><div class="row"><input type="text" id="purl" readonly><button id="pre">⟳</button><label style="margin:0;white-space:nowrap"><input type="checkbox" id="pfollow" checked style="width:auto"> follow editor</label></div><iframe id="pf"></iframe></div></div>
+<div id="pvwrap"><div class="row"><input type="text" id="purl" readonly><button id="pre">⟳</button><label style="margin:0;white-space:nowrap"><input type="checkbox" id="pfollow" checked style="width:auto"> <span data-i18n="follow_editor">follow editor</span></label></div><iframe id="pf"></iframe></div></div>
 <script>const T=document.querySelector('meta[name=token]').content;
+
+/* ===== UI language (Farsi chrome: fluent common words; keep tech terms in English) ===== */
+let uiLang=(()=>{try{return localStorage.getItem('haoma_editor_lang')||'en'}catch(e){return'en'}})();
+const I18N={
+en:{
+ v_dash:'Dashboard',v_content:'Content',v_drafts:'Drafts',v_themes:'Themes',v_art:'Prompt generator',v_nav:'Navigation',v_review:'Review',v_files:'Files',v_history:'History',v_publish:'Publish & PR',v_settings:'Settings',
+ panels:'Panels',panels_title:'Show / hide panels',panels_help:'Toggle which panels appear in the left rail. Core panels (Dashboard, Content, Settings) cannot be hidden.',
+ save_all:'Save all to files',discard:'Discard',undo_last:'↶ Undo last change',preview_btn:'▶ Preview',preview_stop:'■ Stop preview',check_build:'Check build',follow_editor:'follow editor',
+ logo:'Haoma editor',lang_btn:'فارسی',lang_btn_to_en:'English',
+ pend:'● {n} temporary draft',pend_s:'● {n} temporary drafts',
+ saved:'Saved ✓',restored:'Restored {n} temporary draft(s)',
+ dash:'Dashboard',dash_how:'How to edit (no coding needed)',
+ dash_ol:'<li>Open <b>Content</b> in the left menu (or press <b>+ New page</b> below).</li><li>Pick a culture in the list — <b>right-click</b> a culture for <i>Create section</i> / <i>Add page</i>, or a section for <i>Add page to this section</i>.</li><li>Open a page, set title / related / sources in <b>Properties</b>.</li><li><b>Paste</b> your article from Obsidian (or any editor) into the big space — you do not need to write here.</li><li>Press <b>Preview</b>, then <b>Save</b>. Use <b>Publish &amp; PR</b> when ready.</li>',
+ dash_tip:'Tip: <b>Ctrl+K</b> jumps to any page. Use <b>+ Add page…</b> for related / compare links across cultures. A–Z is auto from titles.',
+ dash_onboard:'Onboarding checklist',
+ dash_onboard_ol:'<li>Theme colours look right for your culture</li><li>At least one character, story and history page</li><li>Card art (or culture animation) + sources + related links</li><li>EN/FA pair (or a <code>TODO translate:</code> stub)</li><li>Publish &amp; PR</li>',
+ dash_counts:'Counts describe saved files. Unsaved edits live only in the editor and the preview.',
+ st_pages:'Pages',st_drafts:'Drafts',st_stubs:'Stubs',st_stale:'Need review',st_nosrc:'Without sources',st_orphan:'No related',st_untr:'Untranslated',st_uncommitted:'Uncommitted files',
+ quick:'Quick actions',qa_page:'+ New page',qa_cult:'+ New culture',qa_prev:'▶ Preview site',qa_chk:'Check build',qa_jump:'⌘K Jump…',
+ uncommitted:'Uncommitted changes',clean_tree:'Working tree clean',
+ review:'Review',review_help:'Find pages that need a source, a translation, atlas links, or a fresh review.',
+ rev_all:'All',rev_drafts:'Drafts',rev_stubs:'TODO translate stubs',rev_stale:'Need review (older than 180 days)',rev_nosrc:'No sources',rev_orphan:'No related links',rev_untr:'Missing translation',
+ rev_none:'Nothing to fix here.',th_page:'Page',th_lang:'Lang',th_grade:'Grade',th_reviewed:'Reviewed',th_flags:'Flags',
+ find_page:'Find a page…',btn_page:'+ Page',btn_cult:'+ Culture',
+ drafts_h:'Temporary drafts',drafts_help:'Drafts live in <code>tools/.drafts</code>, outside your site files. They survive switching pages and reloading the editor. Nothing reaches the project until you save.',
+ save_all_short:'Save all',discard_all:'Discard all',
+ history_h:'History',history_help:'Every Save is recorded. Rolling back restores the files exactly as they were before that change (it undoes newer changes too).',
+ undo_btn:'↶ Undo last change',rollback_btn:'Roll back to before this',no_history:'No saved changes yet.',
+ publish_h:'Publish &amp; pull requests',publish_unsaved:'You have {n} unsaved change(s). Only saved files are committed.',
+ pub_check:'1. Check your work',pub_changes:'2. Changes',pub_commit:'3. Commit',
+ msg_label:'Message',how_publish:'How to publish',branch_l:'Branch',push_origin:' push to origin',
+ commit_btn:'Commit',revert_btn:'Revert last commit',nothing_run:'Nothing run yet.',
+ new_page_h:'New page',new_page_help:'Created as an unsaved draft. Nothing is written to the project until you press Save.',
+ create_draft:'Create draft',new_cult_h:'New culture',new_cult_help:'Created as unsaved drafts (folders, theme and banner).',
+ settings_h:'Settings',settings_help:'Adds "Edit this page", "Report a correction" and "Page history" links under every article.',
+ save:'Save',discard_changes:'Discard changes',nav_save:'Save navigation',nav_add:'+ Add link',
+ starting_prev:'Starting preview…',prev_fail:'Preview failed',build_run:'Building…',build_ok:'Build OK ✓ (saved files)',build_fail:'Build failed',
+ discard_confirm:'Discard all unsaved changes?',
+ static_h:'Editor preview (read-only)',static_warn:'Static preview — no editor backend here'
+},
+fa:{
+ v_dash:'Dashboard',v_content:'Content',v_drafts:'Drafts',v_themes:'Themes',v_art:'Prompt generator',v_nav:'Navigation',v_review:'Review',v_files:'Files',v_history:'History',v_publish:'Publish & PR',v_settings:'Settings',
+ panels:'Panels',panels_title:'نمایش / مخفی کردن Panels',panels_help:'از اینجا مشخص کنید کدام Panelها در نوار کناری باشند. Dashboard، Content و Settings همیشه می‌مانند.',
+ save_all:'Save همه روی فایل‌ها',discard:'Discard',undo_last:'↶ Undo آخرین تغییر',preview_btn:'▶ Preview',preview_stop:'■ توقف Preview',check_build:'Check build',follow_editor:'همراه با editor',
+ logo:'ویرایشگر Haoma',lang_btn:'English',lang_btn_to_en:'English',
+ pend:'● {n} draft موقت',pend_s:'● {n} draft موقت',
+ saved:'Save شد ✓',restored:'{n} draft موقت برگردانده شد',
+ dash:'Dashboard',dash_how:'چطور ویرایش کنیم (بدون کدنویسی)',
+ dash_ol:'<li>از منوی کناری <b>Content</b> را باز کنید (یا پایین، <b>+ New page</b>).</li><li>یک culture را از فهرست انتخاب کنید — روی culture <b>راست‌کلیک</b> کنید برای <i>Create section</i> / <i>Add page</i>، یا روی section برای <i>Add page to this section</i>.</li><li>صفحه را باز کنید و در <b>Properties</b> عنوان، related و sources را بگذارید.</li><li>متن مقاله را از Obsidian (یا هر editorی) <b>Paste</b> کنید — لازم نیست اینجا بنویسید.</li><li>اول <b>Preview</b>، بعد <b>Save</b>. وقتی آماده بودید <b>Publish &amp; PR</b>.</li>',
+ dash_tip:'نکته: با <b>Ctrl+K</b> سریع به هر صفحه بروید. برای لینک related / compare بین cultureها از <b>+ Add page…</b> استفاده کنید. فهرست A–Z از عنوان‌ها خودکار ساخته می‌شود.',
+ dash_onboard:'چک‌لیست شروع کار',
+ dash_onboard_ol:'<li>رنگ‌های Theme برای culture درست به‌نظر برسد</li><li>حداقل یک صفحه character، story و history</li><li>Card art (یا انیمیشن culture) + sources + related</li><li>جفت EN/FA (یا stub با <code>TODO translate:</code>)</li><li>Publish &amp; PR</li>',
+ dash_counts:'این عددها مربوط به فایل‌های Save‌شده است. ویرایش‌های ذخیره‌نشده فقط داخل editor و Preview می‌مانند.',
+ st_pages:'صفحات',st_drafts:'Drafts',st_stubs:'Stubها',st_stale:'نیاز به Review',st_nosrc:'بدون sources',st_orphan:'بدون related',st_untr:'ترجمه‌نشده',st_uncommitted:'فایل‌های Commit‌نشده',
+ quick:'کارهای سریع',qa_page:'+ New page',qa_cult:'+ New culture',qa_prev:'▶ Preview سایت',qa_chk:'Check build',qa_jump:'⌘K پرش…',
+ uncommitted:'تغییرات Commit‌نشده',clean_tree:'Working tree تمیز است',
+ review:'Review',review_help:'صفحاتی که source، ترجمه، لینک atlas یا Review تازه کم دارند را پیدا کنید.',
+ rev_all:'همه',rev_drafts:'Drafts',rev_stubs:'Stubهای TODO translate',rev_stale:'نیاز به Review (بیش از ۱۸۰ روز)',rev_nosrc:'بدون sources',rev_orphan:'بدون related',rev_untr:'ترجمهٔ ناقص',
+ rev_none:'اینجا چیزی برای درست کردن نیست.',th_page:'صفحه',th_lang:'زبان',th_grade:'Grade',th_reviewed:'Reviewed',th_flags:'Flags',
+ find_page:'پیدا کردن صفحه…',btn_page:'+ Page',btn_cult:'+ Culture',
+ drafts_h:'Draftهای موقت',drafts_help:'Draftها در <code>tools/.drafts</code> هستند، بیرون از فایل‌های سایت. با عوض کردن صفحه یا Reload editor هم می‌مانند. تا وقتی Save نزنید به پروژه نمی‌روند.',
+ save_all_short:'Save همه',discard_all:'Discard همه',
+ history_h:'History',history_help:'هر Save ثبت می‌شود. Roll back فایل‌ها را به حالت قبل از آن تغییر برمی‌گرداند (تغییرهای جدیدتر هم Undo می‌شوند).',
+ undo_btn:'↶ Undo آخرین تغییر',rollback_btn:'Roll back به قبل از این',no_history:'هنوز تغییری Save نشده.',
+ publish_h:'Publish و pull request',publish_unsaved:'{n} تغییر ذخیره‌نشده دارید. فقط فایل‌های Save‌شده Commit می‌شوند.',
+ pub_check:'۱. کارتان را چک کنید',pub_changes:'۲. Changes',pub_commit:'۳. Commit',
+ msg_label:'پیام Commit',how_publish:'چطور Publish شود',branch_l:'Branch',push_origin:' push به origin',
+ commit_btn:'Commit',revert_btn:'Revert آخرین Commit',nothing_run:'هنوز چیزی اجرا نشده.',
+ new_page_h:'صفحهٔ جدید',new_page_help:'به‌صورت draft موقت ساخته می‌شود. تا Save نزنید چیزی روی پروژه نوشته نمی‌شود.',
+ create_draft:'ساخت draft',new_cult_h:'Culture جدید',new_cult_help:'به‌صورت draft موقت (پوشه، Theme و banner) ساخته می‌شود.',
+ settings_h:'Settings',settings_help:'لینک‌های «ویرایش این صفحه»، «گزارش اصلاح» و «تاریخچهٔ صفحه» را زیر مقاله‌ها اضافه می‌کند.',
+ save:'Save',discard_changes:'Discard تغییرات',nav_save:'Save navigation',nav_add:'+ Add link',
+ starting_prev:'در حال شروع Preview…',prev_fail:'Preview شروع نشد',build_run:'در حال Build…',build_ok:'Build OK ✓ (فایل‌های Save‌شده)',build_fail:'Build ناموفق',
+ discard_confirm:'همهٔ تغییرات ذخیره‌نشده Discard شوند؟',
+ static_h:'پیش‌نمایش editor (فقط خواندنی)',static_warn:'پیش‌نمایش استاتیک — اینجا backend ویرایشگر نیست'
+}
+};
+function t(k,vars){let s=(I18N[uiLang]&&I18N[uiLang][k]!=null)?I18N[uiLang][k]:(I18N.en[k]!=null?I18N.en[k]:k);if(vars)Object.keys(vars).forEach(a=>{s=String(s).split('{'+a+'}').join(vars[a])});return s}
+function applyUiDir(){document.documentElement.lang=uiLang==='fa'?'fa':'en';document.documentElement.dir=uiLang==='fa'?'rtl':'ltr'}
+function paintChrome(){
+ applyUiDir();
+ const logo=$('#logoTxt');if(logo)logo.textContent=t('logo');
+ document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(!k)return;if(el.id==='bpv'&&typeof pvOn!=='undefined'&&pvOn){el.textContent=t('preview_stop');return}el.textContent=t(k)});
+ const bl=$('#blang');if(bl){bl.textContent=uiLang==='fa'?t('lang_btn_to_en'):t('lang_btn');bl.title=uiLang==='fa'?'Switch UI to English':'زبان رابط: فارسی'}}
+function setUiLang(l){uiLang=l==='fa'?'fa':'en';try{localStorage.setItem('haoma_editor_lang',uiLang)}catch(e){}paintChrome();if(typeof render==='function')render()}
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 async function api(p,o={}){const r=await fetch('/api/'+p,{...o,headers:{'X-Token':T}});const ct=r.headers.get('content-type')||'';const d=ct.includes('json')?await r.json():await r.text();if(!r.ok)throw new Error(d.error||d);return d}
 const E=encodeURIComponent,get=p=>api('file?path='+E(p));
@@ -229,23 +331,23 @@ const allFiles=()=>{const s=new Set(files);drafts.forEach((v,p)=>v===null?s.dele
 function setDraft(p,v){const o=orig[p];if(typeof v==='string'&&o!==undefined&&v===o){drafts.delete(p);clearTimeout(timers[p]);api('discard?path='+E(p),{method:'POST'}).catch(()=>{})}else{drafts.set(p,v);clearTimeout(timers[p]);if(!(v&&v.bin))timers[p]=setTimeout(()=>push(p),450)}pend()}
 async function push(p){clearTimeout(timers[p]);const v=drafts.get(p);if(v===undefined||(v&&v.bin))return;try{if(v===null)await api('draftdel?path='+E(p),{method:'POST'});else await api('draft?path='+E(p),{method:'PUT',body:v})}catch(e){say(e.message,'bad')}}
 async function putBin(p,f){await api('draft?path='+E(p),{method:'PUT',body:f});drafts.set(p,{bin:true,name:f.name,size:f.size});pend()}
-function pend(){const n=drafts.size;$('#pend').hidden=!n;$('#pend b').textContent='● '+n+' temporary draft'+(n>1?'s':'')}
-async function commit(paths,label){for(const p of paths)if(timers[p])await push(p);await api('apply',{method:'POST',body:JSON.stringify({paths,x:nid(),l:label})});paths.forEach(p=>{drafts.delete(p);delete orig[p]});await load();pend();refresh();say('Saved ✓','ok')}
+function pend(){const n=drafts.size;$('#pend').hidden=!n;const el=$('#pendb')||$('#pend b');if(el)el.textContent=t(n===1?'pend':'pend_s',{n})}
+async function commit(paths,label){for(const p of paths)if(timers[p])await push(p);await api('apply',{method:'POST',body:JSON.stringify({paths,x:nid(),l:label})});paths.forEach(p=>{drafts.delete(p);delete orig[p]});await load();pend();refresh();say(t('saved'),'ok')}
 async function discardPaths(paths){for(const p of paths){drafts.delete(p);clearTimeout(timers[p]);await api('discard?path='+E(p),{method:'POST'}).catch(()=>{})}await load();pend();refresh()}
 async function loadDrafts(){const r=await api('drafts');drafts.clear();r.items.forEach(i=>drafts.set(i.path,i.kind==='del'?null:i.kind==='bin'?{bin:true,name:i.path.split('/').pop(),size:i.size}:i.text))}
 async function load(){files=await api('tree');for(const p of DATA){try{orig[p]=await get(p)}catch(e){}}git=await api('git');$('#branch').textContent=git.ok?'⎇ '+git.branch:'not a git repo';audit=(await api('audit')).items;pend()}
 function refresh(){const c=cur;render();if(c&&VIEWS[view][3]&&allFiles().includes(c)&&view!=='themes'&&view!=='nav')openFile(c)}
-const VIEWS={dash:['🏠','Dashboard',pDash,0],content:['📝','Content',pContent,1],drafts:['🗒','Drafts',pDrafts,0],themes:['🎨','Themes',pThemes,1],art:['🖌','Prompt generator',pPrompts,0],nav:['🧭','Navigation',pNav,1],review:['🔎','Review',pReview,0],files:['🗂','Files',pFiles,1],history:['↶','History',pHistory,0],publish:['🚀','Publish & PR',pPublish,0],settings:['⚙️','Settings',pSettings,0]};
+const VIEWS={dash:['🏠','v_dash',pDash,0],content:['📝','v_content',pContent,1],drafts:['🗒','v_drafts',pDrafts,0],themes:['🎨','v_themes',pThemes,1],art:['🖌','v_art',pPrompts,0],nav:['🧭','v_nav',pNav,1],review:['🔎','v_review',pReview,0],files:['🗂','v_files',pFiles,1],history:['↶','v_history',pHistory,0],publish:['🚀','v_publish',pPublish,0],settings:['⚙️','v_settings',pSettings,0]};
 /* ===== panel visibility (persisted to localStorage) ===== */
 let hiddenPanels=new Set();
 try{const h=JSON.parse(localStorage.getItem('editor_hidden_panels')||'[]');hiddenPanels=new Set(h)}catch(e){}
 function savePanelVis(){localStorage.setItem('editor_hidden_panels',JSON.stringify([...hiddenPanels]))}
-function pPanelConfig(){modal('Show / hide panels',
- `<p class="msg" style="margin:0 0 12px">Toggle which panels appear in the left rail. Core panels (Dashboard, Content, Settings) cannot be hidden.</p>`+
- Object.entries(VIEWS).filter(([k])=>!['dash','content','settings'].includes(k)).map(([k,v])=>`<div class="row" style="margin:6px 0"><label style="display:flex;gap:10px;align-items:center;color:var(--t);font-size:14px;cursor:pointer"><input type="checkbox" data-pk="${k}" style="width:auto" ${hiddenPanels.has(k)?'':'checked'}> <span>${v[0]}</span> ${v[1]}</label></div>`).join(''),
+function pPanelConfig(){modal(t('panels_title'),
+ `<p class="msg" style="margin:0 0 12px">${t('panels_help')}</p>`+
+ Object.entries(VIEWS).filter(([k])=>!['dash','content','settings'].includes(k)).map(([k,v])=>`<div class="row" style="margin:6px 0"><label style="display:flex;gap:10px;align-items:center;color:var(--t);font-size:14px;cursor:pointer"><input type="checkbox" data-pk="${k}" style="width:auto" ${hiddenPanels.has(k)?'':'checked'}> <span>${v[0]}</span> ${t(v[1])}</label></div>`).join(''),
  m=>{m.querySelectorAll('[data-pk]').forEach(c=>{if(c.checked)hiddenPanels.delete(c.dataset.pk);else hiddenPanels.add(c.dataset.pk)});savePanelVis();render()});return false}
-function render(){$('#rl').innerHTML='';for(const k in VIEWS){if(hiddenPanels.has(k))continue;const b=document.createElement('button');b.className='rb'+(k===view?' on':'');b.innerHTML=`<span>${VIEWS[k][0]}</span>${VIEWS[k][1]}`;b.onclick=()=>{view=k;render()};$('#rl').append(b)}
- const cfg=document.createElement('button');cfg.className='rb';cfg.title='Show / hide panels';cfg.innerHTML=`<span>⊞</span><span style="color:var(--m);font-size:11px">Panels</span>`;cfg.onclick=pPanelConfig;$('#rl').append(cfg);
+function render(){paintChrome();$('#rl').innerHTML='';for(const k in VIEWS){if(hiddenPanels.has(k))continue;const b=document.createElement('button');b.className='rb'+(k===view?' on':'');b.innerHTML=`<span>${VIEWS[k][0]}</span>${t(VIEWS[k][1])}`;b.onclick=()=>{view=k;render()};$('#rl').append(b)}
+ const cfg=document.createElement('button');cfg.className='rb';cfg.title=t('panels_title');cfg.innerHTML=`<span>⊞</span><span style="color:var(--m);font-size:11px">${t('panels')}</span>`;cfg.onclick=pPanelConfig;$('#rl').append(cfg);
  if(hiddenPanels.has(view)){view='dash'}
  $('#app').classList.toggle('nolist',!VIEWS[view][3]);$('#app').classList.remove('note-mode');$('#panel').innerHTML='';$('#main').innerHTML='';VIEWS[view][2]()}
 function list(paths,filter=''){return paths.filter(p=>p.includes(filter)).map(p=>`<button class="item ${p===cur?'on':''}" data-p="${esc(p)}" title="${esc(p)}">${drafts.has(p)?'● ':''}${esc(p.replace(/^content\//,''))}</button>`).join('')}
@@ -409,31 +511,27 @@ function ctree(paths,filter){
   return`<details open><summary>${lang==='en'?'English':lang==='fa'?'فارسی':lang}</summary>${cultHtml}${topHtml}</details>`;
  }).join('');
 }
-function pContent(){const md=allFiles().filter(f=>f.startsWith('content/'));$('#panel').innerHTML=`<div class="vault-tools"><button class="pri" id="np">+ Page</button><button id="nc">+ Culture</button></div><input type="search" class="vault-search" id="cs" placeholder="Find a page…" autocomplete="off"><div id="ct">${ctree(md,'')}</div>`;bindItems();$('#np').onclick=()=>wizPage();$('#nc').onclick=wizCulture;$('#cs').oninput=()=>{$('#ct').innerHTML=ctree(md,$('#cs').value);bindItems()}}
+function pContent(){const md=allFiles().filter(f=>f.startsWith('content/'));$('#panel').innerHTML=`<div class="vault-tools"><button class="pri" id="np">${t('btn_page')}</button><button id="nc">${t('btn_cult')}</button></div><input type="search" class="vault-search" id="cs" placeholder="${t('find_page')}" autocomplete="off"><div id="ct">${ctree(md,'')}</div>`;bindItems();$('#np').onclick=()=>wizPage();$('#nc').onclick=wizCulture;$('#cs').oninput=()=>{$('#ct').innerHTML=ctree(md,$('#cs').value);bindItems()}}
 /* ===== dashboard / review ===== */
 const issues={drafts:a=>a.draft&&!a.index,stale:a=>a.stale,nosrc:a=>!a.sources&&!a.index,untr:a=>a.missing.length&&!a.index,stubs:a=>a.stub&&!a.index,orphan:a=>a.orphan&&!a.index};
 function pDash(){const pg=audit.filter(a=>!a.index),n=k=>audit.filter(issues[k]).length,ch=(git.status||'').split('\n').filter(Boolean);
- $('#main').innerHTML=`<h2>Dashboard</h2>
- <div class="guide"><b>How to edit (no coding needed)</b>
- <ol><li>Open <b>Content</b> in the left menu (or press <b>+ New page</b> below).</li>
- <li>Pick a culture in the list — <b>right-click</b> a culture for <i>Create section</i> / <i>Add page</i>, or a section for <i>Add page to this section</i>.</li>
- <li>Open a page, set title / related / sources in <b>Properties</b>.</li>
- <li><b>Paste</b> your article from Obsidian (or any editor) into the big space — you do not need to write here.</li>
- <li>Press <b>Preview</b>, then <b>Save</b>. Use <b>Publish &amp; PR</b> when ready.</li></ol>
- <p class="msg" style="margin:10px 0 0">Tip: <b>Ctrl+K</b> jumps to any page. Use <b>+ Add page…</b> for related / compare links across cultures. A–Z is auto from titles.</p></div>
- <div class="guide" style="margin-top:12px"><b>Onboarding checklist</b>
- <ol><li>Theme colours look right for your culture</li><li>At least one character, story and history page</li><li>Card art (or culture animation) + sources + related links</li><li>EN/FA pair (or a <code>TODO translate:</code> stub)</li><li>Publish &amp; PR</li></ol></div>
- <p class="msg" style="margin:0">Counts describe saved files. Unsaved edits live only in the editor and the preview.</p><div class="stats" style="margin-top:12px">${[['all','Pages',pg.length],['drafts','Drafts',n('drafts')],['stubs','Stubs',n('stubs')],['stale','Need review',n('stale')],['nosrc','Without sources',n('nosrc')],['orphan','No related',n('orphan')],['untr','Untranslated',n('untr')]].map(([k,l,v])=>`<button class="stat" data-r="${k}"><b>${v}</b><span>${l}</span></button>`).join('')}<button class="stat" data-v="publish"><b>${ch.length}</b><span>Uncommitted files</span></button></div>
- <h3 style="margin-top:22px">Quick actions</h3><div class="row" style="flex-wrap:wrap"><button class="pri" id="qp">+ New page</button><button id="qc">+ New culture</button><button id="qv">▶ Preview site</button><button id="qk">Check build</button><button id="qpal">⌘K Jump…</button>${site().repo?`<button id="qi">GitHub issues ↗</button><button id="qr">Pull requests ↗</button>`:''}</div>
- <h3 style="margin-top:22px">Uncommitted changes</h3><pre>${esc(ch.join('\n')||'Working tree clean')}</pre>`;
+ $('#main').innerHTML=`<h2>${t('dash')}</h2>
+ <div class="guide"><b>${t('dash_how')}</b>
+ <ol>${t('dash_ol')}</ol>
+ <p class="msg" style="margin:10px 0 0">${t('dash_tip')}</p></div>
+ <div class="guide" style="margin-top:12px"><b>${t('dash_onboard')}</b>
+ <ol>${t('dash_onboard_ol')}</ol></div>
+ <p class="msg" style="margin:0">${t('dash_counts')}</p><div class="stats" style="margin-top:12px">${[['all',t('st_pages'),pg.length],['drafts',t('st_drafts'),n('drafts')],['stubs',t('st_stubs'),n('stubs')],['stale',t('st_stale'),n('stale')],['nosrc',t('st_nosrc'),n('nosrc')],['orphan',t('st_orphan'),n('orphan')],['untr',t('st_untr'),n('untr')]].map(([k,l,v])=>`<button class="stat" data-r="${k}"><b>${v}</b><span>${l}</span></button>`).join('')}<button class="stat" data-v="publish"><b>${ch.length}</b><span>${t('st_uncommitted')}</span></button></div>
+ <h3 style="margin-top:22px">${t('quick')}</h3><div class="row" style="flex-wrap:wrap"><button class="pri" id="qp">${t('qa_page')}</button><button id="qc">${t('qa_cult')}</button><button id="qv">${t('qa_prev')}</button><button id="qk">${t('qa_chk')}</button><button id="qpal">${t('qa_jump')}</button>${site().repo?`<button id="qi">GitHub issues ↗</button><button id="qr">Pull requests ↗</button>`:''}</div>
+ <h3 style="margin-top:22px">${t('uncommitted')}</h3><pre>${esc(ch.join('\n')||t('clean_tree'))}</pre>`;
  document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{rf=b.dataset.r;view='review';render()});document.querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>{view=b.dataset.v;render()});
  $('#qp').onclick=()=>{view='content';render();wizPage()};$('#qc').onclick=()=>{view='content';render();wizCulture()};$('#qv').onclick=()=>$('#bpv').click();$('#qk').onclick=()=>$('#bchk').click();
  if($('#qpal'))$('#qpal').onclick=()=>openPalette();
  if(site().repo){$('#qi').onclick=()=>window.open(site().repo+'/issues');$('#qr').onclick=()=>window.open(site().repo+'/pulls')}}
-function pReview(){const L={all:'All',drafts:'Drafts',stubs:'TODO translate stubs',stale:'Need review (older than 180 days)',nosrc:'No sources',orphan:'No related links',untr:'Missing translation'};
+function pReview(){const L={all:t('rev_all'),drafts:t('rev_drafts'),stubs:t('rev_stubs'),stale:t('rev_stale'),nosrc:t('rev_nosrc'),orphan:t('rev_orphan'),untr:t('rev_untr')};
  const rows=audit.filter(a=>!a.index&&(rf==='all'||issues[rf](a)));
- $('#main').innerHTML=`<h2>Review</h2><p class="msg" style="margin:0">Find pages that need a source, a translation, atlas links, or a fresh review.</p><div class="chips">${Object.keys(L).map(k=>`<button class="chip ${k===rf?'on':''}" data-r="${k}">${L[k]}</button>`).join('')}</div>
- <table><tr><th>Page</th><th>Lang</th><th>Grade</th><th>Reviewed</th><th>Flags</th></tr>${rows.map(a=>`<tr class="go" data-p="${esc(a.path)}"><td>${esc(a.title)}<br><span class="msg" style="margin:0">${esc(a.path.replace('content/',''))}</span></td><td>${a.lang}</td><td>${esc(a.grade)}</td><td>${esc(a.reviewed||'-')}</td><td>${a.stub?'<span class="tag">stub</span>':''}${a.draft&&!a.stub?'<span class="tag">draft</span>':''}${a.stale?'<span class="tag">review</span>':''}${a.sources?'':'<span class="tag">no sources</span>'}${a.orphan?'<span class="tag">no related</span>':''}${a.missing.map(m=>`<span class="tag">no ${m}</span>`).join('')}</td></tr>`).join('')||'<tr><td colspan=5 class="ok">Nothing to fix here.</td></tr>'}</table>`;
+ $('#main').innerHTML=`<h2>${t('review')}</h2><p class="msg" style="margin:0">${t('review_help')}</p><div class="chips">${Object.keys(L).map(k=>`<button class="chip ${k===rf?'on':''}" data-r="${k}">${L[k]}</button>`).join('')}</div>
+ <table><tr><th>${t('th_page')}</th><th>${t('th_lang')}</th><th>${t('th_grade')}</th><th>${t('th_reviewed')}</th><th>${t('th_flags')}</th></tr>${rows.map(a=>`<tr class="go" data-p="${esc(a.path)}"><td>${esc(a.title)}<br><span class="msg" style="margin:0">${esc(a.path.replace('content/',''))}</span></td><td>${a.lang}</td><td>${esc(a.grade)}</td><td>${esc(a.reviewed||'-')}</td><td>${a.stub?'<span class="tag">stub</span>':''}${a.draft&&!a.stub?'<span class="tag">draft</span>':''}${a.stale?'<span class="tag">review</span>':''}${a.sources?'':'<span class="tag">no sources</span>'}${a.orphan?'<span class="tag">no related</span>':''}${a.missing.map(m=>`<span class="tag">no ${m}</span>`).join('')}</td></tr>`).join('')||`<tr><td colspan=5 class="ok">${t('rev_none')}</td></tr>`}</table>`;
  document.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>{rf=b.dataset.r;pReview()});document.querySelectorAll('tr.go').forEach(r=>r.onclick=()=>openFile(r.dataset.p))}
 /* ===== new page / culture wizards (create DRAFTS, not files) ===== */
 const cultures=()=>Object.keys(themes()).filter(k=>k!=='base'),SECS=['characters','stories','history','traditions'],SECFA={characters:'شخصیت‌ها',stories:'داستان‌ها',history:'تاریخ',traditions:'سنت‌ها'};
@@ -450,14 +548,14 @@ function wizPage(opts){
  const seOpts=SECS.map(s=>`<option value="${s}" ${s===se0?'selected':''}>${SEC_LABEL[s]||cap(s)}</option>`).join('')
   +(se0&&!SECS.includes(se0)?`<option value="${esc(se0)}" selected>${esc(cap(se0))} (custom)</option>`:'')
   +`<option value="__other__">Other…</option>`;
- $('#main').innerHTML=`<h2>New page</h2><p class="msg" style="margin:0">Created as an unsaved draft. Nothing is written to the project until you press Save.</p><div class="two"><div><label>Type</label><select id="ty"><option value="culture" ${ty0==='culture'?'selected':''}>Culture page (character, story, history, tradition…)</option><option value="episode" ${ty0==='episode'?'selected':''}>Podcast episode</option><option value="plain" ${ty0==='plain'?'selected':''}>Plain page</option></select>
+ $('#main').innerHTML=`<h2>${t('new_page_h')}</h2><p class="msg" style="margin:0">${t('new_page_help')}</p><div class="two"><div><label>Type</label><select id="ty"><option value="culture" ${ty0==='culture'?'selected':''}>Culture page (character, story, history, tradition…)</option><option value="episode" ${ty0==='episode'?'selected':''}>Podcast episode</option><option value="plain" ${ty0==='plain'?'selected':''}>Plain page</option></select>
 <label>Language</label><select id="lg"><option value="en" ${lg0==='en'?'selected':''}>English</option><option value="fa" ${lg0==='fa'?'selected':''}>فارسی</option></select>
 <label id="cu_lab">Culture</label><select id="cu">${cultures().map(c=>`<option value="${esc(c)}" ${c===cu0?'selected':''}>${esc(c)}</option>`).join('')}</select>
 <label id="se_lab">Section</label><select id="se">${seOpts}</select>
 <input type="text" id="se_custom" placeholder="custom section key (a-z, dashes)" hidden value="${se0&&!SECS.includes(se0)?esc(se0):''}">
 <label>Title</label><input type="text" id="ti"><label>URL name (a-z, 0-9, dashes)</label><input type="text" id="sg"></div>
 <div><label>Tagline</label><input type="text" id="tg"><label>Evidence grade</label><select id="gr"><option>primary text</option><option>later compilation</option><option>archaeology</option><option>modern scholarship</option><option>draft</option></select>
-<label>Sources (one per line)</label><textarea id="so" rows="4"></textarea><label><input type="checkbox" id="st" checked> also create a stub in the other language</label></div></div><p><button class="pri" id="go">Create draft</button><span id="wm" class="msg"></span></p>`;
+<label>Sources (one per line)</label><textarea id="so" rows="4"></textarea><label><input type="checkbox" id="st" checked> also create a stub in the other language</label></div></div><p><button class="pri" id="go">${t('create_draft')}</button><span id="wm" class="msg"></span></p>`;
  const toggle=()=>{const ty=$('#ty').value;const cult=ty==='culture',ep=ty==='episode';
   ['cu_lab','cu','se_lab','se'].forEach(id=>{const el=$('#'+id);if(el)el.hidden=ty==='plain'});
   if($('#se'))$('#se').hidden=!cult;if($('#se_lab'))$('#se_lab').hidden=!cult;
@@ -501,9 +599,9 @@ function wizNewSection(lang,cu){
  if(!made.length){say('Section already exists','warn');return}
  view='content';render();openFile(made[0]);say('Section draft'+(made.length>1?'s':'')+' ready — Save to keep. Right-click the section to add a page.','warn');
 }
-function wizCulture(){$('#main').innerHTML=`<h2>New culture</h2><p class="msg" style="margin:0">Created as unsaved drafts (folders, theme and banner).</p><div class="two"><div><label>Key (a-z, e.g. egyptian)</label><input type="text" id="k"><label>English name</label><input type="text" id="n1"><label>Farsi name</label><input type="text" id="n2" dir="rtl"><label>Tagline (English)</label><input type="text" id="t1"><label>Tagline (Farsi)</label><input type="text" id="t2" dir="rtl"></div>
+function wizCulture(){$('#main').innerHTML=`<h2>${t('new_cult_h')}</h2><p class="msg" style="margin:0">${t('new_cult_help')}</p><div class="two"><div><label>Key (a-z, e.g. egyptian)</label><input type="text" id="k"><label>English name</label><input type="text" id="n1"><label>Farsi name</label><input type="text" id="n2" dir="rtl"><label>Tagline (English)</label><input type="text" id="t1"><label>Tagline (Farsi)</label><input type="text" id="t2" dir="rtl"></div>
 <div><div class="sw"><div><label>Accent</label><input type="color" id="ac" value="#c9a45a"></div><div><label>Background</label><input type="color" id="bg" value="#15171a"></div></div><label>Background animation</label><select id="an"><option>fall</option><option>drift</option><option>rise</option><option>none</option></select><label>Top strip pattern</label><select id="pa"><option>none</option><option>meander</option><option>rosette</option><option>zigzag</option><option>waves</option></select>
-<label>Banner art</label><select id="bs"><option value="mountains">Mountains + moon</option><option value="waves">Waves</option><option value="">None</option></select></div></div><p><button class="pri" id="go">Create draft</button><span id="wm" class="msg"></span></p>`;
+<label>Banner art</label><select id="bs"><option value="mountains">Mountains + moon</option><option value="waves">Waves</option><option value="">None</option></select></div></div><p><button class="pri" id="go">${t('create_draft')}</button><span id="wm" class="msg"></span></p>`;
  $('#go').onclick=()=>{try{const g=id=>$('#'+id).value.trim(),k=slug(g('k'));if(!k)throw Error('enter a key using a-z');const all=themes();if(all[k])throw Error('a theme named '+k+' already exists');
   for(const [l,n,t] of [['en',g('n1')||cap(k),g('t1')],['fa',g('n2')||g('n1')||cap(k),g('t2')]]){setDraft(`content/${l}/cultures/${k}/_index.md`,cultIdx(k,n,t));for(const s of SECS)setDraft(`content/${l}/cultures/${k}/${s}/_index.md`,secIdx(l,s))}
   let banner='';if(g('bs')){banner=k+'-gen.svg';setDraft('static/img/'+banner,genBanner(g('bs'),g('bg'),g('ac')))}
@@ -1010,7 +1108,7 @@ function genBanner(style,bg,ac){const top=mix(bg,'#000000',.4),bot=mix(bg,ac,.28
 function pNav(){const a=nav(),langs=[...new Set([...Object.keys(a),'en','fa'])];if(!a[cN])cN=langs[0];
  $('#panel').innerHTML=langs.map(l=>{const n=(a[l]||[]).length;return `<button class="item ${l===cN?'on':''}" data-l="${l}">Menu: ${l} <span class="msg">(${n})</span></button>`}).join('');
  document.querySelectorAll('#panel .item').forEach(b=>b.onclick=()=>{cN=b.dataset.l;pNav()});editNav(cN)}
-function editNav(l){show(l===DL?'':l+'/');const rows=nav()[l]||[];$('#main').innerHTML=`<h2>Navigation (${l})</h2>`+(rows.length?'':`<p class="msg" style="margin:0 0 10px">This menu is empty — press “+ Add link” to add the first entry.</p>`)+rows.map((r,i)=>`<div class="row" style="margin:6px 0"><input type="text" data-i="${i}" data-f="name" value="${esc(r.name)}"><input type="text" data-i="${i}" data-f="url" value="${esc(r.url)}"><button data-u="${i}">↑</button><button data-d="${i}">↓</button><button data-x="${i}">✕</button></div>`).join('')+`<p><button id="ad">+ Add link</button> <button class="pri" id="sn">Save navigation</button> <button id="dn">Discard changes</button><span id="wm" class="msg"></span></p><p class="msg">Link = path relative to the language root, e.g. cultures/ or about/</p>`;
+function editNav(l){show(l===DL?'':l+'/');const rows=nav()[l]||[];$('#main').innerHTML=`<h2>Navigation (${l})</h2>`+(rows.length?'':`<p class="msg" style="margin:0 0 10px">This menu is empty — press “+ Add link” to add the first entry.</p>`)+rows.map((r,i)=>`<div class="row" style="margin:6px 0"><input type="text" data-i="${i}" data-f="name" value="${esc(r.name)}"><input type="text" data-i="${i}" data-f="url" value="${esc(r.url)}"><button data-u="${i}">↑</button><button data-d="${i}">↓</button><button data-x="${i}">✕</button></div>`).join('')+`<p><button id="ad">${t('nav_add')}</button> <button class="pri" id="sn">${t('nav_save')}</button> <button id="dn">${t('discard_changes')}</button><span id="wm" class="msg"></span></p><p class="msg">Link = path relative to the language root, e.g. cultures/ or about/</p>`;
  const mut=f=>{const a=nav();a[l]=a[l]||[];f(a[l]);setJ('data/nav.json',a)};
  document.querySelectorAll('#main input').forEach(e=>e.oninput=()=>mut(r=>r[e.dataset.i][e.dataset.f]=e.value));
  const mv=(i,j)=>{mut(r=>{if(j<0||j>=r.length)return;[r[i],r[j]]=[r[j],r[i]]});editNav(l)};
@@ -1020,7 +1118,7 @@ function editNav(l){show(l===DL?'':l+'/');const rows=nav()[l]||[];$('#main').inn
 function pFiles(){$('#panel').innerHTML=`<input type="text" id="ff" placeholder="filter…"><div id="fl">${list(allFiles())}</div>`;bindItems();$('#ff').oninput=()=>{$('#fl').innerHTML=list(allFiles(),$('#ff').value);document.querySelectorAll('#fl .item').forEach(b=>b.onclick=()=>openFile(b.dataset.p))}}
 /* ===== temporary drafts ===== */
 async function pDrafts(){const r=(await api('drafts')).items;
- $('#main').innerHTML=`<h2>Temporary drafts</h2><p class="msg" style="margin:0">Drafts live in <code>tools/.drafts</code>, outside your site files. They survive switching pages and reloading the editor. Nothing reaches the project until you save.</p><div class="row" style="margin:12px 0"><button class="pri" id="dsa" ${r.length?'':'disabled'}>Save all</button><button id="dda" ${r.length?'':'disabled'}>Discard all</button></div>
+ $('#main').innerHTML=`<h2>${t('drafts_h')}</h2><p class="msg" style="margin:0">${t('drafts_help')}</p><div class="row" style="margin:12px 0"><button class="pri" id="dsa" ${r.length?'':'disabled'}>${t('save_all_short')}</button><button id="dda" ${r.length?'':'disabled'}>${t('discard_all')}</button></div>
  <table><tr><th>File</th><th>Kind</th><th>Updated</th><th>Size</th><th></th></tr>${r.map(i=>`<tr><td>${esc(i.path)}</td><td>${i.kind==='del'?'<span class="tag">delete</span>':i.kind==='bin'?'<span class="tag">upload</span>':'edit'}</td><td>${new Date(i.time*1000).toLocaleString()}</td><td>${i.size}</td><td><button data-o="${esc(i.path)}" ${i.kind==='text'?'':'disabled'}>Open</button> <button data-s="${esc(i.path)}">Save</button> <button data-x="${esc(i.path)}">Discard</button></td></tr>`).join('')||'<tr><td colspan=5 class="msg">No temporary drafts.</td></tr>'}</table>`;
  $('#dsa').onclick=()=>commit([...drafts.keys()],'Save '+drafts.size+' drafts');$('#dda').onclick=()=>{if(confirm('Discard all temporary drafts?'))discardPaths([...drafts.keys()])};
  document.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>openFile(b.dataset.o));document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>commit([b.dataset.s],'Save draft '+b.dataset.s));document.querySelectorAll('[data-x]').forEach(b=>b.onclick=()=>discardPaths([b.dataset.x]))}
@@ -1374,16 +1472,16 @@ function bVerse(ins){const m=modal('Insert couplets',`<p class="msg" style="marg
   m=>{const t=m.querySelector('#m_vl').value.trim();if(!t)throw Error('Write at least one line');const g=m.querySelector('#m_vg').value,so=qv(m.querySelector('#m_vs').value);ins(`\n{{< verse${g?` lang="${g}"`:''}${so?` source="${so}"`:''} >}}\n${t}\n{{< /verse >}}\n`)})}
 /* ===== history / rollback ===== */
 async function undo(id){const n=id?'this change and everything after it':'the last saved change';if(!confirm('Roll back '+n+'?'))return;try{const r=await api('rollback'+(id?'?id='+id:''),{method:'POST'});r.paths.forEach(p=>{drafts.delete(p);delete orig[p]});await load();pend();say('Rolled back: '+r.undone.join(', '),'ok');render()}catch(e){say(e.message,'bad')}}
-async function pHistory(){const h=(await api('history')).items;$('#main').innerHTML=`<h2>History</h2><p class="msg" style="margin:0">Every Save is recorded. Rolling back restores the files exactly as they were before that change (it undoes newer changes too).</p><div class="row" style="margin:12px 0"><button class="pri" id="u1" ${h.length?'':'disabled'}>↶ Undo last change</button></div>
- <table><tr><th>When</th><th>Change</th><th>Files</th><th></th></tr>${h.map(t=>`<tr><td>${new Date(t.time*1000).toLocaleString()}</td><td>${esc(t.label)}</td><td>${t.files.map(f=>`<div class="msg" style="margin:0">${esc(f)}</div>`).join('')}</td><td><button data-id="${t.id}">Roll back to before this</button></td></tr>`).join('')||'<tr><td colspan=4 class="msg">No saved changes yet.</td></tr>'}</table>`;
+async function pHistory(){const h=(await api('history')).items;$('#main').innerHTML=`<h2>${t('history_h')}</h2><p class="msg" style="margin:0">${t('history_help')}</p><div class="row" style="margin:12px 0"><button class="pri" id="u1" ${h.length?'':'disabled'}>${t('undo_btn')}</button></div>
+ <table><tr><th>When</th><th>Change</th><th>Files</th><th></th></tr>${h.map(row=>`<tr><td>${new Date(row.time*1000).toLocaleString()}</td><td>${esc(row.label)}</td><td>${row.files.map(f=>`<div class="msg" style="margin:0">${esc(f)}</div>`).join('')}</td><td><button data-id="${row.id}">${t('rollback_btn')}</button></td></tr>`).join('')||`<tr><td colspan=4 class="msg">${t('no_history')}</td></tr>`}</table>`;
  $('#u1').onclick=()=>undo();document.querySelectorAll('[data-id]').forEach(b=>b.onclick=()=>undo(b.dataset.id))}
 /* ===== publish & PR ===== */
 async function pPublish(){git=await api('git');const ch=(git.status||'').split('\n').filter(Boolean),repo=site().repo||git.remote,un=drafts.size;
- $('#main').innerHTML=`<h2>Publish &amp; pull requests</h2>${un?`<div class="card pad warn">You have ${un} unsaved change(s). Only saved files are committed. <button class="pri" id="sa2">Save all</button></div>`:''}
- <div class="card pad"><h3>1. Check your work</h3><div class="row"><button id="a1">▶ Preview</button><button id="a2">Check build (saved files)</button><button id="a3">Pull latest</button><span id="am" class="msg"></span></div></div>
- <div class="card pad"><h3>2. Changes (${ch.length})</h3><pre>${esc(ch.join('\n')||'Working tree clean')}</pre><button id="df">Show diff</button></div>
- <div class="card pad"><h3>3. Commit</h3><label>Message</label><input type="text" id="cm" placeholder="Fix Mehr festival date"><label>How to publish</label><select id="md"><option value="pr">New branch + pull request (recommended for corrections)</option><option value="direct">Commit straight to ${esc(git.branch||'master')}</option></select>
- <label>Branch</label><input type="text" id="br"><label><input type="checkbox" id="ps" checked> push to origin</label><p><button class="pri" id="cp">Commit</button> <button id="rc">Revert last commit</button></p><pre id="co">Nothing run yet.</pre><div id="prl"></div></div>
+ $('#main').innerHTML=`<h2>${t('publish_h')}</h2>${un?`<div class="card pad warn">${t('publish_unsaved',{n:un})} <button class="pri" id="sa2">${t('save_all_short')}</button></div>`:''}
+ <div class="card pad"><h3>${t('pub_check')}</h3><div class="row"><button id="a1">▶ Preview</button><button id="a2">Check build (saved files)</button><button id="a3">Pull latest</button><span id="am" class="msg"></span></div></div>
+ <div class="card pad"><h3>${t('pub_changes')} (${ch.length})</h3><pre>${esc(ch.join('\n')||t('clean_tree'))}</pre><button id="df">Show diff</button></div>
+ <div class="card pad"><h3>${t('pub_commit')}</h3><label>${t('msg_label')}</label><input type="text" id="cm" placeholder="Fix Mehr festival date"><label>${t('how_publish')}</label><select id="md"><option value="pr">New branch + pull request (recommended for corrections)</option><option value="direct">Commit straight to ${esc(git.branch||'master')}</option></select>
+ <label>${t('branch_l')}</label><input type="text" id="br"><label><input type="checkbox" id="ps" checked>${t('push_origin')}</label><p><button class="pri" id="cp">${t('commit_btn')}</button> <button id="rc">${t('revert_btn')}</button></p><pre id="co">${t('nothing_run')}</pre><div id="prl"></div></div>
  ${repo?`<p><button class="link" onclick="window.open('${repo}/issues')">Issues ↗</button> · <button class="link" onclick="window.open('${repo}/pulls')">Pull requests ↗</button></p>`:''}`;
  if(un)$('#sa2').onclick=()=>commit([...drafts.keys()],'Save '+un+' changes').then(pPublish);
  const setBr=()=>{$('#br').value=$('#md').value==='pr'?'fix/'+(slug($('#cm').value)||'update').slice(0,40):(git.branch||'master')};setBr();$('#md').onchange=setBr;$('#cm').oninput=()=>{if($('#md').value==='pr')setBr()};
@@ -1751,8 +1849,8 @@ function mountTranslatePromptPane(root){
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='haoma-translate-prompt.md';a.click();URL.revokeObjectURL(a.href)};
 }
 /* ===== settings ===== */
-function pSettings(){const s=site();$('#main').innerHTML=`<h2>Settings</h2><div class="card pad"><h3>GitHub project</h3><p class="msg" style="margin:0">Adds "Edit this page", "Report a correction" and "Page history" links under every article.</p>
- <label>Repository URL</label><div class="row"><input type="text" id="sr" placeholder="https://github.com/you/mythblog" value="${esc(s.repo||'')}"><button id="sd">Detect from git</button></div><label>Main branch</label><input type="text" id="sb" value="${esc(s.branch||'master')}"><p><button class="pri" id="ss">Save</button> <button id="sx">Discard changes</button><span id="wm" class="msg"></span></p></div>`;
+function pSettings(){const s=site();$('#main').innerHTML=`<h2>${t('settings_h')}</h2><div class="card pad"><h3>GitHub project</h3><p class="msg" style="margin:0">${t('settings_help')}</p>
+ <label>Repository URL</label><div class="row"><input type="text" id="sr" placeholder="https://github.com/you/mythblog" value="${esc(s.repo||'')}"><button id="sd">Detect from git</button></div><label>Main branch</label><input type="text" id="sb" value="${esc(s.branch||'master')}"><p><button class="pri" id="ss">${t('save')}</button> <button id="sx">${t('discard_changes')}</button><span id="wm" class="msg"></span></p></div>`;
  const upd=()=>setJ('data/site.json',{repo:$('#sr').value.trim().replace(/\/$/,''),branch:$('#sb').value.trim()||'master'});$('#sr').oninput=upd;$('#sb').oninput=upd;
  $('#sd').onclick=()=>{if(git.remote){$('#sr').value=git.remote;upd()}else{$('#wm').textContent='No git remote named origin';$('#wm').className='msg bad'}};
  $('#ss').onclick=()=>{upd();commit(['data/site.json'],'Settings')};$('#sx').onclick=()=>discardPaths(['data/site.json'])}
@@ -1761,15 +1859,15 @@ let pvOn=false,pvBase='';const DL='en';
 function pageUrl(p){const m=p.match(/^content\/(\w+)\/(.+)\.md$/);if(!m)return null;const r=m[2].replace(/(^|\/)_?index$/,'');return(m[1]===DL?'':m[1]+'/')+(r?r+'/':'')}
 function show(u){if(!pvOn||!pvBase||u==null||!$('#pfollow').checked)return;const full=pvBase+u,f=$('#pf');if(f.dataset.cur!==full){f.dataset.cur=full;f.src=full;$('#purl').value=full}}
 const followPage=p=>show(pageUrl(p));
-async function pv(a){await api('preview?a='+a,{method:'POST'});say(a==='start'?'Starting preview…':'');
+async function pv(a){await api('preview?a='+a,{method:'POST'});say(a==='start'?t('starting_prev'):'');
  for(let i=0;i<24;i++){await new Promise(r=>setTimeout(r,500));const s=await api('preview');
   if(a==='stop'&&!s.running){pvOn=false;break}
-  if(a==='start'&&(!s.running||s.log.includes('Web Server is available'))){pvOn=s.running;if(s.running){pvBase=s.url;$('#pf').dataset.cur=s.url;$('#pf').src=s.url;$('#purl').value=s.url;say('');if(cur)followPage(cur)}else{say('Preview failed','bad');$('#main').innerHTML='<h2>Preview could not start</h2><pre>'+esc(s.log)+'</pre>'}break}}
- $('#app').classList.toggle('pv',pvOn);$('#bpv').textContent=pvOn?'■ Stop preview':'▶ Preview'}
+  if(a==='start'&&(!s.running||s.log.includes('Web Server is available'))){pvOn=s.running;if(s.running){pvBase=s.url;$('#pf').dataset.cur=s.url;$('#pf').src=s.url;$('#purl').value=s.url;say('');if(cur)followPage(cur)}else{say(t('prev_fail'),'bad');$('#main').innerHTML='<h2>Preview could not start</h2><pre>'+esc(s.log)+'</pre>'}break}}
+ $('#app').classList.toggle('pv',pvOn);$('#bpv').textContent=pvOn?t('preview_stop'):t('preview_btn')}
 $('#bpv').onclick=()=>pv(pvOn?'stop':'start');$('#pre').onclick=()=>{$('#pf').src=$('#pf').dataset.cur||$('#purl').value};
-$('#bchk').onclick=async()=>{say('Building…');const r=await api('check');say(r.ok?'Build OK ✓ (saved files)':'Build failed',r.ok?'ok':'bad');if(!r.ok)$('#main').innerHTML='<h2>Build output</h2><pre>'+esc(r.output)+'</pre>'};
+$('#bchk').onclick=async()=>{say(t('build_run'));const r=await api('check');say(r.ok?t('build_ok'):t('build_fail'),r.ok?'ok':'bad');if(!r.ok)$('#main').innerHTML='<h2>Build output</h2><pre>'+esc(r.output)+'</pre>'};
 $('#bundo').onclick=()=>undo();$('#sa').onclick=()=>commit([...drafts.keys()],'Save '+drafts.size+' changes');
-$('#da').onclick=()=>{if(confirm('Discard all unsaved changes?'))discardPaths([...drafts.keys()])};
+$('#da').onclick=()=>{if(confirm(t('discard_confirm')))discardPaths([...drafts.keys()])};
 /* ===== boot =====
    This same file is published from GitHub Pages, where nothing answers /api.
    Failing to reach a backend is therefore normal, not an error: the panel asks
@@ -1781,7 +1879,7 @@ function staticMode(){
   ['sa','da','bundo','bpv','bchk'].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=true});
   $('#rl').innerHTML='';
   const n=Object.keys(VIEWS).filter(k=>!hiddenPanels.has(k)).length;
-  $('#main').innerHTML='<h2>Editor preview (read-only)</h2>'
+  $('#main').innerHTML='<h2>'+t('static_h')+'</h2>'
     +'<div class="guide"><b>Want to edit without installing Python?</b>'
     +'<ol><li>Download the <b>Haoma editor</b> binary from the project&rsquo;s GitHub Releases (Linux, Windows or macOS).</li>'
     +'<li>Put it in (or next to) your Haoma project folder and run it — a browser window opens.</li>'
@@ -1792,11 +1890,13 @@ function staticMode(){
     +'<pre>python tools/editor.py</pre>'
     +'<p class="msg">The live editor provides the file list, drafts, preview, build check and publishing. Without it those '+n+' views stay hidden.</p>'
     +'<p>See <b>README.md</b> § &ldquo;The local editor&rdquo; for full steps.</p>';
-  say('Static preview — no editor backend here','warn');
+  say(t('static_warn'),'warn');
 }
+if($('#blang'))$('#blang').onclick=()=>setUiLang(uiLang==='fa'?'en':'fa');
+paintChrome();
 (async()=>{
   try{await api('resync',{method:'POST'})}catch(e){return staticMode()}
   await loadDrafts();await load();render();
-  if(drafts.size)say('Restored '+drafts.size+' temporary draft(s)','warn');
+  if(drafts.size)say(t('restored',{n:drafts.size}),'warn');
 })().catch(e=>say(e.message,'bad'));
 </script></body></html>
