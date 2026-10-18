@@ -129,6 +129,24 @@
   other = "دسته"
 [cardArt]
   other = "مقاله"
+[cardCulture]
+  other = "فرهنگ"
+[cardSub]
+  other = "سنت"
+[cardEpisode]
+  other = "قسمت"
+[gradePrimary]
+  other = "متن اصلی"
+[gradeLater]
+  other = "تألیف متأخر"
+[gradeArchaeology]
+  other = "باستان‌شناسی"
+[gradeScholarship]
+  other = "پژوهش نوین"
+[gradeDraft]
+  other = "پیش‌نویس"
+[gradeGuide]
+  other = "راهنما"
 [searchOpen]
   other = "جستجو در سایت"
 [searchClose]

@@ -129,6 +129,24 @@
   other = "Category"
 [cardArt]
   other = "Article"
+[cardCulture]
+  other = "Culture"
+[cardSub]
+  other = "Tradition"
+[cardEpisode]
+  other = "Episode"
+[gradePrimary]
+  other = "Primary text"
+[gradeLater]
+  other = "Later compilation"
+[gradeArchaeology]
+  other = "Archaeology"
+[gradeScholarship]
+  other = "Modern scholarship"
+[gradeDraft]
+  other = "Draft"
+[gradeGuide]
+  other = "Guide"
 [searchOpen]
   other = "Search the site"
 [searchClose]

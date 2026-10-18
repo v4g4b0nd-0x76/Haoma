@@ -12,7 +12,7 @@
     {{- with .Params.sec -}}<span class="sheet__chip sheet__chip--sec">{{ i18n . | default . }}</span>{{- end -}}
     {{- if eq .Section "episodes" -}}<span class="sheet__chip sheet__chip--sec">{{ i18n "episodes" }}</span>{{- end -}}
     {{- if and .Params.subculture (ne .Params.sec "traditions") -}}{{ partial "subculture-chip.html" . }}{{- end -}}
-    {{- with .Params.grade -}}<span class="sheet__chip sheet__chip--grade">{{ . }}</span>{{- end -}}
+    {{- with .Params.grade -}}<span class="sheet__chip sheet__chip--grade">{{ partial "grade.html" . }}</span>{{- end -}}
     {{- range (.Params.themes | default slice) -}}
       <a class="sheet__chip sheet__chip--theme" href="{{ printf "%s#%s" ("themes/" | relLangURL) (. | urlize) }}">{{ . }}</a>
     {{- end -}}

@@ -1,10 +1,28 @@
-{{ $cult := .Params.culture | default "base" }}
-{{ $kind := cond .IsSection "cat" "art" }}
-{{ $bg := .Params.card_bg }}
-{{ $bgKind := .Params.card_bg_kind | default "" }}
-{{ if and $bg (not $bgKind) }}{{ $bgKind = cond (strings.HasSuffix (lower $bg) ".gif") "gif" "static" }}{{ end }}
-{{ $isGif := and $bg (eq $bgKind "gif") }}
-{{ $tkeys := slice }}{{ range (.Params.themes | default slice) }}{{ $tkeys = $tkeys | append (. | urlize) }}{{ end }}
+{{- /* Typed cards: culture · category · subculture · article · episode (+ media). */ -}}
+{{- $cult := .Params.culture | default "base" -}}
+{{- $sec := .Params.sec | default "" -}}
+{{- $kind := "art" -}}
+{{- if and .IsSection .Params.culture (not $sec) -}}
+  {{- $kind = "culture" -}}
+{{- else if .IsSection -}}
+  {{- $kind = "cat" -}}
+{{- else if eq $sec "traditions" -}}
+  {{- $kind = "sub" -}}
+{{- else if eq .Section "episodes" -}}
+  {{- $kind = "ep" -}}
+{{- end -}}
+{{- $bg := .Params.card_bg -}}
+{{- $bgKind := .Params.card_bg_kind | default "" -}}
+{{- if and $bg (not $bgKind) }}{{ $bgKind = cond (strings.HasSuffix (lower $bg) ".gif") "gif" "static" }}{{ end -}}
+{{- $isGif := and $bg (eq $bgKind "gif") -}}
+{{- $tkeys := slice -}}{{ range (.Params.themes | default slice) }}{{ $tkeys = $tkeys | append (. | urlize) }}{{ end -}}
+{{- $label := i18n "cardArt" -}}
+{{- if eq $kind "culture" }}{{ $label = i18n "cardCulture" -}}
+{{- else if eq $kind "cat" }}{{ $label = i18n "cardCat" -}}
+{{- else if eq $kind "sub" }}{{ $label = i18n "cardSub" -}}
+{{- else if eq $kind "ep" }}{{ $label = i18n "cardEpisode" -}}
+{{- else if eq $sec "traditions" }}{{ $label = i18n "cardSub" -}}
+{{- end -}}
 <li class="card card--{{ $kind }}{{ if $bg }} card--media{{ end }}{{ if $isGif }} card--gif{{ end }}" data-culture="{{ $cult }}" data-kind="{{ $kind }}"{{ if $tkeys }} data-themes="{{ delimit $tkeys " " }}"{{ end }}>
 <a class="art{{ if not $bg }} art--fall{{ end }}" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true">
 {{- if $bg -}}
@@ -18,10 +36,15 @@
 <span class="art-fall" aria-hidden="true"{{ if $bg }} hidden{{ end }}></span>
 <span class="art-lattice" aria-hidden="true"></span>
 <span class="art-seal" aria-hidden="true"></span>
+{{- if and (eq $kind "ep") $bg -}}<span class="art-play" aria-hidden="true"></span>{{- end -}}
 </a>
 <div class="body">
-<span class="card-kind">{{ if .IsSection }}{{ i18n "cardCat" }}{{ else if eq .Params.sec "traditions" }}{{ i18n "traditions" }}{{ else }}{{ i18n "cardArt" }}{{ end }}</span>
+<div class="card-top">
+<span class="card-kind">{{ $label }}</span>
+{{- with .Params.grade -}}<span class="card-grade">{{ partial "grade.html" . }}</span>{{- end -}}
+</div>
 <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-<p>{{ with .Params.tagline }}{{ . }}{{ else }}{{ .Summary | plainify | truncate 120 }}{{ end }}</p>
+<p>{{ with .Params.tagline }}{{ . | truncate 90 }}{{ else }}{{ .Summary | plainify | truncate 90 }}{{ end }}</p>
+<span class="card-go" aria-hidden="true"></span>
 </div>
 </li>

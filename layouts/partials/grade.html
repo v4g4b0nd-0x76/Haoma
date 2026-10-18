@@ -1,0 +1,18 @@
+{{- /* Normalize grade labels (EN keys or FA aliases) → localized i18n string. */ -}}
+{{- $raw := trim . " \t\n\r" -}}
+{{- $low := $raw | lower -}}
+{{- $key := "" -}}
+{{- if or (eq $low "primary text") (eq $raw "متن اصلی") -}}
+  {{- $key = "gradePrimary" -}}
+{{- else if or (eq $low "later compilation") (eq $raw "تألیف متأخر") (eq $raw "تالیف متأخر") -}}
+  {{- $key = "gradeLater" -}}
+{{- else if or (eq $low "archaeology") (eq $raw "باستان‌شناسی") (eq $raw "باستان شناسی") -}}
+  {{- $key = "gradeArchaeology" -}}
+{{- else if or (eq $low "modern scholarship") (eq $raw "پژوهش نوین") -}}
+  {{- $key = "gradeScholarship" -}}
+{{- else if or (eq $low "draft") (eq $raw "پیش‌نویس") (eq $raw "پیش نویس") -}}
+  {{- $key = "gradeDraft" -}}
+{{- else if or (eq $low "guide") (eq $raw "راهنما") -}}
+  {{- $key = "gradeGuide" -}}
+{{- end -}}
+{{- if $key }}{{ i18n $key }}{{ else }}{{ $raw }}{{ end -}}

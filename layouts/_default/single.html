@@ -5,10 +5,10 @@
 <h1>{{ .Title }}</h1>
 {{ partial "sheet.html" . }}
 {{- if and (not (or (and (eq .Section "cultures") .Params.sec) (eq .Section "episodes"))) (or .Params.grade .Params.reviewed) -}}
-<p class="meta-line">{{ with .Params.grade }}<span class="chip">{{ . }}</span>{{ end }}{{ with .Params.reviewed }}<span class="muted">{{ i18n "reviewed" }} {{ . }}</span>{{ end }}</p>
+<p class="meta-line">{{ with .Params.grade }}<span class="chip">{{ partial "grade.html" . }}</span>{{ end }}{{ with .Params.reviewed }}<span class="muted">{{ i18n "reviewed" }} {{ . }}</span>{{ end }}</p>
 {{- end -}}
 {{- if and (eq .Section "cultures") (eq .Params.sec "traditions") (or .Params.grade .Params.reviewed) -}}
-<p class="meta-line">{{ with .Params.grade }}<span class="chip">{{ . }}</span>{{ end }}{{ with .Params.reviewed }}<span class="muted">{{ i18n "reviewed" }} {{ . }}</span>{{ end }}</p>
+<p class="meta-line">{{ with .Params.grade }}<span class="chip">{{ partial "grade.html" . }}</span>{{ end }}{{ with .Params.reviewed }}<span class="muted">{{ i18n "reviewed" }} {{ . }}</span>{{ end }}</p>
 {{- end -}}
 {{- if eq .Section "episodes" -}}
 {{ partial "ep-stage.html" . }}
