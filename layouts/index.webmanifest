@@ -1,0 +1,70 @@
+{{- /* Per-language web app manifest (install + shortcuts). Relative icon paths
+     resolve against this file’s URL, so /Haoma/ and /Haoma/fa/ both work. */ -}}
+{{- $home := site.Home.RelPermalink -}}
+{{- /* Scope = site root: strip trailing /fa/ so EN+FA share /Haoma/ (or /) under Pages. */ -}}
+{{- $scope := $home -}}
+{{- if or (eq $scope "/fa/") (hasSuffix $scope "/fa/") -}}
+  {{- $scope = $scope | strings.TrimSuffix "fa/" -}}
+{{- end -}}
+{{- if and $scope (not (hasSuffix $scope "/")) -}}{{- $scope = printf "%s/" $scope -}}{{- end -}}
+{{- if not $scope -}}{{- $scope = "/" -}}{{- end -}}
+{{- $eps := "episodes/" | relLangURL -}}
+{{- $stories := printf "%s#story-rail-h" $home -}}
+{{- $icon192 := "img/brand/favicon-192.png" | relURL -}}
+{{- $icon512 := "img/brand/favicon-512.png" | relURL -}}
+{{- $name := site.Title -}}
+{{- $short := site.Title -}}
+{{- $desc := i18n "tagline" -}}
+{{- $lang := site.Language.LanguageCode -}}
+{{- $dir := site.Language.LanguageDirection | default "ltr" -}}
+{
+  "name": {{ $name | jsonify }},
+  "short_name": {{ $short | jsonify }},
+  "description": {{ $desc | jsonify }},
+  "lang": {{ $lang | jsonify }},
+  "dir": {{ $dir | jsonify }},
+  "start_url": {{ $home | jsonify }},
+  "scope": {{ $scope | jsonify }},
+  "id": {{ printf "haoma-%s" $lang | jsonify }},
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#14161a",
+  "theme_color": "#14161a",
+  "categories": ["education", "entertainment", "books"],
+  "icons": [
+    {
+      "src": {{ $icon192 | jsonify }},
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": {{ $icon512 | jsonify }},
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": {{ $icon512 | jsonify }},
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": {{ i18n "pwaShortcutEpisodes" | jsonify }},
+      "short_name": {{ i18n "pwaShortcutEpisodesShort" | jsonify }},
+      "description": {{ i18n "pwaShortcutEpisodesDesc" | jsonify }},
+      "url": {{ $eps | jsonify }},
+      "icons": [{ "src": {{ $icon192 | jsonify }}, "sizes": "192x192" }]
+    },
+    {
+      "name": {{ i18n "pwaShortcutStories" | jsonify }},
+      "short_name": {{ i18n "pwaShortcutStoriesShort" | jsonify }},
+      "description": {{ i18n "pwaShortcutStoriesDesc" | jsonify }},
+      "url": {{ $stories | jsonify }},
+      "icons": [{ "src": {{ $icon192 | jsonify }}, "sizes": "192x192" }]
+    }
+  ]
+}

@@ -243,16 +243,25 @@
       go(i + d, d);
     });
 
+    /* Swipe on the card body (which is an <a>). Ignore only chrome controls /
+       secondary links; suppress click after a successful swipe. */
+    function isSwipeBlocked(t) {
+      if (!t || !t.closest) return true;
+      return !!t.closest(".story-rail__nav, .story-rail__dot, .story-card__more a");
+    }
+
     var startX = 0;
     var startY = 0;
     var dragging = false;
     var axis = "";
     var pid = null;
+    var didSwipe = false;
 
     function onDown(e) {
       if (e.button != null && e.button !== 0) return;
-      if (e.target.closest && e.target.closest("a,button")) return;
+      if (isSwipeBlocked(e.target)) return;
       dragging = true;
+      didSwipe = false;
       axis = "";
       pid = e.pointerId;
       startX = e.clientX;
@@ -271,6 +280,8 @@
       }
       if (axis === "y") {
         dragging = false;
+        rail.removeAttribute("data-dragging");
+        track.style.removeProperty("--story-drag");
         return;
       }
       e.preventDefault();
@@ -282,7 +293,7 @@
       if (!dragging && !rail.dataset.dragging) return;
       dragging = false;
       rail.removeAttribute("data-dragging");
-      var dx = e.clientX - startX;
+      var dx = (e.clientX != null ? e.clientX : startX) - startX;
       track.style.removeProperty("--story-drag");
       try {
         if (pid != null) viewport.releasePointerCapture(pid);
@@ -294,10 +305,26 @@
       }
       axis = "";
       var pull = isRtl(rail) ? -dx : dx;
-      var thresh = Math.min(72, viewport.clientWidth * 0.18);
-      if (pull <= -thresh) go(i + 1, 1);
-      else if (pull >= thresh) go(i - 1, -1);
+      var thresh = Math.min(56, Math.max(40, viewport.clientWidth * 0.14));
+      if (pull <= -thresh) {
+        didSwipe = true;
+        go(i + 1, 1);
+      } else if (pull >= thresh) {
+        didSwipe = true;
+        go(i - 1, -1);
+      }
     }
+
+    viewport.addEventListener(
+      "click",
+      function (e) {
+        if (!didSwipe) return;
+        didSwipe = false;
+        e.preventDefault();
+        e.stopPropagation();
+      },
+      true
+    );
 
     if (window.PointerEvent) {
       viewport.addEventListener("pointerdown", onDown);
@@ -312,10 +339,11 @@
         "touchstart",
         function (e) {
           if (!e.touches || !e.touches[0]) return;
-          if (e.target.closest && e.target.closest("a,button")) return;
+          if (isSwipeBlocked(e.target)) return;
           tx = e.touches[0].clientX;
           ty = e.touches[0].clientY;
           tax = "";
+          didSwipe = false;
           rail.dataset.dragging = "1";
         },
         { passive: true }
@@ -332,6 +360,7 @@
           }
           if (tax === "y") {
             rail.removeAttribute("data-dragging");
+            track.style.removeProperty("--story-drag");
             return;
           }
           var pull = isRtl(rail) ? -dx : dx;
@@ -340,15 +369,24 @@
         { passive: true }
       );
       viewport.addEventListener("touchend", function (e) {
-        if (!rail.dataset.dragging) return;
+        if (!rail.dataset.dragging && tax !== "x") return;
         rail.removeAttribute("data-dragging");
         track.style.removeProperty("--story-drag");
-        if (tax !== "x" || !e.changedTouches || !e.changedTouches[0]) return;
+        if (tax !== "x" || !e.changedTouches || !e.changedTouches[0]) {
+          tax = "";
+          return;
+        }
         var dx = e.changedTouches[0].clientX - tx;
         var pull = isRtl(rail) ? -dx : dx;
-        var thresh = Math.min(72, viewport.clientWidth * 0.18);
-        if (pull <= -thresh) go(i + 1, 1);
-        else if (pull >= thresh) go(i - 1, -1);
+        var thresh = Math.min(56, Math.max(40, viewport.clientWidth * 0.14));
+        tax = "";
+        if (pull <= -thresh) {
+          didSwipe = true;
+          go(i + 1, 1);
+        } else if (pull >= thresh) {
+          didSwipe = true;
+          go(i - 1, -1);
+        }
       });
     }
   }

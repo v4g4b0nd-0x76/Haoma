@@ -66,6 +66,7 @@
     {{- end -}}
   </div>
   {{- if gt $n 1 -}}
+  <p class="story-rail__hint" aria-hidden="true">{{ i18n "storyRailSwipe" }}</p>
   <div class="story-rail__chrome">
     <button type="button" class="story-rail__nav story-rail__nav--prev story-rail__nav--bar" data-story-dir="-1" aria-label="{{ i18n "storyRailPrev" }}"><span aria-hidden="true">‹</span></button>
     <div class="story-rail__dots" role="group" aria-label="{{ i18n "storyRailDots" }}">

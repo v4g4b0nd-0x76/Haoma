@@ -16,6 +16,7 @@ Short pointers (do not duplicate AI.md):
 | Release tags | `editor-v*` (binaries), `cult-flourish-*` (CSS/JS asset tags) |
 | Art / maps / translation | [art-gen-ai.md](art-gen-ai.md), [MAP-DESIGN.md](MAP-DESIGN.md), [translate-ai.md](translate-ai.md) |
 | History purge (never auto-run) | [docs/repo-hygiene.md](docs/repo-hygiene.md) |
+| PWA / home-screen shortcuts (not native widgets) | [docs/pwa-and-widgets.md](docs/pwa-and-widgets.md) |
 
 Shell: prefer `rtk` prefix for git/test/build commands when available (see parent `CLAUDE.md` / RTK).
 

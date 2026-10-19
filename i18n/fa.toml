@@ -291,6 +291,8 @@
   other = "داستانک بعدی"
 [storyRailDots]
   other = "فهرست داستانک‌ها"
+[storyRailSwipe]
+  other = "برای نگاه بعدی بکشید"
 [cookieKicker]
   other = "این جهان به یاد می‌سپارد"
 [cookieTitle]
@@ -309,3 +311,23 @@
   other = "باز کردن آخرین صفحه"
 [cookieResumeDismiss]
   other = "بستن"
+[pwaInstall]
+  other = "نصب هوم"
+[pwaLater]
+  other = "الان نه"
+[pwaBody]
+  other = "هوم را به صفحهٔ اصلی اضافه کنید تا سریع به قسمت‌ها و داستانک‌ها برسید."
+[pwaIosTip]
+  other = "در آیفون یا آیپد: Share را بزنید، سپس Add to Home Screen."
+[pwaShortcutEpisodes]
+  other = "تازه‌ترین قسمت‌ها"
+[pwaShortcutEpisodesShort]
+  other = "قسمت‌ها"
+[pwaShortcutEpisodesDesc]
+  other = "فهرست قسمت‌های پادکست"
+[pwaShortcutStories]
+  other = "داستانک‌ها"
+[pwaShortcutStoriesShort]
+  other = "داستانک"
+[pwaShortcutStoriesDesc]
+  other = "پرش به نگاه‌های کوتاه در صفحهٔ اصلی"

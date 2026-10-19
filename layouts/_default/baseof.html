@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ site.Language.LanguageCode }}" dir="{{ site.Language.LanguageDirection | default "ltr" }}" data-culture="{{ .Params.culture | default "base" }}"{{ if .Params.culture }} data-fixed="1"{{ end }}>
+<html lang="{{ site.Language.LanguageCode }}" dir="{{ site.Language.LanguageDirection | default "ltr" }}" data-culture="{{ .Params.culture | default "base" }}"{{ if .Params.culture }} data-fixed="1"{{ end }} data-pwa-install="{{ i18n "pwaInstall" }}" data-pwa-later="{{ i18n "pwaLater" }}" data-pwa-body="{{ i18n "pwaBody" }}" data-pwa-ios="{{ i18n "pwaIosTip" }}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,9 +8,16 @@
 <link rel="icon" type="image/png" sizes="32x32" href="{{ "img/brand/favicon-32.png" | relURL }}">
 <link rel="icon" type="image/png" sizes="192x192" href="{{ "img/brand/favicon-192.png" | relURL }}">
 <link rel="apple-touch-icon" href="{{ "img/brand/apple-touch-icon.png" | relURL }}">
+{{- with site.Home.OutputFormats.Get "Webmanifest" -}}
+<link rel="manifest" href="{{ .RelPermalink }}">
+{{- end }}
 <meta name="theme-color" content="#14161a">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="{{ site.Title }}">
 <script src="{{ printf "%s?v=cookie-3" ("js/boot.js" | relURL) }}"></script>
-<link rel="stylesheet" href="{{ printf "%s?v=ntick-nav-2" ("css/style.css" | relURL) }}">
+<link rel="stylesheet" href="{{ printf "%s?v=pwa-mobile-1" ("css/style.css" | relURL) }}">
 <style>{{ range $k, $t := site.Data.themes }}[data-culture="{{ $k }}"]{--accent:{{ $t.accent | safeCSS }};--bg:{{ $t.bg | safeCSS }};--surface:{{ $t.surface | safeCSS }};--border:{{ $t.border | safeCSS }};--text:{{ $t.text | safeCSS }};--muted:{{ $t.muted | safeCSS }};--anim:{{ $t.anim | default "none" | safeCSS }};--meander:var(--m-{{ $t.pattern | default "none" | safeCSS }});--rune:{{ printf "%q" ($t.glyphs | default "") | safeCSS }}}
 {{ end }}</style>
 {{- if eq site.Language.Lang "fa" -}}
@@ -94,11 +101,12 @@
 <script src="{{ printf "%s?v=recs-1" ("js/recs.js" | relURL) }}"></script>
 {{- end -}}
 {{- if partial "section-enabled.html" (dict "name" "stories" "culture" (.Params.culture | default "")) -}}
-<script src="{{ printf "%s?v=stories-4" ("js/stories.js" | relURL) }}"></script>
+<script src="{{ printf "%s?v=stories-5" ("js/stories.js" | relURL) }}"></script>
 {{- end -}}
 {{- if .IsHome -}}
 <script src="{{ printf "%s?v=worlds-3" ("js/worlds.js" | relURL) }}"></script>
 <script src="{{ printf "%s?v=home-scroll-2" ("js/home-scroll.js" | relURL) }}"></script>
 {{- end -}}
+<script src="{{ printf "%s?v=pwa-1" ("js/pwa.js" | relURL) }}" defer></script>
 </body>
 </html>

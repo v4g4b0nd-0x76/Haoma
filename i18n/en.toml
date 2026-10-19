@@ -291,6 +291,8 @@
   other = "Next story"
 [storyRailDots]
   other = "Story list"
+[storyRailSwipe]
+  other = "Swipe for the next glimpse"
 [cookieKicker]
   other = "This world remembers"
 [cookieTitle]
@@ -309,3 +311,23 @@
   other = "Open last page"
 [cookieResumeDismiss]
   other = "Dismiss"
+[pwaInstall]
+  other = "Install Haoma"
+[pwaLater]
+  other = "Not now"
+[pwaBody]
+  other = "Add Haoma to your home screen for quick access to episodes and stories."
+[pwaIosTip]
+  other = "On iPhone or iPad: tap Share, then Add to Home Screen."
+[pwaShortcutEpisodes]
+  other = "Latest episodes"
+[pwaShortcutEpisodesShort]
+  other = "Episodes"
+[pwaShortcutEpisodesDesc]
+  other = "Open the podcast episode list"
+[pwaShortcutStories]
+  other = "Stories"
+[pwaShortcutStoriesShort]
+  other = "Stories"
+[pwaShortcutStoriesDesc]
+  other = "Jump to short story glimpses on the home page"
