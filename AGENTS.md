@@ -2,10 +2,13 @@
 
 Start with **[AI.md](AI.md)** — full project reference (content model, editor, themes, verification).
 
+**Skills:** see [AI.md → Skills to use](AI.md#skills-to-use). Project skill: `.cursor/skills/haoma-site/`. Reusable: `frontend-design`, `rtl`, `accessibility-auditing`, `github-release` in `~/.cursor/skills/`.
+
 Short pointers (do not duplicate AI.md):
 
 | Topic | Where |
 |---|---|
+| Skills to use (table) | [AI.md § Skills to use](AI.md#skills-to-use) |
 | Culture flourishes / eggs / reduced motion | AI.md §5 |
 | Library off-git + remote `url` | AI.md §8, [docs/repo-hygiene.md](docs/repo-hygiene.md) |
 | Cache-bust `?v=` tokens | AI.md § Working agreements; `layouts/_default/baseof.html` |

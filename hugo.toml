@@ -5,10 +5,15 @@ defaultContentLanguage = "en"
 taxonomies = {}
 enableRobotsTXT = true
 [outputs]
-  home = ["HTML", "RSS", "SearchIndex"]
+  home = ["HTML", "RSS", "SearchIndex", "RelatedIndex"]
 [outputFormats.SearchIndex]
   mediaType = "application/json"
   baseName = "search"
+  isPlainText = true
+  notAlternative = true
+[outputFormats.RelatedIndex]
+  mediaType = "application/json"
+  baseName = "related"
   isPlainText = true
   notAlternative = true
 [markup.goldmark.renderer]

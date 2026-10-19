@@ -989,6 +989,9 @@ en:{
  new_page_h:'New page',new_page_help:'Created as an unsaved draft. Nothing is written to the project until you press Save.',
  create_draft:'Create draft',new_cult_h:'New culture',new_cult_help:'Created as unsaved drafts (folders, theme and banner).',
  settings_h:'Settings',settings_help:'Adds "Edit this page", "Report a correction" and "Page history" links under every article.',
+ sections_h:'Site sections',sections_help:'Turn Recommendations or Stories off for the whole site, or only for one culture. Site-wide Off wins. Stories cards live in data/stories.json (edit via Files or this list).',
+ sections_recs:'Recommendations (Continue exploring)',sections_stories:'Stories (short bestiary cards)',
+ sections_site:'Whole site',sections_on:'On',sections_off:'Off',sections_stories_help:'Add or edit story cards in data/stories.json — fields: id, culture, title, blurb, motif, animated, links[{path,label}].',
  save:'Save',discard_changes:'Discard changes',nav_save:'Save navigation',nav_add:'+ Add link',
  starting_prev:'Starting preview…',prev_fail:'Preview failed',build_run:'Building…',build_ok:'Build OK ✓ (saved files)',build_fail:'Build failed',
  discard_confirm:'Discard all unsaved changes?',
@@ -1056,6 +1059,9 @@ fa:{
  new_page_h:'صفحهٔ جدید',new_page_help:'به‌صورت draft موقت ساخته می‌شود. تا Save نزنید چیزی روی پروژه نوشته نمی‌شود.',
  create_draft:'ساخت draft',new_cult_h:'Culture جدید',new_cult_help:'به‌صورت draft موقت (پوشه، Theme و banner) ساخته می‌شود.',
  settings_h:'Settings',settings_help:'لینک‌های «ویرایش این صفحه»، «گزارش اصلاح» و «تاریخچهٔ صفحه» را زیر مقاله‌ها اضافه می‌کند.',
+ sections_h:'بخش‌های سایت',sections_help:'پیشنهادها یا داستانک‌ها را برای کل سایت یا فقط یک فرهنگ خاموش کنید. Off سراسری بر فرهنگ‌ها غالب است. کارت‌های داستانک در data/stories.json هستند.',
+ sections_recs:'پیشنهادها (ادامهٔ کاوش)',sections_stories:'داستانک‌ها (کارت‌های بهترین‌نامه)',
+ sections_site:'کل سایت',sections_on:'روشن',sections_off:'خاموش',sections_stories_help:'کارت‌های داستانک را در data/stories.json ویرایش کنید — فیلدها: id, culture, title, blurb, motif, animated, links[{path,label}].',
  save:'Save',discard_changes:'Discard تغییرات',nav_save:'Save navigation',nav_add:'+ Add link',
  starting_prev:'در حال شروع Preview…',prev_fail:'Preview شروع نشد',build_run:'در حال Build…',build_ok:'Build OK ✓ (فایل‌های Save‌شده)',build_fail:'Build ناموفق',
  discard_confirm:'همهٔ تغییرات ذخیره‌نشده Discard شوند؟',
@@ -1086,12 +1092,15 @@ const q=s=>JSON.stringify(s),slug=s=>s.toLowerCase().replace(/[^a-z0-9]+/g,'-').
 const say=(t,c='')=>{$('#hmsg').className='msg '+c;/* collapse and clamp: a failed request can hand back a whole HTML error page, and it must never fill the rail */$('#hmsg').textContent=String(t).replace(/\s+/g,' ').trim().slice(0,300)};
 /* ===== state: nothing touches project files until Save ===== */
 let files=[],orig={},drafts=new Map(),git={},audit=[],cur=null,view='dash',rf='all',cT=null,cN='en',timers={};
-const DATA=['data/themes.json','data/nav.json','data/site.json'];
+const DATA=['data/themes.json','data/nav.json','data/site.json','data/site-sections.json','data/stories.json'];
 const J=p=>drafts.has(p)?drafts.get(p):orig[p];
 const themes=()=>JSON.parse(J('data/themes.json')),
 /* nav.json may be missing or empty: never throw, always give every language a (possibly empty) menu so the "+ Add link" button is always reachable */
 nav=()=>{let v;try{v=JSON.parse(J('data/nav.json'))}catch(e){}if(!v||typeof v!=='object'||Array.isArray(v))v={};if(!Object.keys(v).length)v={en:[],fa:[]};return v},
-site=()=>{try{return JSON.parse(J('data/site.json'))}catch(e){return{repo:'',branch:'master'}}};
+site=()=>{try{return JSON.parse(J('data/site.json'))}catch(e){return{repo:'',branch:'master'}}},
+siteSections=()=>{try{const v=JSON.parse(J('data/site-sections.json'));if(v&&typeof v==='object')return v}catch(e){}
+ return{recommendations:{enabled:true,cultures:{}},stories:{enabled:true,cultures:{}}}},
+storiesData=()=>{try{const v=JSON.parse(J('data/stories.json'));if(v&&typeof v==='object')return v}catch(e){}return{en:[],fa:[]}};
 const setJ=(p,o)=>setDraft(p,JSON.stringify(o,null,2));
 const allFiles=()=>{const s=new Set(files);drafts.forEach((v,p)=>v===null?s.delete(p):s.add(p));return[...s].sort()};
 function setDraft(p,v){const o=orig[p];if(typeof v==='string'&&o!==undefined&&v===o){drafts.delete(p);clearTimeout(timers[p]);api('discard?path='+E(p),{method:'POST'}).catch(()=>{})}else{drafts.set(p,v);clearTimeout(timers[p]);if(!(v&&v.bin))timers[p]=setTimeout(()=>push(p),450)}pend()}
@@ -2927,11 +2936,31 @@ function mountTranslatePromptPane(root){
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='haoma-translate-prompt.md';a.click();URL.revokeObjectURL(a.href)};
 }
 /* ===== settings ===== */
-function pSettings(){const s=site();$('#main').innerHTML=`<h2>${t('settings_h')}</h2><div class="card pad"><h3>GitHub project</h3><p class="msg" style="margin:0">${t('settings_help')}</p>
- <label>Repository URL</label><div class="row"><input type="text" id="sr" placeholder="https://github.com/you/mythblog" value="${esc(s.repo||'')}"><button id="sd">Detect from git</button></div><label>Main branch</label><input type="text" id="sb" value="${esc(s.branch||'master')}"><p><button class="pri" id="ss">${t('save')}</button> <button id="sx">${t('discard_changes')}</button><span id="wm" class="msg"></span></p></div>`;
+function pSettings(){const s=site();const sec=siteSections();const cults=cultures();
+ const secRow=(key,label)=>{const cfg=sec[key]||{enabled:true,cultures:{}};
+  const cultCells=cults.map(c=>{const on=cfg.cultures&&cfg.cultures[c]===false?false:true;
+   return`<label class="row" style="gap:8px;margin:4px 0;align-items:center"><input type="checkbox" data-sec="${key}" data-cult="${c}" style="width:auto" ${on?'checked':''}> <span>${esc(c)}</span></label>`}).join('');
+  return`<div class="card pad" style="margin-top:12px"><h3>${label}</h3>
+   <label class="row" style="gap:8px;align-items:center;margin:8px 0"><input type="checkbox" data-sec="${key}" data-site style="width:auto" ${cfg.enabled!==false?'checked':''}> <b>${t('sections_site')}</b></label>
+   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:4px 12px;margin-top:8px">${cultCells}</div></div>`};
+ $('#main').innerHTML=`<h2>${t('settings_h')}</h2><div class="card pad"><h3>GitHub project</h3><p class="msg" style="margin:0">${t('settings_help')}</p>
+ <label>Repository URL</label><div class="row"><input type="text" id="sr" placeholder="https://github.com/you/mythblog" value="${esc(s.repo||'')}"><button id="sd">Detect from git</button></div><label>Main branch</label><input type="text" id="sb" value="${esc(s.branch||'master')}"><p><button class="pri" id="ss">${t('save')}</button> <button id="sx">${t('discard_changes')}</button><span id="wm" class="msg"></span></p></div>
+ <h2 style="margin-top:28px">${t('sections_h')}</h2><p class="msg" style="margin:0 0 8px">${t('sections_help')}</p>
+ ${secRow('recommendations',t('sections_recs'))}${secRow('stories',t('sections_stories'))}
+ <p class="msg" style="margin:12px 0 0">${t('sections_stories_help')} <code>data/stories.json</code> · ${storiesData().en?storiesData().en.length:0} EN / ${storiesData().fa?storiesData().fa.length:0} FA cards</p>
+ <p><button class="pri" id="ssec">${t('save')}</button> <button id="xsec">${t('discard_changes')}</button><span id="wm2" class="msg"></span></p>`;
  const upd=()=>setJ('data/site.json',{repo:$('#sr').value.trim().replace(/\/$/,''),branch:$('#sb').value.trim()||'master'});$('#sr').oninput=upd;$('#sb').oninput=upd;
  $('#sd').onclick=()=>{if(git.remote){$('#sr').value=git.remote;upd()}else{$('#wm').textContent='No git remote named origin';$('#wm').className='msg bad'}};
- $('#ss').onclick=()=>{upd();commit(['data/site.json'],'Settings')};$('#sx').onclick=()=>discardPaths(['data/site.json'])}
+ $('#ss').onclick=()=>{upd();commit(['data/site.json'],'Settings')};$('#sx').onclick=()=>discardPaths(['data/site.json']);
+ const syncSec=()=>{const next=siteSections();
+  ['recommendations','stories'].forEach(key=>{next[key]=next[key]||{enabled:true,cultures:{}};next[key].cultures=next[key].cultures||{};
+   const siteBox=document.querySelector(`[data-sec="${key}"][data-site]`);
+   if(siteBox)next[key].enabled=!!siteBox.checked;
+   cults.forEach(c=>{const box=document.querySelector(`[data-sec="${key}"][data-cult="${c}"]`);if(box)next[key].cultures[c]=!!box.checked})});
+  setJ('data/site-sections.json',next)};
+ document.querySelectorAll('[data-sec]').forEach(el=>el.onchange=syncSec);
+ $('#ssec').onclick=()=>{syncSec();commit(['data/site-sections.json'],'Site sections')};
+ $('#xsec').onclick=()=>discardPaths(['data/site-sections.json'])}
 /* ===== preview + check ===== */
 let pvOn=false,pvBase='';const DL='en';
 function pageUrl(p){const m=p.match(/^content\/(\w+)\/(.+)\.md$/);if(!m)return null;const r=m[2].replace(/(^|\/)_?index$/,'');return(m[1]===DL?'':m[1]+'/')+(r?r+'/':'')}

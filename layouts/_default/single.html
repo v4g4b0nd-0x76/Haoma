@@ -23,6 +23,9 @@
 {{ partial "subculture-members.html" . }}
 {{ partial "library-links.html" . }}
 {{ partial "related.html" . }}
+{{- if or .Params.culture (eq .Section "episodes") -}}
+{{ partial "recommendations.html" . }}
+{{- end -}}
 {{ with .Params.sources }}<div class="sources"><h2>{{ i18n "sources" }}</h2><ul>{{ range . }}<li>{{ . }}</li>{{ end }}</ul></div>{{ end }}
 {{ with site.Data.site.repo }}{{ $b := $.Site.Data.site.branch | default "master" }}{{ $f := printf "content/%s/%s" site.Language.Lang $.File.Path }}
 <p class="contribute"><a href="{{ . }}/edit/{{ $b }}/{{ $f }}">{{ i18n "cEdit" }}</a><a href="{{ . }}/issues/new?template=correction.yml&title={{ printf "Correction: %s" $.Title | urlquery }}&page={{ $.Permalink | urlquery }}">{{ i18n "cIssue" }}</a><a href="{{ . }}/commits/{{ $b }}/{{ $f }}">{{ i18n "cHistory" }}</a></p>{{ end }}

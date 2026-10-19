@@ -20,6 +20,7 @@
       '; SameSite=Lax' +
       secure;
   }
+  /* Expose cookie helpers early; news-tick and other UI may call before site.js */
   function delCookie(name) {
     setCookie(name, '', 0);
   }
@@ -97,9 +98,15 @@
       delCookie('haoma_culture');
       delCookie('haoma_prefs');
       delCookie('haoma_last');
+      delCookie('haoma_hide_tick');
       clearLS('culture');
       clearLS('prefs');
       clearLS('haoma_last');
+      clearLS('haoma_reads');
+      try { sessionStorage.removeItem('haoma_hide_news_tick'); } catch (e) {}
+      if (window.haoma && typeof window.haoma.clearReads === 'function') {
+        window.haoma.clearReads();
+      }
     }
   }
 

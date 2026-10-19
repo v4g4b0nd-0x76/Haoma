@@ -1,0 +1,12 @@
+{{- /* Return true if a site section is on (site-wide + optional culture).
+       Usage: {{ if partial "section-enabled.html" (dict "name" "stories" "culture" $c) }} */ -}}
+{{- $name := .name -}}
+{{- $cult := .culture | default "" -}}
+{{- $cfg := index site.Data.site_sections $name | default dict -}}
+{{- $on := true -}}
+{{- if isset $cfg "enabled" }}{{ $on = $cfg.enabled }}{{ end -}}
+{{- if and $on $cult -}}
+  {{- $cults := $cfg.cultures | default dict -}}
+  {{- if isset $cults $cult }}{{ $on = index $cults $cult }}{{ end -}}
+{{- end -}}
+{{- return $on -}}

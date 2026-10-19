@@ -2,7 +2,21 @@
 
 Read this before changing anything. It describes the site, the editor, the file formats and the rules that keep both working. Humans can use it too.
 
-**Also see:** [AGENTS.md](AGENTS.md) (short map) · [docs/repo-hygiene.md](docs/repo-hygiene.md) (library off-git + history purge runbook) · [CLAUDE.md](CLAUDE.md) (entry stub).
+**Also see:** [AGENTS.md](AGENTS.md) (short map) · [docs/repo-hygiene.md](docs/repo-hygiene.md) (library off-git + history purge runbook) · [CLAUDE.md](CLAUDE.md) (entry stub) · [Skills to use](#skills-to-use).
+
+## Skills to use
+
+Prefer these Cursor Agent Skills when the task matches. Read the skill’s `SKILL.md` before acting. Do not invent parallel workflows that contradict AI.md.
+
+| Skill | When to use | Path |
+|---|---|---|
+| **haoma-site** | Default for this repo: cultures, flourishes, EN/FA, library, editor, parity | `.cursor/skills/haoma-site/` |
+| **frontend-design** | Distinctive UI / visual polish (still follow Haoma brand + §5 flourishes) | `~/.cursor/skills/frontend-design/` |
+| **rtl** | FA/RTL layout, CSS logical properties, bidirectional text | `~/.cursor/skills/rtl/` |
+| **accessibility-auditing** | Browser aria-snapshot a11y audit / keyboard pass | `~/.cursor/skills/accessibility-auditing/` |
+| **github-release** | Cutting GitHub releases / tags (adapt to `editor-v*`, `cult-flourish-*`) | `~/.cursor/skills/github-release/` |
+
+Built-in Cursor skills (already on the machine, do not reinstall): `create-skill`, `create-rule`, `review-bugbot`, `review-security`, `split-to-prs`, `autopilot`, etc. under `~/.cursor/skills-cursor/`. Art / maps / translation briefs stay in [art-gen-ai.md](art-gen-ai.md), [MAP-DESIGN.md](MAP-DESIGN.md), [translate-ai.md](translate-ai.md) — not skills.
 
 ## 1. What this project is
 Haoma is a bilingual (English + Farsi/RTL) mythology podcast and wiki: wiki-style pages per culture, a podcast section, a media library. It is a **static Hugo site** deployed to **GitHub Pages**. A local **editor** (`tools/`) generates the files for you.
@@ -25,10 +39,12 @@ content/en|fa/            pages (same relative paths in both languages)
 data/themes.json          per-culture theme (colours, animation, strip pattern, banner)
 data/nav.json             top navigation per language
 data/site.json            {"repo": "https://github.com/you/repo", "branch": "master"}
+data/site-sections.json   Recommendations / Stories toggles (site-wide + per culture)
+data/stories.json         short-form bestiary cards (en/fa) for the Stories rail
 i18n/en.toml fa.toml      interface strings
 layouts/                  templates, partials, shortcodes, markdown render hooks
 static/css/style.css      all styling; theme colours come from data/themes.json
-static/js/boot.js site.js culture pick, slider, play-on-scroll, notes, tabs
+static/js/boot.js site.js recs.js  culture pick, consent, Continue exploring, tabs
 static/img/               banners (<culture>.svg), maps/ for map artwork, media/ for page images and GIFs
 static/img/brand/         logo set, favicon, podcast cover, share image (generated, see 8a)
 tools/brand/              logo generator (build.py) and its font
@@ -80,6 +96,8 @@ atlas_path:                # culture hub only: ordered paths for Atlas “readin
 ---
 ```
 Culture `_index.md` also takes `quote`, `quoteSource` (hero line, paraphrase unless public domain), `tagline`, and optional `atlas_path:` (ordered site-root paths for the Atlas reading-path tour). The culture hub renders an **Atlas** (`layouts/partials/mindmap.html` + `static/js/mindmap.js`) from every leaf under that culture (plus matching episodes) and **undirected** edges from each page's `related:` list only — no body scanning. Paths are language-root absolute (`/cultures/…/`, never `/fa/…`); `site.GetPage` resolves them per language. Leaf and episode pages also render a **Related** card strip from the same `related:` list.
+
+**Continue exploring (recommendations)** and **Stories** are optional site sections toggled in `data/site-sections.json` (Editor → Settings). Site-wide `enabled: false` hides the section everywhere; `cultures.<key>: false` hides it only on that culture’s pages. Recommendations (`layouts/partials/recommendations.html` + `static/js/recs.js`) read a build-time `related.json` index (home output `RelatedIndex`) and a consent-gated `localStorage` key `haoma_reads` (last ~30 articles; cleared when cookies are refused). No server tracking. Stories (`layouts/partials/stories.html`) render short bestiary cards from `data/stories.json` on culture hubs and the home page. To add a story card: append an object under `en` and `fa` with `id`, `culture`, `title`, `blurb`, `motif` (`none|rosette|meander|zigzag|waves`), optional `animated`, and `links: [{path, label}]` (site-root paths like `/cultures/iranian/stories/two-spirits/`).
 
 **Site search** is Hugo-only: home output `search.json` (`layouts/index.searchindex.json`) + `static/js/search.js`. Title/tagline rank above body; queries use AND matching and return at most 8 hits (header ⌕ or `/`).
 

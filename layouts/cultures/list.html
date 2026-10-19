@@ -1,6 +1,6 @@
 {{ define "main" }}
 <div class="layout{{ if not .Params.culture }} solo{{ end }}">{{ partial "sidebar.html" . }}
-<article{{ if .Params.wide }} class="wide"{{ end }}>
+<article class="cult-hub{{ if .Params.wide }} wide{{ end }}{{ if and .Params.culture (not .Params.sec) }} cult-hub--index{{ end }}">
 {{ partial "tools.html" . }}{{ partial "crumbs.html" . }}
 <h1>{{ .Title }}</h1>
 {{ .Content }}
@@ -20,10 +20,16 @@
   {{- end -}}
 {{- end -}}
 {{ partial "mindmap.html" . }}
+{{- if and .Params.culture (not .Params.sec) -}}
+{{ partial "stories.html" (dict "culture" .Params.culture) }}
+{{- end -}}
 {{- if eq .Params.sec "traditions" -}}
 <ul class="cards">{{ range .Pages }}{{ partial "card.html" . }}{{ end }}</ul>
 {{- else -}}
 <ul class="cards">{{ range .Pages }}{{ if not (in .RelPermalink "/traditions/") }}{{ partial "card.html" . }}{{ end }}{{ end }}</ul>
+{{- end -}}
+{{- if and .Params.culture (not .Params.sec) -}}
+{{ partial "recommendations.html" . }}
 {{- end -}}
 </article></div>
 {{ end }}

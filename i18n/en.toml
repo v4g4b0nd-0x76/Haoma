@@ -1,5 +1,13 @@
 [latest]
   other = "Latest episodes"
+[tickEpisode]
+  other = "Episode"
+[tickArticle]
+  other = "Article"
+[tickClose]
+  other = "Hide latest bar"
+[tickNow]
+  other = "Latest"
 [listen]
   other = "Listen & read"
 [explore]
@@ -18,6 +26,12 @@
   other = "In this tradition"
 [choose]
   other = "Choose your world"
+[worldPrev]
+  other = "Previous world"
+[worldNext]
+  other = "Next world"
+[worldDots]
+  other = "Worlds"
 [media]
   other = "Media"
 [episodes]
@@ -255,12 +269,34 @@
   other = "Browse by theme"
 [homeEmptyCulture]
   other = "No articles for this culture yet — pick All cultures, or enter this world to add some."
+[recsTitle]
+  other = "Continue exploring"
+[recsHint]
+  other = "Suggested from pages you have already read on this device — nothing is sent to a server."
+[recsEmpty]
+  other = "Open a few articles and come back for personal suggestions, or browse the culture hub."
+[recsCta]
+  other = "Explore"
+[storyRailTitle]
+  other = "Glimpses"
+[storyRailLead]
+  other = "Short glimpses from the bestiary — swipe or tap through to the full article."
+[storyRailKicker]
+  other = "Bestiary"
+[storyRailCta]
+  other = "Read the full story"
+[storyRailPrev]
+  other = "Previous story"
+[storyRailNext]
+  other = "Next story"
+[storyRailDots]
+  other = "Story list"
 [cookieKicker]
   other = "This world remembers"
 [cookieTitle]
   other = "Allow cookies for this visit?"
 [cookieText]
-  other = "If you allow, we save your culture, reading size, and the last page you opened — only on this device, using cookies. Refuse and nothing is stored after you leave."
+  other = "If you allow, we save your culture, reading size, last page, and a short reading history for Continue exploring — only on this device. Refuse and nothing is stored after you leave."
 [cookieAllow]
   other = "Allow"
 [cookieDeny]

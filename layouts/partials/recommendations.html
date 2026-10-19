@@ -1,0 +1,52 @@
+{{- /* Continue exploring — localStorage history + related graph (static JS). */ -}}
+{{- $cult := .Params.culture | default "" -}}
+{{- if not (partial "section-enabled.html" (dict "name" "recommendations" "culture" $cult)) -}}
+{{- else -}}
+{{- $key := "" -}}
+{{- if and (eq .Section "cultures") .Params.culture .Params.sec -}}
+  {{- $key = printf "/cultures/%s/%s/%s/" .Params.culture .Params.sec .File.ContentBaseName -}}
+{{- else if eq .Section "episodes" -}}
+  {{- $key = printf "/episodes/%s/" .File.ContentBaseName -}}
+{{- else if and (eq .Section "cultures") .Params.culture (not .Params.sec) -}}
+  {{- $key = printf "/cultures/%s/" .Params.culture -}}
+{{- end -}}
+{{- $themes := slice -}}
+{{- range (.Params.themes | default slice) }}{{ $themes = $themes | append . }}{{ end -}}
+{{- $featured := slice -}}
+{{- if $cult -}}
+  {{- $hub := site.GetPage (printf "/cultures/%s" $cult) -}}
+  {{- with $hub -}}
+    {{- range first 8 (where .RegularPagesRecursive "Params.sec" "!=" nil) -}}
+      {{- if .Params.sec -}}
+        {{- $featured = $featured | append (dict
+          "k" (printf "/cultures/%s/%s/%s/" .Params.culture .Params.sec .File.ContentBaseName)
+          "u" .RelPermalink
+          "t" .Title
+          "g" (.Params.tagline | default "")
+          "c" (.Params.culture | default "")
+        ) -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- with site.Home.OutputFormats.Get "RelatedIndex" -}}
+<link rel="alternate" type="application/json" href="{{ .Permalink }}" title="related" hidden>
+{{- end }}
+<section class="explore-recs" id="haoma-recs" hidden
+  data-recs
+  data-path="{{ $key }}"
+  data-culture="{{ $cult }}"
+  data-title="{{ .Title }}"
+  data-themes="{{ delimit $themes " " }}"
+  data-featured="{{ $featured | jsonify }}"
+  data-i18n-title="{{ i18n "recsTitle" }}"
+  data-i18n-hint="{{ i18n "recsHint" }}"
+  data-i18n-empty="{{ i18n "recsEmpty" }}"
+  data-i18n-cta="{{ i18n "recsCta" }}"
+  aria-labelledby="recs-h">
+  <h2 id="recs-h">{{ i18n "recsTitle" }}</h2>
+  <p class="explore-recs__hint">{{ i18n "recsHint" }}</p>
+  <ul class="cards cards--recs" data-recs-list></ul>
+  <p class="explore-recs__empty muted" data-recs-empty hidden>{{ i18n "recsEmpty" }}</p>
+</section>
+{{- end -}}

@@ -1,7 +1,7 @@
 {{ define "main" }}
 {{ $cs := (site.GetPage "/cultures").Sections }}
 {{- /* One full-bleed composition: brand over culture art, CTA at the foot. */ -}}
-<section class="cine" data-culture="base">
+<section class="cine home-panel" data-home-panel data-culture="base">
 <div class="slide on" data-culture="base">{{ with (index site.Data.themes "base").banner }}<img class="sbg" src="{{ printf "img/%s" . | relURL }}" alt="" aria-hidden="true"><img class="sfg" src="{{ printf "img/%s" . | relURL }}" alt="">{{ end }}<template><span>{{ i18n "baseQuote" }}</span></template></div>
 {{ range $cs }}{{ $b := (index site.Data.themes .Params.culture | default dict).banner }}{{ if $b }}
 <div class="slide" data-culture="{{ .Params.culture }}"><img class="sbg" src="{{ printf "img/%s" $b | relURL }}" alt="" aria-hidden="true"><img class="sfg" src="{{ printf "img/%s" $b | relURL }}" alt="{{ .Title }} banner art"><template><span>{{ .Params.quote }}</span><cite>{{ .Params.quoteSource }}</cite></template></div>
@@ -19,12 +19,61 @@
   </div>
 </div>
 </section>
-<section class="wrap slider" data-home-cards><div class="slider-head"><h2>{{ i18n "latest" }}</h2><div class="arrows"><button type="button" data-dir="-1" aria-label="{{ i18n "prev" }}">‹</button><button type="button" data-dir="1" aria-label="{{ i18n "next" }}">›</button></div></div>
-<ul class="cards rail">{{ range first 8 (where site.RegularPages "Section" "episodes") }}{{ partial "card.html" . }}{{ end }}</ul></section>
-<section class="wrap intro"><h2>{{ i18n "introTitle" }}</h2><p>{{ i18n "introText" }}</p></section>
-<section class="wrap home-choose"><h2>{{ i18n "choose" }}</h2>
-<div class="panels">{{ range $cs }}<a class="panel" data-culture="{{ .Params.culture }}" href="{{ .RelPermalink }}">{{ with .Params.culture }}{{ $b := (index site.Data.themes . | default dict).banner }}{{ if $b }}<img src="{{ printf "img/%s" $b | relURL }}" alt="" loading="lazy">{{ end }}{{ end }}<div><h3>{{ .Title }}</h3><p>{{ .Params.tagline }}</p></div></a>{{ end }}</div></section>
-<section class="wrap" data-home-cards><h2>{{ i18n "explore" }}</h2>
+<section class="wrap intro home-panel" data-home-panel><h2>{{ i18n "introTitle" }}</h2><p>{{ i18n "introText" }}</p></section>
+{{ partial "stories.html" (dict "home" true) }}
+{{- $worlds := $cs -}}
+{{- $wn := len $worlds -}}
+{{- with index $worlds 0 -}}
+<section class="home-choose home-panel" data-home-panel data-world-slider data-culture="{{ .Params.culture }}" aria-roledescription="carousel" aria-labelledby="home-choose-h">
+  <div class="world-atmos" aria-hidden="true">
+    <span class="world-atmos__fall"></span>
+    <span class="world-atmos__motif"></span>
+  </div>
+  <div class="world-inner wrap">
+    <h2 id="home-choose-h">{{ i18n "choose" }}</h2>
+    <div class="world-stage">
+      {{- if gt $wn 1 -}}
+      <button type="button" class="world-nav world-nav--prev" data-world-dir="-1" aria-label="{{ i18n "worldPrev" }}"><span aria-hidden="true">‹</span></button>
+      {{- end -}}
+      <div class="world-viewport" tabindex="0" aria-label="{{ i18n "choose" }}">
+        <ul class="world-track" data-world-track>
+        {{- range $i, $c := $worlds -}}
+          {{- $t := index site.Data.themes $c.Params.culture | default dict -}}
+          {{- $b := $t.banner -}}
+          <li class="world-slide{{ if eq $i 0 }} is-active{{ end }}" data-culture="{{ $c.Params.culture }}" data-world-i="{{ $i }}"{{ if ne $i 0 }} aria-hidden="true" inert{{ end }}>
+            {{- with $b -}}
+            <div class="world-slide__sky" aria-hidden="true">
+              <img class="world-slide__bg" src="{{ printf "img/%s" . | relURL }}" alt="" loading="{{ if eq $i 0 }}eager{{ else }}lazy{{ end }}">
+            </div>
+            {{- end -}}
+            <a class="panel" data-culture="{{ $c.Params.culture }}" href="{{ $c.RelPermalink }}"{{ if ne $i 0 }} tabindex="-1"{{ end }}>
+              {{- with $b -}}<img src="{{ printf "img/%s" . | relURL }}" alt="" loading="{{ if eq $i 0 }}eager{{ else }}lazy{{ end }}">{{- end -}}
+              <div><h3>{{ $c.Title }}</h3><p>{{ $c.Params.tagline }}</p></div>
+            </a>
+          </li>
+        {{- end -}}
+        </ul>
+      </div>
+      {{- if gt $wn 1 -}}
+      <button type="button" class="world-nav world-nav--next" data-world-dir="1" aria-label="{{ i18n "worldNext" }}"><span aria-hidden="true">›</span></button>
+      {{- end -}}
+    </div>
+    {{- if gt $wn 1 -}}
+    <div class="world-chrome">
+      <button type="button" class="world-nav world-nav--bar" data-world-dir="-1" aria-label="{{ i18n "worldPrev" }}"><span aria-hidden="true">‹</span></button>
+      <div class="world-dots" role="group" aria-label="{{ i18n "worldDots" }}">
+        {{- range $i, $c := $worlds -}}
+        <button type="button" class="world-dot{{ if eq $i 0 }} is-on{{ end }}" data-world-go="{{ $i }}" aria-label="{{ $c.Title }}" aria-current="{{ if eq $i 0 }}true{{ else }}false{{ end }}"></button>
+        {{- end -}}
+      </div>
+      <button type="button" class="world-nav world-nav--bar" data-world-dir="1" aria-label="{{ i18n "worldNext" }}"><span aria-hidden="true">›</span></button>
+    </div>
+    <p class="sr" data-world-status aria-live="polite"></p>
+    {{- end -}}
+  </div>
+</section>
+{{- end -}}
+<section class="wrap home-panel" data-home-panel data-home-cards><h2>{{ i18n "explore" }}</h2>
 <p class="explore-themes"><a href="{{ "themes/" | relLangURL }}">{{ i18n "exploreThemes" }}</a> · <a href="{{ "az/" | relLangURL }}">{{ i18n "az" }}</a> · <a href="{{ "compare/" | relLangURL }}">{{ i18n "compare" }}</a></p>
 <div class="tabs" role="tablist"><button role="tab" aria-selected="true" aria-controls="t-ch">{{ i18n "characters" }}</button><button role="tab" aria-selected="false" aria-controls="t-st">{{ i18n "stories" }}</button><button role="tab" aria-selected="false" aria-controls="t-hi">{{ i18n "history" }}</button><button role="tab" aria-selected="false" aria-controls="t-tr">{{ i18n "traditions" }}</button></div>
 {{ $all := where site.RegularPages "Section" "cultures" }}
@@ -36,7 +85,7 @@
 <p class="msg home-empty" data-home-empty hidden>{{ i18n "homeEmptyCulture" }}</p></div>
 <div id="t-tr" class="tabpanel" hidden><ul class="cards">{{ range where $all "Params.sec" "traditions" }}{{ partial "card.html" . }}{{ end }}</ul>
 <p class="msg home-empty" data-home-empty hidden>{{ i18n "homeEmptyCulture" }}</p></div></section>
-<section class="wrap" data-home-cards><h2>{{ i18n "media" }}</h2>
+<section class="wrap home-panel" data-home-panel data-home-cards><h2>{{ i18n "media" }}</h2>
 <div class="tabs" role="tablist"><button role="tab" aria-selected="true" aria-controls="m-ep">{{ i18n "episodes" }}</button><button role="tab" aria-selected="false" aria-controls="m-lib">{{ i18n "library" }}</button></div>
 <div id="m-ep" class="tabpanel"><ul class="cards">{{ range where site.RegularPages "Section" "episodes" }}{{ partial "card.html" . }}{{ end }}</ul>
 <p class="msg home-empty" data-home-empty hidden>{{ i18n "homeEmptyCulture" }}</p></div>

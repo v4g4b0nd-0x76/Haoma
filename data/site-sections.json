@@ -1,0 +1,22 @@
+{
+  "recommendations": {
+    "enabled": true,
+    "cultures": {
+      "norse": true,
+      "greek": true,
+      "iranian": true,
+      "mesopotamian": true,
+      "indian": true
+    }
+  },
+  "stories": {
+    "enabled": true,
+    "cultures": {
+      "norse": true,
+      "greek": true,
+      "iranian": true,
+      "mesopotamian": true,
+      "indian": true
+    }
+  }
+}

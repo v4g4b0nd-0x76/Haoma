@@ -1,0 +1,262 @@
+{
+  "en": [
+    {
+      "id": "twin-choice",
+      "culture": "iranian",
+      "title": "The Twin Choice",
+      "blurb": "Before the world hardened into shape, two spirits stood at a fork: one chose asha — truth, order, the straight path — and the other chose the lie. That single decision still frames Zoroastrian ethics, ritual fire, and how a person weighs every word. The story is short on the page and endless in the tradition that grew from it.",
+      "motif": "rosette",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/iranian/stories/two-spirits/", "label": "Read the full tale" },
+        { "path": "/cultures/iranian/characters/zarathustra/", "label": "Zarathustra" }
+      ]
+    },
+    {
+      "id": "oath-lord",
+      "culture": "iranian",
+      "title": "Lord of the Oath",
+      "blurb": "Mehr does not merely bless friendship — he watches covenants. A broken promise is not private; in the old hymns it summons a judge of light. Follow how oath, sun, and loyalty braid into one figure who still echoes across Iranian memory.",
+      "motif": "rosette",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/iranian/characters/mehr/", "label": "Read about Mehr" },
+        { "path": "/cultures/iranian/traditions/mehr/", "label": "Mehr tradition" }
+      ]
+    },
+    {
+      "id": "fire-in-persia",
+      "culture": "iranian",
+      "title": "Fire Across Empires",
+      "blurb": "From the Gathas of Zarathustra to the fire temples of the Sasanian state, asha stopped being only a poem and became law, calendar, and court. Trace how a moral fire took root in Persian history — and what survived when empires fell.",
+      "motif": "rosette",
+      "animated": false,
+      "links": [
+        { "path": "/cultures/iranian/history/zoroastrianism-in-persia/", "label": "Read the history" }
+      ]
+    },
+    {
+      "id": "odin-price",
+      "culture": "norse",
+      "title": "Wisdom Has a Price",
+      "blurb": "Nine nights on the world-tree. One eye given at the well. Odin does not stumble into wisdom — he buys it with flesh, sleep, and risk. The poems remember the cost as carefully as the knowledge, and that bargain still defines the Allfather.",
+      "motif": "none",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/norse/characters/odin/", "label": "Read about Odin" },
+        { "path": "/cultures/norse/stories/ragnarok/", "label": "Ragnarök" }
+      ]
+    },
+    {
+      "id": "wolfs-hour",
+      "culture": "norse",
+      "title": "The Wolf's Hour",
+      "blurb": "Gods fall. The sun darkens. Kin turn on kin. Ragnarök is less a tidy ending than a clearing of the board — chaos that the sources refuse to soften. Step into the hour when even fate wears fangs, then follow the threads that lead beyond the fire.",
+      "motif": "none",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/norse/stories/ragnarok/", "label": "Read Ragnarök" },
+        { "path": "/cultures/norse/history/viking-age/", "label": "Viking Age" }
+      ]
+    },
+    {
+      "id": "sky-father",
+      "culture": "greek",
+      "title": "Thunder on Olympus",
+      "blurb": "Zeus rules by storm, guest-right, and the fear of a broken oath — yet every vow he swears binds him too. Kingship here is thunder and law at once. Meet the sky-father as the Greeks told him, not as a cartoon lightning bolt.",
+      "motif": "meander",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/greek/characters/zeus/", "label": "Read about Zeus" },
+        { "path": "/compare/odin-zeus/", "label": "Odin ↔ Zeus" }
+      ]
+    },
+    {
+      "id": "owl-city",
+      "culture": "greek",
+      "title": "Owl of the Polis",
+      "blurb": "Athena is craft, counsel, and the wall that holds. Her war is never mindless: strategy, weaving, and the life of the city share one goddess. See why the owl watched the polis — and what that still teaches about wisdom under pressure.",
+      "motif": "meander",
+      "animated": false,
+      "links": [
+        { "path": "/cultures/greek/characters/athena/", "label": "Read about Athena" }
+      ]
+    },
+    {
+      "id": "wild-friend",
+      "culture": "mesopotamian",
+      "title": "Made of Clay and Grass",
+      "blurb": "Enkidu begins as wilderness — hair, herd, and open sky — until friendship civilises him and death remakes the king who loved him. The epic turns on that change: what it costs to become human, and what a friend is worth when the gods collect.",
+      "motif": "zigzag",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/mesopotamian/characters/enkidu/", "label": "Read about Enkidu" },
+        { "path": "/cultures/mesopotamian/stories/journey-to-the-cedar-forest/", "label": "Cedar Forest" }
+      ]
+    },
+    {
+      "id": "cedar-gate",
+      "culture": "mesopotamian",
+      "title": "Gate of the Cedar",
+      "blurb": "Gilgamesh and Enkidu cut a road through Humbaba's forest — glory first, grief later. The cedar gate is adventure, arrogance, and the moment friendship walks into a trap the gods already set. Open the gate; the rest of the epic waits beyond it.",
+      "motif": "zigzag",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/mesopotamian/stories/journey-to-the-cedar-forest/", "label": "Read the journey" }
+      ]
+    },
+    {
+      "id": "bridge-of-stones",
+      "culture": "indian",
+      "title": "Bridge of Stone",
+      "blurb": "Rama's army spans the sea with devotion and design — Setu as myth, map, and memory. Stones, allies, and a vow to reclaim what was taken: the bridge is both engineering and faith. Cross it in the telling, then follow the road into the full Ramayana thread.",
+      "motif": "waves",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/indian/stories/rama-and-the-bridge/", "label": "Read the bridge story" },
+        { "path": "/cultures/indian/characters/rama/", "label": "Rama" }
+      ]
+    },
+    {
+      "id": "dharma-bow",
+      "culture": "indian",
+      "title": "Bow of Dharma",
+      "blurb": "Exile, vow, and the long road home: Rama holds the line between duty and desire when both claim to be right. The bow is not only a weapon — it is the weight of dharma under pressure. Walk that path with him in the fuller portrait.",
+      "motif": "waves",
+      "animated": false,
+      "links": [
+        { "path": "/cultures/indian/characters/rama/", "label": "Read about Rama" }
+      ]
+    }
+  ],
+  "fa": [
+    {
+      "id": "twin-choice",
+      "culture": "iranian",
+      "title": "انتخاب دوگانه",
+      "blurb": "پیش از آن‌که جهان شکل بگیرد، دو مینو بر سر دو راه ایستادند: یکی اشه — راستی و سامان — را برگزید و دیگری دروغ را. همان یک انتخاب هنوز اخلاق زرتشتی، آتش آیینی و وزن هر سخن را شکل می‌دهد. داستان در صفحه کوتاه است و در سنتی که از آن رویید، بی‌پایان.",
+      "motif": "rosette",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/iranian/stories/two-spirits/", "label": "خواندن داستان کامل" },
+        { "path": "/cultures/iranian/characters/zarathustra/", "label": "زرتشت" }
+      ]
+    },
+    {
+      "id": "oath-lord",
+      "culture": "iranian",
+      "title": "خداوند پیمان",
+      "blurb": "مهر فقط دوستی را برکت نمی‌دهد — نگهبان پیمان است. سوگند شکسته خصوصی نیست؛ در سرودهای کهن داور نور را فرامی‌خواند. ببین چگونه سوگند، خورشید و وفاداری در یک چهره می‌تنند که هنوز در حافظهٔ ایرانی می‌پیچد.",
+      "motif": "rosette",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/iranian/characters/mehr/", "label": "خواندن دربارهٔ مهر" },
+        { "path": "/cultures/iranian/traditions/mehr/", "label": "سنت مهر" }
+      ]
+    },
+    {
+      "id": "fire-in-persia",
+      "culture": "iranian",
+      "title": "آتش در امپراتوری‌ها",
+      "blurb": "از گاهان زرتشت تا آتشکده‌های ساسانی، اشه از شعر صرف به قانون، گاه‌شماری و دربار بدل شد. رد پای آتش اخلاقی را در تاریخ ایران دنبال کن — و ببین وقتی امپراتوری‌ها فرو ریختند چه چیزی ماند.",
+      "motif": "rosette",
+      "animated": false,
+      "links": [
+        { "path": "/cultures/iranian/history/zoroastrianism-in-persia/", "label": "خواندن تاریخ" }
+      ]
+    },
+    {
+      "id": "odin-price",
+      "culture": "norse",
+      "title": "بهای خرد",
+      "blurb": "نه شب بر درخت جهان. یک چشم در چاه. اودین به خرد نمی‌افتد — آن را با تن، خواب و خطر می‌خرد. سرودها بها را به اندازهٔ دانایی به یاد می‌سپارند؛ همان معامله هنوز پدرِ همه را تعریف می‌کند.",
+      "motif": "none",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/norse/characters/odin/", "label": "خواندن دربارهٔ اودین" },
+        { "path": "/cultures/norse/stories/ragnarok/", "label": "راگناروک" }
+      ]
+    },
+    {
+      "id": "wolfs-hour",
+      "culture": "norse",
+      "title": "ساعت گرگ",
+      "blurb": "خدایان می‌افتند. خورشید تاریک می‌شود. خویشاوند بر خویشاوند. راگناروک پایانِ مرتب نیست؛ پاک‌سازی صفحه است — آشوبی که منابع نرمش نمی‌کنند. وارد ساعتی شو که حتی تقدیر دندان دارد، سپس رشته‌ها را تا آن‌سوی آتش دنبال کن.",
+      "motif": "none",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/norse/stories/ragnarok/", "label": "خواندن راگناروک" },
+        { "path": "/cultures/norse/history/viking-age/", "label": "عصر وایکینگ" }
+      ]
+    },
+    {
+      "id": "sky-father",
+      "culture": "greek",
+      "title": "تندر بر المپ",
+      "blurb": "زئوس با طوفان، حق میهمان و ترس از سوگند شکسته فرمان می‌راند — ولی هر پیمانی او را هم می‌بندد. پادشاهی اینجا تندر و قانون با هم است. پدرِ آسمان را چنان ببین که یونانیان گفتند، نه چون کارتون آذرخش.",
+      "motif": "meander",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/greek/characters/zeus/", "label": "خواندن دربارهٔ زئوس" },
+        { "path": "/compare/odin-zeus/", "label": "اودین ↔ زئوس" }
+      ]
+    },
+    {
+      "id": "owl-city",
+      "culture": "greek",
+      "title": "جغد پولیس",
+      "blurb": "آتنا هنر، مشورت و دیواری است که نگه می‌دارد. جنگش هرگز بی‌فکر نیست: راهبرد، بافتن و زندگی شهر در یک ایزدبانو شریک‌اند. ببین چرا جغد بر پولیس می‌نگریست — و خرد زیر فشار هنوز چه می‌آموزد.",
+      "motif": "meander",
+      "animated": false,
+      "links": [
+        { "path": "/cultures/greek/characters/athena/", "label": "خواندن دربارهٔ آتنا" }
+      ]
+    },
+    {
+      "id": "wild-friend",
+      "culture": "mesopotamian",
+      "title": "از گل و گیاه",
+      "blurb": "انکیدو از بیابان آغاز می‌کند — مو، گله و آسمان باز — تا دوستی او را اهلی کند و مرگ شاهِ دوستش را دیگرگون سازد. حماسه بر همان دگرگونی می‌چرخد: بهای انسان‌شدن، و ارزش دوست وقتی خدایان حساب می‌کشند.",
+      "motif": "zigzag",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/mesopotamian/characters/enkidu/", "label": "خواندن دربارهٔ انکیدو" },
+        { "path": "/cultures/mesopotamian/stories/journey-to-the-cedar-forest/", "label": "جنگل سرو" }
+      ]
+    },
+    {
+      "id": "cedar-gate",
+      "culture": "mesopotamian",
+      "title": "دروازهٔ سرو",
+      "blurb": "گیلگمش و انکیدو راهی در جنگل هومبابا می‌گشایند — نخست شکوه، سپس اندوه. دروازهٔ سرو ماجرا، غرور، و لحظه‌ای است که دوستی به دام خدایان می‌افتد. در را باز کن؛ باقی حماسه آن‌سو منتظر است.",
+      "motif": "zigzag",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/mesopotamian/stories/journey-to-the-cedar-forest/", "label": "خواندن سفر" }
+      ]
+    },
+    {
+      "id": "bridge-of-stones",
+      "culture": "indian",
+      "title": "پل سنگ",
+      "blurb": "سپاه راما دریا را با اخلاص و طرح می‌سپارد — سِتو افسانه، نقشه و خاطره. سنگ، یاران، و پیمانی برای بازپس‌گرفتن آنچه ربوده شد: پل هم مهندسی است هم ایمان. در روایت از آن بگذر، سپس جاده را تا رشتهٔ کامل رامایانا دنبال کن.",
+      "motif": "waves",
+      "animated": true,
+      "links": [
+        { "path": "/cultures/indian/stories/rama-and-the-bridge/", "label": "خواندن داستان پل" },
+        { "path": "/cultures/indian/characters/rama/", "label": "راما" }
+      ]
+    },
+    {
+      "id": "dharma-bow",
+      "culture": "indian",
+      "title": "کمان دارما",
+      "blurb": "تبعید، پیمان، و راه دراز بازگشت: راما خط میان وظیفه و خواهش را نگه می‌دارد وقتی هر دو حق می‌نمایند. کمان فقط سلاح نیست — وزن دارما زیر فشار است. آن مسیر را در تصویر کامل‌تر با او برو.",
+      "motif": "waves",
+      "animated": false,
+      "links": [
+        { "path": "/cultures/indian/characters/rama/", "label": "خواندن دربارهٔ راما" }
+      ]
+    }
+  ]
+}

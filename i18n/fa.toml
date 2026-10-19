@@ -1,5 +1,13 @@
 [latest]
   other = "تازه‌ترین قسمت‌ها"
+[tickEpisode]
+  other = "قسمت"
+[tickArticle]
+  other = "مقاله"
+[tickClose]
+  other = "بستن نوار تازه‌ها"
+[tickNow]
+  other = "تازه"
 [listen]
   other = "بشنوید و بخوانید"
 [explore]
@@ -18,6 +26,12 @@
   other = "در این سنت"
 [choose]
   other = "جهان خود را برگزینید"
+[worldPrev]
+  other = "جهان قبلی"
+[worldNext]
+  other = "جهان بعدی"
+[worldDots]
+  other = "جهان‌ها"
 [media]
   other = "رسانه"
 [episodes]
@@ -255,12 +269,34 @@
   other = "مرور بر پایهٔ مضمون"
 [homeEmptyCulture]
   other = "هنوز مقاله‌ای برای این فرهنگ نیست — «همهٔ فرهنگ‌ها» را برگزینید، یا وارد این جهان شوید."
+[recsTitle]
+  other = "ادامهٔ کاوش"
+[recsHint]
+  other = "پیشنهادها بر پایهٔ مقاله‌هایی است که روی همین دستگاه خوانده‌اید — چیزی به سرور فرستاده نمی‌شود."
+[recsEmpty]
+  other = "چند مقاله بخوانید و برای پیشنهادهای شخصی برگردید، یا قطب فرهنگ را بگردید."
+[recsCta]
+  other = "کاوش"
+[storyRailTitle]
+  other = "نگاه‌ها"
+[storyRailLead]
+  other = "نگاه‌های کوتاه از بهترین‌نامه — بکشید یا لمس کنید تا به مقالهٔ کامل برسید."
+[storyRailKicker]
+  other = "بهترین‌نامه"
+[storyRailCta]
+  other = "خواندن داستان کامل"
+[storyRailPrev]
+  other = "داستانک قبلی"
+[storyRailNext]
+  other = "داستانک بعدی"
+[storyRailDots]
+  other = "فهرست داستانک‌ها"
 [cookieKicker]
   other = "این جهان به یاد می‌سپارد"
 [cookieTitle]
   other = "کوکی برای این بازدید مجاز باشد؟"
 [cookieText]
-  other = "اگر بپذیرید، فرهنگ، اندازهٔ متن و آخرین صفحه‌ای که گشودید فقط روی همین دستگاه با کوکی ذخیره می‌شود. اگر رد کنید، پس از ترک سایت چیزی نمی‌ماند."
+  other = "اگر بپذیرید، فرهنگ، اندازهٔ متن، آخرین صفحه و تاریخچهٔ کوتاه خواندن برای «ادامهٔ کاوش» فقط روی همین دستگاه ذخیره می‌شود. اگر رد کنید، پس از ترک سایت چیزی نمی‌ماند."
 [cookieAllow]
   other = "اجازه بده"
 [cookieDeny]

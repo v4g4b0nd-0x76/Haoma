@@ -1,0 +1,82 @@
+{{- /* Short-form bestiary / story cards — single-card carousel (data/stories.json). */ -}}
+{{- $cult := .culture | default "" -}}
+{{- $home := .home | default false -}}
+{{- if not (partial "section-enabled.html" (dict "name" "stories" "culture" $cult)) -}}
+{{- else -}}
+{{- $lang := site.Language.Lang -}}
+{{- $all := index site.Data.stories $lang | default (index site.Data.stories "en") | default slice -}}
+{{- $items := slice -}}
+{{- range $all -}}
+  {{- if or $home (eq .culture $cult) (not $cult) -}}
+    {{- $items = $items | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- if $items -}}
+{{- $n := len $items -}}
+<section class="story-rail story-rail--carousel{{ if $home }} story-rail--home wrap home-panel{{ end }}"{{ if $home }} data-home-panel{{ end }} aria-labelledby="story-rail-h" aria-roledescription="carousel"{{ if $cult }} data-culture="{{ $cult }}"{{ end }}{{ if $home }} data-home-cards{{ end }} data-story-count="{{ $n }}">
+  <div class="story-rail__head">
+    <h2 id="story-rail-h" class="story-rail__label">{{ i18n "storyRailTitle" }}</h2>
+  </div>
+  <div class="story-rail__stage">
+    {{- if gt $n 1 -}}
+    <button type="button" class="story-rail__nav story-rail__nav--prev story-rail__nav--side" data-story-dir="-1" aria-label="{{ i18n "storyRailPrev" }}"><span aria-hidden="true">‹</span></button>
+    {{- end -}}
+    <div class="story-rail__viewport" tabindex="0" aria-label="{{ i18n "storyRailTitle" }}">
+      <ul class="story-rail__track" data-story-track>
+      {{- range $i, $it := $items -}}
+        {{- $motif := $it.motif | default "none" -}}
+        {{- $anim := $it.animated | default false -}}
+        {{- $href := "" -}}
+        {{- $cta := i18n "storyRailCta" -}}
+        {{- with index $it.links 0 -}}
+          {{- $href = .path | strings.TrimPrefix "/" | relLangURL -}}
+          {{- with .label }}{{ $cta = . }}{{ end -}}
+        {{- end -}}
+        {{- if not $href -}}
+          {{- if $it.culture -}}
+            {{- $href = printf "cultures/%s/" $it.culture | relLangURL -}}
+          {{- else -}}
+            {{- $href = "cultures/" | relLangURL -}}
+          {{- end -}}
+        {{- end -}}
+        <li class="story-card{{ if $anim }} story-card--anim{{ end }}{{ if eq $i 0 }} is-active{{ end }}" data-culture="{{ $it.culture }}" data-motif="{{ $motif }}"{{ if not $anim }} data-static="1"{{ end }} data-story-i="{{ $i }}"{{ if ne $i 0 }} aria-hidden="true" inert{{ end }}>
+          <a class="story-card__hit" href="{{ $href }}"{{ if ne $i 0 }} tabindex="-1"{{ end }}>
+            <span class="story-card__motif" aria-hidden="true"></span>
+            <span class="story-card__body">
+              <span class="story-card__kicker">{{ i18n "storyRailKicker" }}</span>
+              <span class="story-card__title">{{ $it.title }}</span>
+              <span class="story-card__blurb">{{ $it.blurb }}</span>
+              <span class="story-card__cta">{{ $cta }}</span>
+            </span>
+          </a>
+          {{- if gt (len $it.links) 1 -}}
+          <ul class="story-card__more">
+            {{- range after 1 $it.links -}}
+              {{- $p := .path | strings.TrimPrefix "/" | relLangURL -}}
+              <li><a href="{{ $p }}"{{ if ne $i 0 }} tabindex="-1"{{ end }}>{{ .label | default (i18n "storyRailCta") }}</a></li>
+            {{- end -}}
+          </ul>
+          {{- end -}}
+        </li>
+      {{- end -}}
+      </ul>
+    </div>
+    {{- if gt $n 1 -}}
+    <button type="button" class="story-rail__nav story-rail__nav--next story-rail__nav--side" data-story-dir="1" aria-label="{{ i18n "storyRailNext" }}"><span aria-hidden="true">›</span></button>
+    {{- end -}}
+  </div>
+  {{- if gt $n 1 -}}
+  <div class="story-rail__chrome">
+    <button type="button" class="story-rail__nav story-rail__nav--prev story-rail__nav--bar" data-story-dir="-1" aria-label="{{ i18n "storyRailPrev" }}"><span aria-hidden="true">‹</span></button>
+    <div class="story-rail__dots" role="group" aria-label="{{ i18n "storyRailDots" }}">
+      {{- range $i, $it := $items -}}
+      <button type="button" class="story-rail__dot{{ if eq $i 0 }} is-on{{ end }}" data-story-go="{{ $i }}" aria-label="{{ $it.title }}" aria-current="{{ if eq $i 0 }}true{{ else }}false{{ end }}"></button>
+      {{- end -}}
+    </div>
+    <button type="button" class="story-rail__nav story-rail__nav--next story-rail__nav--bar" data-story-dir="1" aria-label="{{ i18n "storyRailNext" }}"><span aria-hidden="true">›</span></button>
+  </div>
+  <p class="sr" data-story-status aria-live="polite"></p>
+  {{- end -}}
+</section>
+{{- end -}}
+{{- end -}}

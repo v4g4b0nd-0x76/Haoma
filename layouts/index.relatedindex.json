@@ -1,0 +1,31 @@
+{{- /* Related / recommendation graph: site-root keys + RelPermalink hrefs. */ -}}
+{{- $pages := slice -}}
+{{- range where site.RegularPages "Draft" false -}}
+  {{- $key := "" -}}
+  {{- if and (eq .Section "cultures") .Params.culture .Params.sec -}}
+    {{- $key = printf "/cultures/%s/%s/%s/" .Params.culture .Params.sec .File.ContentBaseName -}}
+  {{- else if eq .Section "episodes" -}}
+    {{- $key = printf "/episodes/%s/" .File.ContentBaseName -}}
+  {{- else if eq .Section "compare" -}}
+    {{- $key = printf "/compare/%s/" .File.ContentBaseName -}}
+  {{- else -}}
+    {{- continue -}}
+  {{- end -}}
+  {{- $rel := slice -}}
+  {{- range (.Params.related | default slice) -}}
+    {{- $rel = $rel | append (strings.TrimSuffix "/" . | printf "%s/") -}}
+  {{- end -}}
+  {{- $themes := slice -}}
+  {{- range (.Params.themes | default slice) }}{{ $themes = $themes | append . }}{{ end -}}
+  {{- $pages = $pages | append (dict
+    "k" $key
+    "u" .RelPermalink
+    "t" .Title
+    "g" (.Params.tagline | default "")
+    "c" (.Params.culture | default "")
+    "s" (.Params.sec | default (cond (eq .Section "episodes") "episode" (cond (eq .Section "compare") "compare" "")))
+    "m" $themes
+    "r" $rel
+  ) -}}
+{{- end -}}
+{{ dict "lang" site.Language.Lang "pages" $pages | jsonify }}

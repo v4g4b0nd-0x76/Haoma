@@ -1,0 +1,28 @@
+{{- /* Compact header preview: cycles latest episodes ↔ articles; dismissible. */ -}}
+{{- $eps := first 6 (where site.RegularPages "Section" "episodes") -}}
+{{- $arts := first 6 (where site.RegularPages "Section" "cultures") -}}
+{{- $n := add (len $eps) (len $arts) -}}
+{{- if gt $n 0 -}}
+<div class="ntick" id="news-tick" hidden data-interval="6000" aria-live="polite" data-label-episode="{{ i18n "tickEpisode" }}" data-label-article="{{ i18n "tickArticle" }}" data-label-now="{{ i18n "tickNow" }}">
+  <a class="ntick__hit" data-ntick-link href="#">
+    <span class="ntick__mark" aria-hidden="true"></span>
+    <span class="ntick__meta">
+      <span class="ntick__now">{{ i18n "tickNow" }}</span>
+      <span class="ntick__kind" data-ntick-kind></span>
+    </span>
+    <span class="ntick__title" data-ntick-title></span>
+  </a>
+  <button type="button" class="ntick__close" data-ntick-close aria-label="{{ i18n "tickClose" }}">×</button>
+  <script type="application/json" id="news-tick-data">[
+{{- $sep := false -}}
+{{- range $eps -}}
+{{- if $sep }},{{ end }}{{- $sep = true -}}
+{{ dict "kind" "episode" "title" .Title "href" .RelPermalink | jsonify | safeJS }}
+{{- end -}}
+{{- range $arts -}}
+{{- if $sep }},{{ end }}{{- $sep = true -}}
+{{ dict "kind" "article" "title" .Title "href" .RelPermalink | jsonify | safeJS }}
+{{- end -}}
+]</script>
+</div>
+{{- end -}}

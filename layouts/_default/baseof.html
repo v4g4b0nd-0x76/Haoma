@@ -9,8 +9,8 @@
 <link rel="icon" type="image/png" sizes="192x192" href="{{ "img/brand/favicon-192.png" | relURL }}">
 <link rel="apple-touch-icon" href="{{ "img/brand/apple-touch-icon.png" | relURL }}">
 <meta name="theme-color" content="#14161a">
-<script src="{{ printf "%s?v=cookie-1" ("js/boot.js" | relURL) }}"></script>
-<link rel="stylesheet" href="{{ printf "%s?v=cult-flourish-1" ("css/style.css" | relURL) }}">
+<script src="{{ printf "%s?v=cookie-3" ("js/boot.js" | relURL) }}"></script>
+<link rel="stylesheet" href="{{ printf "%s?v=card-hover-3" ("css/style.css" | relURL) }}">
 <style>{{ range $k, $t := site.Data.themes }}[data-culture="{{ $k }}"]{--accent:{{ $t.accent | safeCSS }};--bg:{{ $t.bg | safeCSS }};--surface:{{ $t.surface | safeCSS }};--border:{{ $t.border | safeCSS }};--text:{{ $t.text | safeCSS }};--muted:{{ $t.muted | safeCSS }};--anim:{{ $t.anim | default "none" | safeCSS }};--meander:var(--m-{{ $t.pattern | default "none" | safeCSS }});--rune:{{ printf "%q" ($t.glyphs | default "") | safeCSS }}}
 {{ end }}</style>
 {{- if eq site.Language.Lang "fa" -}}
@@ -26,11 +26,12 @@
 <link rel="alternate" type="application/json" href="{{ .Permalink }}" title="search">
 {{- end }}
 </head>
-<body>
+<body{{ if .IsHome }} class="is-home"{{ end }}>
 <div class="bg"></div>
 <header class="top">
   <a class="brand" href="{{ site.Home.RelPermalink }}" aria-label="{{ site.Title }}">{{ partial "logo.html" (dict "v" "word" "id" "h") }}</a>
   <nav>{{ range index site.Data.nav site.Language.Lang }}<a href="{{ .url | relLangURL }}">{{ .name }}</a>{{ end }}</nav>
+  {{ partial "news-tick.html" . }}
   <div class="ctrl">
     <div class="search" id="site-search">
       <button type="button" class="search__open" aria-expanded="false" aria-controls="search-panel" title="{{ i18n "searchOpen" }}" aria-label="{{ i18n "searchOpen" }}">⌕</button>
@@ -86,7 +87,18 @@
 {{ if and .Params.culture (ne .Params.culture "base") }}<div class="cult-eggs" data-culture-eggs aria-hidden="true"><i class="cult-eggs__scroll"></i></div>{{ end }}
 {{ partial "cookie.html" . }}
 <script src="{{ printf "%s?v=cult-flourish-1" ("js/site.js" | relURL) }}"></script>
+<script src="{{ printf "%s?v=news-tick-2" ("js/news-tick.js" | relURL) }}"></script>
 <script src="{{ printf "%s?v=basepath-2" ("js/search.js" | relURL) }}"></script>
 {{ if and .Params.culture (not .Params.sec) }}<script src="{{ printf "%s?v=tour-here-1" ("js/mindmap.js" | relURL) }}"></script>{{ end }}
+{{- if and (or .Params.culture (eq .Section "episodes")) (partial "section-enabled.html" (dict "name" "recommendations" "culture" (.Params.culture | default ""))) -}}
+<script src="{{ printf "%s?v=recs-1" ("js/recs.js" | relURL) }}"></script>
+{{- end -}}
+{{- if partial "section-enabled.html" (dict "name" "stories" "culture" (.Params.culture | default "")) -}}
+<script src="{{ printf "%s?v=stories-4" ("js/stories.js" | relURL) }}"></script>
+{{- end -}}
+{{- if .IsHome -}}
+<script src="{{ printf "%s?v=worlds-3" ("js/worlds.js" | relURL) }}"></script>
+<script src="{{ printf "%s?v=home-scroll-2" ("js/home-scroll.js" | relURL) }}"></script>
+{{- end -}}
 </body>
 </html>
