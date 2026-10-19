@@ -280,7 +280,7 @@
 [storyRailTitle]
   other = "نگاه‌ها"
 [storyRailLead]
-  other = "نگاه‌های کوتاه از بهترین‌نامه — بکشید یا لمس کنید تا به مقالهٔ کامل برسید."
+  other = "نگاه‌های کوتاه از بهترین‌نامه — بکشید یا بزنید تا مقالهٔ کامل باز شود."
 [storyRailKicker]
   other = "بهترین‌نامه"
 [storyRailCta]
@@ -292,7 +292,7 @@
 [storyRailDots]
   other = "فهرست داستانک‌ها"
 [storyRailSwipe]
-  other = "برای نگاه بعدی بکشید"
+  other = "بکشید تا بعدی را ببینید"
 [cookieKicker]
   other = "این جهان به یاد می‌سپارد"
 [cookieTitle]
@@ -316,18 +316,18 @@
 [pwaLater]
   other = "الان نه"
 [pwaBody]
-  other = "هوم را به صفحهٔ اصلی اضافه کنید تا سریع به قسمت‌ها و داستانک‌ها برسید."
+  other = "هوم را به صفحهٔ اصلی گوشی اضافه کنید تا قسمت‌ها و داستانک‌ها دمِ دستتان باشد."
 [pwaIosTip]
-  other = "در آیفون یا آیپد: Share را بزنید، سپس Add to Home Screen."
+  other = "در آیفون یا آیپد: «اشتراک‌گذاری» را بزنید، بعد «افزودن به صفحهٔ اصلی» را انتخاب کنید."
 [pwaShortcutEpisodes]
   other = "تازه‌ترین قسمت‌ها"
 [pwaShortcutEpisodesShort]
   other = "قسمت‌ها"
 [pwaShortcutEpisodesDesc]
-  other = "فهرست قسمت‌های پادکست"
+  other = "باز کردن فهرست قسمت‌های پادکست"
 [pwaShortcutStories]
   other = "داستانک‌ها"
 [pwaShortcutStoriesShort]
-  other = "داستانک"
+  other = "داستانک‌ها"
 [pwaShortcutStoriesDesc]
-  other = "پرش به نگاه‌های کوتاه در صفحهٔ اصلی"
+  other = "رفتن به داستانک‌های کوتاه صفحهٔ اصلی"
