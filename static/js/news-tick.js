@@ -62,7 +62,23 @@
     return;
   }
 
+  function normPath(href) {
+    try {
+      var u = new URL(href, location.href);
+      return (u.pathname || "/").replace(/\/+$/, "") || "/";
+    } catch (e) {
+      return "";
+    }
+  }
+  var here = normPath(location.href);
+
   var i = 0;
+  for (var s = 0; s < items.length; s++) {
+    if (normPath(items[s].href) !== here) {
+      i = s;
+      break;
+    }
+  }
   var timer = null;
   var reduced = false;
   try {
@@ -87,7 +103,7 @@
     paint(i);
   }
 
-  paint(0);
+  paint(i);
   root.hidden = false;
   root.removeAttribute("aria-hidden");
 
@@ -104,5 +120,18 @@
     });
   }
 
-  if (closeBtn) closeBtn.addEventListener("click", closeAndRemember);
+  /* Same-page click: avoid reload that can flash a mid-layout header state. */
+  linkEl.addEventListener("click", function (ev) {
+    if (normPath(linkEl.href) === here) {
+      ev.preventDefault();
+    }
+  });
+
+  if (closeBtn) {
+    closeBtn.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      closeAndRemember();
+    });
+  }
 })();

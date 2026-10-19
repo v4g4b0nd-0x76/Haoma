@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="{{ "img/brand/apple-touch-icon.png" | relURL }}">
 <meta name="theme-color" content="#14161a">
 <script src="{{ printf "%s?v=cookie-3" ("js/boot.js" | relURL) }}"></script>
-<link rel="stylesheet" href="{{ printf "%s?v=card-hover-3" ("css/style.css" | relURL) }}">
+<link rel="stylesheet" href="{{ printf "%s?v=ntick-nav-1" ("css/style.css" | relURL) }}">
 <style>{{ range $k, $t := site.Data.themes }}[data-culture="{{ $k }}"]{--accent:{{ $t.accent | safeCSS }};--bg:{{ $t.bg | safeCSS }};--surface:{{ $t.surface | safeCSS }};--border:{{ $t.border | safeCSS }};--text:{{ $t.text | safeCSS }};--muted:{{ $t.muted | safeCSS }};--anim:{{ $t.anim | default "none" | safeCSS }};--meander:var(--m-{{ $t.pattern | default "none" | safeCSS }});--rune:{{ printf "%q" ($t.glyphs | default "") | safeCSS }}}
 {{ end }}</style>
 {{- if eq site.Language.Lang "fa" -}}
@@ -87,7 +87,7 @@
 {{ if and .Params.culture (ne .Params.culture "base") }}<div class="cult-eggs" data-culture-eggs aria-hidden="true"><i class="cult-eggs__scroll"></i></div>{{ end }}
 {{ partial "cookie.html" . }}
 <script src="{{ printf "%s?v=cult-flourish-1" ("js/site.js" | relURL) }}"></script>
-<script src="{{ printf "%s?v=news-tick-2" ("js/news-tick.js" | relURL) }}"></script>
+<script src="{{ printf "%s?v=news-tick-3" ("js/news-tick.js" | relURL) }}"></script>
 <script src="{{ printf "%s?v=basepath-2" ("js/search.js" | relURL) }}"></script>
 {{ if and .Params.culture (not .Params.sec) }}<script src="{{ printf "%s?v=tour-here-1" ("js/mindmap.js" | relURL) }}"></script>{{ end }}
 {{- if and (or .Params.culture (eq .Section "episodes")) (partial "section-enabled.html" (dict "name" "recommendations" "culture" (.Params.culture | default ""))) -}}
