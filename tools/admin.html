@@ -82,7 +82,6 @@ pre{
 #app.note-mode{--_rail:var(--rail-icon)}
 #app.note-mode.rail-collapsed{--_rail:0px}
 #app.note-mode #main{padding:0;display:flex;flex-direction:column;overflow:hidden;width:100%;max-width:none;min-width:0}
-#app.note-mode #panel{padding:6px 4px}
 #app.note-mode #rl .rb{
   justify-content:center;padding:10px 4px;gap:0;font-size:0;min-height:40px;
 }
@@ -127,7 +126,8 @@ html[dir=rtl] #app.note-mode #rl .rb.on{box-shadow:inset 0 0 0 1px color-mix(in 
 }
 #btn-menu{display:none}
 #btn-panel{display:none}
-#app.note-mode:not(.nolist):not(.static) #btn-panel{display:inline-flex}
+#app:not(.nolist):not(.static) #btn-panel{display:inline-flex}
+#btn-panel.on{color:var(--a2);background:var(--a-dim);border-color:transparent}
 
 #rail{
   grid-column:1;grid-row:2;
@@ -176,26 +176,54 @@ html[dir=rtl] #app.note-mode #rl .rb.on{box-shadow:inset 0 0 0 1px color-mix(in 
 .pend .row{display:flex;gap:6px}.pend .row button{flex:1;padding:8px 6px;min-height:40px}
 
 #panel-resizer{
-  grid-column:2;grid-row:2;width:6px;margin-inline-end:-3px;
+  grid-column:2;grid-row:2;width:8px;margin-inline-end:-4px;
   cursor:col-resize;position:relative;z-index:5;justify-self:end;align-self:stretch;
-  background:transparent;
+  background:transparent;touch-action:none;
+}
+#panel-resizer::before{
+  content:"";position:absolute;top:50%;inset-inline:2px;height:28px;margin-top:-14px;
+  border-radius:99px;background:rgba(255,255,255,.14);opacity:0;transition:opacity .12s;
 }
 #panel-resizer::after{
   content:"";position:absolute;inset:0 -2px;border-radius:2px;
 }
+#panel-resizer:hover::before,#panel-resizer.dragging::before{opacity:1}
 #panel-resizer:hover::after,#panel-resizer.dragging::after{background:var(--a-glow)}
-#app.nolist #panel-resizer,#app.static #panel-resizer{display:none}
+#panel-resizer:focus-visible{outline:2px solid var(--a);outline-offset:-2px}
+#app.nolist #panel-resizer,#app.static #panel-resizer,
+#app.panel-collapsed #panel-resizer{display:none}
 
 #panel{
   grid-column:2;grid-row:2;
   background:var(--bg2);
   border-inline-end:1px solid var(--b);
-  overflow:auto;padding:10px 8px;
+  display:flex;flex-direction:column;
+  overflow:hidden;padding:0;
   min-width:0;
+}
+.panel-head{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:6px 6px 6px 10px;flex-shrink:0;
+  border-bottom:1px solid var(--b);
+  min-height:36px;
+}
+.panel-head__title{
+  font-size:11px;font-weight:650;letter-spacing:.04em;text-transform:uppercase;
+  color:var(--m);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+#btn-panel-close{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;padding:0;border:0;border-radius:6px;
+  background:transparent;color:var(--m);flex:0 0 auto;font-size:15px;line-height:1;
+}
+#btn-panel-close:hover{background:rgba(255,255,255,.06);color:var(--t)}
+#panel-body{
+  flex:1;min-height:0;overflow:auto;padding:10px 8px;
   scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.12) transparent;
 }
-#panel::-webkit-scrollbar{width:6px}
-#panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:99px}
+#panel-body::-webkit-scrollbar{width:6px}
+#panel-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12);border-radius:99px}
+#app.note-mode #panel-body{padding:6px 4px}
 
 #main{
   grid-column:3;grid-row:2;
@@ -519,6 +547,7 @@ table .acts button{padding:6px 10px;font-size:12.5px;min-height:34px}
 }
 .note__actions button.pri:hover:not(:disabled){filter:brightness(1.05);background:linear-gradient(180deg,var(--a2),var(--a))}
 .note__actions #btn-pages,.note__actions #btn-fullw{min-width:auto;padding:4px 8px;color:var(--m2)}
+.note__actions #btn-pages.on{color:var(--a2);background:var(--a-dim)}
 .note__actions #btn-fullw.on{color:var(--a2);background:var(--a-dim)}
 .note__actions #em{margin-inline-start:6px;font-size:12px}
 .note__scroll{
@@ -738,7 +767,9 @@ html[dir=rtl] #app.mobile-nav #rail{inset:var(--top-h) 0 0 auto}
     grid-template-rows:var(--top-h) auto minmax(0,1fr) auto;
   }
   #btn-menu{display:inline-flex}
-  #btn-rail,#btn-panel{display:none}
+  #btn-rail{display:none}
+  #btn-panel{display:none}
+  #app.panel-collapsed:not(.nolist):not(.static) #btn-panel{display:inline-flex}
   #rail{
     position:fixed;inset:var(--top-h) auto 0 0;width:min(280px,86vw);
     transform:translateX(-105%);transition:transform .18s ease;
@@ -751,7 +782,7 @@ html[dir=rtl] #app.mobile-nav #rail{inset:var(--top-h) 0 0 auto}
   #app.note-mode .rbot .side-help,#app.note-mode #branch{display:block}
   #panel{
     grid-column:1;grid-row:2;max-height:34vh;border-inline-end:0;border-bottom:1px solid var(--b);
-    --_panel:auto;display:block;
+    --_panel:auto;display:flex;flex-direction:column;
   }
   #app.nolist #panel,#app.static #panel,#app.panel-collapsed #panel{display:none}
   #panel-resizer{display:none!important}
@@ -782,6 +813,56 @@ html[dir=rtl] #app.mobile-nav #rail{inset:var(--top-h) 0 0 auto}
   button, .chip, .ppick-filters button{min-height:40px}
 }
 
+/* ===== selects: dark-theme contrast (keep last — overrides transparent note props) ===== */
+html{color-scheme:dark}
+#app select,
+.note select,
+select{
+  color-scheme:dark;
+  background-color:var(--bg2);
+  color:var(--t);
+  border-color:var(--b);
+}
+#app select:hover,
+.note select:hover,
+select:hover{
+  background-color:var(--s2);
+  color:var(--t);
+  border-color:var(--b2);
+}
+#app select:focus,
+#app select:focus-visible,
+.note select:focus,
+.note select:focus-visible,
+select:focus,
+select:focus-visible{
+  background-color:var(--s2);
+  color:var(--t);
+  border-color:var(--a);
+}
+#app select option,
+#app select optgroup,
+.note select option,
+.note select optgroup,
+select option,
+select optgroup{
+  background-color:var(--s2);
+  color:var(--t);
+}
+/* Note property rows: opaque dark surface (transparent + light text = white-on-white in Chromium) */
+.note__props .inner select,
+.note__props .inner select:hover,
+.note__props .inner select:focus{
+  background-color:var(--bg2);
+  color:var(--t);
+  border:1px solid var(--b);
+}
+.note__props .inner select:hover,
+.note__props .inner select:focus{
+  background-color:var(--s2);
+  border-color:var(--b2);
+}
+
 </style></head><body>
 <div id="ctx" hidden></div>
 <div id="scrim" aria-hidden="true"></div>
@@ -789,7 +870,7 @@ html[dir=rtl] #app.mobile-nav #rail{inset:var(--top-h) 0 0 auto}
   <header id="topbar">
     <button type="button" id="btn-menu" title="Menu" aria-label="Menu">☰</button>
     <button type="button" id="btn-rail" title="Collapse sidebar" aria-label="Collapse sidebar">«</button>
-    <button type="button" id="btn-panel" title="Toggle page list" aria-label="Toggle page list" hidden>☰</button>
+    <button type="button" id="btn-panel" title="Toggle page list" aria-label="Toggle page list" aria-pressed="false">☰</button>
     <div class="tb-brand">
       <svg class="logo-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="hg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6cf7a"/><stop offset="1" stop-color="#d9972c"/></linearGradient></defs><rect x="3" y="3" width="94" height="94" rx="3" fill="none" stroke="url(#hg)" stroke-width="1.6"/><rect x="9" y="9" width="82" height="82" rx="1.5" fill="none" stroke="url(#hg)" stroke-width=".8" opacity=".75"/><path d="M297 118Q181 118 123 34Q65 -50 65 -205Q65 -277 84 -330Q104 -382 136 -410Q168 -438 205 -438Q266 -438 306 -380Q346 -321 346 -208Q346 -177 336 -151Q325 -125 296 -109Q266 -93 209 -93H163Q171 -59 186 -27Q201 5 228 26Q255 46 297 46Q392 46 430 -11Q467 -68 467 -188V-428H536Q545 -409 550 -380Q556 -352 556 -332Q556 -290 577 -270Q598 -251 621 -251Q656 -251 672 -273Q688 -295 688 -338V-428H757Q765 -405 771 -374Q777 -343 777 -322Q777 -253 738 -216Q699 -178 621 -178Q604 -178 587 -183Q570 -188 556 -199V-184Q556 -29 496 44Q437 118 297 118ZM155 -161H199Q231 -161 244 -174Q257 -187 257 -210Q257 -284 244 -324Q231 -365 206 -365Q180 -365 167 -319Q154 -273 154 -199Q154 -190 154 -180Q154 -171 155 -161Z" transform="translate(19.25 61.69) scale(0.07303)" fill="url(#hg)"/></svg>
       <div style="min-width:0">
@@ -821,8 +902,14 @@ html[dir=rtl] #app.mobile-nav #rail{inset:var(--top-h) 0 0 auto}
       <button id="bundo" data-i18n="undo_last">↶ Undo last change</button>
     </div>
   </nav>
-  <div id="panel"></div>
-  <div id="panel-resizer" title="Drag to resize" aria-hidden="true"></div>
+  <aside id="panel" aria-label="Page list">
+    <div class="panel-head">
+      <span class="panel-head__title" id="panel-label">Pages</span>
+      <button type="button" id="btn-panel-close" title="Hide page list" aria-label="Hide page list">✕</button>
+    </div>
+    <div id="panel-body"></div>
+  </aside>
+  <div id="panel-resizer" title="Drag to resize" role="separator" aria-orientation="vertical" aria-label="Resize page list" tabindex="0"></div>
   <div id="main"></div>
   <div id="pvwrap">
     <div class="row">
@@ -845,7 +932,8 @@ en:{
  v_dash:'Dashboard',v_content:'Content',v_drafts:'Drafts',v_themes:'Themes',v_art:'Prompt generator',v_nav:'Navigation',v_review:'Review',v_library:'Library',v_files:'Files',v_history:'History',v_publish:'Publish & PR',v_settings:'Settings',
  panels:'Panels',panels_title:'Show / hide panels',panels_help:'Toggle which panels appear in the left rail. Core panels (Dashboard, Content, Settings) cannot be hidden.',
  save_all:'Save all',save_all_files:'Save all to files',discard:'Discard',undo_last:'Undo last change',preview_btn:'Preview',preview_stop:'Stop preview',check_build:'Check build',follow_editor:'Follow editor',
- side_help:'Drafts stay private until you Save.',collapse_rail:'Collapse sidebar',expand_rail:'Expand sidebar',menu_btn:'Menu',
+ side_help:'Drafts stay private until you Save.',collapse_rail:'Collapse sidebar',expand_rail:'Expand sidebar',
+ collapse_panel:'Hide page list',expand_panel:'Show page list',pages_btn:'Pages',resize_panel:'Drag to resize page list',menu_btn:'Menu',
  logo:'Haoma editor',lang_btn:'فارسی',lang_btn_to_en:'English',
  pend:'● {n} temporary draft',pend_s:'● {n} temporary drafts',
  saved:'Saved ✓',restored:'Restored {n} temporary draft(s)',
@@ -907,7 +995,8 @@ fa:{
  v_dash:'Dashboard',v_content:'Content',v_drafts:'Drafts',v_themes:'Themes',v_art:'Prompt generator',v_nav:'Navigation',v_review:'Review',v_library:'Library',v_files:'Files',v_history:'History',v_publish:'Publish & PR',v_settings:'Settings',
  panels:'Panels',panels_title:'نمایش / مخفی کردن Panels',panels_help:'از اینجا مشخص کنید کدام Panelها در نوار کناری باشند. Dashboard، Content و Settings همیشه می‌مانند.',
  save_all:'Save همه',save_all_files:'Save همه روی فایل‌ها',discard:'Discard',undo_last:'Undo آخرین تغییر',preview_btn:'Preview',preview_stop:'توقف Preview',check_build:'Check build',follow_editor:'همراه با editor',
- side_help:'Draftها تا Save خصوصی می‌مانند.',collapse_rail:'بستن نوار کناری',expand_rail:'باز کردن نوار کناری',menu_btn:'منو',
+ side_help:'Draftها تا Save خصوصی می‌مانند.',collapse_rail:'بستن نوار کناری',expand_rail:'باز کردن نوار کناری',
+ collapse_panel:'بستن فهرست صفحات',expand_panel:'نمایش فهرست صفحات',pages_btn:'صفحات',resize_panel:'کشیدن برای تغییر عرض فهرست',menu_btn:'منو',
  logo:'ویرایشگر Haoma',lang_btn:'English',lang_btn_to_en:'English',
  pend:'● {n} draft موقت',pend_s:'● {n} draft موقت',
  saved:'Save شد ✓',restored:'{n} draft موقت برگردانده شد',
@@ -974,9 +1063,13 @@ function paintChrome(){
  const vl=$('#viewLabel');if(vl&&typeof VIEWS!=='undefined'&&VIEWS[view])vl.textContent=t(VIEWS[view][1]);
  document.querySelectorAll('[data-i18n]').forEach(el=>{const k=el.getAttribute('data-i18n');if(!k)return;if(el.id==='bpv'&&typeof pvOn!=='undefined'&&pvOn){el.textContent=t('preview_stop');return}el.textContent=t(k)});
  const bl=$('#blang');if(bl){bl.textContent=uiLang==='fa'?t('lang_btn_to_en'):t('lang_btn');bl.title=uiLang==='fa'?'Switch UI to English':'زبان رابط: فارسی'}
- const br=$('#btn-rail');if(br){const col=$('#app')&&$('#app').classList.contains('rail-collapsed');br.textContent=col?'»':'«';br.title=t(col?'expand_rail':'collapse_rail');br.setAttribute('aria-label',br.title)}
+ const br=$('#btn-rail');if(br){const col=$('#app')&&$('#app').classList.contains('rail-collapsed');br.textContent=col?'»':'«';br.title=t(col?'expand_rail':'collapse_rail');br.setAttribute('aria-label',br.title);br.setAttribute('aria-pressed',col?'true':'false')}
+ const bp=$('#btn-panel');if(bp){const hid=$('#app')&&$('#app').classList.contains('panel-collapsed');bp.title=t(hid?'expand_panel':'collapse_panel');bp.setAttribute('aria-label',bp.title);bp.setAttribute('aria-pressed',hid?'true':'false');bp.classList.toggle('on',!!hid)}
+ const bc=$('#btn-panel-close');if(bc){bc.title=t('collapse_panel');bc.setAttribute('aria-label',t('collapse_panel'))}
+ const rez=$('#panel-resizer');if(rez){rez.title=t('resize_panel');rez.setAttribute('aria-label',t('resize_panel'))}
  const bm=$('#btn-menu');if(bm){bm.title=t('menu_btn');bm.setAttribute('aria-label',t('menu_btn'))}
- const ss=$('#sa_side');if(ss)ss.textContent=t('save_all_files')}
+ const ss=$('#sa_side');if(ss)ss.textContent=t('save_all_files');
+ if(typeof syncLayoutChrome==='function')syncLayoutChrome()}
 function setUiLang(l){uiLang=l==='fa'?'fa':'en';try{localStorage.setItem('haoma_editor_lang',uiLang)}catch(e){}paintChrome();if(typeof render==='function')render()}
 const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 async function api(p,o={}){const r=await fetch('/api/'+p,{...o,headers:{'X-Token':T}});const ct=r.headers.get('content-type')||'';const d=ct.includes('json')?await r.json():await r.text();if(!r.ok)throw new Error(d.error||d);return d}
@@ -1020,7 +1113,11 @@ function render(){paintChrome();closeMobileNav();$('#rl').innerHTML='';for(const
  const cfg=document.createElement('button');cfg.className='rb';cfg.title=t('panels_title');cfg.innerHTML=`<span>⊞</span><span style="color:var(--m);font-size:11px">${t('panels')}</span>`;cfg.onclick=pPanelConfig;$('#rl').append(cfg);
  if(hiddenPanels.has(view)){view='dash'}
  const vl=$('#viewLabel');if(vl)vl.textContent=t(VIEWS[view][1]);
- $('#app').classList.toggle('nolist',!VIEWS[view][3]);$('#app').classList.remove('note-mode');$('#panel').innerHTML='';$('#main').innerHTML='';VIEWS[view][2]()}
+ $('#app').classList.toggle('nolist',!VIEWS[view][3]);$('#app').classList.remove('note-mode');
+ const pb=$('#panel-body');if(pb)pb.innerHTML='';$('#main').innerHTML='';
+ const pl=$('#panel-label');if(pl){const labels={content:'pages_btn',themes:'v_themes',nav:'v_nav',files:'v_files',art:'v_art'};pl.textContent=t(labels[view]||'pages_btn')}
+ if(typeof syncLayoutChrome==='function')syncLayoutChrome();
+ VIEWS[view][2]()}
 function list(paths,filter=''){return paths.filter(p=>p.includes(filter)).map(p=>`<button class="item ${p===cur?'on':''}" data-p="${esc(p)}" title="${esc(p)}">${drafts.has(p)?'● ':''}${esc(p.replace(/^content\//,''))}</button>`).join('')}
 function bindItems(){
  document.querySelectorAll('#panel .item').forEach(b=>{b.onclick=()=>openFile(b.dataset.p);b.oncontextmenu=e=>{e.preventDefault();showCtx(e.clientX,e.clientY,treeCtx(b.dataset.p))}});
@@ -1183,7 +1280,7 @@ function ctree(paths,filter){
   return`<details open><summary>${lang==='en'?'English':lang==='fa'?'فارسی':lang}</summary>${cultHtml}${topHtml}</details>`;
  }).join('');
 }
-function pContent(){const md=allFiles().filter(f=>f.startsWith('content/'));$('#panel').innerHTML=`<div class="vault-tools"><button class="pri" id="np">${t('btn_page')}</button><button id="nc">${t('btn_cult')}</button></div><input type="search" class="vault-search" id="cs" placeholder="${t('find_page')}" autocomplete="off"><div id="ct">${ctree(md,'')}</div>`;bindItems();$('#np').onclick=()=>wizPage();$('#nc').onclick=wizCulture;$('#cs').oninput=()=>{$('#ct').innerHTML=ctree(md,$('#cs').value);bindItems()}}
+function pContent(){const md=allFiles().filter(f=>f.startsWith('content/'));$('#panel-body').innerHTML=`<div class="vault-tools"><button class="pri" id="np">${t('btn_page')}</button><button id="nc">${t('btn_cult')}</button></div><input type="search" class="vault-search" id="cs" placeholder="${t('find_page')}" autocomplete="off"><div id="ct">${ctree(md,'')}</div>`;bindItems();$('#np').onclick=()=>wizPage();$('#nc').onclick=wizCulture;$('#cs').oninput=()=>{$('#ct').innerHTML=ctree(md,$('#cs').value);bindItems()}}
 /* ===== dashboard / review ===== */
 const issues={drafts:a=>a.draft&&!a.index,stale:a=>a.stale,nosrc:a=>!a.sources&&!a.index,untr:a=>a.missing.length&&!a.index,stubs:a=>a.stub&&!a.index,orphan:a=>a.orphan&&!a.index};
 function pDash(){const pg=audit.filter(a=>!a.index),n=k=>audit.filter(issues[k]).length,ch=(git.status||'').split('\n').filter(Boolean);
@@ -1496,7 +1593,7 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
  if(drafts.has(p)){$('#em').textContent='● unsaved';$('#em').className='msg warn'}
  ta.oninput=()=>{prev();mark()};wordCount();
  if($('#btn-fullw'))$('#btn-fullw').onclick=()=>{const n=document.querySelector('.note');const b=$('#btn-fullw');if(!n||!b)return;n.classList.toggle('full-width');const on=n.classList.contains('full-width');b.classList.toggle('on',on);b.textContent=on?'Full width':'Narrow';b.title=on?'Editor full width (on)':'Soft max prose width';try{localStorage.setItem('haoma_note_full',on?'1':'0')}catch(e){}};
- if($('#btn-pages'))$('#btn-pages').onclick=()=>{const a=$('#app');a.classList.toggle('panel-collapsed');try{localStorage.setItem('haoma_panel_collapsed',a.classList.contains('panel-collapsed')?'1':'0')}catch(e){}};
+ if($('#btn-pages')){$('#btn-pages').onclick=()=>togglePanelCollapsed();syncLayoutChrome()}
  if(hasFm){const FM=$('#fm');FM.value=sp.fm;
   const sync=()=>{let f=FM.value;f=setK(f,'title',$('#mt').value);f=setK(f,'tagline',$('#mg').value);f=setK(f,'grade',$('#mr').value);f=setK(f,'reviewed',$('#mv').value);f=setSrc(f,$('#ms').value.split('\n').map(s=>s.trim()).filter(Boolean));
    const rel=[...document.querySelectorAll('#mrel .relchip.on')].map(c=>c.dataset.u).filter(Boolean);f=setRel(f,rel);
@@ -1766,7 +1863,7 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
    await putBin(path,f);wrap(img?`![${leaf}](/${dir}${leaf})`:(au||ext==='pdf')?`\n{{< media src="${dir}${leaf}" >}}\n`:`[${leaf}](/${dir}${leaf})`,'');say('Attached '+leaf+' (unsaved)','warn')}}}
 /* ===== themes (edits are drafts of data/themes.json) ===== */
 const COLS=[['bg','Background'],['surface','Surface'],['border','Border'],['text','Text'],['muted','Muted'],['accent','Accent']];
-function pThemes(){const all=themes();$('#panel').innerHTML=Object.keys(all).map(k=>`<button class="item ${k===cT?'on':''}" data-k="${k}">${k==='base'?'General (no culture)':k}</button>`).join('');document.querySelectorAll('#panel .item').forEach(b=>b.onclick=()=>{cT=b.dataset.k;pThemes()});if(cT&&all[cT])pickTheme(cT)}
+function pThemes(){const all=themes();$('#panel-body').innerHTML=Object.keys(all).map(k=>`<button class="item ${k===cT?'on':''}" data-k="${k}">${k==='base'?'General (no culture)':k}</button>`).join('');document.querySelectorAll('#panel .item').forEach(b=>b.onclick=()=>{cT=b.dataset.k;pThemes()});if(cT&&all[cT])pickTheme(cT)}
 const themeFiles=()=>['data/themes.json',...[...drafts.keys()].filter(p=>p.startsWith('static/img/'))];
 function pickTheme(k){show(k==='base'?'':'cultures/'+k+'/');const all=themes(),t=all[k],imgs=allFiles().filter(f=>f.startsWith('static/img/')&&/\.(svg|png|jpe?g|webp)$/.test(f)).map(f=>f.slice(11));if(t.banner&&!imgs.includes(t.banner))imgs.push(t.banner);
  $('#main').innerHTML=`<h2>Theme: ${k==='base'?'General':k}</h2><div class="two"><div><div class="sw">${COLS.map(([c,l])=>`<div><label>${l}</label><input type="color" data-c="${c}" value="${t[c]}"></div>`).join('')}</div>
@@ -1790,7 +1887,7 @@ function genBanner(style,bg,ac){const top=mix(bg,'#000000',.4),bot=mix(bg,ac,.28
  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice"><style>.t0{animation:tw 4s ease-in-out infinite alternate}.t1{animation:tw 6s ease-in-out infinite alternate-reverse}@keyframes tw{to{opacity:.15}}.o{animation:pl 7s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes pl{to{opacity:.5;transform:scale(1.1)}}.w1{animation:sw 16s linear infinite}.w2{animation:sw 26s linear infinite reverse}@keyframes sw{to{transform:translateX(240px)}}</style><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${top}"/><stop offset="1" stop-color="${bot}"/></linearGradient></defs><rect width="1200" height="300" fill="url(#g)"/><g fill="#ffffff">${stars}</g><circle class="o" cx="900" cy="95" r="70" fill="${ac}" opacity=".18"/><circle cx="900" cy="95" r="32" fill="${ac}"/>${body}</svg>`}
 /* ===== navigation (drafts of data/nav.json) ===== */
 function pNav(){const a=nav(),langs=[...new Set([...Object.keys(a),'en','fa'])];if(!a[cN])cN=langs[0];
- $('#panel').innerHTML=langs.map(l=>{const n=(a[l]||[]).length;return `<button class="item ${l===cN?'on':''}" data-l="${l}">Menu: ${l} <span class="msg">(${n})</span></button>`}).join('');
+ $('#panel-body').innerHTML=langs.map(l=>{const n=(a[l]||[]).length;return `<button class="item ${l===cN?'on':''}" data-l="${l}">Menu: ${l} <span class="msg">(${n})</span></button>`}).join('');
  document.querySelectorAll('#panel .item').forEach(b=>b.onclick=()=>{cN=b.dataset.l;pNav()});editNav(cN)}
 function editNav(l){show(l===DL?'':l+'/');const rows=nav()[l]||[];$('#main').innerHTML=`<h2>Navigation (${l})</h2>`+(rows.length?'':`<p class="msg" style="margin:0 0 10px">This menu is empty — press “+ Add link” to add the first entry.</p>`)+rows.map((r,i)=>`<div class="row" style="margin:6px 0"><input type="text" data-i="${i}" data-f="name" value="${esc(r.name)}"><input type="text" data-i="${i}" data-f="url" value="${esc(r.url)}"><button data-u="${i}">↑</button><button data-d="${i}">↓</button><button data-x="${i}">✕</button></div>`).join('')+`<p><button id="ad">${t('nav_add')}</button> <button class="pri" id="sn">${t('nav_save')}</button> <button id="dn">${t('discard_changes')}</button><span id="wm" class="msg"></span></p><p class="msg">Link = path relative to the language root, e.g. cultures/ or about/</p>`;
  const mut=f=>{const a=nav();a[l]=a[l]||[];f(a[l]);setJ('data/nav.json',a)};
@@ -2045,7 +2142,7 @@ function pLibrary(){const chips=[['all',t('lib_all')],['pdf',t('lib_pdf')],['ima
   const m=libManifest(),id=libCatId(titles.en||titles.fa);m.categories.push({id,title:titles,pages:[]});setLibManifest(m);paint()};
  $('#libsave').onclick=()=>{const u=dirtyLib();if(!u.length){say(t('lib_save_none'),'warn');return}commit(u,'Library').then(pLibrary)}}
 /* ===== files ===== */
-function pFiles(){$('#panel').innerHTML=`<input type="text" id="ff" placeholder="filter…"><div id="fl">${list(allFiles())}</div>`;bindItems();$('#ff').oninput=()=>{$('#fl').innerHTML=list(allFiles(),$('#ff').value);document.querySelectorAll('#fl .item').forEach(b=>b.onclick=()=>openFile(b.dataset.p))}}
+function pFiles(){$('#panel-body').innerHTML=`<input type="text" id="ff" placeholder="filter…"><div id="fl">${list(allFiles())}</div>`;bindItems();$('#ff').oninput=()=>{$('#fl').innerHTML=list(allFiles(),$('#ff').value);document.querySelectorAll('#fl .item').forEach(b=>b.onclick=()=>openFile(b.dataset.p))}}
 /* ===== temporary drafts ===== */
 async function pDrafts(){const r=(await api('drafts')).items;
  $('#main').innerHTML=`<div class="page-canvas wide"><h2>${t('drafts_h')}</h2><p class="msg" style="margin:0">${t('drafts_help')}</p><div class="row" style="margin:14px 0;flex-wrap:wrap;gap:8px"><button class="pri" id="dsa" ${r.length?'':'disabled'}>${t('save_all_short')}</button><button id="dda" ${r.length?'':'disabled'}>${t('discard_all')}</button></div>
@@ -2603,7 +2700,7 @@ function buildTranslatePrompt(o){
  return{prompt,howto,spec:`${srcLang} → ${tgtLang} · ${path} → ${outPath} · agent ${agent}`,outPath,srcLang,tgtLang};
 }
 function pPrompts(){
- $('#panel').innerHTML='<p class="msg" style="padding:8px">Multi-section prompts for agents. Art → <code>art-gen-ai.md</code>. Translation → <code>translate-ai.md</code>.</p>';
+ $('#panel-body').innerHTML='<p class="msg" style="padding:8px">Multi-section prompts for agents. Art → <code>art-gen-ai.md</code>. Translation → <code>translate-ai.md</code>.</p>';
  $('#main').innerHTML=`<h2>Prompt generator</h2>
  <div class="pg-tabs" role="tablist">
   <button type="button" data-pg="art" class="${promptTab==='art'?'on':''}">Art generation</button>
@@ -2801,32 +2898,95 @@ const saveAllDrafts=()=>{if(!drafts.size){say(t('nothing_save'),'warn');return}c
 $('#sa').onclick=saveAllDrafts;if($('#sa_side'))$('#sa_side').onclick=saveAllDrafts;
 $('#da').onclick=()=>{if(confirm(t('discard_confirm')))discardPaths([...drafts.keys()])};
 /* ===== shell: collapsible rail, resizable panel, mobile nav ===== */
+const PANEL_W_MIN=200,PANEL_W_MAX=480,PANEL_W_DEFAULT=260;
+function panelWidthNow(){const app=$('#app');if(!app)return PANEL_W_DEFAULT;return parseFloat(getComputedStyle(app).getPropertyValue('--panel-w'))||PANEL_W_DEFAULT}
+function setPanelWidth(px){
+  const app=$('#app');if(!app)return;
+  const w=Math.max(PANEL_W_MIN,Math.min(PANEL_W_MAX,Math.round(px)));
+  app.style.setProperty('--panel-w',w+'px');
+  try{localStorage.setItem('haoma_panel_w',String(w))}catch(e){}
+}
+function syncLayoutChrome(){
+  const app=$('#app');if(!app)return;
+  const railCol=app.classList.contains('rail-collapsed');
+  const panelCol=app.classList.contains('panel-collapsed');
+  const br=$('#btn-rail');
+  if(br){br.textContent=railCol?'»':'«';br.title=t(railCol?'expand_rail':'collapse_rail');br.setAttribute('aria-label',br.title);br.setAttribute('aria-pressed',railCol?'true':'false')}
+  const bp=$('#btn-panel');
+  if(bp){bp.title=t(panelCol?'expand_panel':'collapse_panel');bp.setAttribute('aria-label',bp.title);bp.setAttribute('aria-pressed',panelCol?'true':'false');bp.classList.toggle('on',panelCol)}
+  const bc=$('#btn-panel-close');if(bc){bc.title=t('collapse_panel');bc.setAttribute('aria-label',t('collapse_panel'))}
+  const pages=$('#btn-pages');
+  if(pages){pages.textContent=t('pages_btn');pages.title=t(panelCol?'expand_panel':'collapse_panel');pages.classList.toggle('on',panelCol);pages.setAttribute('aria-pressed',panelCol?'true':'false')}
+  const rez=$('#panel-resizer');if(rez){rez.title=t('resize_panel');rez.setAttribute('aria-label',t('resize_panel'))}
+}
+function setRailCollapsed(on){
+  const app=$('#app');if(!app)return;
+  app.classList.toggle('rail-collapsed',!!on);
+  try{localStorage.setItem('haoma_rail_collapsed',app.classList.contains('rail-collapsed')?'1':'0')}catch(e){}
+  syncLayoutChrome();
+}
+function setPanelCollapsed(on){
+  const app=$('#app');if(!app)return;
+  if(app.classList.contains('nolist')||app.classList.contains('static'))return;
+  app.classList.toggle('panel-collapsed',!!on);
+  try{localStorage.setItem('haoma_panel_collapsed',app.classList.contains('panel-collapsed')?'1':'0')}catch(e){}
+  syncLayoutChrome();
+}
+function togglePanelCollapsed(){const app=$('#app');if(!app)return;setPanelCollapsed(!app.classList.contains('panel-collapsed'))}
+function toggleRailCollapsed(){const app=$('#app');if(!app)return;setRailCollapsed(!app.classList.contains('rail-collapsed'))}
 (function(){
   const app=$('#app');if(!app)return;
   try{if(localStorage.getItem('haoma_rail_collapsed')==='1')app.classList.add('rail-collapsed')}catch(e){}
   try{if(localStorage.getItem('haoma_panel_collapsed')==='1')app.classList.add('panel-collapsed')}catch(e){}
-  try{const w=+localStorage.getItem('haoma_panel_w');if(w>=200&&w<=480)app.style.setProperty('--panel-w',w+'px')}catch(e){}
-  const syncRailBtn=()=>{const br=$('#btn-rail');if(!br)return;const col=app.classList.contains('rail-collapsed');br.textContent=col?'»':'«';br.title=t(col?'expand_rail':'collapse_rail')};
-  if($('#btn-rail'))$('#btn-rail').onclick=()=>{app.classList.toggle('rail-collapsed');try{localStorage.setItem('haoma_rail_collapsed',app.classList.contains('rail-collapsed')?'1':'0')}catch(e){}syncRailBtn()};
+  try{const w=+localStorage.getItem('haoma_panel_w');if(w>=PANEL_W_MIN&&w<=PANEL_W_MAX)app.style.setProperty('--panel-w',w+'px')}catch(e){}
+  if($('#btn-rail'))$('#btn-rail').onclick=()=>toggleRailCollapsed();
+  if($('#btn-panel'))$('#btn-panel').onclick=()=>togglePanelCollapsed();
+  if($('#btn-panel-close'))$('#btn-panel-close').onclick=()=>setPanelCollapsed(true);
   if($('#btn-menu'))$('#btn-menu').onclick=()=>app.classList.toggle('mobile-nav');
   if($('#scrim'))$('#scrim').onclick=()=>closeMobileNav();
   const rez=$('#panel-resizer');
   if(rez){
-    let startX=0,startW=300;
+    let startX=0,startW=PANEL_W_DEFAULT;
     const onMove=e=>{
       if(app.classList.contains('panel-collapsed'))return;
+      if(e.cancelable)e.preventDefault();
       const x=e.touches?e.touches[0].clientX:e.clientX;
       const rtl=document.documentElement.dir==='rtl';
       let w=startW+(rtl?startX-x:x-startX);
-      w=Math.max(200,Math.min(480,w));
+      if(w<PANEL_W_MIN-40){setPanelCollapsed(true);onUp();return}
+      w=Math.max(PANEL_W_MIN,Math.min(PANEL_W_MAX,w));
       app.style.setProperty('--panel-w',w+'px');
     };
-    const onUp=()=>{rez.classList.remove('dragging');document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onUp);
-      try{localStorage.setItem('haoma_panel_w',getComputedStyle(app).getPropertyValue('--panel-w').trim().replace('px',''))}catch(e){}};
-    const onDown=e=>{if(app.classList.contains('nolist')||app.classList.contains('panel-collapsed'))return;e.preventDefault();rez.classList.add('dragging');startX=e.touches?e.touches[0].clientX:e.clientX;startW=parseFloat(getComputedStyle(app).getPropertyValue('--panel-w'))||300;document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);document.addEventListener('touchmove',onMove,{passive:false});document.addEventListener('touchend',onUp)};
-    rez.addEventListener('mousedown',onDown);rez.addEventListener('touchstart',onDown,{passive:false});
+    const onUp=()=>{
+      rez.classList.remove('dragging');
+      document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);
+      document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onUp);
+      if(!app.classList.contains('panel-collapsed')){
+        try{localStorage.setItem('haoma_panel_w',String(Math.round(panelWidthNow())))}catch(e){}
+      }
+    };
+    const onDown=e=>{
+      if(app.classList.contains('nolist')||app.classList.contains('static')||app.classList.contains('panel-collapsed'))return;
+      e.preventDefault();rez.classList.add('dragging');
+      startX=e.touches?e.touches[0].clientX:e.clientX;startW=panelWidthNow();
+      document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);
+      document.addEventListener('touchmove',onMove,{passive:false});document.addEventListener('touchend',onUp);
+    };
+    rez.addEventListener('mousedown',onDown);
+    rez.addEventListener('touchstart',onDown,{passive:false});
+    rez.addEventListener('dblclick',()=>{if(app.classList.contains('nolist')||app.classList.contains('panel-collapsed'))return;setPanelWidth(PANEL_W_DEFAULT)});
+    rez.addEventListener('keydown',e=>{
+      if(app.classList.contains('nolist')||app.classList.contains('panel-collapsed'))return;
+      const rtl=document.documentElement.dir==='rtl';
+      const step=e.shiftKey?24:12;
+      if(e.key==='ArrowLeft'){e.preventDefault();setPanelWidth(panelWidthNow()+(rtl?step:-step))}
+      else if(e.key==='ArrowRight'){e.preventDefault();setPanelWidth(panelWidthNow()+(rtl?-step:step))}
+      else if(e.key==='Home'){e.preventDefault();setPanelWidth(PANEL_W_MIN)}
+      else if(e.key==='End'){e.preventDefault();setPanelWidth(PANEL_W_MAX)}
+      else if(e.key==='Enter'||e.key===' '){e.preventDefault();togglePanelCollapsed()}
+    });
   }
-  syncRailBtn();
+  syncLayoutChrome();
 })();
 /* ===== boot =====
    This same file is published from GitHub Pages, where nothing answers /api.
