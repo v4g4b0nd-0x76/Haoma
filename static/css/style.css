@@ -211,11 +211,11 @@ audio{width:100%;margin:var(--s1) 0 var(--s3)}
 .cards{list-style:none;margin:var(--s3) 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:var(--s3);
   --card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M0 24h48M24 0v48' stroke='%23fff' stroke-width='.6' opacity='.35'/%3E%3C/svg%3E");
   --card-grid-size:48px;--card-motif:none;--card-motif-size:72%}
-.cards .card[data-culture=iranian],.panel[data-culture=iranian]{--accent:#e0a03a;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 2L54 28 28 54 2 28Z' fill='none' stroke='%23fff' stroke-width='.7' opacity='.45'/%3E%3Cpath d='M28 12L44 28 28 44 12 28Z' fill='none' stroke='%23fff' stroke-width='.5' opacity='.3'/%3E%3Ccircle cx='28' cy='28' r='3' fill='none' stroke='%23fff' stroke-width='.6' opacity='.35'/%3E%3C/svg%3E");--card-grid-size:56px;--card-motif:url("../img/atlas/iranian-motifs.svg?v=seal-2")}
-.cards .card[data-culture=greek],.panel[data-culture=greek]{--accent:#c98a5a;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 32h28V12H8v12h12' fill='none' stroke='%23fff' stroke-width='1.1' opacity='.4'/%3E%3C/svg%3E");--card-grid-size:40px;--card-motif:url("../img/atlas/greek-motifs.svg?v=seal-2")}
-.cards .card[data-culture=mesopotamian],.panel[data-culture=mesopotamian]{--accent:#6f8fd6;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='28'%3E%3Cpath d='M0 14l11-10 11 10 11-10 11 10' fill='none' stroke='%23fff' stroke-width='1' opacity='.42'/%3E%3C/svg%3E");--card-grid-size:44px 28px;--card-motif:url("../img/atlas/mesopotamian-motifs.svg?v=seal-2")}
-.cards .card[data-culture=indian],.panel[data-culture=indian]{--accent:#d9708f;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52'%3E%3Ccircle cx='26' cy='26' r='18' fill='none' stroke='%23fff' stroke-width='.55' opacity='.3'/%3E%3Ccircle cx='26' cy='26' r='10' fill='none' stroke='%23fff' stroke-width='.5' opacity='.34'/%3E%3Cpath d='M26 4v44M4 26h44' stroke='%23fff' stroke-width='.4' opacity='.22'/%3E%3C/svg%3E");--card-grid-size:52px;--card-motif:url("../img/atlas/indian-motifs.svg?v=seal-2")}
-.cards .card[data-culture=norse],.panel[data-culture=norse]{--accent:#7fa8c9;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 4v40M8 12l32 24M40 12L8 36' stroke='%23fff' stroke-width='.7' opacity='.36'/%3E%3C/svg%3E");--card-grid-size:48px;--card-motif:url("../img/atlas/norse-motifs.svg?v=seal-2")}
+.cards .card[data-culture=iranian],.panel[data-culture=iranian]{--accent:#e0a03a;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='56'%3E%3Cpath d='M28 2L54 28 28 54 2 28Z' fill='none' stroke='%23fff' stroke-width='.7' opacity='.45'/%3E%3Cpath d='M28 12L44 28 28 44 12 28Z' fill='none' stroke='%23fff' stroke-width='.5' opacity='.3'/%3E%3Ccircle cx='28' cy='28' r='3' fill='none' stroke='%23fff' stroke-width='.6' opacity='.35'/%3E%3C/svg%3E");--card-grid-size:56px;--card-motif:url("../img/atlas/iranian-motifs.svg?v=seal-3")}
+.cards .card[data-culture=greek],.panel[data-culture=greek]{--accent:#c98a5a;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 32h28V12H8v12h12' fill='none' stroke='%23fff' stroke-width='1.1' opacity='.4'/%3E%3C/svg%3E");--card-grid-size:40px;--card-motif:url("../img/atlas/greek-motifs.svg?v=seal-3")}
+.cards .card[data-culture=mesopotamian],.panel[data-culture=mesopotamian]{--accent:#6f8fd6;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='28'%3E%3Cpath d='M0 14l11-10 11 10 11-10 11 10' fill='none' stroke='%23fff' stroke-width='1' opacity='.42'/%3E%3C/svg%3E");--card-grid-size:44px 28px;--card-motif:url("../img/atlas/mesopotamian-motifs.svg?v=seal-3")}
+.cards .card[data-culture=indian],.panel[data-culture=indian]{--accent:#d9708f;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52'%3E%3Ccircle cx='26' cy='26' r='18' fill='none' stroke='%23fff' stroke-width='.55' opacity='.3'/%3E%3Ccircle cx='26' cy='26' r='10' fill='none' stroke='%23fff' stroke-width='.5' opacity='.34'/%3E%3Cpath d='M26 4v44M4 26h44' stroke='%23fff' stroke-width='.4' opacity='.22'/%3E%3C/svg%3E");--card-grid-size:52px;--card-motif:url("../img/atlas/indian-motifs.svg?v=seal-3")}
+.cards .card[data-culture=norse],.panel[data-culture=norse]{--accent:#7fa8c9;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 4v40M8 12l32 24M40 12L8 36' stroke='%23fff' stroke-width='.7' opacity='.36'/%3E%3C/svg%3E");--card-grid-size:48px;--card-motif:url("../img/atlas/norse-motifs.svg?v=seal-3")}
 
 /* shared shell */
 .cards .card{position:relative;display:flex;overflow:hidden;isolation:isolate;
@@ -490,11 +490,11 @@ html[lang=fa] .atlas__label{font-weight:500;font-size:.74rem}
   --atlas-grid-mesopotamian:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='28'%3E%3Cpath d='M0 14l11-10 11 10 11-10 11 10' fill='none' stroke='%23fff' stroke-width='1' opacity='.4'/%3E%3Cpath d='M0 0h44M0 28h44' stroke='%23fff' stroke-width='.4' opacity='.2'/%3E%3C/svg%3E");
   --atlas-grid-indian:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52'%3E%3Ccircle cx='26' cy='26' r='18' fill='none' stroke='%23fff' stroke-width='.55' opacity='.28'/%3E%3Ccircle cx='26' cy='26' r='10' fill='none' stroke='%23fff' stroke-width='.5' opacity='.32'/%3E%3Cpath d='M26 4v44M4 26h44M10 10l32 32M42 10L10 42' stroke='%23fff' stroke-width='.4' opacity='.22'/%3E%3C/svg%3E");
   --atlas-grid-norse:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 4v40M8 12l32 24M40 12L8 36' stroke='%23fff' stroke-width='.7' opacity='.34'/%3E%3Cpath d='M4 4h40v40H4z' fill='none' stroke='%23fff' stroke-width='.4' opacity='.2'/%3E%3C/svg%3E")}
-.atlas[data-culture=iranian]{--atlas-grid:var(--atlas-grid-iranian);--atlas-motif:url("../img/atlas/iranian-motifs.svg?v=seal-2")}
-.atlas[data-culture=greek]{--atlas-grid:var(--atlas-grid-greek);--atlas-motif:url("../img/atlas/greek-motifs.svg?v=seal-2")}
-.atlas[data-culture=mesopotamian]{--atlas-grid:var(--atlas-grid-mesopotamian);--atlas-motif:url("../img/atlas/mesopotamian-motifs.svg?v=seal-2")}
-.atlas[data-culture=indian]{--atlas-grid:var(--atlas-grid-indian);--atlas-motif:url("../img/atlas/indian-motifs.svg?v=seal-2")}
-.atlas[data-culture=norse]{--atlas-grid:var(--atlas-grid-norse);--atlas-motif:url("../img/atlas/norse-motifs.svg?v=seal-2")}
+.atlas[data-culture=iranian]{--atlas-grid:var(--atlas-grid-iranian);--atlas-motif:url("../img/atlas/iranian-motifs.svg?v=seal-3")}
+.atlas[data-culture=greek]{--atlas-grid:var(--atlas-grid-greek);--atlas-motif:url("../img/atlas/greek-motifs.svg?v=seal-3")}
+.atlas[data-culture=mesopotamian]{--atlas-grid:var(--atlas-grid-mesopotamian);--atlas-motif:url("../img/atlas/mesopotamian-motifs.svg?v=seal-3")}
+.atlas[data-culture=indian]{--atlas-grid:var(--atlas-grid-indian);--atlas-motif:url("../img/atlas/indian-motifs.svg?v=seal-3")}
+.atlas[data-culture=norse]{--atlas-grid:var(--atlas-grid-norse);--atlas-motif:url("../img/atlas/norse-motifs.svg?v=seal-3")}
 .atlas__canvas{position:relative;width:100%;min-height:360px;border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));border-radius:10px;background-color:var(--bg);background-image:
   radial-gradient(ellipse at 50% 42%,color-mix(in srgb,var(--accent) 16%,transparent),transparent 58%),
   linear-gradient(180deg,color-mix(in srgb,var(--surface) 88%,#000),var(--bg));
@@ -1413,6 +1413,126 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
   .listen,.cookie,.resume{backdrop-filter:none}
 }
 
+/* ---------- culture flourishes (hubs + articles when data-culture is set) ----------
+   Light CSS motions + micro-ornaments. Motifs are original SVG masks (atlas-style),
+   not downloaded fan art. Eggs: footer glyph, scroll seal, rare reveal class.
+   Gated JS lives in site.js (see AI.md §5). Always honour prefers-reduced-motion. */
+html[data-culture]:not([data-culture=base]){
+  --egg-mask:url("../img/ornaments/base.svg?v=cult-1");
+  --egg-glyph:"";
+  --flourish-size:88px;
+  --orn:url("../img/ornaments/base.svg?v=cult-1");
+}
+/* Per-culture micro-ornaments: original SVG files (atlas-aligned), not fan art */
+html[data-culture=iranian]{
+  /* Lotus/rosette + diamond derafsh cue — no Faravahar figure */
+  --egg-mask:url("../img/ornaments/iranian.svg?v=cult-1");
+  --orn:url("../img/ornaments/iranian.svg?v=cult-1");
+  --egg-glyph:"𐎠";
+}
+html[data-culture=greek]{
+  /* Meander corners, olive, thunderbolt */
+  --egg-mask:url("../img/ornaments/greek.svg?v=cult-1");
+  --orn:url("../img/ornaments/greek.svg?v=cult-1");
+  --egg-glyph:"Α";
+}
+html[data-culture=indian]{
+  /* Padma + abstract 8-spoke wheel + peacock-eye tip */
+  --egg-mask:url("../img/ornaments/indian.svg?v=cult-1");
+  --orn:url("../img/ornaments/indian.svg?v=cult-1");
+  --egg-glyph:"॥";
+}
+html[data-culture=mesopotamian]{
+  /* Ishtar/Inanna 8-point star, ziggurat, wedge marks */
+  --egg-mask:url("../img/ornaments/mesopotamian.svg?v=cult-1");
+  --orn:url("../img/ornaments/mesopotamian.svg?v=cult-1");
+  --egg-glyph:"𒀭";
+}
+html[data-culture=norse]{
+  /* Spare interlaced triangle + Elder Futhark line forms */
+  --egg-mask:url("../img/ornaments/norse.svg?v=cult-1");
+  --orn:url("../img/ornaments/norse.svg?v=cult-1");
+  --egg-glyph:"ᛟ";
+}
+
+/* 1) Motif strip: slow horizontal drift of the pattern mask */
+@media(prefers-reduced-motion:no-preference){
+  html[data-culture]:not([data-culture=base]) .motif::before{
+    animation:motif-drift 56s linear infinite;
+  }
+}
+@keyframes motif-drift{to{-webkit-mask-position:120px 0;mask-position:120px 0}}
+
+/* 2) Accent headpiece shimmer under article titles */
+@media(prefers-reduced-motion:no-preference){
+  html[data-culture]:not([data-culture=base]) article h1::after{
+    animation:orn-shimmer 7s ease-in-out infinite;
+  }
+}
+@keyframes orn-shimmer{
+  0%,100%{opacity:.72;filter:brightness(1)}
+  50%{opacity:.95;filter:brightness(1.25)}
+}
+
+/* 3) Soft banner parallax (same idea as cine-drift, quieter) */
+@media(prefers-reduced-motion:no-preference){
+  html[data-culture]:not([data-culture=base]) .hero-art .sfg{
+    animation:hero-soft 32s ease-in-out infinite alternate;
+    will-change:transform;
+  }
+}
+@keyframes hero-soft{
+  from{transform:scale(1.02) translateY(0)}
+  to{transform:scale(1.045) translateY(-1%)}
+}
+
+/* Chip / card hover glow tied to culture accent */
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  html[data-culture]:not([data-culture=base]) .sheet__chip:hover,
+  html[data-culture]:not([data-culture=base]) .chip:hover{
+    box-shadow:0 0 0 1px color-mix(in srgb,var(--accent) 35%,transparent),
+               0 0 18px -4px color-mix(in srgb,var(--accent) 55%,transparent);
+  }
+  html[data-culture]:not([data-culture=base]) .cards .card:hover{
+    box-shadow:0 10px 28px -14px color-mix(in srgb,var(--accent) 45%,#000);
+  }
+}
+
+/* Corner scroll-seal (appears after JS sets .eggs-awake) */
+.cult-eggs{position:fixed;inset:auto var(--safe-r,0) calc(var(--safe-b,0) + 1.2rem) auto;
+  width:var(--flourish-size);height:var(--flourish-size);z-index:3;pointer-events:none;
+  opacity:0;transform:translateY(10px) scale(.92);transition:opacity .7s ease,transform .7s ease}
+.cult-eggs__scroll{display:block;width:100%;height:100%;background:var(--accent);
+  -webkit-mask:var(--egg-mask) center/contain no-repeat;mask:var(--egg-mask) center/contain no-repeat;
+  opacity:.14}
+html.eggs-awake .cult-eggs{opacity:1;transform:none}
+@media(prefers-reduced-motion:no-preference){
+  html.eggs-awake .cult-eggs__scroll{animation:seal-breathe 9s ease-in-out infinite}
+}
+@keyframes seal-breathe{0%,100%{opacity:.12;transform:rotate(0)}50%{opacity:.2;transform:rotate(4deg)}}
+
+/* Hidden footer glyph — faint until hover / egg-lit */
+footer .cult-glyph{display:inline-block;margin-inline-start:.55em;font-size:.95em;line-height:1;
+  color:var(--accent);opacity:.18;letter-spacing:0;vertical-align:baseline;
+  transition:opacity .35s ease,transform .35s ease;cursor:default;user-select:none}
+footer .cult-glyph::before{content:var(--egg-glyph)}
+footer:hover .cult-glyph,html.egg-lit footer .cult-glyph{opacity:.72}
+@media(prefers-reduced-motion:no-preference){
+  html.egg-lit footer .cult-glyph{animation:glyph-pulse 1.6s ease 2}
+}
+@keyframes glyph-pulse{0%,100%{transform:scale(1)}40%{transform:scale(1.35)}}
+
+/* Rare brand “sigil flash” when egg chord fires */
+html.egg-lit .brand .logo{filter:drop-shadow(0 0 10px color-mix(in srgb,var(--accent) 65%,transparent))}
+@media(prefers-reduced-motion:reduce){
+  html[data-culture] .motif::before,
+  html[data-culture] article h1::after,
+  html[data-culture] .hero-art .sfg,
+  html.eggs-awake .cult-eggs__scroll,
+  html.egg-lit footer .cult-glyph{animation:none!important}
+  .cult-eggs{transition:none}
+}
+
 /* ---------- print / PDF export ----------
    The export button calls window.print(); the reader's own "Save as PDF" makes
    the file. That keeps the promise of "same background and theme" without a
@@ -1437,7 +1557,7 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
   body{padding:12mm 14mm 0}
   article>:last-child,.layout>:last-child{margin-bottom:0!important;padding-bottom:0!important}
   /* interactive-only furniture: none of it means anything on paper */
-  .bg,.top,.motif,.tools,.ctrl,.navtab,aside.side,aside.toc,footer,
+  .bg,.top,.motif,.tools,.ctrl,.navtab,aside.side,aside.toc,footer,.cult-eggs,
   .contribute,.myth-map__ctrl,.myth-pin__ring,[data-act],.arrows,.sm-dots,
   .sm-prev,.sm-next,.search,.keys-help,.read-progress,.atlas__tourbar,
   .lang-status,.lib__bar,.cookie,.resume{display:none!important}
@@ -1522,3 +1642,107 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
 @media screen{
   img.gif-still,.fig .gif-still{display:none!important}
 }
+
+/* ===== culture micro-ornaments + light motion (hubs + articles) =====
+   Original SVG seals in /img/ornaments; atlas seals stay the shared lattice language.
+   Cap: ~2–3 motions per culture surface; prefers-reduced-motion kills them. */
+html[data-culture]:not([data-culture=""]){
+  --orn:url("../img/ornaments/base.svg?v=cult-1");
+  --orn-pulse:4.8s;
+}
+html[data-culture=iranian]{--orn:url("../img/ornaments/iranian.svg?v=cult-1")}
+html[data-culture=greek]{--orn:url("../img/ornaments/greek.svg?v=cult-1")}
+html[data-culture=indian]{--orn:url("../img/ornaments/indian.svg?v=cult-1")}
+html[data-culture=mesopotamian]{--orn:url("../img/ornaments/mesopotamian.svg?v=cult-1")}
+html[data-culture=norse]{--orn:url("../img/ornaments/norse.svg?v=cult-1")}
+html[data-culture=base]{--orn:url("../img/ornaments/base.svg?v=cult-1")}
+
+/* Motif rail: slow pattern drift + hidden glyph slot (JS may reveal) */
+.motif{isolation:isolate}
+.motif::before{will-change:background-position}
+html[data-fixed] .motif::before{animation:motif-slide 36s linear infinite}
+@keyframes motif-slide{to{-webkit-mask-position:48px 0;mask-position:48px 0}}
+
+.cult-egg{
+  position:absolute;inset-inline-end:10px;top:50%;transform:translateY(-50%);
+  width:14px;height:14px;opacity:0;pointer-events:none;z-index:2;
+  background:var(--accent);
+  -webkit-mask:var(--orn) center/contain no-repeat;mask:var(--orn) center/contain no-repeat;
+  transition:opacity .45s ease}
+.motif.is-egg .cult-egg,.cult-egg.is-on{opacity:.72}
+.cult-egg[data-whisper]::after{
+  content:attr(data-whisper);position:absolute;inset-inline-end:calc(100% + 8px);top:50%;
+  transform:translateY(-50%);white-space:nowrap;font:600 .68rem/1 var(--head);
+  letter-spacing:.08em;color:var(--accent);opacity:.9;pointer-events:none}
+
+/* Hero: corner seal + soft accent breath */
+html[data-fixed] .hero-art{isolation:isolate}
+html[data-fixed] .hero-art::after{
+  content:"";position:absolute;inset-inline-end:clamp(12px,3vw,28px);bottom:clamp(10px,2vw,22px);
+  width:clamp(52px,8vw,76px);height:clamp(52px,8vw,76px);z-index:3;pointer-events:none;
+  background:color-mix(in srgb,var(--accent) 78%,#fff 6%);
+  -webkit-mask:var(--orn) center/contain no-repeat;mask:var(--orn) center/contain no-repeat;
+  opacity:.28;filter:drop-shadow(0 0 12px color-mix(in srgb,var(--accent) 35%,transparent));
+  animation:orn-breathe var(--orn-pulse) ease-in-out infinite}
+html[data-fixed] .hero-art.is-seal::after{opacity:.55}
+@keyframes orn-breathe{0%,100%{opacity:.22;transform:scale(1)}50%{opacity:.38;transform:scale(1.04)}}
+
+/* Article: side ornament + h1 underline flourish */
+html[data-fixed] article{position:relative}
+html[data-fixed] article::before{
+  content:"";position:absolute;inset-inline-start:-28px;top:1.1rem;
+  width:18px;height:18px;pointer-events:none;
+  background:var(--accent);
+  -webkit-mask:var(--orn) center/contain no-repeat;mask:var(--orn) center/contain no-repeat;
+  opacity:.35}
+html[data-fixed] article>h1{
+  position:relative;padding-bottom:.65rem}
+html[data-fixed] article>h1::after{
+  content:"";position:absolute;inset-inline-start:0;bottom:0;height:10px;width:min(14rem,62%);
+  background:var(--accent);
+  -webkit-mask:var(--meander) repeat-x left center/24px 14px;mask:var(--meander) repeat-x left center/24px 14px;
+  opacity:.55;animation:h1-gleam 7.5s ease-in-out infinite}
+@keyframes h1-gleam{0%,100%{opacity:.35}50%{opacity:.7}}
+
+/* Scroll-reveal for section heads (JS adds .cult-reveal) */
+.cult-reveal{opacity:0;transform:translateY(10px);
+  transition:opacity .55s ease,transform .55s cubic-bezier(.22,1,.36,1)}
+.cult-reveal.is-in{opacity:1;transform:none}
+
+/* Culture-specific motion accents (keep to 1 extra keyed anim each) */
+html[data-culture=iranian]{--orn-pulse:5.2s}
+html[data-culture=iranian] .bg{background-image:
+  radial-gradient(2px 2px at 20px 30px,var(--accent),transparent),
+  radial-gradient(1.5px 1.5px at 100px 90px,var(--accent),transparent),
+  radial-gradient(2px 2px at 150px 150px,var(--accent),transparent),
+  radial-gradient(1px 1px at 60px 140px,color-mix(in srgb,var(--accent) 70%,#fff),transparent)}
+html[data-culture=greek] .motif::before{animation-duration:42s}
+html[data-culture=greek] article>h1::after{height:4px}
+html[data-culture=indian]{--orn-pulse:5.6s}
+html[data-culture=indian] .hero-art::after{filter:drop-shadow(0 0 14px color-mix(in srgb,var(--accent) 45%,transparent))}
+html[data-culture=mesopotamian] .motif::before{animation-duration:40s;animation-direction:alternate}
+html[data-culture=mesopotamian] article::before{width:20px;height:20px}
+html[data-culture=norse] .motif::after{letter-spacing:1.1em;opacity:.55}
+html[data-culture=norse]{--orn-pulse:4.4s}
+
+/* Brand hover wink (easter egg cue) */
+html[data-fixed] .brand:hover .logo-word,
+html[data-fixed] .brand:focus-visible .logo-word{
+  filter:drop-shadow(0 0 6px color-mix(in srgb,var(--accent) 55%,transparent))}
+
+@media(prefers-reduced-motion:reduce){
+  html[data-fixed] .motif::before,
+  html[data-fixed] .hero-art::after,
+  html[data-fixed] article>h1::after{animation:none!important}
+  .cult-reveal{opacity:1;transform:none;transition:none}
+  html[data-fixed] .hero-art::after{opacity:.3;transform:none}
+}
+@media(max-width:900px){
+  html[data-fixed] article::before{display:none}
+  html[data-fixed] .hero-art::after{width:44px;height:44px;opacity:.22}
+}
+@media print{
+  .cult-egg,html[data-fixed] .hero-art::after,html[data-fixed] article::before{display:none!important}
+  html[data-fixed] article>h1::after{animation:none;opacity:.5}
+}
+

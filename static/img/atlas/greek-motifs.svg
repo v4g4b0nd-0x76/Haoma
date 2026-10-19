@@ -31,6 +31,10 @@
         <ellipse cx="3" cy="14" rx="6" ry="2.8" transform="rotate(-25 3 14)"/>
         <ellipse cx="5" cy="23" rx="5.5" ry="2.5" transform="rotate(-12 5 23)"/>
       </g>
+      <!-- thunderbolt (Zeus attribute) -->
+      <g transform="translate(46 -8)" stroke-width="1.35" opacity=".72">
+        <path d="M6-22-4 2h8L-2 28 10 0H2Z"/>
+      </g>
     </g>
   </g>
 </svg>

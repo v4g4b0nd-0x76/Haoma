@@ -24,5 +24,14 @@
     </g>
     <circle r="110" stroke-width="1" opacity=".4"/>
     <circle r="120" stroke-width="1.6" opacity=".55"/>
+    <!-- ziggurat silhouette (temple platform form) -->
+    <g transform="translate(0 78)" stroke-width="1.15" opacity=".55">
+      <path d="M-70 28h140M-54 28V14h108v14M-36 14V2h72v12M-18 2V-10h36v12"/>
+    </g>
+    <!-- wedge-inspired marks -->
+    <g stroke-width="1.5" opacity=".4" stroke-linecap="butt">
+      <path d="M-108-40h14M-104-44v14"/>
+      <path d="M94 48h16M98 44v16"/>
+    </g>
   </g>
 </svg>

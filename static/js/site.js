@@ -684,5 +684,127 @@ document.querySelectorAll('[data-yt-card]').forEach(function(card){
 });
 })();
 
+/* ===== culture easter eggs (fixed culture hubs + articles only) ===== */
+(function(){
+  var D=document.documentElement,reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  if(!D.hasAttribute('data-fixed'))return;
+  var cult=D.getAttribute('data-culture')||'';
+  if(!cult||cult==='base')return;
+
+  var whispers={
+    iranian:'asha',
+    greek:'athena',
+    indian:'padma',
+    mesopotamian:'inanna',
+    norse:'futhark'
+  };
+
+  /* Hidden glyph in the motif rail — hover the rail or triple-click the brand */
+  var motif=document.querySelector('.motif');
+  if(motif){
+    var egg=document.createElement('span');
+    egg.className='cult-egg';egg.setAttribute('aria-hidden','true');
+    egg.dataset.whisper=whispers[cult]||cult;
+    motif.appendChild(egg);
+    var hideT;
+    function showEgg(ms){
+      motif.classList.add('is-egg');egg.classList.add('is-on');
+      clearTimeout(hideT);
+      hideT=setTimeout(function(){motif.classList.remove('is-egg');egg.classList.remove('is-on')},ms||2200);
+    }
+    motif.addEventListener('mouseenter',function(){showEgg(2800)});
+    var brand=document.querySelector('.brand');
+    if(brand){
+      var taps=0,tapT;
+      brand.addEventListener('click',function(){
+        taps++;clearTimeout(tapT);
+        tapT=setTimeout(function(){taps=0},700);
+        if(taps>=3){taps=0;showEgg(3600)}
+      });
+    }
+  }
+
+  /* Hero seal brightens on hover / long-press focus */
+  var hero=document.querySelector('.hero-art');
+  if(hero){
+    hero.addEventListener('mouseenter',function(){hero.classList.add('is-seal')});
+    hero.addEventListener('mouseleave',function(){hero.classList.remove('is-seal')});
+    hero.addEventListener('focusin',function(){hero.classList.add('is-seal')});
+    hero.addEventListener('focusout',function(){hero.classList.remove('is-seal')});
+  }
+
+  /* Scroll-reveal section headings (and first card row) */
+  if(!reduced&&'IntersectionObserver' in window){
+    var nodes=[].slice.call(document.querySelectorAll('article h2, article h3, .trad-hub, .atlas, article .cards'));
+    nodes.forEach(function(n){n.classList.add('cult-reveal')});
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target)}
+      });
+    },{rootMargin:'0px 0px -8% 0px',threshold:0.12});
+    nodes.forEach(function(n){io.observe(n)});
+  }
+})();
+
 /* ===== hero height comes from CSS (--hero-h): the same box on every page, so
    nothing is measured or stretched to the viewport here ===== */
+
+/* ===== Culture easter eggs (culture-bound pages only: data-fixed) =====
+   Soft, tasteful: scroll seal, brand triple-click, ↑↑↓↓ chord.
+   Motifs are CSS masks already on the page — no fan-art downloads.
+   Documented in AI.md §5. Honours prefers-reduced-motion (still shows
+   static seal / glyph; skips motion classes that only animate). */
+(function(){
+  var D=document.documentElement;
+  if(!D.hasAttribute('data-fixed'))return;
+  var cult=D.dataset.culture;if(!cult||cult==='base')return;
+  var eggs=document.querySelector('[data-culture-eggs]');
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var litTimer=0;
+  function lightEgg(ms){
+    D.classList.add('egg-lit');
+    clearTimeout(litTimer);
+    litTimer=setTimeout(function(){D.classList.remove('egg-lit')},ms||2200);
+  }
+  /* Motif appears once you have read a bit of the page */
+  function onScroll(){
+    if(!eggs)return;
+    var max=Math.max(1,document.documentElement.scrollHeight-window.innerHeight);
+    if(window.scrollY/max>=.38){D.classList.add('eggs-awake');window.removeEventListener('scroll',onScroll)}
+  }
+  if(eggs){
+    window.addEventListener('scroll',onScroll,{passive:true});
+    onScroll();
+  }
+  /* Brand: double-click (single click still goes home) → brief sigil flash */
+  var brand=document.querySelector('.brand');
+  if(brand){
+    brand.addEventListener('dblclick',function(e){
+      e.preventDefault();
+      lightEgg(2400);D.classList.add('eggs-awake');
+    });
+  }
+  /* Konami-light: ↑ ↑ ↓ ↓ (no need for the full arcade string) */
+  var seq=[],want=['ArrowUp','ArrowUp','ArrowDown','ArrowDown'];
+  document.addEventListener('keydown',function(e){
+    if(e.metaKey||e.ctrlKey||e.altKey)return;
+    if(e.target&&(/INPUT|TEXTAREA|SELECT/.test(e.target.tagName)||e.target.isContentEditable))return;
+    if(e.key!=='ArrowUp'&&e.key!=='ArrowDown'){seq=[];return}
+    seq.push(e.key);if(seq.length>want.length)seq.shift();
+    if(seq.length===want.length&&seq.every(function(k,i){return k===want[i]})){
+      seq=[];lightEgg(2800);D.classList.add('eggs-awake');
+    }
+  });
+  /* Culture-specific quiet hover: long-press motif strip reveals footer glyph */
+  var motif=document.querySelector('.motif');
+  if(motif){
+    var hold=0;
+    motif.addEventListener('pointerdown',function(){
+      hold=setTimeout(function(){lightEgg(2000)},650);
+    });
+    ['pointerup','pointerleave','pointercancel'].forEach(function(ev){
+      motif.addEventListener(ev,function(){clearTimeout(hold)});
+    });
+  }
+  if(reduce){/* keep eggs-awake/egg-lit as opacity reveals; CSS kills motion */}
+})();

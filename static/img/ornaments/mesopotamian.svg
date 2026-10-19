@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="96" height="96" viewBox="0 0 96 96" fill="none">
+  <!-- Original: 8-point Ishtar/Inanna star, ziggurat silhouette, wedge-inspired marks -->
+  <g stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(48 34)">
+      <circle r="7" stroke-width="1.3"/>
+      <circle r="2.5" fill="#fff" stroke="none" opacity=".85"/>
+      <g stroke-width="1.5">
+        <path d="M0-10v-16M0 10v16M10 0h16M-10 0h-16"/>
+        <path d="M7-7 18-18M7 7 18 18M-7 7-18 18M-7-7-18-18"/>
+      </g>
+    </g>
+    <g stroke-width="1.2" opacity=".85" transform="translate(18 58)">
+      <path d="M0 28h60M8 28V18h44v10M16 18V10h28v8M24 10V2h12v8"/>
+    </g>
+    <g stroke-width="1.4" opacity=".55" stroke-linecap="butt">
+      <path d="M10 12h8M12 10v8"/>
+      <path d="M78 78h10M80 76v10"/>
+    </g>
+  </g>
+</svg>

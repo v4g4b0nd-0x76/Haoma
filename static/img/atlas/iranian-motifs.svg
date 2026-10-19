@@ -32,6 +32,8 @@
       <path d="M0-22v-50" transform="rotate(300)"/>
       <path d="M0-22v-50" transform="rotate(330)"/>
     </g>
+    <!-- diamond frame cue (modern derafsh emblem geometry, not a historical reconstruction) -->
+    <path d="M0-102 102 0 0 102-102 0Z" stroke-width=".7" opacity=".28"/>
     <circle r="78" stroke-width=".9" opacity=".5"/>
     <circle r="88" stroke-width="1.4" opacity=".7"/>
     <circle r="96" stroke-width=".5" opacity=".35"/>

@@ -20,7 +20,7 @@
     "muted": "#8a8f9a",
     "anim": "fall",
     "pattern": "none",
-    "glyphs": "ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ",
+    "glyphs": "ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ",
     "banner": "norse-fjord.svg"
   },
   "greek": {
@@ -32,7 +32,7 @@
     "muted": "#8a8f9a",
     "anim": "drift",
     "pattern": "meander",
-    "glyphs": "",
+    "glyphs": "· Α · Θ · Η · Ν · Α ·",
     "banner": "greek-olympus.svg"
   },
   "iranian": {
@@ -56,7 +56,7 @@
     "muted": "#8e93a3",
     "anim": "drift",
     "pattern": "zigzag",
-    "glyphs": "",
+    "glyphs": "𒀭 𒈹 𒀭 𒀯 𒀭 𒈹 𒀭 𒀯",
     "banner": "mesopotamian-ur.svg"
   },
   "indian": {
@@ -68,7 +68,7 @@
     "muted": "#968da0",
     "anim": "fall",
     "pattern": "waves",
-    "glyphs": "",
+    "glyphs": "॥ · पद्म · ॥ · पद्म · ॥",
     "banner": "indian-setu.svg"
   }
 }

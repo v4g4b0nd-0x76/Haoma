@@ -37,6 +37,17 @@
     <circle r="58" stroke-width=".8" opacity=".45"/>
     <circle r="96" stroke-width="1.1" opacity=".55"/>
     <circle r="108" stroke-width=".6" opacity=".35"/>
+    <!-- abstract 8-spoke wheel (dharma-chakra inspired geometry) -->
+    <g stroke-width=".65" opacity=".4">
+      <path d="M0-58v-20M0 58v20M58 0h20M-58 0h-20"/>
+      <path d="M41-41 55-55M41 41 55 55M-41 41-55 55M-41-41-55-55"/>
+    </g>
+    <!-- peacock-eye tip (decorative) -->
+    <g transform="translate(88 -72)" opacity=".65">
+      <ellipse cx="0" cy="0" rx="10" ry="14" stroke-width="1.1"/>
+      <circle cx="0" cy="-1.5" r="3.2" stroke-width="1"/>
+      <circle cx="0" cy="-1.5" r="1.2" fill="#fff" stroke="none"/>
+    </g>
     <g fill="#fff" stroke="none" opacity=".6">
       <circle cx="0" cy="-96" r="2"/>
       <circle cx="0" cy="-96" r="2" transform="rotate(22.5)"/>
