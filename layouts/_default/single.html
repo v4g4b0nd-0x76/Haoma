@@ -21,6 +21,7 @@
 {{- end -}}
 {{ .Content }}
 {{ partial "subculture-members.html" . }}
+{{ partial "library-links.html" . }}
 {{ partial "related.html" . }}
 {{ with .Params.sources }}<div class="sources"><h2>{{ i18n "sources" }}</h2><ul>{{ range . }}<li>{{ . }}</li>{{ end }}</ul></div>{{ end }}
 {{ with site.Data.site.repo }}{{ $b := $.Site.Data.site.branch | default "master" }}{{ $f := printf "content/%s/%s" site.Language.Lang $.File.Path }}

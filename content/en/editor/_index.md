@@ -23,6 +23,7 @@ Works in Chrome, Firefox, Safari, or Edge. You only need a free GitHub account.
 Then:
 
 - Edit pages, themes, or maps in the left/main panels.
+- **Library** (left menu): upload PDF, images, or EPUB; search and filter; **Save uploads** to keep them. On an article, use **Library link…** in the toolbar (or right-click) to insert a download link.
 - Use **Save** when you want changes written into the project (until then they stay as drafts).
 - Use **Publish & PR** to push a branch and open a pull request.
 

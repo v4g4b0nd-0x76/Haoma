@@ -90,7 +90,14 @@ def tree():
 
 
 def ws_sync():
-    """Preview copy = saved files + temporary drafts."""
+    """Preview copy = saved files + temporary drafts.
+
+    Stop Hugo first: deleting tools/.preview under a running server leaves a
+    broken tree (404s, empty readDir listings) until restart.
+    """
+    was_running = preview_status()["running"]
+    if was_running:
+        preview_stop()
     shutil.rmtree(WS, ignore_errors=True)
     WS.mkdir(parents=True)
     for d in DIRS:
@@ -104,6 +111,30 @@ def ws_sync():
             ws_delete(real)
         elif dr_blob(rel).exists():
             ws_write(real, dr_blob(rel).read_bytes())
+    if was_running:
+        preview_start()
+
+
+def ws_nudge():
+    """Ask hugo server to rebuild. readDir('static/library') stays stale when
+    only static files change; Hugo also ignores bare mtime on hugo.toml and
+    wants a real content change, so toggle a marker in the *preview* config."""
+    p = WS / "hugo.toml"
+    if not p.exists():
+        return
+    try:
+        text = p.read_text(encoding="utf-8")
+        marker = "\n# haoma-preview-nudge\n"
+        if text.endswith(marker):
+            p.write_text(text[: -len(marker)], encoding="utf-8")
+        else:
+            p.write_text(text + marker, encoding="utf-8")
+    except OSError:
+        pass
+
+
+def is_library_path(rel):
+    return rel.replace("\\", "/").startswith("static/library/")
 
 
 def dr_load():
@@ -474,16 +505,22 @@ class H(BaseHTTPRequestHandler):
         return self.rfile.read(n)
 
     def proxy_hugo(self, method):
-        """Serve Hugo under HUGO_PREFIX on this same host (iframe-safe)."""
+        """Serve Hugo under HUGO_PREFIX on this same host (iframe-safe).
+
+        Hugo is started with baseURL=…/__hugo__/, so it serves pages under that
+        path prefix. Forward the full path (do not strip HUGO_PREFIX).
+        """
         port = preview.get("port")
         proc = preview.get("proc")
         if not port or proc is None or proc.poll() is not None:
             return self.send(503, b"preview not running", "text/plain")
         u = urlparse(self.path)
-        rest = u.path[len(HUGO_PREFIX) :] or "/"
-        if not rest.startswith("/"):
-            rest = "/" + rest
-        path = rest + (("?" + u.query) if u.query else "")
+        path = u.path or (HUGO_PREFIX + "/")
+        if not path.startswith(HUGO_PREFIX):
+            path = HUGO_PREFIX + (path if path.startswith("/") else "/" + path)
+        if path == HUGO_PREFIX:
+            path = HUGO_PREFIX + "/"
+        path = path + (("?" + u.query) if u.query else "")
         skip = {
             "host", "connection", "content-length", "transfer-encoding",
             "keep-alive", "proxy-authenticate", "proxy-authorization",
@@ -508,10 +545,10 @@ class H(BaseHTTPRequestHandler):
                 pu = urlparse(v)
                 local = not pu.netloc or pu.hostname in ("127.0.0.1", "localhost")
                 if local:
-                    path = pu.path or "/"
-                    if not path.startswith(HUGO_PREFIX):
-                        path = HUGO_PREFIX + (path if path.startswith("/") else "/" + path)
-                    v = path + (("?" + pu.query) if pu.query else "")
+                    loc = pu.path or "/"
+                    if not loc.startswith(HUGO_PREFIX):
+                        loc = HUGO_PREFIX + (loc if loc.startswith("/") else "/" + loc)
+                    v = loc + (("?" + pu.query) if pu.query else "")
             self.send_header(k, v)
         self.send_header("Content-Length", str(len(data)))
         self.send_header("Cache-Control", "no-store")
@@ -569,21 +606,30 @@ class H(BaseHTTPRequestHandler):
             if ep == "draft" and method == "PUT":
                 p = safe(q["path"])
                 data = self.body()
-                dr_put(p.relative_to(ROOT).as_posix(), data)
+                rel = p.relative_to(ROOT).as_posix()
+                dr_put(rel, data)
                 ws_write(p, data)
+                if is_library_path(rel):
+                    ws_nudge()
                 return self.send(200, {"ok": True})
             if ep == "draftdel" and method == "POST":
                 p = safe(q["path"])
-                dr_mark_delete(p.relative_to(ROOT).as_posix())
+                rel = p.relative_to(ROOT).as_posix()
+                dr_mark_delete(rel)
                 ws_delete(p)
+                if is_library_path(rel):
+                    ws_nudge()
                 return self.send(200, {"ok": True})
             if ep == "discard" and method == "POST":
                 p = safe(q["path"])
-                dr_drop(p.relative_to(ROOT).as_posix())
+                rel = p.relative_to(ROOT).as_posix()
+                dr_drop(rel)
                 if p.exists():
                     ws_write(p, p.read_bytes())
                 else:
                     ws_delete(p)
+                if is_library_path(rel):
+                    ws_nudge()
                 return self.send(200, {"ok": True})
             if ep == "drafts":
                 items = []
@@ -599,6 +645,7 @@ class H(BaseHTTPRequestHandler):
                 if not re.fullmatch(r"[\w-]+", x):
                     raise ValueError("bad change id")
                 lab, n, drafts = str(d.get("l", ""))[:120], 0, dr_load()
+                lib_changed = False
                 for rel in d.get("paths", []):
                     e = drafts.get(rel)
                     if not e:
@@ -616,6 +663,10 @@ class H(BaseHTTPRequestHandler):
                         ws_write(p, data)
                     dr_drop(rel)
                     n += 1
+                    if is_library_path(rel):
+                        lib_changed = True
+                if lib_changed:
+                    ws_nudge()
                 return self.send(200, {"ok": True, "applied": n})
             if ep == "resync" and method == "POST":
                 ws_sync()

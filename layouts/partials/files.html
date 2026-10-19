@@ -1,14 +1,46 @@
-{{- /* Library discovery: filterable list with type + human title. */ -}}
+{{- /* Library discovery: filterable list with type, category, and human title. */ -}}
+{{- $mani := dict "categories" (slice) "files" (dict) -}}
+{{- if fileExists "static/library/manifest.json" -}}
+  {{- $mani = transform.Unmarshal (readFile "static/library/manifest.json") -}}
+{{- end -}}
+{{- $filesMap := $mani.files | default dict -}}
+{{- $cats := $mani.categories | default slice -}}
+{{- $lang := site.Language.Lang -}}
+{{- $catTitle := dict -}}
+{{- range $cats -}}
+  {{- $t := .title -}}
+  {{- $label := .id -}}
+  {{- if reflect.IsMap $t -}}
+    {{- $label = index $t $lang | default (index $t "en") | default (index $t "fa") | default .id -}}
+  {{- else if $t -}}
+    {{- $label = $t -}}
+  {{- end -}}
+  {{- $catTitle = merge $catTitle (dict .id $label) -}}
+{{- end -}}
 {{- $files := slice -}}
 {{- range readDir "static/library" -}}
-  {{- if and (not .IsDir) (ne .Name "README.md") -}}
+  {{- if and (not .IsDir) (ne .Name "README.md") (ne .Name ".gitkeep") (ne .Name "manifest.json") (not (strings.HasPrefix .Name ".")) -}}
     {{- $ext := path.Ext .Name | strings.TrimPrefix "." | lower -}}
     {{- $kind := "file" -}}
     {{- if eq $ext "pdf" }}{{ $kind = "pdf" }}{{ end -}}
+    {{- if eq $ext "epub" }}{{ $kind = "epub" }}{{ end -}}
     {{- if or (eq $ext "md") (eq $ext "markdown") }}{{ $kind = "md" }}{{ end -}}
-    {{- if or (eq $ext "epub") (eq $ext "txt") }}{{ $kind = "text" }}{{ end -}}
-    {{- $title := .Name | strings.TrimSuffix (path.Ext .Name) | replaceRE `[-_]+` " " -}}
-    {{- $files = $files | append (dict "name" .Name "title" $title "ext" $ext "kind" $kind "url" (printf "library/%s" .Name | relURL)) -}}
+    {{- if eq $ext "txt" }}{{ $kind = "text" }}{{ end -}}
+    {{- if or (eq $ext "png") (eq $ext "jpg") (eq $ext "jpeg") (eq $ext "gif") (eq $ext "webp") (eq $ext "svg") }}{{ $kind = "image" }}{{ end -}}
+    {{- $meta := index $filesMap .Name | default dict -}}
+    {{- $titleObj := $meta.title -}}
+    {{- $title := .Name | strings.TrimSuffix (path.Ext .Name) | replaceRE `[.\-_]+` " " | replaceRE `\s+` " " | replaceRE `^\s+|\s+$` "" -}}
+    {{- if reflect.IsMap $titleObj -}}
+      {{- $title = index $titleObj $lang | default (index $titleObj "en") | default (index $titleObj "fa") | default $title -}}
+    {{- else if $titleObj -}}
+      {{- $title = $titleObj -}}
+    {{- end -}}
+    {{- $fileCats := $meta.categories | default slice -}}
+    {{- $catLabels := slice -}}
+    {{- range $fileCats -}}
+      {{- with index $catTitle . }}{{ $catLabels = $catLabels | append . }}{{ end -}}
+    {{- end -}}
+    {{- $files = $files | append (dict "name" .Name "title" $title "ext" $ext "kind" $kind "cats" $fileCats "catLabels" $catLabels "url" (printf "library/%s" .Name | relURL)) -}}
   {{- end -}}
 {{- end -}}
 <div class="lib" data-lib>
@@ -19,15 +51,26 @@
     <div class="lib__chips" role="group" aria-label="{{ i18n "libraryFilter" }}">
       <button type="button" class="lib__chip is-on" data-kind="all">{{ i18n "libraryAll" }}</button>
       <button type="button" class="lib__chip" data-kind="pdf">PDF</button>
+      <button type="button" class="lib__chip" data-kind="image">{{ i18n "libraryImage" }}</button>
+      <button type="button" class="lib__chip" data-kind="epub">{{ i18n "libraryEpub" }}</button>
       <button type="button" class="lib__chip" data-kind="md">{{ i18n "libraryMd" }}</button>
       <button type="button" class="lib__chip" data-kind="text">{{ i18n "libraryText" }}</button>
     </div>
+    {{- if $cats -}}
+    <div class="lib__chips lib__chips--cat" role="group" aria-label="{{ i18n "libraryCategories" }}">
+      <button type="button" class="lib__chip is-on" data-cat="">{{ i18n "libraryAllCats" }}</button>
+      {{- range $cats -}}
+      {{- $label := index $catTitle .id | default .id -}}
+      <button type="button" class="lib__chip" data-cat="{{ .id }}">{{ $label }}</button>
+      {{- end -}}
+    </div>
+    {{- end -}}
   </div>
   {{- if $files -}}
   <ul class="files">
     {{- range sort $files "title" -}}
-    <li class="files__item" data-kind="{{ .kind }}" data-name="{{ .name | lower }}" data-title="{{ .title | lower }}">
-      <a href="{{ .url }}"><span class="files__title">{{ .title }}</span><span class="files__name muted">{{ .name }}</span></a>
+    <li class="files__item" data-kind="{{ .kind }}" data-name="{{ .name | lower }}" data-title="{{ .title | lower }}" data-cats="{{ delimit .cats " " }}">
+      <a href="{{ .url }}"><span class="files__title">{{ .title }}</span><span class="files__name muted">{{ .name }}{{ with .catLabels }} · {{ delimit . ", " }}{{ end }}</span></a>
       <span class="files__ext muted">{{ .ext }}</span>
     </li>
     {{- end -}}
@@ -40,18 +83,26 @@
 <script>
 (function(){
   var root=document.querySelector("[data-lib]"); if(!root) return;
-  var q=root.querySelector(".lib__q"), chips=root.querySelectorAll(".lib__chip");
+  var q=root.querySelector(".lib__q"), chips=root.querySelectorAll(".lib__chip[data-kind]");
+  var catChips=root.querySelectorAll(".lib__chip[data-cat]");
   var items=[].slice.call(root.querySelectorAll(".files__item"));
   var empty=root.querySelector(".lib__empty");
-  var kind="all";
+  var kind="all", cat="";
+  try{
+    var u=new URL(location.href);
+    var c=u.searchParams.get("cat")||"";
+    if(c){cat=c;catChips.forEach(function(b){b.classList.toggle("is-on",(b.getAttribute("data-cat")||"")===c);});}
+  }catch(e){}
   function run(){
     var t=(q&&q.value||"").toLowerCase().trim();
     var n=0;
     items.forEach(function(li){
       var okKind=kind==="all"||li.getAttribute("data-kind")===kind;
+      var cats=(" "+(li.getAttribute("data-cats")||"")+" ");
+      var okCat=!cat||cats.indexOf(" "+cat+" ")>=0;
       var hay=(li.getAttribute("data-title")||"")+" "+(li.getAttribute("data-name")||"");
       var okQ=!t||hay.indexOf(t)>=0;
-      var on=okKind&&okQ; li.hidden=!on; if(on)n++;
+      var on=okKind&&okCat&&okQ; li.hidden=!on; if(on)n++;
     });
     if(empty) empty.hidden=n>0;
   }
@@ -61,5 +112,11 @@
     chips.forEach(function(c){ c.classList.toggle("is-on",c===b); });
     run();
   }); });
+  catChips.forEach(function(b){ b.addEventListener("click",function(){
+    cat=b.getAttribute("data-cat")||"";
+    catChips.forEach(function(c){ c.classList.toggle("is-on",c===b); });
+    run();
+  }); });
+  run();
 })();
 </script>

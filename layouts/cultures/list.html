@@ -4,6 +4,7 @@
 {{ partial "tools.html" . }}{{ partial "crumbs.html" . }}
 <h1>{{ .Title }}</h1>
 {{ .Content }}
+{{ partial "library-links.html" . }}
 {{ partial "lang-status.html" . }}
 {{- /* Culture hub: traditions (sub-cultures) first, then section portals. */ -}}
 {{- if and .Params.culture (not .Params.sec) -}}

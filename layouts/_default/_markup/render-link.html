@@ -1,5 +1,14 @@
-{{- $d := .Destination -}}{{- if hasPrefix $d "/" -}}{{- /* a leading slash marks the path as
-absolute from the site root, which Hugo passes through untouched -- so the baseURL path would
-never be applied and the link would break when the site is served from a subdirectory. Trim it
-and let relLangURL add the base path and the language prefix. */ -}}{{- $d = relLangURL (strings.TrimPrefix "/" $d) -}}{{- end -}}
+{{- $d := .Destination -}}
+{{- if hasPrefix $d "/" -}}
+  {{- /* Leading slash = site-root path. Hugo would leave it alone, so we trim and
+       re-prefix with the site baseURL. Content pages need the language prefix
+       (relLangURL); static assets under library/img/audio/video/fonts/tools must
+       not, or FA pages would point at /fa/library/…. */ -}}
+  {{- $path := strings.TrimPrefix "/" $d -}}
+  {{- if or (hasPrefix $path "library/") (hasPrefix $path "img/") (hasPrefix $path "audio/") (hasPrefix $path "video/") (hasPrefix $path "fonts/") (hasPrefix $path "tools/") (hasPrefix $path "css/") (hasPrefix $path "js/") -}}
+    {{- $d = $path | relURL -}}
+  {{- else -}}
+    {{- $d = relLangURL $path -}}
+  {{- end -}}
+{{- end -}}
 <a href="{{ $d | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}>{{ .Text | safeHTML }}</a>

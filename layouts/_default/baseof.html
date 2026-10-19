@@ -10,7 +10,7 @@
 <link rel="apple-touch-icon" href="{{ "img/brand/apple-touch-icon.png" | relURL }}">
 <meta name="theme-color" content="#14161a">
 <script src="{{ printf "%s?v=cookie-1" ("js/boot.js" | relURL) }}"></script>
-<link rel="stylesheet" href="{{ printf "%s?v=tour-here-1" ("css/style.css" | relURL) }}">
+<link rel="stylesheet" href="{{ printf "%s?v=polish-screens-1" ("css/style.css" | relURL) }}">
 <style>{{ range $k, $t := site.Data.themes }}[data-culture="{{ $k }}"]{--accent:{{ $t.accent | safeCSS }};--bg:{{ $t.bg | safeCSS }};--surface:{{ $t.surface | safeCSS }};--border:{{ $t.border | safeCSS }};--text:{{ $t.text | safeCSS }};--muted:{{ $t.muted | safeCSS }};--anim:{{ $t.anim | default "none" | safeCSS }};--meander:var(--m-{{ $t.pattern | default "none" | safeCSS }});--rune:{{ printf "%q" ($t.glyphs | default "") | safeCSS }}}
 {{ end }}</style>
 {{- if eq site.Language.Lang "fa" -}}
@@ -83,7 +83,7 @@
 <main>{{ block "main" . }}{{ end }}</main>
 <footer>{{ i18n "textLabel" }} CC BY-SA · {{ i18n "codeLabel" }} MIT{{ with site.Home.OutputFormats.Get "rss" }} · <a href="{{ .RelPermalink }}">RSS</a>{{ end }} · <a href="{{ "about/" | relLangURL }}">{{ i18n "sources" }}</a> · <button type="button" class="cookie-link" data-cookie-settings>{{ i18n "cookieSettings" }}</button></footer>
 {{ partial "cookie.html" . }}
-<script src="{{ printf "%s?v=seo-1" ("js/site.js" | relURL) }}"></script>
+<script src="{{ printf "%s?v=polish-screens-1" ("js/site.js" | relURL) }}"></script>
 <script src="{{ printf "%s?v=basepath-2" ("js/search.js" | relURL) }}"></script>
 {{ if and .Params.culture (not .Params.sec) }}<script src="{{ printf "%s?v=tour-here-1" ("js/mindmap.js" | relURL) }}"></script>{{ end }}
 </body>

@@ -177,12 +177,22 @@
   other = "Text"
 [libraryMd]
   other = "Markdown"
+[libraryImage]
+  other = "Images"
+[libraryEpub]
+  other = "EPUB"
 [keysEscKey]
   other = "Esc"
 [libraryEmpty]
-  other = "No library files yet — add PDFs or Markdown under static/library/."
+  other = "No library files yet."
 [libraryEmptyFilter]
   other = "No files match this filter."
+[libraryCategories]
+  other = "Categories"
+[libraryAllCats]
+  other = "All categories"
+[libraryRelated]
+  other = "From the library"
 [atlasTourStart]
   other = "Start reading path"
 [atlasTourOpen]

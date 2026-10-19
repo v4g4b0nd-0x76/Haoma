@@ -1,0 +1,78 @@
+{{- /* Library files/categories linked to this page or its culture hub. */ -}}
+{{- if fileExists "static/library/manifest.json" -}}
+{{- $raw := readFile "static/library/manifest.json" -}}
+{{- $mani := transform.Unmarshal $raw -}}
+{{- $filesMap := $mani.files | default dict -}}
+{{- $cats := $mani.categories | default slice -}}
+{{- $lang := site.Language.Lang -}}
+{{- $cur := .RelPermalink | strings.TrimPrefix site.LanguagePrefix | strings.TrimPrefix "/" | strings.TrimSuffix "/" -}}
+{{- $hub := "" -}}
+{{- with .Params.culture }}{{ $hub = printf "cultures/%s" . }}{{ end -}}
+{{- $norm := slice $cur -}}
+{{- if $hub }}{{ $norm = $norm | append $hub }}{{ end -}}
+{{- $hitFiles := slice -}}
+{{- range $name, $meta := $filesMap -}}
+  {{- $pages := $meta.pages | default slice -}}
+  {{- $ok := false -}}
+  {{- range $pages -}}
+    {{- $p := . | strings.TrimPrefix "/" | strings.TrimSuffix "/" -}}
+    {{- if in $norm $p }}{{ $ok = true }}{{ end -}}
+  {{- end -}}
+  {{- if not $ok -}}
+    {{- range ($meta.categories | default slice) -}}
+      {{- $cid := . -}}
+      {{- range $cats -}}
+        {{- if eq .id $cid -}}
+          {{- range (.pages | default slice) -}}
+            {{- $p := . | strings.TrimPrefix "/" | strings.TrimSuffix "/" -}}
+            {{- if in $norm $p }}{{ $ok = true }}{{ end -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if $ok -}}
+    {{- $titleObj := $meta.title -}}
+    {{- $title := $name -}}
+    {{- if reflect.IsMap $titleObj -}}
+      {{- $title = index $titleObj $lang | default (index $titleObj "en") | default (index $titleObj "fa") | default $name -}}
+    {{- else if $titleObj -}}
+      {{- $title = $titleObj -}}
+    {{- end -}}
+    {{- $hitFiles = $hitFiles | append (dict "name" $name "title" $title "url" (printf "library/%s" $name | relURL)) -}}
+  {{- end -}}
+{{- end -}}
+{{- $hitCats := slice -}}
+{{- range $cats -}}
+  {{- $ok := false -}}
+  {{- range (.pages | default slice) -}}
+    {{- $p := . | strings.TrimPrefix "/" | strings.TrimSuffix "/" -}}
+    {{- if in $norm $p }}{{ $ok = true }}{{ end -}}
+  {{- end -}}
+  {{- if $ok -}}
+    {{- $t := .title -}}
+    {{- $label := .id -}}
+    {{- if reflect.IsMap $t -}}
+      {{- $label = index $t $lang | default (index $t "en") | default (index $t "fa") | default .id -}}
+    {{- else if $t -}}
+      {{- $label = $t -}}
+    {{- end -}}
+    {{- $hitCats = $hitCats | append (dict "id" .id "title" $label) -}}
+  {{- end -}}
+{{- end -}}
+{{- if or (gt (len $hitFiles) 0) (gt (len $hitCats) 0) -}}
+<section class="lib-links" aria-labelledby="lib-links-h">
+  <h2 id="lib-links-h">{{ i18n "libraryRelated" }}</h2>
+  {{- if gt (len $hitCats) 0 -}}
+  <p class="lib-links__cats">{{ range $hitCats }}<a class="lib__chip" href="{{ "library/" | relLangURL }}?cat={{ .id }}">{{ .title }}</a>{{ end }}</p>
+  {{- end -}}
+  {{- if gt (len $hitFiles) 0 -}}
+  <ul class="files files--related">
+    {{- range $hitFiles -}}
+    <li class="files__item"><a href="{{ .url }}"><span class="files__title">{{ .title }}</span><span class="files__name muted">{{ .name }}</span></a></li>
+    {{- end -}}
+  </ul>
+  {{- end -}}
+</section>
+{{- end -}}
+{{- end -}}

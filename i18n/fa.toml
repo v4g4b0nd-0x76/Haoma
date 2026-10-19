@@ -177,12 +177,22 @@
   other = "متن"
 [libraryMd]
   other = "Markdown"
+[libraryImage]
+  other = "تصاویر"
+[libraryEpub]
+  other = "EPUB"
 [keysEscKey]
   other = "Esc"
 [libraryEmpty]
-  other = "هنوز فایلی در کتابخانه نیست — PDF یا Markdown را در static/library/ بگذارید."
+  other = "هنوز فایلی در کتابخانه نیست."
 [libraryEmptyFilter]
   other = "هیچ فایلی با این پالایش نیست."
+[libraryCategories]
+  other = "دسته‌ها"
+[libraryAllCats]
+  other = "همهٔ دسته‌ها"
+[libraryRelated]
+  other = "از کتابخانه"
 [atlasTourStart]
   other = "شروع مسیر خواندن"
 [atlasTourOpen]

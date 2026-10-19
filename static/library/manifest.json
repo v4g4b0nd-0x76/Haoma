@@ -1,0 +1,27 @@
+{
+  "categories": [
+    {
+      "id": "persian-mythology",
+      "title": {
+        "en": "Persian Mythology",
+        "fa": "اساطیر ایرانی"
+      },
+      "pages": []
+    }
+  ],
+  "files": {
+    "persian-myths-vesta-sarkhosh-curtis-z-library.sk-1lib.sk-z-lib.sk-.pdf": {
+      "title": {
+        "en": "Persian Myths",
+        "fa": "اساطیر ایران"
+      },
+      "categories": [
+        "persian-mythology"
+      ],
+      "pages": [
+        "cultures/iranian/traditions/zoroastrian/",
+        "cultures/iranian/"
+      ]
+    }
+  }
+}

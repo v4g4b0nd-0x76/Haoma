@@ -225,6 +225,10 @@ if(bar&&art){
     if(!banner||banner.hidden){D.style.removeProperty('--cookie-h');return}
     D.style.setProperty('--cookie-h',Math.ceil(banner.getBoundingClientRect().height)+'px');
   }
+  function syncResumeH(){
+    if(!resume||resume.hidden){D.style.removeProperty('--resume-h');return}
+    D.style.setProperty('--resume-h',Math.ceil(resume.getBoundingClientRect().height)+'px');
+  }
   function showBanner(on){
     if(!banner)return;
     banner.hidden=!on;
@@ -234,11 +238,12 @@ if(bar&&art){
   function showResume(){
     if(!resume||!link||!allowed()||!H.getLast)return;
     var last=H.getLast();
-    if(!last||last===location.pathname){resume.hidden=true;return}
+    if(!last||last===location.pathname){resume.hidden=true;syncResumeH();return}
     /* only nudge on language homes so article reading is not interrupted */
-    if(!isHome()){resume.hidden=true;return}
+    if(!isHome()){resume.hidden=true;syncResumeH();return}
     link.href=last;
     resume.hidden=false;
+    requestAnimationFrame(syncResumeH);
   }
   function afterAllow(){
     rememberCulture(D.dataset.pick||'base');
@@ -263,13 +268,33 @@ if(bar&&art){
   });
   if(dismiss)dismiss.addEventListener('click',function(){
     if(resume)resume.hidden=true;
+    syncResumeH();
     try{sessionStorage.setItem('haoma-resume-hide','1')}catch(e){}
   });
-  try{if(sessionStorage.getItem('haoma-resume-hide')==='1'&&resume)resume.hidden=true;
+  try{if(sessionStorage.getItem('haoma-resume-hide')==='1'&&resume){resume.hidden=true;syncResumeH()}
   else showResume()}catch(e){showResume()}
   if(banner&&typeof ResizeObserver!=='undefined')new ResizeObserver(syncCookieH).observe(banner);
-  window.addEventListener('resize',syncCookieH);
+  if(resume&&typeof ResizeObserver!=='undefined')new ResizeObserver(syncResumeH).observe(resume);
+  window.addEventListener('resize',function(){syncCookieH();syncResumeH()});
   syncCookieH();
+  syncResumeH();
+})();
+
+/* sticky header / listen chrome: keep sticky rails + fixed resume clear of the bar */
+(function chromeOffsets(){
+  var top=document.querySelector('header.top');
+  var listen=document.querySelector('.listen');
+  function set(){
+    if(top)D.style.setProperty('--top-h',Math.ceil(top.getBoundingClientRect().height)+'px');
+    if(listen&&!listen.hidden)D.style.setProperty('--listen-h',Math.ceil(listen.getBoundingClientRect().height)+'px');
+    else D.style.removeProperty('--listen-h');
+  }
+  set();
+  window.addEventListener('resize',set,{passive:true});
+  if(typeof ResizeObserver!=='undefined'){
+    if(top)new ResizeObserver(set).observe(top);
+    if(listen)new ResizeObserver(set).observe(listen);
+  }
 })();
 })();
 /* ===== v4: sliders, play-on-scroll media, notes ===== */
