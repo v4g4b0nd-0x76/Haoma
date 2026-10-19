@@ -1,9 +1,11 @@
-/* Haoma service worker — cache shell assets for offline revisit.
+/* Haoma service worker — shell assets + recently visited HTML.
    Scope is the directory that hosts this file (site root or /Haoma/).
-   Does not cache large media (audio/video/library). Version: pwa-1 */
+   Does not cache large media (audio/video/library). Version: pwa-2 */
 /* eslint-disable no-restricted-globals */
 (function () {
-  var CACHE = "haoma-shell-pwa-1";
+  var SHELL_CACHE = "haoma-shell-pwa-2";
+  var PAGES_CACHE = "haoma-pages-pwa-2";
+  var MAX_PAGES = 40;
   var SHELL = [
     "./",
     "css/style.css",
@@ -12,6 +14,8 @@
     "js/search.js",
     "js/stories.js",
     "js/news-tick.js",
+    "js/pwa.js",
+    "js/study.js",
     "img/brand/favicon.svg",
     "img/brand/favicon-192.png",
     "img/brand/apple-touch-icon.png",
@@ -21,7 +25,7 @@
   self.addEventListener("install", function (event) {
     event.waitUntil(
       caches
-        .open(CACHE)
+        .open(SHELL_CACHE)
         .then(function (cache) {
           return cache.addAll(
             SHELL.map(function (p) {
@@ -29,12 +33,8 @@
             })
           );
         })
-        .then(function () {
-          return self.skipWaiting();
-        })
         .catch(function () {
           /* partial shell OK — network will fill gaps */
-          return self.skipWaiting();
         })
     );
   });
@@ -47,7 +47,11 @@
           return Promise.all(
             keys
               .filter(function (k) {
-                return k.indexOf("haoma-shell-") === 0 && k !== CACHE;
+                return (
+                  (k.indexOf("haoma-shell-") === 0 || k.indexOf("haoma-pages-") === 0) &&
+                  k !== SHELL_CACHE &&
+                  k !== PAGES_CACHE
+                );
               })
               .map(function (k) {
                 return caches.delete(k);
@@ -58,6 +62,13 @@
           return self.clients.claim();
         })
     );
+  });
+
+  self.addEventListener("message", function (event) {
+    var data = event.data;
+    if (data && data.type === "SKIP_WAITING") {
+      self.skipWaiting();
+    }
   });
 
   function isShellAsset(url) {
@@ -73,6 +84,30 @@
     return /\/(?:audio|video|library)\//.test(path) || /\.(?:mp3|mp4|webm|pdf|epub)(?:$|\?)/i.test(path);
   }
 
+  function trimPagesCache(cache) {
+    return cache.keys().then(function (keys) {
+      if (keys.length <= MAX_PAGES) return;
+      var drop = keys.length - MAX_PAGES;
+      var chain = Promise.resolve();
+      keys.slice(0, drop).forEach(function (req) {
+        chain = chain.then(function () {
+          return cache.delete(req);
+        });
+      });
+      return chain;
+    });
+  }
+
+  function putPage(req, res) {
+    if (!res || !res.ok) return;
+    var copy = res.clone();
+    caches.open(PAGES_CACHE).then(function (c) {
+      c.put(req, copy).then(function () {
+        return trimPagesCache(c);
+      });
+    });
+  }
+
   self.addEventListener("fetch", function (event) {
     var req = event.request;
     if (req.method !== "GET") return;
@@ -85,20 +120,25 @@
     if (url.origin !== self.location.origin) return;
     if (isHeavy(url)) return;
 
-    /* HTML / navigations: network first, cached shell fallback */
+    /* HTML / navigations: network first, cache visited pages, shell fallback */
     if (req.mode === "navigate" || (req.headers.get("accept") || "").indexOf("text/html") !== -1) {
       event.respondWith(
         fetch(req)
           .then(function (res) {
-            var copy = res.clone();
-            caches.open(CACHE).then(function (c) {
-              c.put(req, copy);
-            });
+            putPage(req, res);
             return res;
           })
           .catch(function () {
             return caches.match(req).then(function (hit) {
-              return hit || caches.match(new URL("./", self.registration.scope).href);
+              if (hit) return hit;
+              return caches.open(PAGES_CACHE).then(function (c) {
+                return c.match(req).then(function (pageHit) {
+                  return (
+                    pageHit ||
+                    caches.match(new URL("./", self.registration.scope).href)
+                  );
+                });
+              });
             });
           })
       );
@@ -113,7 +153,7 @@
             .then(function (res) {
               if (res && res.ok) {
                 var copy = res.clone();
-                caches.open(CACHE).then(function (c) {
+                caches.open(SHELL_CACHE).then(function (c) {
                   c.put(req, copy);
                 });
               }

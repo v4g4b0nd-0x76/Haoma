@@ -2255,3 +2255,77 @@ html[lang=fa] .pwa-banner__text{font-size:.95rem;line-height:1.6}
   .pwa-banner__inner{backdrop-filter:none;background:var(--surface)}
 }
 
+/* ---------- Study: reading list, reader mode, standalone ---------- */
+.rlist{position:relative}
+.rlist__open{appearance:none;display:inline-flex;align-items:center;justify-content:center;
+  min-width:var(--tap);min-height:var(--tap);padding:0 8px;border:1px solid var(--border);
+  background:var(--surface);color:var(--muted);border-radius:8px;
+  cursor:var(--cur-ptr,pointer)}
+.rlist__open:hover,.rlist__open[aria-expanded=true]{border-color:var(--accent);color:var(--accent)}
+.ico-scribe{display:block;flex:0 0 auto;width:1.05em;height:1.05em}
+.ico-scribe__tablet{fill:none}
+.card-save.is-saved .ico-scribe__tablet,.tools__save.is-saved .ico-scribe__tablet,
+.rlist__open[aria-expanded=true] .ico-scribe__tablet{
+  fill:color-mix(in srgb,currentColor 22%,transparent)}
+.card-save.is-saved .ico-scribe__script,.tools__save.is-saved .ico-scribe__script{
+  stroke-width:1.6}
+.rlist__panel{position:absolute;inset-inline-end:0;top:calc(100% + 8px);z-index:60;width:min(320px,calc(100vw - 24px));
+  padding:12px 14px;border-radius:12px;border:1px solid color-mix(in srgb,var(--accent) 28%,var(--border));
+  background:color-mix(in srgb,var(--surface) 96%,transparent);box-shadow:0 16px 36px rgba(0,0,0,.45)}
+.rlist__head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.rlist__title{margin:0;font:600 1rem/1.3 var(--head);color:var(--text)}
+html[lang=fa] .rlist__title{font-family:var(--head)}
+.rlist__close{appearance:none;border:0;background:transparent;color:var(--muted);font-size:1.35rem;line-height:1;
+  cursor:var(--cur-ptr,pointer);min-width:var(--tap);min-height:var(--tap)}
+.rlist__close:hover{color:var(--text)}
+.rlist__empty{margin:0 0 8px;font-size:.88rem;line-height:1.45}
+.rlist__list{list-style:none;margin:0;padding:0;max-height:min(50vh,320px);overflow:auto}
+.rlist__item{display:flex;align-items:center;gap:6px;border-bottom:1px solid var(--border)}
+.rlist__item:last-child{border-bottom:0}
+.rlist__link{flex:1 1 auto;min-width:0;padding:10px 4px;color:var(--text);text-decoration:none;font:500 .9rem/1.35 var(--ui);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rlist__link:hover{color:var(--accent)}
+.rlist__rm{appearance:none;border:0;background:transparent;color:var(--muted);font-size:1.2rem;cursor:var(--cur-ptr,pointer);
+  min-width:var(--tap);min-height:var(--tap)}
+.rlist__rm:hover{color:var(--text)}
+.rlist__tip{margin:10px 0 0;font-size:.72rem;line-height:1.4}
+
+.cards .card-save,.tools__save{appearance:none;display:inline-flex;align-items:center;justify-content:center;
+  margin-inline-start:auto;min-width:34px;height:28px;padding:0 8px;border:1px solid var(--border);
+  background:transparent;color:var(--muted);border-radius:8px;cursor:var(--cur-ptr,pointer);flex:0 0 auto}
+.cards .card-save:hover,.tools__save:hover,.cards .card-save.is-saved,.tools__save.is-saved{border-color:var(--accent);color:var(--accent)}
+.cards .card-save .ico-scribe,.tools__save .ico-scribe{width:15px;height:15px}
+.tools [data-act=reader].is-on{border-color:var(--accent);color:var(--accent)}
+
+/* Reader: calmer measure + optional warm/cool tones (keeps culture accent) */
+html[data-reader="1"]{--read:1.32rem}
+html[data-reader="1"] article{max-width:36rem;line-height:1.95}
+html[lang=fa][data-reader="1"] article{line-height:2.15;max-width:34rem}
+html[data-reader="1"][data-reader-tone="sepia"]{
+  --bg:#1a1612;--surface:#241e18;--border:#3a3228;--text:#e8dcc8;--muted:#a89880}
+html[data-reader="1"][data-reader-tone="night"]{
+  --bg:#0b0c0f;--surface:#12141a;--border:#22262e;--text:#b4b8c2;--muted:#6a7080}
+html[data-reader="1"] .bg{opacity:.55}
+html[data-reader="1"].reader-chrome-hide header.top,
+html[data-reader="1"].reader-chrome-hide .motif,
+html[data-reader="1"].reader-chrome-hide footer{
+  transform:translateY(-110%);opacity:0;pointer-events:none;
+  transition:transform .28s ease,opacity .28s ease}
+html[data-reader="1"].reader-chrome-hide footer{transform:translateY(110%)}
+html[data-reader="1"] header.top,
+html[data-reader="1"] .motif,
+html[data-reader="1"] footer{
+  transition:transform .28s ease,opacity .28s ease}
+@media(prefers-reduced-motion:reduce){
+  html[data-reader="1"].reader-chrome-hide header.top,
+  html[data-reader="1"].reader-chrome-hide .motif,
+  html[data-reader="1"].reader-chrome-hide footer{transform:none;opacity:1;pointer-events:auto;transition:none}
+  html[data-reader="1"] header.top,
+  html[data-reader="1"] .motif,
+  html[data-reader="1"] footer{transition:none}
+}
+
+/* Installed / standalone: quieter chrome tip area */
+body.is-standalone .pwa-banner:not(#pwa-update){display:none}
+body.is-standalone header.top{padding-block:calc(8px + var(--safe-t)) 8px}
+

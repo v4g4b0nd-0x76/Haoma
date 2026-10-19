@@ -14,7 +14,7 @@
     { "name": "الفبا", "url": "az/" },
     { "name": "سنجش", "url": "compare/" },
     { "name": "کتابخانه", "url": "library/" },
-    { "name": "دربارهٔ ما", "url": "about/" },
+    { "name": "درباره", "url": "about/" },
     { "name": "ویرایش", "url": "editor/" }
   ]
 }

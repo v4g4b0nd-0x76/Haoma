@@ -42,6 +42,9 @@
 <div class="card-top">
 <span class="card-kind">{{ $label }}</span>
 {{- with .Params.grade -}}<span class="card-grade">{{ partial "grade.html" . }}</span>{{- end -}}
+{{- if or (eq $kind "art") (eq $kind "ep") -}}
+<button type="button" class="card-save" data-save data-save-path="{{ .RelPermalink }}" data-save-title="{{ .Title }}" data-save-culture="{{ $cult }}" data-save-kind="{{ $kind }}" title="{{ i18n "readingSave" }}" aria-label="{{ i18n "readingSave" }}" aria-pressed="false">{{ partial "icon-scribe.html" }}</button>
+{{- end -}}
 </div>
 <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
 <p>{{ with .Params.tagline }}{{ . | truncate 90 }}{{ else }}{{ .Summary | plainify | truncate 90 }}{{ end }}</p>

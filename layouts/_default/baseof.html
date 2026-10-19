@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="{{ site.Language.LanguageCode }}" dir="{{ site.Language.LanguageDirection | default "ltr" }}" data-culture="{{ .Params.culture | default "base" }}"{{ if .Params.culture }} data-fixed="1"{{ end }} data-pwa-install="{{ i18n "pwaInstall" }}" data-pwa-later="{{ i18n "pwaLater" }}" data-pwa-body="{{ i18n "pwaBody" }}" data-pwa-ios="{{ i18n "pwaIosTip" }}">
+<html lang="{{ site.Language.LanguageCode }}" dir="{{ site.Language.LanguageDirection | default "ltr" }}" data-culture="{{ .Params.culture | default "base" }}"{{ if .Params.culture }} data-fixed="1"{{ end }} data-pwa-install="{{ i18n "pwaInstall" }}" data-pwa-later="{{ i18n "pwaLater" }}" data-pwa-body="{{ i18n "pwaBody" }}" data-pwa-ios="{{ i18n "pwaIosTip" }}" data-pwa-update="{{ i18n "pwaUpdate" }}" data-pwa-update-go="{{ i18n "pwaUpdateGo" }}" data-study-continue="{{ i18n "studyContinue" }}" data-study-continue-go="{{ i18n "studyContinueGo" }}" data-study-save="{{ i18n "readingSave" }}" data-study-saved="{{ i18n "readingSaved" }}" data-study-unsave="{{ i18n "readingUnsave" }}" data-study-reader="{{ i18n "readerMode" }}">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,8 +16,8 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="{{ site.Title }}">
-<script src="{{ printf "%s?v=cookie-3" ("js/boot.js" | relURL) }}"></script>
-<link rel="stylesheet" href="{{ printf "%s?v=pwa-mobile-1" ("css/style.css" | relURL) }}">
+<script src="{{ printf "%s?v=study-boot-1" ("js/boot.js" | relURL) }}"></script>
+<link rel="stylesheet" href="{{ printf "%s?v=scribe-icon-1" ("css/style.css" | relURL) }}">
 <style>{{ range $k, $t := site.Data.themes }}[data-culture="{{ $k }}"]{--accent:{{ $t.accent | safeCSS }};--bg:{{ $t.bg | safeCSS }};--surface:{{ $t.surface | safeCSS }};--border:{{ $t.border | safeCSS }};--text:{{ $t.text | safeCSS }};--muted:{{ $t.muted | safeCSS }};--anim:{{ $t.anim | default "none" | safeCSS }};--meander:var(--m-{{ $t.pattern | default "none" | safeCSS }});--rune:{{ printf "%q" ($t.glyphs | default "") | safeCSS }}}
 {{ end }}</style>
 {{- if eq site.Language.Lang "fa" -}}
@@ -40,6 +40,18 @@
   <nav>{{ range index site.Data.nav site.Language.Lang }}<a href="{{ .url | relLangURL }}">{{ .name }}</a>{{ end }}</nav>
   {{ partial "news-tick.html" . }}
   <div class="ctrl">
+    <div class="rlist" id="site-rlist">
+      <button type="button" class="rlist__open" id="rlist-open" aria-expanded="false" aria-controls="rlist-panel" title="{{ i18n "readingList" }}" aria-label="{{ i18n "readingList" }}">{{ partial "icon-scribe.html" }}</button>
+      <div class="rlist__panel" id="rlist-panel" role="dialog" aria-labelledby="rlist-title" hidden>
+        <div class="rlist__head">
+          <h2 class="rlist__title" id="rlist-title">{{ i18n "readingList" }}</h2>
+          <button type="button" class="rlist__close" id="rlist-close" aria-label="{{ i18n "readingListClose" }}">×</button>
+        </div>
+        <p class="rlist__empty muted" id="rlist-empty">{{ i18n "readingListEmpty" }}</p>
+        <ul class="rlist__list" id="rlist-list"></ul>
+        <p class="rlist__tip muted">{{ i18n "readingListTip" }}</p>
+      </div>
+    </div>
     <div class="search" id="site-search">
       <button type="button" class="search__open" aria-expanded="false" aria-controls="search-panel" title="{{ i18n "searchOpen" }}" aria-label="{{ i18n "searchOpen" }}">⌕</button>
       <div class="search__panel" id="search-panel" role="combobox" aria-expanded="false" aria-owns="search-list" hidden>
@@ -93,7 +105,7 @@
 {{- /* Culture scroll-seal egg (CSS mask); only on culture-bound pages. */ -}}
 {{ if and .Params.culture (ne .Params.culture "base") }}<div class="cult-eggs" data-culture-eggs aria-hidden="true"><i class="cult-eggs__scroll"></i></div>{{ end }}
 {{ partial "cookie.html" . }}
-<script src="{{ printf "%s?v=cult-flourish-1" ("js/site.js" | relURL) }}"></script>
+<script src="{{ printf "%s?v=media-session-1" ("js/site.js" | relURL) }}"></script>
 <script src="{{ printf "%s?v=news-tick-3" ("js/news-tick.js" | relURL) }}"></script>
 <script src="{{ printf "%s?v=basepath-2" ("js/search.js" | relURL) }}"></script>
 {{ if and .Params.culture (not .Params.sec) }}<script src="{{ printf "%s?v=tour-here-1" ("js/mindmap.js" | relURL) }}"></script>{{ end }}
@@ -107,6 +119,7 @@
 <script src="{{ printf "%s?v=worlds-3" ("js/worlds.js" | relURL) }}"></script>
 <script src="{{ printf "%s?v=home-scroll-2" ("js/home-scroll.js" | relURL) }}"></script>
 {{- end -}}
-<script src="{{ printf "%s?v=pwa-1" ("js/pwa.js" | relURL) }}" defer></script>
+<script src="{{ printf "%s?v=scribe-icon-1" ("js/study.js" | relURL) }}" defer></script>
+<script src="{{ printf "%s?v=pwa-2" ("js/pwa.js" | relURL) }}" defer></script>
 </body>
 </html>

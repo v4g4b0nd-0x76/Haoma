@@ -10,6 +10,7 @@
 {{- if not $scope -}}{{- $scope = "/" -}}{{- end -}}
 {{- $eps := "episodes/" | relLangURL -}}
 {{- $stories := printf "%s#story-rail-h" $home -}}
+{{- $rlist := printf "%s#reading-list" $home -}}
 {{- $icon192 := "img/brand/favicon-192.png" | relURL -}}
 {{- $icon512 := "img/brand/favicon-512.png" | relURL -}}
 {{- $name := site.Title -}}
@@ -64,6 +65,13 @@
       "short_name": {{ i18n "pwaShortcutStoriesShort" | jsonify }},
       "description": {{ i18n "pwaShortcutStoriesDesc" | jsonify }},
       "url": {{ $stories | jsonify }},
+      "icons": [{ "src": {{ $icon192 | jsonify }}, "sizes": "192x192" }]
+    },
+    {
+      "name": {{ i18n "pwaShortcutReadingList" | jsonify }},
+      "short_name": {{ i18n "pwaShortcutReadingListShort" | jsonify }},
+      "description": {{ i18n "pwaShortcutReadingListDesc" | jsonify }},
+      "url": {{ $rlist | jsonify }},
       "icons": [{ "src": {{ $icon192 | jsonify }}, "sizes": "192x192" }]
     }
   ]

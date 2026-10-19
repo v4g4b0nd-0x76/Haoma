@@ -22,7 +22,7 @@ var act={
  pdf:function(){var go=function(){window.print()};window.haomaPrintPrep?window.haomaPrintPrep().then(go,go):go()}};
 function size(d){P.size=Math.min(1.7,Math.max(1,Math.round(((P.size||1.2)+d)*100)/100));D.style.setProperty('--read',P.size+'rem')}
 var hasSide=!!document.querySelector('aside.side');
-Q('[data-act]').forEach(function(b){if(!hasSide&&/nav|dock/.test(b.dataset.act))b.hidden=true;b.onclick=function(){act[b.dataset.act]();save()}});
+Q('[data-act]').forEach(function(b){if(!hasSide&&/nav|dock/.test(b.dataset.act))b.hidden=true;b.onclick=function(){var fn=act[b.dataset.act];if(typeof fn==='function'){fn();save()}}});
 /* culture pick: a listbox, so an option can be tinted with its own colour on hover */
 var pick=document.getElementById('culture-pick'),btn=document.getElementById('cpick-btn'),
     list=document.getElementById('cpick-list'),cine=Q('.cine')[0];
@@ -239,9 +239,16 @@ if(bar&&art){
     if(!resume||!link||!allowed()||!H.getLast)return;
     var last=H.getLast();
     if(!last||last===location.pathname){resume.hidden=true;syncResumeH();return}
-    /* only nudge on language homes so article reading is not interrupted */
-    if(!isHome()){resume.hidden=true;syncResumeH();return}
+    /* home always; standalone also (study.js may enrich copy) */
+    var standalone=false;
+    try{standalone=matchMedia('(display-mode: standalone)').matches||!!(navigator.standalone)}catch(e){}
+    if(!isHome()&&!standalone){resume.hidden=true;syncResumeH();return}
     link.href=last;
+    var tCont=D.getAttribute('data-study-continue');
+    var tGo=D.getAttribute('data-study-continue-go');
+    var text=resume.querySelector('.resume__text');
+    if(tCont&&text)text.textContent=tCont;
+    if(tGo)link.textContent=tGo;
     resume.hidden=false;
     requestAnimationFrame(syncResumeH);
   }
@@ -653,10 +660,32 @@ function wirePlayer(root){
   function seekTo(clientX){var r=seek.getBoundingClientRect(),x=clientX-r.left,p=r.width?x/r.width:0;
     if(getComputedStyle(document.documentElement).direction==='rtl')p=1-p;
     if(a.duration){a.currentTime=Math.max(0,Math.min(1,p))*a.duration;paint()}}
+  function mediaMeta(){
+    if(!('mediaSession' in navigator))return;
+    var titleEl=root.querySelector('.ha-player__title');
+    var title=(titleEl&&titleEl.textContent)||document.title||'Haoma';
+    var art=[];
+    try{
+      var icon=document.querySelector('link[rel="apple-touch-icon"],link[rel="icon"][sizes="192x192"]');
+      if(icon&&icon.href)art=[{src:icon.href,sizes:'192x192',type:'image/png'}];
+    }catch(e){}
+    try{
+      navigator.mediaSession.metadata=new MediaMetadata({title:title,artist:'Haoma',album:document.documentElement.lang==='fa'?'هوم':'Haoma',artwork:art});
+    }catch(e2){}
+  }
+  function bindMediaSession(){
+    if(!('mediaSession' in navigator))return;
+    try{
+      navigator.mediaSession.setActionHandler('play',function(){a.play().catch(function(){})});
+      navigator.mediaSession.setActionHandler('pause',function(){a.pause()});
+      navigator.mediaSession.setActionHandler('seekbackward',function(){if(a.duration)a.currentTime=Math.max(0,a.currentTime-10)});
+      navigator.mediaSession.setActionHandler('seekforward',function(){if(a.duration)a.currentTime=Math.min(a.duration,a.currentTime+10)});
+    }catch(e){}
+  }
   btn.addEventListener('click',function(){if(a.paused){document.querySelectorAll('[data-ha-player] audio').forEach(function(o){if(o!==a)o.pause()});a.play().catch(function(){})}else a.pause()});
-  a.addEventListener('play',function(){setPlaying(true)});
-  a.addEventListener('pause',function(){setPlaying(false)});
-  a.addEventListener('ended',function(){setPlaying(false);paint()});
+  a.addEventListener('play',function(){setPlaying(true);mediaMeta();try{navigator.mediaSession.playbackState='playing'}catch(e){}});
+  a.addEventListener('pause',function(){setPlaying(false);try{navigator.mediaSession.playbackState='paused'}catch(e){}});
+  a.addEventListener('ended',function(){setPlaying(false);paint();try{navigator.mediaSession.playbackState='none'}catch(e){}});
   a.addEventListener('timeupdate',paint);
   a.addEventListener('loadedmetadata',paint);
   var drag=false;
@@ -666,6 +695,7 @@ function wirePlayer(root){
   seek.addEventListener('pointercancel',function(){drag=false});
   seek.addEventListener('keydown',function(e){if(!a.duration)return;var step=Math.max(2,a.duration*0.05);
     if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();a.currentTime=Math.max(0,Math.min(a.duration,a.currentTime+(e.key==='ArrowRight'?step:-step)));paint()}});
+  bindMediaSession();
   paint();
 }
 document.querySelectorAll('[data-ha-player]').forEach(wirePlayer);

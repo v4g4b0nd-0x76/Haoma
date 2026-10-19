@@ -1,4 +1,4 @@
-/* PWA: register service worker, soft install prompt (Android), iOS tip. */
+/* PWA: register service worker, soft update banner, install tip (suppressed in standalone). */
 (function () {
   var reduced = false;
   try {
@@ -32,31 +32,6 @@
     }
   }
 
-  function registerSW() {
-    if (!("serviceWorker" in navigator)) return;
-    var root = siteRoot();
-    var swUrl = new URL("sw.js", root.href).href;
-    navigator.serviceWorker.register(swUrl, { scope: root.pathname }).catch(function () {});
-  }
-
-  function dismissKey() {
-    return "haoma_pwa_tip";
-  }
-
-  function tipSeen() {
-    try {
-      return sessionStorage.getItem(dismissKey()) === "1";
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function markSeen() {
-    try {
-      sessionStorage.setItem(dismissKey(), "1");
-    } catch (e) {}
-  }
-
   function isStandalone() {
     try {
       if (window.matchMedia("(display-mode: standalone)").matches) return true;
@@ -69,10 +44,35 @@
     return /iPad|iPhone|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
   }
 
-  function banner(html) {
-    if (document.getElementById("pwa-banner")) return null;
+  function tipKey() {
+    return "haoma_pwa_tip";
+  }
+
+  function tipSeen() {
+    try {
+      if (localStorage.getItem(tipKey()) === "1") return true;
+    } catch (e) {}
+    try {
+      return sessionStorage.getItem(tipKey()) === "1";
+    } catch (e2) {
+      return false;
+    }
+  }
+
+  function markSeen() {
+    try {
+      localStorage.setItem(tipKey(), "1");
+    } catch (e) {}
+    try {
+      sessionStorage.setItem(tipKey(), "1");
+    } catch (e2) {}
+  }
+
+  function banner(html, id) {
+    id = id || "pwa-banner";
+    if (document.getElementById(id)) return null;
     var el = document.createElement("div");
-    el.id = "pwa-banner";
+    el.id = id;
     el.className = "pwa-banner";
     el.setAttribute("role", "dialog");
     el.setAttribute("aria-live", "polite");
@@ -81,11 +81,95 @@
     var close = el.querySelector("[data-pwa-dismiss]");
     if (close) {
       close.addEventListener("click", function () {
-        markSeen();
+        if (id === "pwa-banner") markSeen();
         el.remove();
       });
     }
     return el;
+  }
+
+  function registerSW() {
+    if (!("serviceWorker" in navigator)) return;
+    var root = siteRoot();
+    var swUrl = new URL("sw.js", root.href).href;
+    navigator.serviceWorker
+      .register(swUrl, { scope: root.pathname })
+      .then(function (reg) {
+        watchUpdates(reg);
+      })
+      .catch(function () {});
+  }
+
+  function watchUpdates(reg) {
+    function showUpdate() {
+      if (!reg.waiting) return;
+      if (document.getElementById("pwa-update")) return;
+      var tBody =
+        document.documentElement.getAttribute("data-pwa-update") ||
+        "A new version is ready.";
+      var tGo =
+        document.documentElement.getAttribute("data-pwa-update-go") || "Refresh";
+      var tLater =
+        document.documentElement.getAttribute("data-pwa-later") || "Not now";
+      var el = banner(
+        '<div class="pwa-banner__inner">' +
+          '<p class="pwa-banner__text">' +
+          tBody +
+          "</p>" +
+          '<div class="pwa-banner__acts">' +
+          '<button type="button" class="pwa-banner__go" data-pwa-refresh>' +
+          tGo +
+          "</button>" +
+          '<button type="button" class="pwa-banner__skip" data-pwa-dismiss>' +
+          tLater +
+          "</button>" +
+          "</div></div>",
+        "pwa-update"
+      );
+      if (!el) return;
+      var go = el.querySelector("[data-pwa-refresh]");
+      if (go) {
+        go.addEventListener("click", function () {
+          var waiting = reg.waiting;
+          if (!waiting) {
+            el.remove();
+            return;
+          }
+          var reloaded = false;
+          navigator.serviceWorker.addEventListener("controllerchange", function () {
+            if (reloaded) return;
+            reloaded = true;
+            location.reload();
+          });
+          waiting.postMessage({ type: "SKIP_WAITING" });
+          el.remove();
+        });
+      }
+    }
+
+    if (reg.waiting) showUpdate();
+
+    reg.addEventListener("updatefound", function () {
+      var nw = reg.installing;
+      if (!nw) return;
+      nw.addEventListener("statechange", function () {
+        if (nw.state === "installed" && navigator.serviceWorker.controller) {
+          showUpdate();
+        } else if (nw.state === "installed" && !navigator.serviceWorker.controller) {
+          /* first install — activate without interrupting a read */
+          if (reg.waiting) reg.waiting.postMessage({ type: "SKIP_WAITING" });
+        }
+      });
+    });
+
+    /* periodic check when tab is visible again */
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "visible") {
+        try {
+          reg.update();
+        } catch (e) {}
+      }
+    });
   }
 
   var deferred = null;
@@ -131,7 +215,7 @@
     if (!tBody) return;
     window.setTimeout(
       function () {
-        if (tipSeen() || document.getElementById("pwa-banner")) return;
+        if (tipSeen() || document.getElementById("pwa-banner") || document.getElementById("pwa-update")) return;
         banner(
           '<div class="pwa-banner__inner">' +
             '<p class="pwa-banner__text">' +

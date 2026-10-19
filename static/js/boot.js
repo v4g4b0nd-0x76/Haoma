@@ -103,9 +103,14 @@
       clearLS('prefs');
       clearLS('haoma_last');
       clearLS('haoma_reads');
+      clearLS('haoma_saved');
+      clearLS('haoma_resume');
       try { sessionStorage.removeItem('haoma_hide_news_tick'); } catch (e) {}
       if (window.haoma && typeof window.haoma.clearReads === 'function') {
         window.haoma.clearReads();
+      }
+      if (window.haoma && typeof window.haoma.clearStudy === 'function') {
+        window.haoma.clearStudy();
       }
     }
   }
@@ -124,6 +129,10 @@
   D.dataset.dock = P.dock || 'start';
   D.dataset.nav = P.nav || 'shown';
   D.dataset.focus = P.focus ? '1' : '0';
+  if (P.reader) {
+    D.setAttribute('data-reader', '1');
+    D.setAttribute('data-reader-tone', P.readerTone || 'calm');
+  }
 
   window.haoma = {
     allowed: allowed,

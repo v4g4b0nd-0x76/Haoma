@@ -4,8 +4,11 @@
 <button type="button" data-act="minus" title="{{ i18n "tSmaller" }}" aria-label="{{ i18n "tSmaller" }}">A−</button>
 <button type="button" data-act="plus" title="{{ i18n "tBigger" }}" aria-label="{{ i18n "tBigger" }}">A+</button>
 <button type="button" data-act="focus" title="{{ i18n "tFocus" }}" aria-label="{{ i18n "tFocus" }}">◐</button>
-{{- /* PDF export: culture leaf articles (characters/stories/history) and episodes only. */ -}}
+<button type="button" data-act="reader" title="{{ i18n "readerMode" }}" aria-label="{{ i18n "readerMode" }}" aria-pressed="false">¶</button>
+{{- /* Save + PDF: culture leaf articles and episodes. */ -}}
 {{- if or (and (eq .Section "cultures") .IsPage .Params.sec) (eq .Section "episodes") -}}
+{{- $kind := cond (eq .Section "episodes") "ep" (.Params.sec | default "art") -}}
+<button type="button" class="tools__save" data-save data-save-path="{{ .RelPermalink }}" data-save-title="{{ .Title }}" data-save-culture="{{ .Params.culture | default "" }}" data-save-kind="{{ $kind }}" title="{{ i18n "readingSave" }}" aria-label="{{ i18n "readingSave" }}" aria-pressed="false">{{ partial "icon-scribe.html" }}</button>
 <button type="button" class="tools__pdf" data-act="pdf" title="{{ i18n "exportPdfHint" }}" aria-label="{{ i18n "exportPdf" }}">{{ i18n "exportPdf" }}</button>
 {{- end -}}
 </div>

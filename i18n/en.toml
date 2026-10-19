@@ -298,7 +298,7 @@
 [cookieTitle]
   other = "Allow cookies for this visit?"
 [cookieText]
-  other = "If you allow, we save your culture, reading size, last page, and a short reading history for Continue exploring — only on this device. Refuse and nothing is stored after you leave."
+  other = "If you allow, we save your culture, reading size, last page, reading list, and a short history for Continue exploring — only on this device. Refuse and nothing is stored after you leave."
 [cookieAllow]
   other = "Allow"
 [cookieDeny]
@@ -311,6 +311,26 @@
   other = "Open last page"
 [cookieResumeDismiss]
   other = "Dismiss"
+[studyContinue]
+  other = "Continue reading?"
+[studyContinueGo]
+  other = "Pick up where you left off"
+[readerMode]
+  other = "Reader mode (cycles calm / sepia / night)"
+[readingList]
+  other = "Reading list"
+[readingListClose]
+  other = "Close reading list"
+[readingListEmpty]
+  other = "Nothing saved yet — tap the scribe mark on a story or episode."
+[readingListTip]
+  other = "Saved only on this device. Needs cookie consent."
+[readingSave]
+  other = "Save to reading list"
+[readingSaved]
+  other = "Saved — tap to remove"
+[readingUnsave]
+  other = "Remove from list"
 [pwaInstall]
   other = "Install Haoma"
 [pwaLater]
@@ -319,6 +339,10 @@
   other = "Add Haoma to your home screen for quick access to episodes and stories."
 [pwaIosTip]
   other = "On iPhone or iPad: tap Share, then Add to Home Screen."
+[pwaUpdate]
+  other = "A new version is ready — refresh when you finish this page."
+[pwaUpdateGo]
+  other = "Refresh"
 [pwaShortcutEpisodes]
   other = "Latest episodes"
 [pwaShortcutEpisodesShort]
@@ -331,3 +355,9 @@
   other = "Stories"
 [pwaShortcutStoriesDesc]
   other = "Jump to short story glimpses on the home page"
+[pwaShortcutReadingList]
+  other = "Reading list"
+[pwaShortcutReadingListShort]
+  other = "List"
+[pwaShortcutReadingListDesc]
+  other = "Open your saved stories and episodes"
