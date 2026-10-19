@@ -937,15 +937,19 @@ en:{
  logo:'Haoma editor',lang_btn:'فارسی',lang_btn_to_en:'English',
  pend:'● {n} temporary draft',pend_s:'● {n} temporary drafts',
  saved:'Saved ✓',restored:'Restored {n} temporary draft(s)',
- lib_h:'Library',lib_help:'Upload PDF, images and EPUB. Use <b>Move to…</b> (or drag a file onto a category) to group files. <b>Remove</b> marks a file for deletion — Save to delete it from disk. After Save, the site Library page updates.',
- lib_upload:'Upload…',lib_search:'Search library…',lib_empty:'No library files yet.',lib_none:'No matches.',
+ lib_h:'Library',lib_help:'Upload PDF, images and EPUB for local preview, or <b>Add remote URL…</b> for Releases/R2/S3 links (preferred for git). Use <b>Move to…</b> (or drag onto a category) to group. <b>Remove</b> marks a local file for deletion — Save to delete it from disk. Binaries under <code>static/library/</code> are gitignored; keep the manifest in-repo.',
+ lib_upload:'Upload…',lib_remote:'Add remote URL…',lib_search:'Search library…',lib_empty:'No library files yet.',lib_none:'No matches.',
  lib_insert:'Library link…',lib_copy:'Copy link',lib_open:'Open',lib_discard:'Discard',lib_remove:'Remove',
  lib_remove_confirm:'Remove “{name}” from the library? Saved files are deleted on Save (can be undone from Drafts until then).',
+ lib_remove_remote_confirm:'Remove remote entry “{name}” from the manifest? Save library changes to keep.',
  lib_removed:'Removed from library ✓ — Save library changes to delete from disk',
+ lib_removed_remote:'Removed remote entry ✓ — Save library changes to keep',
  lib_removed_draft:'Removed unsaved upload ✓',
  lib_save:'Save uploads',
- lib_save_hint:'Save to write uploads into static/library/, apply removals, and refresh the site Library page.',
- lib_save_none:'Nothing to save — upload, edit categories, or remove a file first.',
+ lib_save_hint:'Save to write uploads into static/library/, apply removals/remote entries, and refresh the site Library page.',
+ lib_save_none:'Nothing to save — upload, add a remote URL, edit categories, or remove a file first.',
+ lib_remote_title:'Remote library URL',lib_remote_url:'HTTPS URL',lib_remote_key:'Id (slug)',lib_remote_ok:'Remote entry added ✓ — Save library changes to keep',
+ lib_remote_bad:'Need an https:// (or http://) URL',lib_remote_tag:'remote',
  lib_all:'All',lib_pdf:'PDF',lib_image:'Images',lib_epub:'EPUB',lib_md:'Markdown',lib_text:'Text',
  lib_pick:'Pick a library file',lib_ok:'Insert',lib_uploaded:'Uploaded {n} file(s) — Save to keep',
  lib_bad_type:'Allowed types: PDF, EPUB, images (png/jpg/gif/webp/svg), Markdown, txt',
@@ -1000,15 +1004,19 @@ fa:{
  logo:'ویرایشگر Haoma',lang_btn:'English',lang_btn_to_en:'English',
  pend:'● {n} draft موقت',pend_s:'● {n} draft موقت',
  saved:'Save شد ✓',restored:'{n} draft موقت برگردانده شد',
- lib_h:'کتابخانه',lib_help:'PDF، تصویر و EPUB را Upload کنید. با <b>انتقال به…</b> (یا کشیدن فایل روی یک دسته) فایل‌ها را گروه‌بندی کنید. <b>حذف</b> فایل را برای پاک شدن علامت می‌زند — با Save از دیسک حذف می‌شود. بعد از Save صفحهٔ Library سایت تازه می‌شود.',
- lib_upload:'Upload…',lib_search:'Search در Library…',lib_empty:'هنوز فایلی نیست.',lib_none:'موردی پیدا نشد.',
+ lib_h:'کتابخانه',lib_help:'برای پیش‌نمایش محلی PDF/تصویر/EPUB را Upload کنید؛ برای Releases/R2/S3 از <b>Add remote URL…</b> استفاده کنید (ترجیح برای git). با <b>انتقال به…</b> دسته‌بندی کنید. باینری‌های <code>static/library/</code> در git نیستند؛ فقط manifest در ریپو می‌ماند.',
+ lib_upload:'Upload…',lib_remote:'Add remote URL…',lib_search:'Search در Library…',lib_empty:'هنوز فایلی نیست.',lib_none:'موردی پیدا نشد.',
  lib_insert:'لینک Library…',lib_copy:'Copy link',lib_open:'Open',lib_discard:'Discard',lib_remove:'حذف',
  lib_remove_confirm:'«{name}» از Library حذف شود؟ فایل‌های ذخیره‌شده با Save از دیسک پاک می‌شوند (تا آن وقت از Drafts قابل Undo است).',
+ lib_remove_remote_confirm:'ورودی remote «{name}» از manifest حذف شود؟ برای ماندن Save library changes بزنید.',
  lib_removed:'از Library حذف شد ✓ — برای پاک شدن از دیسک Save library changes بزنید',
+ lib_removed_remote:'ورودی remote حذف شد ✓ — برای ماندن Save library changes بزنید',
  lib_removed_draft:'Upload ذخیره‌نشده حذف شد ✓',
  lib_save:'Save uploads',
- lib_save_hint:'با Save، Uploadها در static/library/ نوشته می‌شوند، حذف‌ها اعمال می‌شوند و صفحهٔ Library سایت تازه می‌شود.',
- lib_save_none:'چیزی برای Save نیست — Upload کنید، دسته را ویرایش کنید، یا فایلی را حذف کنید.',
+ lib_save_hint:'با Save، Uploadها در static/library/ نوشته می‌شوند، حذف‌ها/ورودی‌های remote اعمال می‌شوند و صفحهٔ Library سایت تازه می‌شود.',
+ lib_save_none:'چیزی برای Save نیست — Upload کنید، remote URL بگذارید، دسته را ویرایش کنید، یا فایلی را حذف کنید.',
+ lib_remote_title:'URL دوردست Library',lib_remote_url:'HTTPS URL',lib_remote_key:'Id (slug)',lib_remote_ok:'ورودی remote اضافه شد ✓ — برای ماندن Save library changes بزنید',
+ lib_remote_bad:'به https:// (یا http://) نیاز است',lib_remote_tag:'remote',
  lib_all:'همه',lib_pdf:'PDF',lib_image:'تصاویر',lib_epub:'EPUB',lib_md:'Markdown',lib_text:'متن',
  lib_pick:'انتخاب فایل Library',lib_ok:'Insert',lib_uploaded:'{n} فایل Upload شد — برای ماندن Save کنید',
  lib_bad_type:'نوع‌های مجاز: PDF، EPUB، تصویر (png/jpg/gif/webp/svg)، Markdown، txt',
@@ -1820,7 +1828,7 @@ async function openFile(p){if(!VIEWS[view][3]){view='content';render()}cur=p;doc
   const doLibLink=()=>{const sel=ta.value.slice(ta.selectionStart,ta.selectionEnd);
    pickLibrary({title:t('lib_pick'),ok:t('lib_ok')},path=>{
     if(!path)return;
-    const name=path.split('/').pop(),href=libPublicUrl(path),label=sel||libDispTitle(name);
+    const name=path.split('/').pop(),href=libEntryHref(name,path.startsWith('remote:')?null:path),label=sel||libDispTitle(name);
     const s=ta.selectionStart,e=ta.selectionEnd;
     ta.setRangeText('['+label+']('+href+')',s,e,'end');ta.focus();prev();mark()})};
   if($('#iMore'))$('#iMore').onclick=e=>{e.stopPropagation();const r=e.target.getBoundingClientRect();showCtx(r.left,r.bottom+4,[
@@ -1923,12 +1931,34 @@ function setLibFileCats(name,cats){
  const m=libManifest(),prev=m.files[name]||{},title=prev.title!=null?prev.title:libDispTitle(name);
  const pages=Array.isArray(prev.pages)?prev.pages:[];
  const next=Array.from(new Set((cats||[]).filter(Boolean)));
- m.files[name]={title,categories:next,pages};setLibManifest(m);return next}
+ const entry={...prev,title,categories:next,pages};
+ m.files[name]=entry;setLibManifest(m);return next}
 function libDropManifestEntry(name){
  const m=libManifest();if(!m.files[name])return false;
  delete m.files[name];setLibManifest(m);return true}
+function libIsRemoteUrl(u){return/^https?:\/\//i.test(String(u||'').trim())}
+function libRemoteHref(meta){const u=(meta&&(meta.url||meta.href))||'';return libIsRemoteUrl(u)?String(u).trim():''}
+function libRemoteEntries(){
+ const local=new Set(libraryFiles().map(p=>p.split('/').pop()));
+ const m=libManifest(),out=[];
+ Object.keys(m.files||{}).forEach(name=>{
+  if(local.has(name))return;
+  const meta=m.files[name]||{},href=libRemoteHref(meta);
+  if(!href)return;
+  out.push({name,meta,href,title:libDispTitle(name),kind:meta.kind||libKind(name)||libKind(href)||'file',cats:meta.categories||[],pages:meta.pages||[]});
+ });
+ return out}
+function libEntryHref(name,path){
+ const href=libRemoteHref(libFileMeta(name));
+ if(href)return href;
+ return path?libPublicUrl(path):('/library/'+encodeURIComponent(name));
+}
 async function removeLibraryFile(path){
  const name=path.split('/').pop();
+ const remoteOnly=!path||path.startsWith('remote:');
+ if(remoteOnly){
+  if(!confirm(t('lib_remove_remote_confirm',{name})))return false;
+  libDropManifestEntry(name);say(t('lib_removed_remote'),'warn');return true}
  if(!confirm(t('lib_remove_confirm',{name})))return false;
  const onDisk=files.includes(path),pendingUpload=drafts.has(path)&&drafts.get(path)&&drafts.get(path).bin;
  if(onDisk){setDraft(path,null);await push(path)}
@@ -1936,6 +1966,19 @@ async function removeLibraryFile(path){
  libDropManifestEntry(name);
  say(t(onDisk&&!pendingUpload?'lib_removed':'lib_removed_draft'),onDisk&&!pendingUpload?'warn':'ok');
  return true}
+async function addLibraryRemote(){
+ const fields=[[t('lib_remote_url'),'lru',''],[t('lib_title_en'),'lte',''],[t('lib_title_fa'),'ltf',''],[t('lib_remote_key'),'lrk','']];
+ const vals=await askLibFields(t('lib_remote_title'),fields,t('lib_ok'));
+ if(!vals)return null;
+ const url=vals[0],titles=libTitleObj(vals[1],vals[2]);
+ if(!libIsRemoteUrl(url))throw Error(t('lib_remote_bad'));
+ let key=(vals[3]||'').trim().toLowerCase().replace(/[^a-z0-9._-]+/g,'-').replace(/^-+|-+$/g,'');
+ if(!key){try{const u=new URL(url);key=libSlug((u.pathname.split('/').pop()||'remote').split('?')[0])||('remote-'+nid())}catch(e){key='remote-'+nid()}}
+ const m=libManifest();
+ if(m.files[key]||libraryFiles().some(p=>p.split('/').pop()===key)){key=key.replace(/(\.[^.]+)?$/,(ext)=>'-'+nid()+(ext||''))}
+ const kind=libKind(key)||libKind(url)||'file';
+ m.files[key]={title:titles,url,kind,categories:[],pages:[]};setLibManifest(m);
+ say(t('lib_remote_ok'),'warn');return key}
 function pickLibMove(name,onDone){
  const mani=libManifest();
  if(!mani.categories.length){say(t('lib_cat_empty'),'warn');return null}
@@ -1990,7 +2033,9 @@ function pickLibTarget(onPick){
   })};
  q.oninput=paint;paint();setTimeout(()=>q.focus(),30);return m}
 async function openLibUrl(pubUrl){
- const path=String(pubUrl||'').replace(/^\//,'');if(!path)return;
+ const raw=String(pubUrl||'');if(!raw)return;
+ if(libIsRemoteUrl(raw)){window.open(raw,'_blank','noopener');say(t('lib_open_tab'),'ok');return}
+ const path=raw.replace(/^\//,'');if(!path)return;
  if(!pvOn){say(t('lib_need_prev'),'warn');try{await pv('start')}catch(e){say(e.message||t('prev_fail'),'bad');return}}
  if(!pvOn||!pvBase){window.open('/__hugo__/'+path,'_blank','noopener');return}
  const full=pvBase+path,f=$('#pf');
@@ -2019,13 +2064,15 @@ function pickLibrary(opts,onPick){opts=opts||{};let filter=opts.filter||'all',ca
  const q=m.querySelector('#libq'),list=m.querySelector('#libl'),filt=m.querySelector('#libf');
  let hits=[],ai=0;
  const paint=()=>{const needle=(q.value||'').toLowerCase().trim();
-  hits=libraryFiles().map(p=>{const name=p.split('/').pop(),meta=libFileMeta(name);
-   return{path:p,name,title:libDispTitle(name),kind:libKind(name),cats:meta.categories||[]}}).filter(o=>{
+  const local=libraryFiles().map(p=>{const name=p.split('/').pop(),meta=libFileMeta(name);
+   return{path:p,name,title:libDispTitle(name),kind:meta.kind||libKind(name),cats:meta.categories||[],href:libEntryHref(name,p)}});
+  const remote=libRemoteEntries().map(o=>({path:'remote:'+o.name,name:o.name,title:o.title,kind:o.kind,cats:o.cats,href:o.href}));
+  hits=local.concat(remote).filter(o=>{
    if(filter&&filter!=='all'&&o.kind!==filter)return false;
    if(catFilter&&!(o.cats||[]).includes(catFilter))return false;
-   if(!needle)return true;return(o.title+' '+o.name).toLowerCase().includes(needle);
+   if(!needle)return true;return(o.title+' '+o.name+' '+(o.href||'')).toLowerCase().includes(needle);
   }).slice(0,80);ai=0;
-  list.innerHTML=hits.map((o,i)=>`<li class="${i===0?'on':''}" data-i="${i}" data-p="${esc(o.path)}"><b>${esc(o.title)}</b><span>${esc(o.kind)} · ${esc(o.name)}</span></li>`).join('')||`<li><span>${esc(t('lib_empty'))}</span></li>`;
+  list.innerHTML=hits.map((o,i)=>`<li class="${i===0?'on':''}" data-i="${i}" data-p="${esc(o.path)}" data-href="${esc(o.href||'')}"><b>${esc(o.title)}</b><span>${esc(o.kind)} · ${esc(o.name)}${o.path.startsWith('remote:')?' · '+esc(t('lib_remote_tag')):''}</span></li>`).join('')||`<li><span>${esc(t('lib_empty'))}</span></li>`;
   list.querySelectorAll('li[data-p]').forEach(li=>{
    li.onmouseenter=()=>{ai=+li.dataset.i;list.querySelectorAll('li').forEach((x,i)=>x.classList.toggle('on',i===ai))};
    li.onclick=()=>{list.querySelectorAll('li').forEach(x=>x.classList.remove('on'));li.classList.add('on');ai=+li.dataset.i};
@@ -2044,17 +2091,19 @@ function pLibrary(){const chips=[['all',t('lib_all')],['pdf',t('lib_pdf')],['ima
  let kind='all',catFilter='',q='';
  const dirtyLib=()=>[...drafts.keys()].filter(p=>p.startsWith('static/library/'));
  const paint=()=>{const needle=q.toLowerCase().trim(),mani=libManifest();
-  const rows=libraryFiles().map(p=>{const name=p.split('/').pop(),meta=libFileMeta(name);
-   return{path:p,name,title:libDispTitle(name),kind:libKind(name),cats:meta.categories||[],pages:meta.pages||[],draft:drafts.has(p)&&!!(drafts.get(p)&&drafts.get(p).bin)}}).filter(o=>{
+  const localRows=libraryFiles().map(p=>{const name=p.split('/').pop(),meta=libFileMeta(name);
+   return{path:p,name,title:libDispTitle(name),kind:meta.kind||libKind(name),cats:meta.categories||[],pages:meta.pages||[],draft:drafts.has(p)&&!!(drafts.get(p)&&drafts.get(p).bin),remote:!!libRemoteHref(meta),href:libEntryHref(name,p)}});
+  const remoteRows=libRemoteEntries().map(o=>({path:'remote:'+o.name,name:o.name,title:o.title,kind:o.kind,cats:o.cats,pages:o.pages,draft:false,remote:true,href:o.href}));
+  const rows=localRows.concat(remoteRows).filter(o=>{
    if(kind!=='all'&&o.kind!==kind)return false;
    if(catFilter&&!(o.cats||[]).includes(catFilter))return false;
-   if(!needle)return true;return(o.title+' '+o.name).toLowerCase().includes(needle);
+   if(!needle)return true;return(o.title+' '+o.name+' '+(o.href||'')).toLowerCase().includes(needle);
   });
   const body=rows.map(o=>{
    const catChips=(o.cats||[]).map(id=>{const c=mani.categories.find(x=>x.id===id);if(!c)return'';
     return`<span class="lib-fcchip">${esc(libCatLabel(c))}<button type="button" data-rmcat="${esc(o.name)}" data-cid="${esc(id)}" title="${esc(t('lib_cat_remove'))}" aria-label="${esc(t('lib_cat_remove'))}">✕</button></span>`}).join('');
    return`<tr>
-   <td><b class="lib-drag" draggable="true" data-dragfile="${esc(o.name)}" title="${esc(t('lib_drag_hint'))}">${esc(o.title)}</b><br><span class="msg" style="margin:0">${esc(o.name)}${o.draft?' <span class="tag">upload</span>':''}</span>
+   <td><b class="lib-drag" draggable="true" data-dragfile="${esc(o.name)}" title="${esc(t('lib_drag_hint'))}">${esc(o.title)}</b><br><span class="msg" style="margin:0">${esc(o.name)}${o.draft?' <span class="tag">upload</span>':''}${o.remote?' <span class="tag">'+esc(t('lib_remote_tag'))+'</span>':''}</span>
     <div class="lib-file-cats">${catChips||`<span class="lib-uncat-badge">${esc(t('lib_uncat'))}</span>`}</div>
     ${o.pages.length?`<div class="lib-meta">${esc(t('lib_links'))}: ${o.pages.map(p=>esc(p)).join(', ')}</div>`:''}</td>
    <td class="kind">${esc(o.kind)}</td>
@@ -2063,8 +2112,8 @@ function pLibrary(){const chips=[['all',t('lib_all')],['pdf',t('lib_pdf')],['ima
     <button type="button" data-rename="${esc(o.name)}">${esc(t('lib_rename'))}</button>
     <button type="button" data-linkfile="${esc(o.name)}">${esc(t('lib_file_link'))}</button>
     ${o.pages.length?`<button type="button" data-clearlinks="${esc(o.name)}">${esc(t('lib_unlink'))}</button>`:''}
-    <button type="button" data-copy="${esc(libPublicUrl(o.path))}">${esc(t('lib_copy'))}</button>
-    <button type="button" data-prev="${esc(libPublicUrl(o.path))}">${esc(t('lib_open'))}</button>
+    <button type="button" data-copy="${esc(o.href)}">${esc(t('lib_copy'))}</button>
+    <button type="button" data-prev="${esc(o.href)}">${esc(t('lib_open'))}</button>
     <button type="button" data-rm="${esc(o.path)}">${esc(t(o.draft?'lib_discard':'lib_remove'))}</button>
    </div></td></tr>`}).join('')||`<tr><td colspan="3" class="msg">${esc(needle||kind!=='all'||catFilter?t('lib_none'):t('lib_empty'))}</td></tr>`;
   const box=$('#libtbl');if(box)box.innerHTML=body;
@@ -2123,6 +2172,7 @@ function pLibrary(){const chips=[['all',t('lib_all')],['pdf',t('lib_pdf')],['ima
  <p class="msg" style="margin:0">${esc(t('lib_save_hint'))}</p>
  <div class="lib-toolbar">
   <button type="button" class="pri" id="libup2">${esc(t('lib_upload'))}</button>
+  <button type="button" id="libremote">${esc(t('lib_remote'))}</button>
   <button type="button" class="pri" id="libsave" title="${esc(n0?t('lib_save_hint'):t('lib_save_none'))}" ${n0?'':'disabled'}>${esc(t('lib_save'))}</button>
   <button type="button" id="libcatadd">${esc(t('lib_cat_add'))}</button>
   <input type="search" id="libqs" placeholder="${esc(t('lib_search'))}" autocomplete="off">
@@ -2138,6 +2188,7 @@ function pLibrary(){const chips=[['all',t('lib_all')],['pdf',t('lib_pdf')],['ima
  $('#libchips').querySelectorAll('button').forEach(b=>b.onclick=()=>{kind=b.dataset.k;$('#libchips').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));paint()});
  $('#libup2').onclick=()=>$('#libfi2').click();
  $('#libfi2').onchange=async e=>{try{const n=(await uploadLibrary([...e.target.files])).length;say(t('lib_uploaded',{n}),'warn');paint()}catch(err){say(err.message,'bad')}};
+ $('#libremote').onclick=async()=>{try{await addLibraryRemote();paint()}catch(err){say(err.message,'bad')}};
  $('#libcatadd').onclick=async()=>{const titles=await askLibCat({});if(!titles)return;
   const m=libManifest(),id=libCatId(titles.en||titles.fa);m.categories.push({id,title:titles,pages:[]});setLibManifest(m);paint()};
  $('#libsave').onclick=()=>{const u=dirtyLib();if(!u.length){say(t('lib_save_none'),'warn');return}commit(u,'Library').then(pLibrary)}}

@@ -2,6 +2,8 @@
 
 Read this before changing anything. It describes the site, the editor, the file formats and the rules that keep both working. Humans can use it too.
 
+**Also see:** [AGENTS.md](AGENTS.md) (short map) · [docs/repo-hygiene.md](docs/repo-hygiene.md) (library off-git + history purge runbook) · [CLAUDE.md](CLAUDE.md) (entry stub).
+
 ## 1. What this project is
 Haoma is a bilingual (English + Farsi/RTL) mythology podcast and wiki: wiki-style pages per culture, a podcast section, a media library. It is a **static Hugo site** deployed to **GitHub Pages**. A local **editor** (`tools/`) generates the files for you.
 
@@ -30,7 +32,7 @@ static/js/boot.js site.js culture pick, slider, play-on-scroll, notes, tabs
 static/img/               banners (<culture>.svg), maps/ for map artwork, media/ for page images and GIFs
 static/img/brand/         logo set, favicon, podcast cover, share image (generated, see 8a)
 tools/brand/              logo generator (build.py) and its font
-static/video/ audio/ library/   MP4/WebM, episode audio, downloadable PDFs and Markdown
+static/video/ audio/ library/   MP4/WebM, episode audio; library = manifest (+ optional locals; binaries off-git)
 MAP-DESIGN.md             map house style, creature rules, workflow, hover and print contract
 tools/genmaps.py          map artwork generator (Natural Earth in tools/geo/; art in tools/mapart.py)
 tools/mapart.py           engraved monsters/ships/terrain symbols used by genmaps.py
@@ -49,7 +51,7 @@ tools/linkcheck.py        every internal link and anchor in a built site
 tools/parity.py           EN/FA structural parity check (see 10, Verify)
 .github/                  Pages workflow, issue and PR templates
 ```
-Never edit `public/`, `resources/`, `tools/.preview/`, `tools/.drafts/`, `tools/.history/` (generated, git-ignored).
+Never edit `public/`, `resources/`, `tools/.preview/`, `tools/.drafts/`, `tools/.history/`, `static/.preview-maps/` (generated, git-ignored).
 
 ## 3. Content model
 ### 3.1 Culture pages
@@ -149,9 +151,11 @@ New culture checklist: folder + `_index.md` files in both languages (3.1), theme
 **The culture picker in the top bar is a listbox, not a `<select>`.** A native select cannot tint an option with that culture's colour while you hover it, which is the whole point of this control (`layouts/_default/baseof.html`, `.cpick*` in style.css, wired in `site.js`). Each `<li role="option">` carries `data-pick` (the culture key), `data-href`, `data-name`, and inline `--c` — that culture's main colour from `data/themes.json` — plus `--pat`, its motif (`--m-meander|rosette|zigzag|waves`; `--m-star` for the general box). The wrapper `#culture-pick` carries the colour of the culture *in force*, which is what tints the trigger and the panel frame, and `paintPick()` copies the chosen option's `--c`/`--pat` onto it and sets `aria-selected`. The first entry is the **general box**: neutral `#9aa3b5`, star-marked, divided off from the cultures. Keep the accessibility contract when touching it — `aria-haspopup`/`aria-expanded` on the button, `role="listbox"` on the panel, arrows move focus, Enter picks, Escape closes and returns focus, a click outside closes — and keep the panel anchored to the trigger's *inline-end* edge so it opens toward the page centre in both directions.
 
 ## 8. Media
-- Images/GIFs: `static/img/media/`. Video: `static/video/` (MP4 H.264 or WebM, muted loops; prefer MP4/WebM over GIF above ~1 MB). Audio: `static/audio/`. PDFs/Markdown: `static/library/` (listed automatically in the Library).
-- Lower-case file names, `a-z0-9.-` only. Keep the repo under ~1 GB; host long audio on archive.org and put the full URL in `audio:`.
+- Images/GIFs: `static/img/media/`. Video: `static/video/` (MP4 H.264 or WebM, muted loops; prefer MP4/WebM over GIF above ~1 MB). Audio: `static/audio/`.
+- **Library (off-git binaries):** only `static/library/manifest.json` and `.gitkeep` belong in git. PDFs/EPUBs/ZIPs/large media are gitignored — host them on GitHub Releases, R2, S3, or archive.org. The Library page lists local files under `static/library/` **and** manifest entries with a remote `url` / `href` (`https://…`). Optional `kind` on a file entry. Editor: **Library → Add remote URL…**. Full schema and history-purge runbook: [docs/repo-hygiene.md](docs/repo-hygiene.md). Do **not** run `git filter-repo` / force-push unless a maintainer explicitly asks.
+- Lower-case file names, `a-z0-9.-` only. Keep the working tree lean; host long audio on archive.org and put the full URL in `audio:`.
 - Record the licence and author of every asset in the page's "Media credits".
+- **Cache-bust:** CSS/JS links in `layouts/_default/baseof.html` use `?v=<token>` (e.g. `cult-flourish-1`, `cookie-1`). When you change a shipped asset in a way that must invalidate CDN/browser caches, bump the matching token. Release/editor binary tags are `editor-v*`; culture-flourish asset tags follow `cult-flourish-*`.
 
 ## 8a. Brand and typography (Haoma)
 **Name.** Haoma (هوم) is the Avestan word for the sacred plant pressed in the Yasna ritual and for the divinity praised in the Hom Yasht (Yasna 9-11); the Vedic cousin is Soma. Use "Haoma" in English prose and "هوم" in Farsi. Do not translate or respell it.
@@ -243,3 +247,16 @@ Verify before finishing:
 - The CDP profile directory persists between runs, so `connect()` in `uicheck.py` is always followed by `nocache(p)`. Without it a scenario can silently test the previous build's CSS or JS — which looks exactly like a bug in your change.
 
 Commit style: one logical change per commit, message in the imperative; open a pull request (`fix/<topic>`) rather than pushing to the main branch when proposing corrections.
+
+## 11. Working agreements for agents
+
+Durable conventions — keep these even when a task is narrow:
+
+1. **Measure before large media commits.** Prefer SVG motifs and compressed assets; do not commit multi‑MB PDFs, EPUBs, ZIPs, or raw preview rasters. Library binaries stay outside git (Releases/R2/S3 + manifest `url`).
+2. **Never commit generated caches:** `tools/.preview/`, `tools/.history/`, `tools/.drafts/`, `static/.preview-maps/`, `public/`, `resources/`, `.DS_Store`. They are gitignored.
+3. **Culture flourishes:** 2–3 light motions on `data-fixed` pages; honour `prefers-reduced-motion`; original SVG motif masks only (align with `static/img/atlas/*-motifs.svg` / `static/img/ornaments/`). Do **not** scrape Pinterest or invent fake script glyphs.
+4. **No secrets** in the tree (tokens, `.env`, private keys, editor session tokens). The editor token is per-run and must not be committed.
+5. **Editor ports:** local editor `127.0.0.1:8765` (or Codespace forward); Hugo preview via editor proxy `/__hugo__/` in Codespaces — never put auto-open on 8765 in `forwardPorts`.
+6. **Shell:** prefer `rtk` prefix for git / test / build commands when RTK is available (token-thrifty filters).
+7. **History rewrite:** document-only in [docs/repo-hygiene.md](docs/repo-hygiene.md). Never run filter-repo or force-push from an agent session unless the human explicitly requests it.
+8. **Verify** with the checklist in §10 before finishing substantive layout/CSS/JS/content work.

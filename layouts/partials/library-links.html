@@ -39,7 +39,12 @@
     {{- else if $titleObj -}}
       {{- $title = $titleObj -}}
     {{- end -}}
-    {{- $hitFiles = $hitFiles | append (dict "name" $name "title" $title "url" (printf "library/%s" $name | relURL)) -}}
+    {{- $href := printf "library/%s" $name | relURL -}}
+    {{- $remote := $meta.url | default $meta.href | default "" -}}
+    {{- if or (hasPrefix $remote "https://") (hasPrefix $remote "http://") -}}
+      {{- $href = $remote -}}
+    {{- end -}}
+    {{- $hitFiles = $hitFiles | append (dict "name" $name "title" $title "url" $href) -}}
   {{- end -}}
 {{- end -}}
 {{- $hitCats := slice -}}

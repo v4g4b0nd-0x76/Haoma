@@ -2,7 +2,74 @@ public/
 resources/
 .hugo_build.lock
 tools/.preview.log
+tools/.editor.log
 __pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Editor / Hugo generated (never commit)
 tools/.preview/
 tools/.history/
-tools/.editor.log
+tools/.drafts/
+
+# Generated map preview raster gallery (not source SVG art)
+static/.preview-maps/
+
+# OS junk
+.DS_Store
+**/.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Library binaries and large media — host via Releases / R2 / S3.
+# Keep static/library/manifest.json and static/library/.gitkeep tracked.
+static/library/**/*.pdf
+static/library/**/*.epub
+static/library/**/*.zip
+static/library/**/*.mobi
+static/library/**/*.azw
+static/library/**/*.azw3
+static/library/**/*.djvu
+static/library/**/*.mp3
+static/library/**/*.mp4
+static/library/**/*.webm
+static/library/**/*.mkv
+static/library/**/*.avi
+static/library/**/*.mov
+static/library/**/*.wav
+static/library/**/*.flac
+static/library/**/*.m4a
+static/library/**/*.ogg
+static/library/**/*.7z
+static/library/**/*.rar
+static/library/**/*.tar
+static/library/**/*.gz
+static/library/**/*.bz2
+# also match files sitting directly under static/library/
+static/library/*.pdf
+static/library/*.epub
+static/library/*.zip
+static/library/*.mobi
+static/library/*.azw
+static/library/*.azw3
+static/library/*.djvu
+static/library/*.mp3
+static/library/*.mp4
+static/library/*.webm
+static/library/*.mkv
+static/library/*.avi
+static/library/*.mov
+static/library/*.wav
+static/library/*.flac
+static/library/*.m4a
+static/library/*.ogg
+static/library/*.7z
+static/library/*.rar
+static/library/*.tar
+static/library/*.gz
+static/library/*.bz2

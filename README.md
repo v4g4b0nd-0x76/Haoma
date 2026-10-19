@@ -31,7 +31,7 @@ The name _Haoma_ is the Avestan word for the sacred plant pressed in the Yasna r
 | **Bilingual** | Every page exists in `content/en/` and `content/fa/`. Farsi is RTL; CSS uses logical properties throughout. |
 | **Cultures** | Each culture (Norse, Iranian, Indian, Greek, Mesopotamian) gets its own folder with `characters`, `stories`, and `history` sub-sections. |
 | **Podcast** | Episodes are numbered Markdown files with an `audio:` field pointing to an MP3 (local or archive.org). |
-| **Library** | PDFs and Markdown files in `static/library/` are listed automatically. |
+| **Library** | Catalogued in `static/library/manifest.json`. Binaries live outside git (Releases / R2 / S3); remote `url` entries and any local files under `static/library/` are listed automatically. See [docs/repo-hygiene.md](docs/repo-hygiene.md). |
 | **Static only** | No database, no server at runtime. Only Hugo builds it; no other build step. |
 | **Local editor** | `python tools/editor.py` — a local web app that edits content with draft/preview/rollback, no IDE needed. |
 | **Web editor** | Open the repo in a **Codespace** to run that same editor in the browser, no local install. See §5. |
@@ -52,7 +52,7 @@ Every route below exists in both languages (`/fa/…` mirrors `/…`); Farsi is 
 | **Stories** | `/cultures/<culture>/stories/` | Myth summaries and retellings. |
 | **History** | `/cultures/<culture>/history/` | Historical context and scholarship. |
 | **Episodes** | `/episodes/` | The podcast: numbered episodes with audio, show notes, script and media credits. |
-| **Library** | `/library/` | Everything in `static/library/` — downloadable PDFs and Markdown. |
+| **Library** | `/library/` | Manifest + local/remote library entries — downloadable PDFs, images, EPUB, Markdown. |
 | **Guide** | `/guide/` | A live demo of every writing component. Read it before editing content. |
 | **About** | `/about/` | What the project is and how it is sourced. |
 | **Editor launcher** | `/tools/` | One-click **Open editor** → GitHub Codespace (real editor). See §5 and §10. |
@@ -117,7 +117,7 @@ static/
   img/brand/              Logo SVGs, favicon, podcast cover, share image
   fonts/                  Self-hosted web fonts (no CDN)
   audio/  video/          Episode audio and video clips
-  library/                Downloadable PDFs and Markdown
+  library/                Manifest (+ optional local files); binaries gitignored — see docs/repo-hygiene.md
 tools/
   editor.py               Local editor server (Python stdlib only)
   admin.html              Editor UI (single-file vanilla JS + HTML)
@@ -134,7 +134,7 @@ tools/
 .github/workflows/hugo.yml  Pages build and deploy on push to master/main
 ```
 
-> **Never edit** `public/`, `resources/`, `tools/.preview/`, `tools/.drafts/`, `tools/.history/` — they are generated and git-ignored.
+> **Never edit** `public/`, `resources/`, `tools/.preview/`, `tools/.drafts/`, `tools/.history/`, `static/.preview-maps/` — they are generated and git-ignored. Library binaries stay out of git; see [docs/repo-hygiene.md](docs/repo-hygiene.md).
 
 ---
 

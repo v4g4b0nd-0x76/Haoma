@@ -1,4 +1,4 @@
-{{- /* Library discovery: filterable list with type, category, and human title. */ -}}
+{{- /* Library discovery: local files under static/library/ plus remote url/href entries in the manifest. */ -}}
 {{- $mani := dict "categories" (slice) "files" (dict) -}}
 {{- if fileExists "static/library/manifest.json" -}}
   {{- $mani = transform.Unmarshal (readFile "static/library/manifest.json") -}}
@@ -17,17 +17,15 @@
   {{- end -}}
   {{- $catTitle = merge $catTitle (dict .id $label) -}}
 {{- end -}}
+{{- $kindFromExt := dict "pdf" "pdf" "epub" "epub" "md" "md" "markdown" "md" "txt" "text" "png" "image" "jpg" "image" "jpeg" "image" "gif" "image" "webp" "image" "svg" "image" -}}
 {{- $files := slice -}}
+{{- $seen := dict -}}
 {{- range readDir "static/library" -}}
   {{- if and (not .IsDir) (ne .Name "README.md") (ne .Name ".gitkeep") (ne .Name "manifest.json") (not (strings.HasPrefix .Name ".")) -}}
     {{- $ext := path.Ext .Name | strings.TrimPrefix "." | lower -}}
-    {{- $kind := "file" -}}
-    {{- if eq $ext "pdf" }}{{ $kind = "pdf" }}{{ end -}}
-    {{- if eq $ext "epub" }}{{ $kind = "epub" }}{{ end -}}
-    {{- if or (eq $ext "md") (eq $ext "markdown") }}{{ $kind = "md" }}{{ end -}}
-    {{- if eq $ext "txt" }}{{ $kind = "text" }}{{ end -}}
-    {{- if or (eq $ext "png") (eq $ext "jpg") (eq $ext "jpeg") (eq $ext "gif") (eq $ext "webp") (eq $ext "svg") }}{{ $kind = "image" }}{{ end -}}
+    {{- $kind := index $kindFromExt $ext | default "file" -}}
     {{- $meta := index $filesMap .Name | default dict -}}
+    {{- with $meta.kind }}{{ $kind = . }}{{ end -}}
     {{- $titleObj := $meta.title -}}
     {{- $title := .Name | strings.TrimSuffix (path.Ext .Name) | replaceRE `[.\-_]+` " " | replaceRE `\s+` " " | replaceRE `^\s+|\s+$` "" -}}
     {{- if reflect.IsMap $titleObj -}}
@@ -40,7 +38,38 @@
     {{- range $fileCats -}}
       {{- with index $catTitle . }}{{ $catLabels = $catLabels | append . }}{{ end -}}
     {{- end -}}
-    {{- $files = $files | append (dict "name" .Name "title" $title "ext" $ext "kind" $kind "cats" $fileCats "catLabels" $catLabels "url" (printf "library/%s" .Name | relURL)) -}}
+    {{- $href := printf "library/%s" .Name | relURL -}}
+    {{- $remote := $meta.url | default $meta.href | default "" -}}
+    {{- if or (hasPrefix $remote "https://") (hasPrefix $remote "http://") -}}
+      {{- $href = $remote -}}
+    {{- end -}}
+    {{- $files = $files | append (dict "name" .Name "title" $title "ext" $ext "kind" $kind "cats" $fileCats "catLabels" $catLabels "url" $href) -}}
+    {{- $seen = merge $seen (dict .Name true) -}}
+  {{- end -}}
+{{- end -}}
+{{- range $name, $meta := $filesMap -}}
+  {{- if and $meta (not (index $seen $name)) -}}
+    {{- $remote := $meta.url | default $meta.href | default "" -}}
+    {{- if or (hasPrefix $remote "https://") (hasPrefix $remote "http://") -}}
+      {{- $ext := path.Ext $name | strings.TrimPrefix "." | lower -}}
+      {{- if not $ext -}}
+        {{- $ext = path.Ext $remote | strings.TrimPrefix "." | lower -}}
+      {{- end -}}
+      {{- $kind := $meta.kind | default (index $kindFromExt $ext | default "file") -}}
+      {{- $titleObj := $meta.title -}}
+      {{- $title := $name | replaceRE `[.\-_]+` " " | replaceRE `\s+` " " | replaceRE `^\s+|\s+$` "" -}}
+      {{- if reflect.IsMap $titleObj -}}
+        {{- $title = index $titleObj $lang | default (index $titleObj "en") | default (index $titleObj "fa") | default $title -}}
+      {{- else if $titleObj -}}
+        {{- $title = $titleObj -}}
+      {{- end -}}
+      {{- $fileCats := $meta.categories | default slice -}}
+      {{- $catLabels := slice -}}
+      {{- range $fileCats -}}
+        {{- with index $catTitle . }}{{ $catLabels = $catLabels | append . }}{{ end -}}
+      {{- end -}}
+      {{- $files = $files | append (dict "name" $name "title" $title "ext" $ext "kind" $kind "cats" $fileCats "catLabels" $catLabels "url" $remote) -}}
+    {{- end -}}
   {{- end -}}
 {{- end -}}
 <div class="lib" data-lib>
