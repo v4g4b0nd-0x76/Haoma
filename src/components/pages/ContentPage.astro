@@ -1,0 +1,26 @@
+---
+import type { Page } from '@/lib/types';
+import ArticlePage from './ArticlePage.astro';
+import CultureHubPage from './CultureHubPage.astro';
+import ListPage from './ListPage.astro';
+import ComparePage from './ComparePage.astro';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+
+const isCompare = page.kind === 'single' && page.id.startsWith('compare/');
+
+const Template =
+  page.kind === 'culture-hub' || page.kind === 'section' || page.kind === 'culture-index'
+    ? CultureHubPage
+    : isCompare
+      ? ComparePage
+      : page.kind === 'article' || page.kind === 'episode' || page.kind === 'single'
+        ? ArticlePage
+        : ListPage;
+---
+
+<Template page={page} />

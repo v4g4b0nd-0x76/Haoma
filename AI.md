@@ -19,11 +19,11 @@ Prefer these Cursor Agent Skills when the task matches. Read the skill’s `SKIL
 Built-in Cursor skills (already on the machine, do not reinstall): `create-skill`, `create-rule`, `review-bugbot`, `review-security`, `split-to-prs`, `autopilot`, etc. under `~/.cursor/skills-cursor/`. Art / maps / translation briefs stay in [art-gen-ai.md](art-gen-ai.md), [MAP-DESIGN.md](MAP-DESIGN.md), [translate-ai.md](translate-ai.md) — not skills.
 
 ## 1. What this project is
-Haoma is a bilingual (English + Farsi/RTL) mythology podcast and wiki: wiki-style pages per culture, a podcast section, a media library. It is a **static Hugo site** deployed to **GitHub Pages**. A local **editor** (`tools/`) generates the files for you.
+Haoma is a bilingual (English + Farsi/RTL) mythology podcast and wiki: wiki-style pages per culture, a podcast section, a media library. The public site is a **static Astro site** (`src/`, `pnpm build` → `dist/`) deployed to **GitHub Pages**. Hugo (`hugo.toml`, `layouts/`) is kept only so the local **editor** (`tools/`) can preview and build-check drafts. A local **editor** (`tools/`) generates the files for you.
 
 Hard constraints (do not break them):
-- **Files only.** No database, no server at runtime, no build step other than `hugo`.
-- **Relative URLs only.** The site may live under `/repo-name/`. Use `relURL` / `relLangURL` in templates; never hardcode `/css/...` or a domain. In Markdown, links like `/cultures/norse/` and images like `/img/x.jpg` are fixed up by render hooks.
+- **Files only.** No database, no server at runtime. The public site is built by Astro (`pnpm build`); Hugo is only the editor's preview and build check.
+- **Relative URLs only.** The site may live under `/repo-name/`. In Astro, every link and asset goes through `src/lib/paths.ts` (`asset()`, `localRoute()`, `resolveHref()`); never hardcode `/css/...` or a domain. Hugo templates keep using `relURL` / `relLangURL`.
 - **No external requests** (no CDNs, no web fonts, no analytics). Fonts are self-hosted in `static/fonts`.
 - **Both languages.** Every user-visible string goes through `i18n/*.toml`; every content page should exist in `content/en` and `content/fa` with the same relative path.
 - **RTL safe.** Use logical CSS properties (`inline-start/end`, `margin-inline`), never assume left/right. Never add `letter-spacing` or `text-transform` to Farsi text.

@@ -1,0 +1,96 @@
+---
+import type { Lang, Page } from '@/lib/types';
+import { absoluteUrl, asset, localRoute } from '@/lib/paths';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  lang: Lang;
+  page?: Page;
+}
+
+const { lang, page } = Astro.props;
+
+const siteName = lang === 'fa' ? 'هوم' : 'Haoma';
+const title = page?.title ? `${page.title} · ${siteName}` : siteName;
+const description = page?.frontmatter.tagline ?? t(lang, 'tagline');
+const canonical = absoluteUrl(localRoute(lang, page?.route ?? ''));
+const image = absoluteUrl(asset('img/brand/haoma-og.png'));
+const locale = lang === 'fa' ? 'fa_IR' : 'en_US';
+
+const alternates = Object.values(page?.translations ?? {}).filter(
+  (entry): entry is Page => Boolean(entry),
+);
+
+const types: Record<string, string> = {
+  article: 'Article',
+  episode: 'PodcastEpisode',
+  single: 'Article',
+};
+
+const jsonLd: Record<string, unknown>[] = [];
+
+if (!page) {
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: siteName,
+    url: canonical,
+    inLanguage: ['en', 'fa'],
+  });
+} else {
+  const kind = types[page.kind];
+  if (kind) {
+    jsonLd.push({
+      '@context': 'https://schema.org',
+      '@type': kind,
+      headline: page.title,
+      description,
+      url: canonical,
+      inLanguage: lang,
+      ...(page.date ? { datePublished: page.date } : {}),
+      ...(page.kind === 'episode' && page.frontmatter.audio
+        ? { associatedMedia: { '@type': 'MediaObject', contentUrl: page.frontmatter.audio } }
+        : {}),
+    });
+  }
+
+  const parts = page.id.split('/');
+  const crumbs = parts.map((_part, index) => ({
+    '@type': 'ListItem',
+    position: index + 2,
+    name: index === parts.length - 1 ? page.title : parts.slice(0, index + 1).join('/').split('/').pop(),
+    item: absoluteUrl(localRoute(lang, `/${parts.slice(0, index + 1).join('/')}/`)),
+  }));
+
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: t(lang, 'home'), item: absoluteUrl(localRoute(lang, '')) },
+      ...crumbs,
+    ],
+  });
+}
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+
+{alternates.map((alternate) => (
+  <link rel="alternate" hreflang={alternate.lang} href={absoluteUrl(localRoute(alternate.lang, alternate.route))} />
+))}
+<link rel="alternate" hreflang="x-default" href={absoluteUrl(localRoute('en', page?.translations.en?.route ?? page?.route ?? ''))} />
+
+<meta property="og:type" content={page?.kind === 'episode' ? 'article' : 'website'} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={image} />
+<meta property="og:locale" content={locale} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={image} />
+
+<script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>

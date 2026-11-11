@@ -1,0 +1,17 @@
+---
+import type { ShortcodeBlock } from '@/lib/types';
+import MediaItem from './MediaItem.astro';
+
+interface Props {
+  block: ShortcodeBlock;
+}
+
+const { block } = Astro.props;
+const align = block.attrs.align ?? 'full';
+const width = block.attrs.w && /^[0-9]{1,3}(%|px|rem)$/.test(block.attrs.w) ? block.attrs.w : '';
+---
+
+<figure class:list={['fig', 'sp', align]} style={width ? `--w:${width}` : undefined}>
+  <MediaItem src={block.attrs.src ?? ''} caption={block.attrs.caption ?? ''} scroll />
+  {block.attrs.caption && <figcaption>{block.attrs.caption}</figcaption>}
+</figure>

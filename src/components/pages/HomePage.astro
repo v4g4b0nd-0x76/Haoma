@@ -1,0 +1,218 @@
+---
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import type { Lang } from '@/lib/types';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import StoryRail from '@/components/home/StoryRail.astro';
+import Card from '@/components/ui/Card.astro';
+import LibraryList from '@/components/article/LibraryList.astro';
+import { cultures, episodes, getContent, leaves } from '@/lib/content/load';
+import { asset, localRoute } from '@/lib/paths';
+import { themeFor } from '@/lib/data/themes';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const index = getContent();
+const worlds = cultures(index, lang);
+const allEpisodes = episodes(index, lang);
+const allLeaves = leaves(index, lang);
+
+const logoFile = lang === 'fa' ? 'haoma-logo-fa.svg' : 'haoma-logo.svg';
+const logo = readFileSync(join(process.cwd(), 'static', 'img', 'brand', logoFile), 'utf8')
+  .replace('<svg ', '<svg class="logo logo-word" ')
+  .replace(/id="hg"/g, 'id="hgx"')
+  .replace(/url\(#hg\)/g, 'url(#hgx)')
+  .replace('viewBox="0 0 271 170"', 'viewBox="0 0 301 170"');
+
+const baseBanner = asset(`img/${themeFor('base').banner}`);
+const culturesHref = localRoute(lang, 'cultures/');
+
+const slides = worlds.map((culture) => {
+  const theme = themeFor(culture.culture);
+  return {
+    title: culture.title,
+    culture: culture.culture ?? '',
+    banner: theme.banner ? asset(`img/${theme.banner}`) : '',
+    quote: culture.frontmatter.quote ?? '',
+    quoteSource: culture.frontmatter.quoteSource ?? '',
+    tagline: culture.frontmatter.tagline ?? '',
+    accent: theme.accent,
+    href: localRoute(lang, culture.route),
+  };
+});
+
+const bySection = (section: string) => allLeaves.filter((page) => page.sec === section);
+const tabs = [
+  { sec: 'characters', id: 't-ch' },
+  { sec: 'stories', id: 't-st' },
+  { sec: 'history', id: 't-hi' },
+  { sec: 'traditions', id: 't-tr' },
+];
+---
+
+<BaseLayout lang={lang} title={lang === 'fa' ? 'هوم' : 'Haoma'} isHome>
+  <section class="cine home-panel" data-home-panel data-culture="base">
+    <div class="slide on" data-culture="base">
+      <img class="sbg" src={baseBanner} alt="" aria-hidden="true" />
+      <img class="sfg" src={baseBanner} alt="" />
+      <template><span>{t(lang, 'baseQuote')}</span></template>
+    </div>
+    {slides.map((slide) => slide.banner && (
+      <div class="slide" data-culture={slide.culture}>
+        <img class="sbg" src={slide.banner} alt="" aria-hidden="true" />
+        <img class="sfg" src={slide.banner} alt={`${slide.title} banner art`} />
+        <template>
+          <span>{slide.quote}</span>
+          <cite>{slide.quoteSource}</cite>
+        </template>
+      </div>
+    ))}
+    <div class="cine-text">
+      <div class="cine-top">
+        <p class="eyebrow">{t(lang, 'eyebrow')}</p>
+        <h1 class="cine-logo">
+          <span class="sr">{lang === 'fa' ? 'هوم' : 'Haoma'}</span>
+          <Fragment set:html={logo} />
+        </h1>
+      </div>
+      <div class="cine-bot">
+        <p class="quote" aria-live="polite"></p>
+        <div class="pills" role="group" aria-label={t(lang, 'pickLabel')}>
+          <button type="button" data-pick="base" data-href={culturesHref} aria-pressed="true" style="--c:#9aa3b5" title={t(lang, 'all')}>{t(lang, 'all')}</button>
+          {slides.map((slide) => (
+            <button
+              type="button"
+              data-pick={slide.culture}
+              data-href={slide.href}
+              aria-pressed="false"
+              style={`--c:${slide.accent}`}
+              title={slide.title}
+            >{slide.title}</button>
+          ))}
+        </div>
+        <a class="btn enter" href={culturesHref} hidden>{t(lang, 'enter')}</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap intro home-panel" data-home-panel>
+    <h2>{t(lang, 'introTitle')}</h2>
+    <p>{t(lang, 'introText')}</p>
+  </section>
+
+  <StoryRail lang={lang} home />
+
+  {slides.length > 0 && (
+    <section
+      class="home-choose home-panel"
+      data-home-panel
+      data-world-slider
+      data-culture={slides[0].culture}
+      aria-roledescription="carousel"
+      aria-labelledby="home-choose-h"
+    >
+      <div class="world-atmos" aria-hidden="true">
+        <span class="world-atmos__fall"></span>
+        <span class="world-atmos__motif"></span>
+      </div>
+      <div class="world-inner wrap">
+        <h2 id="home-choose-h">{t(lang, 'choose')}</h2>
+        <div class="world-stage">
+          {slides.length > 1 && (
+            <button type="button" class="world-nav world-nav--prev" data-world-dir="-1" aria-label={t(lang, 'worldPrev')}><span aria-hidden="true">‹</span></button>
+          )}
+          <div class="world-viewport" tabindex="0" aria-label={t(lang, 'choose')}>
+            <ul class="world-track" data-world-track>
+              {slides.map((slide, i) => (
+                <li
+                  class:list={['world-slide', i === 0 && 'is-active']}
+                  data-culture={slide.culture}
+                  data-world-i={i}
+                  aria-hidden={i === 0 ? undefined : 'true'}
+                  inert={i === 0 ? undefined : true}
+                >
+                  {slide.banner && (
+                    <div class="world-slide__sky" aria-hidden="true">
+                      <img class="world-slide__bg" src={slide.banner} alt="" loading={i === 0 ? 'eager' : 'lazy'} />
+                    </div>
+                  )}
+                  <a class="panel" data-culture={slide.culture} href={slide.href} tabindex={i === 0 ? undefined : -1}>
+                    {slide.banner && <img src={slide.banner} alt="" loading={i === 0 ? 'eager' : 'lazy'} />}
+                    <div>
+                      <h3>{slide.title}</h3>
+                      <p>{slide.tagline}</p>
+                    </div>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+          {slides.length > 1 && (
+            <button type="button" class="world-nav world-nav--next" data-world-dir="1" aria-label={t(lang, 'worldNext')}><span aria-hidden="true">›</span></button>
+          )}
+        </div>
+        {slides.length > 1 && (
+          <>
+            <div class="world-chrome">
+              <button type="button" class="world-nav world-nav--bar" data-world-dir="-1" aria-label={t(lang, 'worldPrev')}><span aria-hidden="true">‹</span></button>
+              <div class="world-dots" role="group" aria-label={t(lang, 'worldDots')}>
+                {slides.map((slide, i) => (
+                  <button
+                    type="button"
+                    class:list={['world-dot', i === 0 && 'is-on']}
+                    data-world-go={i}
+                    aria-label={slide.title}
+                    aria-current={i === 0 ? 'true' : 'false'}
+                  ></button>
+                ))}
+              </div>
+              <button type="button" class="world-nav world-nav--bar" data-world-dir="1" aria-label={t(lang, 'worldNext')}><span aria-hidden="true">›</span></button>
+            </div>
+            <p class="sr" data-world-status aria-live="polite"></p>
+          </>
+        )}
+      </div>
+    </section>
+  )}
+
+  <section class="wrap home-panel" data-home-panel data-home-cards>
+    <h2>{t(lang, 'explore')}</h2>
+    <p class="explore-themes">
+      <a href={localRoute(lang, 'themes/')}>{t(lang, 'exploreThemes')}</a> · <a href={localRoute(lang, 'az/')}>{t(lang, 'az')}</a> · <a href={localRoute(lang, 'compare/')}>{t(lang, 'compare')}</a>
+    </p>
+    <div class="tabs" role="tablist">
+      {tabs.map((tab, i) => (
+        <button role="tab" aria-selected={i === 0 ? 'true' : 'false'} aria-controls={tab.id}>{t(lang, tab.sec)}</button>
+      ))}
+    </div>
+    {tabs.map((tab, i) => (
+      <div id={tab.id} class="tabpanel" hidden={i !== 0}>
+        <ul class="cards">
+          {bySection(tab.sec).map((entry) => <Card page={entry} />)}
+        </ul>
+        <p class="msg home-empty" data-home-empty hidden>{t(lang, 'homeEmptyCulture')}</p>
+      </div>
+    ))}
+  </section>
+
+  <section class="wrap home-panel" data-home-panel data-home-cards>
+    <h2>{t(lang, 'media')}</h2>
+    <div class="tabs" role="tablist">
+      <button role="tab" aria-selected="true" aria-controls="m-ep">{t(lang, 'episodes')}</button>
+      <button role="tab" aria-selected="false" aria-controls="m-lib">{t(lang, 'library')}</button>
+    </div>
+    <div id="m-ep" class="tabpanel">
+      <ul class="cards">
+        {allEpisodes.map((entry) => <Card page={entry} />)}
+      </ul>
+      <p class="msg home-empty" data-home-empty hidden>{t(lang, 'homeEmptyCulture')}</p>
+    </div>
+    <div id="m-lib" class="tabpanel" hidden>
+      <LibraryList lang={lang} />
+    </div>
+  </section>
+</BaseLayout>

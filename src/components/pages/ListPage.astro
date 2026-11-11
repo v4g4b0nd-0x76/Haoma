@@ -1,0 +1,135 @@
+---
+import type { Page } from '@/lib/types';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Sidebar from '@/components/ui/Sidebar.astro';
+import Tools from '@/components/ui/Tools.astro';
+import Crumbs from '@/components/ui/Crumbs.astro';
+import ArticleBody from '@/components/article/ArticleBody.astro';
+import LibraryList from '@/components/article/LibraryList.astro';
+import Card from '@/components/ui/Card.astro';
+import { parseBlocks } from '@/lib/content/parse';
+import { getContent, leaves } from '@/lib/content/load';
+import { localRoute } from '@/lib/paths';
+import { t } from '@/lib/i18n';
+import { urlize } from '@/lib/text';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const { lang } = page;
+const blocks = parseBlocks(page.body, lang);
+const index = getContent();
+
+const isAz = page.id === 'az';
+const isThemes = page.id === 'themes';
+const isLibrary = page.id === 'library';
+
+/* ---------------------------------------------------------------- A–Z */
+const azPages = isAz ? leaves(index, lang).slice().sort((a, b) => a.title.localeCompare(b.title)) : [];
+const letters: string[] = [];
+for (const entry of azPages) {
+  const letter = Array.from(entry.title)[0]?.toUpperCase() ?? '';
+  if (letter && !letters.includes(letter)) letters.push(letter);
+}
+
+/* ------------------------------------------------------------- Themes */
+const themePages = isThemes
+  ? index.byLang[lang]
+      .filter(
+        (entry) =>
+          (entry.kind === 'article' || entry.kind === 'single' || entry.kind === 'episode') &&
+          (entry.frontmatter.themes?.length ?? 0) > 0,
+      )
+      .sort((a, b) => a.title.localeCompare(b.title))
+  : [];
+const themeNames: string[] = [];
+for (const entry of themePages) {
+  for (const theme of entry.frontmatter.themes ?? []) {
+    if (!themeNames.includes(theme)) themeNames.push(theme);
+  }
+}
+themeNames.sort((a, b) => a.localeCompare(b));
+
+const themeScript = `(function(){
+  var root=document.querySelector("[data-theme-browse]"); if(!root)return;
+  var chips=[].slice.call(root.querySelectorAll("[data-theme]"));
+  var cards=[].slice.call(root.querySelectorAll(".cards > .card"));
+  var empty=root.querySelector("[data-theme-empty]");
+  function go(key){
+    var n=0;
+    cards.forEach(function(li){
+      var on=key==="all"||((" "+(li.getAttribute("data-themes")||"")+" ").indexOf(" "+key+" ")>=0);
+      li.hidden=!on; if(on)n++;
+    });
+    chips.forEach(function(c){var on=c.getAttribute("data-theme")===key;c.classList.toggle("is-on",on);c.setAttribute("aria-pressed",on?"true":"false")});
+    if(empty)empty.hidden=n>0;
+    try{history.replaceState(null,"",key==="all"?location.pathname+location.search:("#"+key))}catch(e){}
+  }
+  chips.forEach(function(c){c.addEventListener("click",function(){go(c.getAttribute("data-theme")||"all")})});
+  var h=(location.hash||"").replace(/^#/,"");
+  if(h)go(h); else go("all");
+})();`;
+---
+
+<BaseLayout lang={lang} title={page.title} culture={page.culture} page={page}>
+  <div class="layout solo">
+    <Sidebar page={page} />
+
+    <article>
+      <Tools page={page} />
+      <Crumbs page={page} />
+      <h1>{page.title}</h1>
+      <ArticleBody blocks={blocks} lang={lang} />
+
+      {isLibrary && <LibraryList lang={lang} />}
+
+      {isAz && (
+        <>
+          <nav class="az-nav" aria-label={t(lang, 'azNav')}>
+            {letters.map((letter) => <a href={`#az-${urlize(letter)}`}>{letter}</a>)}
+          </nav>
+          {letters.map((letter) => (
+            <section class="az-block" id={`az-${urlize(letter)}`}>
+              <h2>{letter}</h2>
+              <ul class="az-list">
+                {azPages
+                  .filter((entry) => (Array.from(entry.title)[0]?.toUpperCase() ?? '') === letter)
+                  .map((entry) => (
+                    <li>
+                      <a href={localRoute(lang, entry.route)}>{entry.title}</a>
+                      {entry.frontmatter.tagline && <span class="muted"> — {entry.frontmatter.tagline}</span>}
+                      {entry.culture && <span class="az-cu muted"> · {entry.culture}</span>}
+                    </li>
+                  ))}
+              </ul>
+            </section>
+          ))}
+        </>
+      )}
+
+      {isThemes && (
+        <div class="theme-browse" data-theme-browse>
+          <div class="theme-browse__chips" role="group" aria-label={t(lang, 'themesLabel')}>
+            <button type="button" class="sheet__chip sheet__chip--theme is-on" data-theme="all" aria-pressed="true">{t(lang, 'libraryAll')}</button>
+            {themeNames.map((theme) => (
+              <button type="button" class="sheet__chip sheet__chip--theme" data-theme={urlize(theme)} aria-pressed="false">{theme}</button>
+            ))}
+          </div>
+          <ul class="cards" data-theme-cards>
+            {themePages.map((entry) => <Card page={entry} />)}
+          </ul>
+          <p class="msg" data-theme-empty hidden>{t(lang, 'themeEmpty')}</p>
+        </div>
+      )}
+
+      {!isLibrary && !isAz && !isThemes && (
+        <ul class="cards">
+          {page.children.map((child) => <Card page={child} />)}
+        </ul>
+      )}
+    </article>
+  </div>
+  {isThemes && <script is:inline set:html={themeScript}></script>}
+</BaseLayout>

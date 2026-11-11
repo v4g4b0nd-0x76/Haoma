@@ -1,0 +1,33 @@
+---
+import { t } from '@/lib/i18n';
+import type { Lang } from '@/lib/types';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+---
+
+<aside class="cookie" id="cookie-banner" hidden role="dialog" aria-modal="false" aria-labelledby="cookie-title" aria-describedby="cookie-text">
+  <div class="cookie__glow" aria-hidden="true"></div>
+  <div class="cookie__inner wrap">
+    <div class="cookie__copy">
+      <p class="cookie__kicker">{t(lang, 'cookieKicker')}</p>
+      <h2 class="cookie__title" id="cookie-title">{t(lang, 'cookieTitle')}</h2>
+      <p class="cookie__text" id="cookie-text">{t(lang, 'cookieText')}</p>
+    </div>
+    <div class="cookie__acts">
+      <button type="button" class="cookie__deny" data-cookie="deny">{t(lang, 'cookieDeny')}</button>
+      <button type="button" class="cookie__allow" data-cookie="allow">{t(lang, 'cookieAllow')}</button>
+    </div>
+  </div>
+</aside>
+
+<aside class="resume" id="resume-bar" hidden role="status">
+  <div class="resume__inner wrap">
+    <p class="resume__text">{t(lang, 'cookieResume')}</p>
+    <a class="resume__go" id="resume-link" href="#">{t(lang, 'cookieResumeGo')}</a>
+    <button type="button" class="resume__x" id="resume-dismiss" aria-label={t(lang, 'cookieResumeDismiss')}>×</button>
+  </div>
+</aside>

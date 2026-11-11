@@ -1,0 +1,150 @@
+---
+import type { Page } from '@/lib/types';
+import { episodes, getContent, resolvePath } from '@/lib/content/load';
+import { localRoute } from '@/lib/paths';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const { lang } = page;
+const culture = page.culture ?? '';
+const index = getContent();
+
+const leaves = index.byLang[lang]
+  .filter((entry) => entry.kind === 'article' && entry.culture === culture && entry.sec)
+  .sort((a, b) => a.title.localeCompare(b.title));
+const cultureEpisodes = episodes(index, lang).filter((entry) => entry.culture === culture);
+
+const nodes = [
+  ...leaves.map((entry) => ({
+    id: localRoute(lang, entry.route),
+    title: entry.title,
+    sec: entry.sec ?? '',
+    url: localRoute(lang, entry.route),
+    tagline: entry.frontmatter.tagline ?? '',
+  })),
+  ...cultureEpisodes.map((entry) => ({
+    id: localRoute(lang, entry.route),
+    title: entry.title,
+    sec: 'episode',
+    url: localRoute(lang, entry.route),
+    tagline: entry.frontmatter.tagline ?? '',
+  })),
+];
+
+const ids = new Set(nodes.map((node) => node.id));
+const edges: { source: string; target: string }[] = [];
+const seen = new Set<string>();
+
+for (const entry of [...leaves, ...cultureEpisodes]) {
+  const source = localRoute(lang, entry.route);
+  for (const related of entry.frontmatter.related ?? []) {
+    const targetPage = resolvePath(index, lang, related);
+    if (!targetPage) continue;
+
+    const target = localRoute(lang, targetPage.route);
+    if (!ids.has(source) || !ids.has(target) || source === target) continue;
+
+    const first = source < target ? source : target;
+    const second = source < target ? target : source;
+    const key = `${first}|${second}`;
+    if (seen.has(key)) continue;
+
+    seen.add(key);
+    edges.push({ source, target });
+  }
+}
+
+const path: string[] = [];
+for (const raw of page.frontmatter.atlas_path ?? []) {
+  const targetPage = resolvePath(index, lang, raw);
+  if (!targetPage) continue;
+  const id = localRoute(lang, targetPage.route);
+  if (ids.has(id) && !path.includes(id)) path.push(id);
+}
+
+const data = JSON.stringify({ nodes, edges, path }).replace(/</g, '\\u003c');
+const hasNodes = nodes.length > 0;
+---
+
+<section
+  id="atlas"
+  class="atlas wrap"
+  data-atlas
+  data-culture={culture}
+  aria-label={t(lang, 'atlasLabel')}
+>
+  <div class="atlas__head">
+    <div class="atlas__head-row">
+      <div>
+        <h2>{t(lang, 'atlasTitle')}</h2>
+        <p class="atlas__hint">{hasNodes ? t(lang, 'atlasHint') : t(lang, 'atlasEmpty')}</p>
+      </div>
+      {hasNodes && (
+        <div class="atlas__zoom" role="group" aria-label={t(lang, 'atlasZoom')}>
+          <button type="button" class="atlas__zoom-btn" data-atlas-zoom-out aria-label="−">−</button>
+          <button type="button" class="atlas__zoom-btn" data-atlas-reset aria-label={t(lang, 'atlasReset')}>⟲</button>
+          <button type="button" class="atlas__zoom-btn" data-atlas-zoom-in aria-label="+">+</button>
+        </div>
+      )}
+    </div>
+
+    {hasNodes && (
+      <ul class="atlas__legend" data-atlas-legend>
+        {[
+          ['characters', t(lang, 'characters')],
+          ['traditions', t(lang, 'traditions')],
+          ['stories', t(lang, 'stories')],
+          ['history', t(lang, 'history')],
+          ['episode', t(lang, 'episodes')],
+        ].map(([sec, label]) => (
+          <li data-sec={sec} data-label={label}>
+            <span class="atlas__swatch" aria-hidden="true"></span>{label}
+          </li>
+        ))}
+      </ul>
+    )}
+
+    {hasNodes && path.length > 0 && (
+      <div class="atlas__tourbar" data-atlas-tour hidden>
+        <button type="button" class="atlas__tour-btn" data-tour-start>{t(lang, 'atlasTourStart')}</button>
+        <div class="atlas__tour-run" data-tour-run hidden>
+          <button type="button" class="atlas__tour-btn atlas__tour-nav" data-tour-prev aria-label={t(lang, 'prev')}></button>
+          <p class="atlas__tour-step" data-tour-step></p>
+          <button type="button" class="atlas__tour-btn atlas__tour-nav" data-tour-next aria-label={t(lang, 'next')}></button>
+          <button type="button" class="atlas__tour-btn" data-tour-open>{t(lang, 'atlasTourOpen')}</button>
+          <button type="button" class="atlas__tour-btn" data-tour-end>{t(lang, 'atlasTourEnd')}</button>
+        </div>
+      </div>
+    )}
+  </div>
+
+  {hasNodes ? (
+    <>
+      <div class="atlas__stage">
+        <div class="atlas__canvas" data-atlas-root role="img" aria-label={t(lang, 'atlasLabel')}></div>
+        <aside class="atlas__dock" data-atlas-dock hidden>
+          <p class="atlas__dock-sec" data-atlas-dock-sec></p>
+          <h3 class="atlas__dock-title" data-atlas-dock-title></h3>
+          <p class="atlas__dock-tag" data-atlas-dock-tag hidden></p>
+          <div class="atlas__dock-neigh" data-atlas-dock-neigh></div>
+          <div class="atlas__dock-acts">
+            <a class="atlas__dock-open" data-atlas-dock-open href="#">{t(lang, 'atlasTourOpen')}</a>
+            <button type="button" class="atlas__dock-clear" data-atlas-dock-clear>{t(lang, 'atlasClear')}</button>
+          </div>
+        </aside>
+      </div>
+      <script type="application/json" data-atlas-json set:html={data}></script>
+    </>
+  ) : (
+    <div class="atlas__canvas atlas__canvas--empty" role="img" aria-label={t(lang, 'atlasEmpty')}>
+      <div class="atlas__empty">
+        <span class="atlas__empty-mark" aria-hidden="true"></span>
+        <p>{t(lang, 'atlasEmpty')}</p>
+      </div>
+    </div>
+  )}
+</section>

@@ -1,0 +1,224 @@
+---
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { nav } from '@/lib/data/site';
+import { cultures, episodes, getContent } from '@/lib/content/load';
+import { asset, localRoute } from '@/lib/paths';
+import { themeFor } from '@/lib/data/themes';
+import { t } from '@/lib/i18n';
+import IconScribe from './IconScribe.astro';
+import type { Lang, Page } from '@/lib/types';
+
+interface Props {
+  lang: Lang;
+  page?: Page;
+}
+
+const { lang, page } = Astro.props;
+const index = getContent();
+
+const siteTitle = lang === 'fa' ? 'هوم' : 'Haoma';
+const logoFile = lang === 'fa' ? 'haoma-logo-fa.svg' : 'haoma-logo.svg';
+const logo = readFileSync(join(process.cwd(), 'static', 'img', 'brand', logoFile), 'utf8')
+  .replace('<svg ', '<svg class="logo logo-word" ')
+  .replace(/id="hg"/g, 'id="hgh"')
+  .replace(/url\(#hg\)/g, 'url(#hgh)')
+  .replace('viewBox="0 0 271 170"', 'viewBox="0 0 301 170"');
+
+const home = localRoute(lang, '');
+const otherLang: Lang = lang === 'en' ? 'fa' : 'en';
+const alternate = page?.translations[otherLang];
+const alternateHref = alternate ? localRoute(alternate.lang, alternate.route) : localRoute(otherLang, '');
+const languageName = otherLang === 'fa' ? 'فارسی' : 'English';
+
+const pick = page?.culture ?? 'base';
+const pickTheme = themeFor(pick);
+
+const cultureOptions = cultures(index, lang).map((culture) => {
+  const theme = themeFor(culture.culture);
+  return {
+    key: culture.culture ?? '',
+    name: culture.title,
+    href: localRoute(lang, culture.route),
+    accent: theme.accent,
+    pattern: theme.pattern || 'none',
+  };
+});
+
+const tickItems = [
+  ...episodes(index, lang).slice(0, 6).map((episode) => ({
+    kind: 'episode',
+    title: episode.title,
+    href: localRoute(lang, episode.route),
+  })),
+  ...cultures(index, lang).slice(0, 6).map((culture) => ({
+    kind: 'article',
+    title: culture.title,
+    href: localRoute(lang, culture.route),
+  })),
+];
+---
+
+<header class="top">
+  <a class="brand" href={home} aria-label={siteTitle}>
+    <Fragment set:html={logo} />
+  </a>
+
+  <nav>
+    {nav[lang].map((item) => (
+      <a href={localRoute(lang, item.url)}>{item.name}</a>
+    ))}
+  </nav>
+
+  <div
+    class="ntick"
+    id="news-tick"
+    hidden
+    data-interval="6000"
+    aria-live="polite"
+    data-label-episode={t(lang, 'tickEpisode')}
+    data-label-article={t(lang, 'tickArticle')}
+    data-label-now={t(lang, 'tickNow')}
+  >
+    <a class="ntick__hit" data-ntick-link href="#">
+      <span class="ntick__mark" aria-hidden="true"></span>
+      <span class="ntick__meta">
+        <span class="ntick__now">{t(lang, 'tickNow')}</span>
+        <span class="ntick__kind" data-ntick-kind></span>
+      </span>
+      <span class="ntick__title" data-ntick-title></span>
+    </a>
+    <button type="button" class="ntick__close" data-ntick-close aria-label={t(lang, 'tickClose')}>×</button>
+    <script type="application/json" id="news-tick-data" set:html={JSON.stringify(tickItems)}></script>
+  </div>
+
+  <div class="ctrl">
+    <div class="rlist" id="site-rlist">
+      <button
+        type="button"
+        class="rlist__open"
+        id="rlist-open"
+        aria-expanded="false"
+        aria-controls="rlist-panel"
+        title={t(lang, 'readingList')}
+        aria-label={t(lang, 'readingList')}
+      >
+        <IconScribe />
+      </button>
+      <div class="rlist__panel" id="rlist-panel" role="dialog" aria-labelledby="rlist-title" hidden>
+        <div class="rlist__head">
+          <h2 class="rlist__title" id="rlist-title">{t(lang, 'readingList')}</h2>
+          <button type="button" class="rlist__close" id="rlist-close" aria-label={t(lang, 'readingListClose')}>×</button>
+        </div>
+        <p class="rlist__empty muted" id="rlist-empty">{t(lang, 'readingListEmpty')}</p>
+        <ul class="rlist__list" id="rlist-list"></ul>
+        <p class="rlist__tip muted">{t(lang, 'readingListTip')}</p>
+      </div>
+    </div>
+    <div class="search" id="site-search">
+      <button
+        type="button"
+        class="search__open"
+        aria-expanded="false"
+        aria-controls="search-panel"
+        title={t(lang, 'searchOpen')}
+        aria-label={t(lang, 'searchOpen')}
+      >⌕</button>
+      <div class="search__panel" id="search-panel" role="combobox" aria-expanded="false" aria-owns="search-list" hidden>
+        <div class="search__row">
+          <input
+            type="search"
+            class="search__input"
+            placeholder={t(lang, 'searchPlaceholder')}
+            autocomplete="off"
+            aria-autocomplete="list"
+            aria-controls="search-list"
+            aria-label={t(lang, 'searchOpen')}
+          />
+          <button type="button" class="search__close" aria-label={t(lang, 'searchClose')}>×</button>
+        </div>
+        <p class="search__status" data-empty={t(lang, 'searchEmpty')} role="status"></p>
+        <ul class="search__list" id="search-list" role="listbox"></ul>
+        <p class="search__tip muted">{t(lang, 'searchTip')}</p>
+      </div>
+    </div>
+
+    <div
+      class="cpick"
+      id="culture-pick"
+      style={`--c:${pickTheme.accent};--pat:var(--m-${pickTheme.pattern || 'none'})`}
+    >
+      <button
+        type="button"
+        class="cpick__btn"
+        id="cpick-btn"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+        aria-controls="cpick-list"
+        aria-label={t(lang, 'pickLabel')}
+      >
+        <span class="cpick__sig" aria-hidden="true"></span>
+        <span class="cpick__name"></span>
+        <span class="cpick__chev" aria-hidden="true"></span>
+      </button>
+      <ul class="cpick__list" id="cpick-list" role="listbox" aria-labelledby="cpick-btn" hidden>
+        <li
+          class="cpick__opt cpick__opt--all"
+          role="option"
+          data-pick="base"
+          data-name={t(lang, 'all')}
+          data-href={localRoute(lang, 'cultures/')}
+          style="--c:#9aa3b5;--pat:var(--m-star)"
+          aria-selected="false"
+        >
+          <span class="cpick__sig" aria-hidden="true"></span>
+          <span class="cpick__name">{t(lang, 'all')}</span>
+          <span class="cpick__dot" aria-hidden="true"></span>
+        </li>
+        {cultureOptions.map((option) => (
+          <li
+            class="cpick__opt"
+            role="option"
+            data-pick={option.key}
+            data-name={option.name}
+            data-href={option.href}
+            style={`--c:${option.accent};--pat:var(--m-${option.pattern})`}
+            aria-selected="false"
+          >
+            <span class="cpick__sig" aria-hidden="true"></span>
+            <span class="cpick__name">{option.name}</span>
+            <span class="cpick__dot" aria-hidden="true"></span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <a class="lang" href={alternateHref} hreflang={otherLang} lang={otherLang}>{languageName}</a>
+
+    <button
+      type="button"
+      class="keys-help-btn"
+      id="keys-help-btn"
+      title={t(lang, 'keysHelp')}
+      aria-label={t(lang, 'keysHelp')}
+    >?</button>
+  </div>
+</header>
+
+<div class="read-progress" id="read-progress" aria-hidden="true"></div>
+
+<div class="keys-help" id="keys-help" hidden role="dialog" aria-labelledby="keys-help-title" aria-modal="true">
+  <div class="keys-help__panel">
+    <h2 id="keys-help-title">{t(lang, 'keysHelpTitle')}</h2>
+    <ul class="keys-help__list">
+      <li><kbd>/</kbd> {t(lang, 'keysSearch')}</li>
+      <li><kbd>?</kbd> {t(lang, 'keysHelpThis')}</li>
+      <li><kbd>{t(lang, 'keysEscKey')}</kbd> {t(lang, 'keysEsc')}</li>
+      <li><kbd>←</kbd> <kbd>→</kbd> {t(lang, 'keysTour')}</li>
+      <li><kbd>j</kbd> <kbd>k</kbd> {t(lang, 'keysCards')}</li>
+    </ul>
+    <button type="button" class="keys-help__ok" id="keys-help-ok">{t(lang, 'keysOk')}</button>
+  </div>
+</div>
+
+<div class="motif"></div>

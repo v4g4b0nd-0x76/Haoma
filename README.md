@@ -71,12 +71,16 @@ Every route below exists in both languages (`/fa/…` mirrors `/…`); Farsi is 
 
 ### Run locally
 
+The public site is **Astro**; Hugo only renders the editor preview.
+
 ```bash
-git clone https://github.com/v4g4b0nd-0x76/Haoma
-cd Haoma
-hugo server
-# Open http://localhost:1313/
+pnpm install
+pnpm dev
+# Open http://localhost:4321/
 ```
+
+`pnpm build` writes the static site to `dist/`. On GitHub Pages the workflow
+`.github/workflows/astro.yml` builds with the repository sub-path automatically.
 
 ### Run the local editor
 
@@ -92,7 +96,10 @@ The editor gives you: live preview of the page you are editing, draft saves (not
 ## 3. Project structure
 
 ```
-hugo.toml                 Site config: languages (en default, fa RTL), markup
+hugo.toml                 Editor preview only (Hugo) + project marker
+package.json              Astro app: pnpm dev / pnpm build -> dist/
+astro.config.mjs          base path, React islands, sitemap
+src/                      Astro pages, React islands, lib/content, styles
 content/en|fa/            All pages — same relative paths in both languages
   cultures/<culture>/     One folder per culture
     _index.md             Culture landing page (must have culture: and cascade:)

@@ -1,0 +1,32 @@
+---
+import type { ShortcodeBlock } from '@/lib/types';
+import { asset } from '@/lib/paths';
+
+interface Props {
+  block: ShortcodeBlock;
+}
+
+const { block } = Astro.props;
+const { attrs } = block;
+const src = attrs.src ?? '';
+const url = asset(src);
+const extension = src.split('.').pop()?.toLowerCase() ?? '';
+const isAudio = ['mp3', 'ogg', 'wav', 'm4a'].includes(extension);
+const isVideo = ['mp4', 'webm'].includes(extension);
+const isPdf = extension === 'pdf';
+---
+
+<div class="media-embed">
+  {isAudio ? (
+    <audio controls preload="none" src={url}></audio>
+  ) : isVideo ? (
+    <video controls preload="metadata" src={url} class="w-full"></video>
+  ) : isPdf ? (
+    <>
+      <embed type="application/pdf" src={url} class="h-[70vh] w-full" />
+      <a href={url}>{attrs.title ?? attrs.src}</a>
+    </>
+  ) : (
+    <a href={url}>{attrs.title ?? attrs.src}</a>
+  )}
+</div>

@@ -1,0 +1,20 @@
+---
+import type { Page } from '@/lib/types';
+import { site } from '@/lib/data/site';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const relative = page.filePath.split('/content/').pop() ?? '';
+const file = `content/${page.lang}/${relative}`;
+const encodedTitle = encodeURIComponent(`Correction: ${page.title}`);
+---
+
+<p class="contribute">
+  <a href={`${site.repo}/edit/${site.branch}/${file}`}>{t(page.lang, 'cEdit')}</a>
+  <a href={`${site.repo}/issues/new?template=correction.yml&title=${encodedTitle}&page=${encodeURIComponent(page.route)}`}>{t(page.lang, 'cIssue')}</a>
+  <a href={`${site.repo}/commits/${site.branch}/${file}`}>{t(page.lang, 'cHistory')}</a>
+</p>

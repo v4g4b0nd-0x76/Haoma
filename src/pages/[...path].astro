@@ -1,0 +1,25 @@
+---
+import { getContent } from '@/lib/content/load';
+import { getStaticRoutes } from '@/lib/content/routes';
+import HomePage from '@/components/pages/HomePage.astro';
+import ContentPage from '@/components/pages/ContentPage.astro';
+import type { Lang } from '@/lib/types';
+
+export function getStaticPaths() {
+  return getStaticRoutes().map((route) => ({
+    params: { path: route.segments.length ? route.segments.join('/') : undefined },
+    props: { lang: route.lang, id: route.id },
+  }));
+}
+
+interface Props {
+  lang: Lang;
+  id: string | null;
+}
+
+const { lang, id } = Astro.props;
+const index = getContent();
+const page = id ? index.byLangId[lang].get(id) : undefined;
+---
+
+{page ? <ContentPage page={page} /> : <HomePage lang={lang} />}

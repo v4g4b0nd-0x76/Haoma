@@ -1,0 +1,21 @@
+---
+import type { ShortcodeBlock } from '@/lib/types';
+import { parsePipeMedia } from '@/lib/content/shortcodes';
+import MediaItem from './MediaItem.astro';
+
+interface Props {
+  block: ShortcodeBlock;
+}
+
+const { block } = Astro.props;
+const items = parsePipeMedia(block.body);
+---
+
+<div class:list={['art-strip', block.attrs.class]}>
+  {items.map((item) => (
+    <figure>
+      <MediaItem src={item.src} caption={item.caption} />
+      {item.caption && <figcaption>{item.caption}</figcaption>}
+    </figure>
+  ))}
+</div>

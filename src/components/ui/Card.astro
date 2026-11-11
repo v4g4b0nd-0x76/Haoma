@@ -1,0 +1,89 @@
+---
+import type { Page } from '@/lib/types';
+import { t } from '@/lib/i18n';
+import { gradeLabel } from '@/lib/grade';
+import { asset, localRoute } from '@/lib/paths';
+import { urlize, truncate, plainSummary } from '@/lib/text';
+import IconScribe from '@/components/shell/IconScribe.astro';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const { lang, frontmatter: fm } = page;
+
+const kind =
+  page.kind === 'culture-hub'
+    ? 'culture'
+    : page.kind === 'section'
+      ? page.sec === 'traditions'
+        ? 'sub'
+        : 'cat'
+      : page.kind === 'episode'
+        ? 'ep'
+        : page.sec === 'traditions'
+          ? 'sub'
+          : 'art';
+
+const labelKey: Record<string, string> = {
+  culture: 'cardCulture',
+  cat: 'cardCat',
+  sub: 'cardSub',
+  ep: 'cardEpisode',
+  art: 'cardArt',
+};
+
+const background = fm.card_bg ?? '';
+const backgroundKind = fm.card_bg_kind ?? (background.toLowerCase().endsWith('.gif') ? 'gif' : 'static');
+const isGif = Boolean(background) && backgroundKind === 'gif';
+const image = background ? asset(`img/${background}`) : '';
+const href = localRoute(lang, page.route);
+const themes = (fm.themes ?? []).map(urlize);
+const description = fm.tagline ? truncate(fm.tagline, 90) : plainSummary(page.body, 90);
+const placeholder = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+---
+
+<li
+  class:list={['card', `card--${kind}`, background && 'card--media', isGif && 'card--gif']}
+  data-culture={page.culture ?? 'base'}
+  data-kind={kind}
+  data-themes={themes.length ? themes.join(' ') : undefined}
+>
+  <a class:list={['art', !background && 'art--fall']} href={href} tabindex="-1" aria-hidden="true">
+    {background && (
+      isGif ? (
+        <img data-gif={image} alt="" src={placeholder} />
+      ) : (
+        <img src={image} alt="" loading="lazy" />
+      )
+    )}
+    <span class="art-fall" aria-hidden="true" hidden={Boolean(background)}></span>
+    <span class="art-lattice" aria-hidden="true"></span>
+    <span class="art-seal" aria-hidden="true"></span>
+    {kind === 'ep' && background && <span class="art-play" aria-hidden="true"></span>}
+  </a>
+  <div class="body">
+    <div class="card-top">
+      <span class="card-kind">{t(lang, labelKey[kind])}</span>
+      {fm.grade && <span class="card-grade">{gradeLabel(lang, fm.grade)}</span>}
+      {(kind === 'art' || kind === 'ep') && (
+        <button
+          type="button"
+          class="card-save"
+          data-save
+          data-save-path={href}
+          data-save-title={page.title}
+          data-save-culture={page.culture ?? ''}
+          data-save-kind={kind}
+          title={t(lang, 'readingSave')}
+          aria-label={t(lang, 'readingSave')}
+          aria-pressed="false"
+        ><IconScribe /></button>
+      )}
+    </div>
+    <h3><a href={href}>{page.title}</a></h3>
+    <p>{description}</p>
+    <span class="card-go" aria-hidden="true"></span>
+  </div>
+</li>

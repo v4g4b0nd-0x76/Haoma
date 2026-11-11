@@ -1,0 +1,69 @@
+---
+import type { Page } from '@/lib/types';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Sidebar from '@/components/ui/Sidebar.astro';
+import Tools from '@/components/ui/Tools.astro';
+import Crumbs from '@/components/ui/Crumbs.astro';
+import ArticleBody from '@/components/article/ArticleBody.astro';
+import Recommendations from '@/components/article/Recommendations.astro';
+import Card from '@/components/ui/Card.astro';
+import StoryRail from '@/components/home/StoryRail.astro';
+import Atlas from '@/components/atlas/Atlas.astro';
+import { parseBlocks } from '@/lib/content/parse';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const blocks = parseBlocks(page.body, page.lang);
+const isHub = !page.sec;
+const isCultureIndex = page.kind === 'culture-index';
+
+const sections = page.children.filter((child) => child.kind === 'section');
+const traditions = isHub ? sections.find((child) => child.sec === 'traditions') : undefined;
+const portals =
+  isHub && !isCultureIndex
+    ? sections.filter((child) => child.sec !== 'traditions')
+    : page.children;
+---
+
+<BaseLayout lang={page.lang} title={page.title} culture={page.culture} page={page}>
+  <div class:list={['layout', !page.culture && 'solo']}>
+    <Sidebar page={page} />
+
+    <article
+      class:list={[
+        'cult-hub',
+        page.frontmatter.wide && 'wide',
+        page.culture && isHub && 'cult-hub--index',
+      ]}
+    >
+      <Tools page={page} />
+      <Crumbs page={page} />
+      <h1>{page.title}</h1>
+      <ArticleBody blocks={blocks} lang={page.lang} />
+
+      {traditions && traditions.children.length > 0 && (
+        <section class="trad-hub" aria-label={t(page.lang, 'traditions')}>
+          <h2>{t(page.lang, 'traditions')}</h2>
+          <p class="trad-hub__lead">{t(page.lang, 'traditionsLead')}</p>
+          <ul class="cards">
+            {traditions.children.map((child) => <Card page={child} />)}
+          </ul>
+        </section>
+      )}
+
+      {isHub && page.culture && <Atlas page={page} />}
+
+      {isHub && page.culture && <StoryRail lang={page.lang} culture={page.culture} />}
+
+      <ul class="cards">
+        {portals.map((child) => <Card page={child} />)}
+      </ul>
+
+      {isHub && page.culture && <Recommendations page={page} />}
+    </article>
+  </div>
+</BaseLayout>

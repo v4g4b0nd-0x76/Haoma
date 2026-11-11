@@ -1,0 +1,18 @@
+---
+import type { ShortcodeBlock } from '@/lib/types';
+import { renderInlineBody } from '@/lib/content/markdown';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  block: ShortcodeBlock;
+  lang: 'en' | 'fa';
+}
+
+const { block, lang } = Astro.props;
+const html = renderInlineBody(block.body, lang);
+---
+
+<div class="disagree" role="note">
+  <h3 class="disagree__title">{block.attrs.title ?? t(lang, 'disagreeTitle')}</h3>
+  <div class="disagree__body"><Fragment set:html={html} /></div>
+</div>

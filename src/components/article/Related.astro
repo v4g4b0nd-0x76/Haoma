@@ -1,0 +1,26 @@
+---
+import type { Page } from '@/lib/types';
+import { getContent, resolvePath } from '@/lib/content/load';
+import { t } from '@/lib/i18n';
+import Card from '@/components/ui/Card.astro';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const index = getContent();
+const related = (page.frontmatter.related ?? [])
+  .map((path) => resolvePath(index, page.lang, path))
+  .filter((entry): entry is Page => Boolean(entry));
+---
+
+{related.length > 0 && (
+  <section class="related" aria-labelledby="related-h">
+    <h2 id="related-h">{t(page.lang, 'relatedTitle')}</h2>
+    <p class="related__hint">{t(page.lang, 'relatedHint')}</p>
+    <ul class="cards cards--related">
+      {related.map((entry) => <Card page={entry} />)}
+    </ul>
+  </section>
+)}

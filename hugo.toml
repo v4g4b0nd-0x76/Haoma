@@ -1,4 +1,7 @@
 baseURL = "/"
+# Hugo renders only the editor preview now; the public site is Astro (dist/).
+# Keeping Hugo's output out of public/ avoids clobbering Astro's asset mirror.
+publishDir = "public-hugo"
 title = "Haoma"
 defaultContentLanguage = "en"
 # no content is ever filed under categories/tags, so don't emit those pages

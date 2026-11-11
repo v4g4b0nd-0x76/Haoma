@@ -1,0 +1,126 @@
+---
+import '../../static/css/style.css';
+import ThemeStyles from '@/components/shell/ThemeStyles.astro';
+import SEOHead from '@/components/shell/SEOHead.astro';
+import Header from '@/components/shell/Header.astro';
+import Footer from '@/components/shell/Footer.astro';
+import CookieBanner from '@/components/shell/CookieBanner.astro';
+import { asset } from '@/lib/paths';
+import { themeFor } from '@/lib/data/themes';
+import { sectionEnabled } from '@/lib/data/site';
+import { t } from '@/lib/i18n';
+import type { Lang, Page } from '@/lib/types';
+
+interface Props {
+  lang?: Lang;
+  title?: string;
+  culture?: string;
+  fixedCulture?: boolean;
+  page?: Page;
+  isHome?: boolean;
+}
+
+const {
+  lang = 'en',
+  culture = 'base',
+  fixedCulture = Boolean(culture && culture !== 'base'),
+  page,
+  isHome = false,
+} = Astro.props;
+
+const dir = lang === 'fa' ? 'rtl' : 'ltr';
+const theme = themeFor(culture);
+const banner = culture !== 'base' && theme.banner ? asset(`img/${theme.banner}`) : null;
+
+const manifest = asset(lang === 'fa' ? 'fa/manifest.webmanifest' : 'manifest.webmanifest');
+const siteTitle = lang === 'fa' ? 'هوم' : 'Haoma';
+
+const showMindmap = Boolean(page?.culture && !page?.sec);
+const showRecs = sectionEnabled('recommendations', culture) && Boolean(page && (page.culture || page.section === 'episodes'));
+const showStories = sectionEnabled('stories', culture);
+---
+
+<!doctype html>
+<html
+  lang={lang}
+  dir={dir}
+  data-culture={culture}
+  data-fixed={fixedCulture ? '1' : undefined}
+  data-pwa-install={t(lang, 'pwaInstall')}
+  data-pwa-later={t(lang, 'pwaLater')}
+  data-pwa-body={t(lang, 'pwaBody')}
+  data-pwa-ios={t(lang, 'pwaIosTip')}
+  data-pwa-update={t(lang, 'pwaUpdate')}
+  data-pwa-update-go={t(lang, 'pwaUpdateGo')}
+  data-study-continue={t(lang, 'studyContinue')}
+  data-study-continue-go={t(lang, 'studyContinueGo')}
+  data-study-save={t(lang, 'readingSave')}
+  data-study-saved={t(lang, 'readingSaved')}
+  data-study-unsave={t(lang, 'readingUnsave')}
+  data-study-reader={t(lang, 'readerMode')}
+>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <SEOHead lang={lang} page={page} />
+    <link rel="icon" href={asset('img/brand/favicon.svg')} type="image/svg+xml" />
+    <link rel="icon" type="image/png" sizes="32x32" href={asset('img/brand/favicon-32.png')} />
+    <link rel="icon" type="image/png" sizes="192x192" href={asset('img/brand/favicon-192.png')} />
+    <link rel="apple-touch-icon" href={asset('img/brand/apple-touch-icon.png')} />
+    <link rel="manifest" href={manifest} />
+    <meta name="theme-color" content="#14161a" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content={siteTitle} />
+    <script is:inline src={asset('js/boot.js')}></script>
+    <ThemeStyles />
+    {lang === 'fa' ? (
+      <>
+        <link rel="preload" href={asset('fonts/vazirmatn.woff2')} as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href={asset('fonts/markazi-text-arabic-400-normal.woff2')} as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href={asset('fonts/lalezar-arabic-400-normal.woff2')} as="font" type="font/woff2" crossorigin />
+      </>
+    ) : (
+      <>
+        <link rel="preload" href={asset('fonts/cinzel-latin-wght-normal.woff2')} as="font" type="font/woff2" crossorigin />
+        <link rel="preload" href={asset('fonts/lora-latin-wght-normal.woff2')} as="font" type="font/woff2" crossorigin />
+      </>
+    )}
+    <link rel="alternate" type="application/json" href={asset(`${lang === 'fa' ? 'fa/' : ''}search.json`)} title="search" />
+  </head>
+  <body class:list={[isHome && 'is-home']}>
+    <div class="bg"></div>
+    <Header lang={lang} page={page} />
+
+    {banner && (
+      <div class:list={['hero-art', `c-${culture}`]}>
+        <img class="sbg" src={banner} alt="" aria-hidden="true" />
+        <img class="sfg" src={banner} alt={`${culture} banner art`} />
+      </div>
+    )}
+
+    <main>
+      <slot />
+    </main>
+
+    <Footer lang={lang} culture={culture} />
+
+    {culture !== 'base' && (
+      <div class="cult-eggs" data-culture-eggs aria-hidden="true"><i class="cult-eggs__scroll"></i></div>
+    )}
+
+    <CookieBanner lang={lang} />
+
+    <script is:inline src={asset('js/site.js')}></script>
+    <script is:inline src={asset('js/news-tick.js')}></script>
+    <script is:inline src={asset('js/search.js')}></script>
+    {showMindmap && <script is:inline src={asset('js/mindmap.js')}></script>}
+    {showRecs && <script is:inline src={asset('js/recs.js')}></script>}
+    {showStories && <script is:inline src={asset('js/stories.js')}></script>}
+    {isHome && <script is:inline src={asset('js/worlds.js')}></script>}
+    {isHome && <script is:inline src={asset('js/home-scroll.js')}></script>}
+    <script is:inline src={asset('js/study.js')} defer></script>
+    <script is:inline src={asset('js/pwa.js')} defer></script>
+  </body>
+</html>

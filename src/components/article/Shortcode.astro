@@ -1,0 +1,44 @@
+---
+import type { Block, Lang, ShortcodeBlock } from '@/lib/types';
+import Figure from '@/components/media/Figure.astro';
+import Slider from '@/components/media/Slider.astro';
+import ScrollPlay from '@/components/media/ScrollPlay.astro';
+import Grid from '@/components/media/Grid.astro';
+import Col from '@/components/media/Col.astro';
+import Infobox from '@/components/media/Infobox.astro';
+import Media from '@/components/media/Media.astro';
+import MythMap from '@/components/map/MythMap.astro';
+import Verse from '@/components/media/Verse.astro';
+import Disagree from '@/components/media/Disagree.astro';
+import Recon from '@/components/media/Recon.astro';
+import Tree from '@/components/media/Tree.astro';
+import ArtStrip from '@/components/media/ArtStrip.astro';
+
+interface Props {
+  block: Block;
+  lang: Lang;
+}
+
+const { block, lang } = Astro.props;
+
+const COMPONENTS: Record<string, any> = {
+  fig: Figure,
+  slider: Slider,
+  scrollplay: ScrollPlay,
+  grid: Grid,
+  col: Col,
+  infobox: Infobox,
+  media: Media,
+  map: MythMap,
+  verse: Verse,
+  disagree: Disagree,
+  recon: Recon,
+  tree: Tree,
+  'art-strip': ArtStrip,
+};
+
+const shortcode = block.type === 'shortcode' ? (block as ShortcodeBlock) : null;
+const Tag: any = shortcode ? COMPONENTS[shortcode.name] : undefined;
+---
+
+{Tag && shortcode ? <Tag block={shortcode} lang={lang} /> : shortcode ? <Fragment set:html={shortcode.raw} /> : null}

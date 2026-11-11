@@ -1,0 +1,235 @@
+---
+import type { Lang, ShortcodeBlock } from '@/lib/types';
+import { asset, localRoute } from '@/lib/paths';
+import { parseMapBody } from '@/lib/content/shortcodes';
+import { t } from '@/lib/i18n';
+import { urlize } from '@/lib/text';
+
+interface Props {
+  block: ShortcodeBlock;
+  lang: Lang;
+}
+
+const { block, lang } = Astro.props;
+const { attrs } = block;
+const { pins, regions } = parseMapBody(block.body);
+
+const id = attrs.id ?? `map-${Date.now()}`;
+const width = attrs.width ?? '100%';
+const height = attrs.height ?? '480px';
+const theme = attrs.theme ?? 'dark';
+const pulse = attrs.pulse ?? 'true';
+const minzoom = /^[0-9]+(\.[0-9]+)?$/.test(attrs.minzoom ?? '') ? attrs.minzoom : '1';
+
+const link = (path?: string) => {
+  if (!path) return '';
+  if (/^(https?:|mailto:|#)/.test(path)) return path;
+  return localRoute(lang, path);
+};
+
+const seenEras: string[] = [];
+for (const region of regions) {
+  if (region.era && !seenEras.includes(region.era)) seenEras.push(region.era);
+}
+for (const pin of pins) {
+  if (pin.era && !seenEras.includes(pin.era)) seenEras.push(pin.era);
+}
+
+const requested = (attrs.eras ?? '').split(',').map((era) => era.trim()).filter(Boolean);
+const eras = requested.length
+  ? [...requested.filter((era) => seenEras.includes(era)), ...seenEras.filter((era) => !requested.includes(era))]
+  : seenEras;
+
+const legend = [
+  ...regions.filter((region) => region.label || region.note).map((region) => ({
+    kind: 'region' as const,
+    id: region.id ?? urlize(region.label),
+    label: region.label,
+    note: region.note ?? '',
+    era: region.era ?? '',
+  })),
+  ...pins.filter((pin) => pin.label || pin.note).map((pin) => ({
+    kind: 'pin' as const,
+    id: pin.id ?? urlize(pin.label),
+    label: pin.label,
+    note: pin.note ?? '',
+    era: pin.era ?? '',
+  })),
+];
+
+const autoPoints = attrs.route === 'auto'
+  ? pins.map((pin) => `${pin.x.replace('%', '')},${pin.y.replace('%', '')}`).join(' ')
+  : (attrs.route ?? '').replace(/%/g, '');
+---
+
+<figure class="myth-map-wrap" style={`width:${width}`}>
+  <div
+    class:list={[
+      'myth-map',
+      'myth-map--fixed',
+      theme === 'sepia' && 'myth-map--sepia',
+      pulse === 'false' && 'myth-map--still',
+      eras.length > 0 && 'myth-map--eras',
+    ]}
+    id={id}
+    style={`height:${height}`}
+    data-minzoom={minzoom}
+    data-era="all"
+    role="region"
+    aria-label={t(lang, 'mapLabel') || 'Interactive myth map'}
+    tabindex="0"
+  >
+    <img class="myth-map__bg" src={asset(attrs.src ?? '')} alt="" aria-hidden="true" draggable="false" />
+
+    {regions.map((region) => {
+      const regionId = region.id ?? urlize(region.label);
+      const points = region.points;
+      const averageX = points.reduce((sum, point) => sum + point.x, 0) / points.length;
+      const averageY = points.reduce((sum, point) => sum + point.y, 0) / points.length;
+      const polygon = points.map((point) => `${point.x}% ${point.y}%`).join(',');
+      const path = `M${points.map((point) => `${point.x} ${point.y}`).join(' L')} Z`;
+      const href = link(region.href);
+      const name = region.label || region.note || '';
+      const content = (
+        <>
+          <span class="myth-region__hit" style={`clip-path:polygon(${polygon})`} aria-hidden="true">
+            <svg class="myth-region__line" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+              <path d={path} />
+            </svg>
+          </span>
+          {(region.label || region.note) && (
+            <span class="myth-region__pop" role="tooltip">
+              {region.label && <b>{region.label}</b>}
+              {region.note && <span>{region.note}</span>}
+            </span>
+          )}
+        </>
+      );
+
+      return href ? (
+        <a
+          class={`myth-region myth-region--${region.color ?? 'gold'}`}
+          style={`--hx:${averageX}%;--hy:${averageY}%`}
+          href={href}
+          id={`${id}-${regionId}`}
+          data-mid={regionId}
+          data-kind="region"
+          data-era={region.era}
+          aria-label={name}
+        >{content}</a>
+      ) : (
+        <span
+          class={`myth-region myth-region--${region.color ?? 'gold'}`}
+          style={`--hx:${averageX}%;--hy:${averageY}%`}
+          id={`${id}-${regionId}`}
+          tabindex="0"
+          role="button"
+          data-mid={regionId}
+          data-kind="region"
+          data-era={region.era}
+          aria-label={name}
+        >{content}</span>
+      );
+    })}
+
+    <div class="myth-map__pins" aria-label={t(lang, 'mapPins') || 'Map locations'}>
+      {pins.map((pin) => {
+        const pinId = pin.id ?? urlize(pin.label);
+        const href = link(pin.href);
+        const name = pin.label || pin.note || '';
+        const content = (
+          <>
+            <span class="myth-pin__dot" aria-hidden="true"></span>
+            <span class="myth-pin__ring" aria-hidden="true"></span>
+            {pin.label && <span class="myth-pin__label">{pin.label}</span>}
+            {pin.note && <span class="myth-pin__pop" role="tooltip">{pin.note}</span>}
+          </>
+        );
+
+        return href ? (
+          <a
+            class={`myth-pin myth-pin--${pin.color ?? 'gold'}`}
+            style={`left:${pin.x};top:${pin.y}`}
+            href={href}
+            id={`${id}-${pinId}`}
+            data-mid={pinId}
+            data-kind="pin"
+            data-era={pin.era}
+            aria-label={name}
+          >{content}</a>
+        ) : (
+          <button
+            class={`myth-pin myth-pin--${pin.color ?? 'gold'}`}
+            style={`left:${pin.x};top:${pin.y}`}
+            id={`${id}-${pinId}`}
+            data-mid={pinId}
+            data-kind="pin"
+            data-era={pin.era}
+            aria-label={name}
+            type="button"
+          >{content}</button>
+        );
+      })}
+
+      {autoPoints && (
+        <svg class="myth-map__route" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <polyline points={autoPoints.replace(/ /g, ',')} />
+        </svg>
+      )}
+    </div>
+
+    <div class="myth-map__ctrl" aria-label={t(lang, 'mapControls') || 'Map controls'}>
+      <button type="button" class="myth-map__zoom" data-zm="1" aria-label={t(lang, 'zoomIn') || 'Zoom in'}>+</button>
+      <button type="button" class="myth-map__zoom" data-zm="-1" aria-label={t(lang, 'zoomOut') || 'Zoom out'}>−</button>
+      <button type="button" class="myth-map__zoom" data-zm="0" aria-label={t(lang, 'zoomReset') || 'Reset view'}>⌂</button>
+    </div>
+
+    {eras.length > 0 && (
+      <div class="myth-map__eras" role="toolbar" aria-label={t(lang, 'mapEras') || 'Map eras'}>
+        <button type="button" class="myth-map__era is-on" data-era="all">{t(lang, 'mapEraAll') || 'All'}</button>
+        {eras.map((era) => (
+          <button type="button" class="myth-map__era" data-era={era}>{t(lang, `mapEra_${era}`) || era}</button>
+        ))}
+      </div>
+    )}
+
+    <aside class="myth-map__dock" data-map-dock hidden>
+      <button type="button" class="myth-map__dock-x" data-map-dock-clear aria-label={t(lang, 'mapDockClose') || 'Close'}>×</button>
+      <p class="myth-map__dock-era" data-map-dock-era hidden></p>
+      <h3 class="myth-map__dock-title" data-map-dock-title></h3>
+      <p class="myth-map__dock-note" data-map-dock-note></p>
+      <a class="myth-map__dock-open" data-map-dock-open hidden href="#">{t(lang, 'mapDockOpen') || 'Open page'}</a>
+    </aside>
+  </div>
+
+  {legend.length > 0 && (
+    <details class="myth-map__places">
+      <summary class="myth-map__places-btn"><span class="myth-map__places-label">{t(lang, 'mapLegend') || 'Places and regions'}</span></summary>
+      <ul class="myth-map__legend">
+        {legend.map((entry) => (
+          <li data-mid={entry.id} data-era={entry.era || undefined}>
+            <button type="button" class="myth-map__leg-btn">
+              <b>{entry.label || entry.note}</b>
+              {entry.label && entry.note ? ' — ' : ''}
+              {entry.note}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </details>
+  )}
+
+  {legend.length > 0 && (
+    <ul class="myth-map__print-notes" aria-hidden="true">
+      {legend.map((entry) => (
+        <li>
+          {entry.label && <b>{entry.label}</b>}
+          {entry.label && entry.note ? ' — ' : ''}
+          {entry.note}
+        </li>
+      ))}
+    </ul>
+  )}
+
+  {attrs.caption && <figcaption>{attrs.caption}</figcaption>}
+</figure>

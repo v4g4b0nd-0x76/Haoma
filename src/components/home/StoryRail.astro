@@ -1,0 +1,128 @@
+---
+import type { Lang } from '@/lib/types';
+import { sectionEnabled, storyCards } from '@/lib/data/site';
+import { localRoute } from '@/lib/paths';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  lang: Lang;
+  culture?: string;
+  home?: boolean;
+}
+
+const { lang, culture, home = false } = Astro.props;
+const enabled = sectionEnabled('stories', culture);
+const cards = enabled ? storyCards(lang, culture) : [];
+const count = cards.length;
+---
+
+{count > 0 && (
+  <section
+    class:list={[
+      'story-rail',
+      'story-rail--carousel',
+      home && 'story-rail--home wrap home-panel',
+    ]}
+    data-home-panel={home ? '' : undefined}
+    aria-labelledby="story-rail-h"
+    aria-roledescription="carousel"
+    data-culture={culture}
+    data-home-cards={home ? '' : undefined}
+    data-story-count={count}
+  >
+    <div class="story-rail__head">
+      <h2 id="story-rail-h" class="story-rail__label">{t(lang, 'storyRailTitle')}</h2>
+    </div>
+    <div class="story-rail__stage">
+      {count > 1 && (
+        <button
+          type="button"
+          class="story-rail__nav story-rail__nav--prev story-rail__nav--side"
+          data-story-dir="-1"
+          aria-label={t(lang, 'storyRailPrev')}
+        ><span aria-hidden="true">‹</span></button>
+      )}
+      <div class="story-rail__viewport" tabindex="0" aria-label={t(lang, 'storyRailTitle')}>
+        <ul class="story-rail__track" data-story-track>
+          {cards.map((card, i) => {
+            const first = card.links[0];
+            const href = first ? localRoute(lang, first.path) : localRoute(lang, `cultures/${card.culture}/`);
+            const cta = first?.label || t(lang, 'storyRailCta');
+            const animated = Boolean(card.animated);
+            return (
+              <li
+                class:list={['story-card', animated && 'story-card--anim', i === 0 && 'is-active']}
+                data-culture={card.culture}
+                data-motif={card.motif || 'none'}
+                data-static={animated ? undefined : '1'}
+                data-story-i={i}
+                aria-hidden={i === 0 ? undefined : 'true'}
+                inert={i === 0 ? undefined : true}
+              >
+                <a class="story-card__hit" href={href} tabindex={i === 0 ? undefined : -1}>
+                  <span class="story-card__motif" aria-hidden="true"></span>
+                  <span class="story-card__body">
+                    <span class="story-card__kicker">{t(lang, 'storyRailKicker')}</span>
+                    <span class="story-card__title">{card.title}</span>
+                    <span class="story-card__blurb">{card.blurb}</span>
+                    <span class="story-card__cta">{cta}</span>
+                  </span>
+                </a>
+                {card.links.length > 1 && (
+                  <ul class="story-card__more">
+                    {card.links.slice(1).map((link) => (
+                      <li>
+                        <a href={localRoute(lang, link.path)} tabindex={i === 0 ? undefined : -1}>
+                          {link.label || t(lang, 'storyRailCta')}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+      {count > 1 && (
+        <button
+          type="button"
+          class="story-rail__nav story-rail__nav--next story-rail__nav--side"
+          data-story-dir="1"
+          aria-label={t(lang, 'storyRailNext')}
+        ><span aria-hidden="true">›</span></button>
+      )}
+    </div>
+    {count > 1 && (
+      <>
+        <p class="story-rail__hint" aria-hidden="true">{t(lang, 'storyRailSwipe')}</p>
+        <div class="story-rail__chrome">
+          <button
+            type="button"
+            class="story-rail__nav story-rail__nav--prev story-rail__nav--bar"
+            data-story-dir="-1"
+            aria-label={t(lang, 'storyRailPrev')}
+          ><span aria-hidden="true">‹</span></button>
+          <div class="story-rail__dots" role="group" aria-label={t(lang, 'storyRailDots')}>
+            {cards.map((card, i) => (
+              <button
+                type="button"
+                class:list={['story-rail__dot', i === 0 && 'is-on']}
+                data-story-go={i}
+                aria-label={card.title}
+                aria-current={i === 0 ? 'true' : 'false'}
+              ></button>
+            ))}
+          </div>
+          <button
+            type="button"
+            class="story-rail__nav story-rail__nav--next story-rail__nav--bar"
+            data-story-dir="1"
+            aria-label={t(lang, 'storyRailNext')}
+          ><span aria-hidden="true">›</span></button>
+        </div>
+        <p class="sr" data-story-status aria-live="polite"></p>
+      </>
+    )}
+  </section>
+)}

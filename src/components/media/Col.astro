@@ -1,0 +1,26 @@
+---
+import type { Block, Lang, ShortcodeBlock } from '@/lib/types';
+import ArticleBody from '@/components/article/ArticleBody.astro';
+
+interface Props {
+  block: ShortcodeBlock;
+  lang: Lang;
+}
+
+const { block, lang } = Astro.props;
+const blocks: Block[] = block.blocks ?? [];
+const span = block.attrs.span;
+const rowspan = block.attrs.rowspan;
+---
+
+<div
+  class="col"
+  style={[
+    span ? `grid-column:span ${span}` : '',
+    rowspan ? `grid-row:span ${rowspan}` : '',
+  ]
+    .filter(Boolean)
+    .join(';')}
+>
+  <ArticleBody blocks={blocks} lang={lang} />
+</div>

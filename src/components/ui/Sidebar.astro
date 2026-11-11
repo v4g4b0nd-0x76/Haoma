@@ -1,0 +1,50 @@
+---
+import type { Page } from '@/lib/types';
+import { getContent } from '@/lib/content/load';
+import { localRoute } from '@/lib/paths';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const { lang } = page;
+const index = getContent();
+const hub = page.culture ? index.byLangId[lang].get(`cultures/${page.culture}`) : undefined;
+
+const current = localRoute(lang, page.route);
+const sections = hub?.children.filter((child) => child.kind === 'section') ?? [];
+---
+
+{hub && (
+  <>
+    <button type="button" class="navtab" data-act="nav" aria-label={t(lang, 'tNav')}>☰</button>
+    <aside class="side">
+      <h3>{hub.title}</h3>
+      <ul>
+        {sections.map((section) => {
+          const sectionHref = localRoute(lang, section.route);
+          const open = current.startsWith(sectionHref);
+          return (
+            <li>
+              <a href={sectionHref} class:list={[current === sectionHref && 'active']}>{section.title}</a>
+              {open && (
+                <ul>
+                  {section.children.map((leaf) => {
+                    const leafHref = localRoute(lang, leaf.route);
+                    return (
+                      <li>
+                        <a href={leafHref} class:list={[current === leafHref && 'active']}>{leaf.title}</a>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </aside>
+  </>
+)}

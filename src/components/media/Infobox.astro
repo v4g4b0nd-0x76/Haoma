@@ -1,0 +1,19 @@
+---
+import type { Block, Lang, ShortcodeBlock } from '@/lib/types';
+import ArticleBody from '@/components/article/ArticleBody.astro';
+
+interface Props {
+  block: ShortcodeBlock;
+  lang: Lang;
+}
+
+const { block, lang } = Astro.props;
+const blocks: Block[] = block.blocks ?? [];
+const side = block.attrs.side === 'start' ? 'start' : 'end';
+const width = block.attrs.w ?? '33%';
+---
+
+<div class:list={['infobox', side]} style={`--w:${width}`}>
+  {block.attrs.title && <div class="ib-title">{block.attrs.title}</div>}
+  <ArticleBody blocks={blocks} lang={lang} />
+</div>

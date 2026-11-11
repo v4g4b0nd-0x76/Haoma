@@ -1,6 +1,14 @@
 public/
 resources/
 .hugo_build.lock
+
+# Astro
+node_modules/
+.astro/
+dist/
+src/content/generated/
+*.tsbuildinfo
+public-hugo/
 tools/.preview.log
 tools/.editor.log
 __pycache__/

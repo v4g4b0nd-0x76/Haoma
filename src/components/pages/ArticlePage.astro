@@ -1,0 +1,118 @@
+---
+import type { Page } from '@/lib/types';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Sidebar from '@/components/ui/Sidebar.astro';
+import Tools from '@/components/ui/Tools.astro';
+import Crumbs from '@/components/ui/Crumbs.astro';
+import Sheet from '@/components/article/Sheet.astro';
+import ArticleBody from '@/components/article/ArticleBody.astro';
+import Sources from '@/components/article/Sources.astro';
+import Related from '@/components/article/Related.astro';
+import Recommendations from '@/components/article/Recommendations.astro';
+import Contribute from '@/components/article/Contribute.astro';
+import CiteScript from '@/components/article/CiteScript.astro';
+import Listen from '@/components/article/Listen.astro';
+import EpStage from '@/components/media/EpStage.astro';
+import HaPlayer from '@/components/media/HaPlayer.astro';
+import Card from '@/components/ui/Card.astro';
+import { parseBlocks } from '@/lib/content/parse';
+import { extractToc } from '@/lib/content/markdown';
+import { existsSync } from 'node:fs';
+import { join } from 'node:path';
+import { getContent } from '@/lib/content/load';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const { lang, frontmatter: fm } = page;
+const index = getContent();
+
+const blocks = parseBlocks(page.body, lang);
+const toc = extractToc(page.body);
+const isEpisode = page.kind === 'episode';
+const isLeaf = page.kind === 'article' || isEpisode;
+
+const audio = fm.audio
+  ? /^https?:/.test(fm.audio) || existsSync(join(process.cwd(), 'static', fm.audio))
+    ? fm.audio
+    : ''
+  : '';
+
+const showMetaLine =
+  !isLeaf && (fm.grade || fm.reviewed) && true;
+const showTraditionsMeta = page.sec === 'traditions' && (fm.grade || fm.reviewed);
+
+const members =
+  page.sec === 'traditions' && page.kind === 'article'
+    ? index.byLang[lang]
+        .filter(
+          (entry) =>
+            entry.kind === 'article' &&
+            entry.culture === page.culture &&
+            entry.sec !== 'traditions' &&
+            entry.frontmatter.subculture === page.slug,
+        )
+        .sort((a, b) => a.title.localeCompare(b.title))
+    : [];
+
+const showRecommendations = Boolean(page.culture) || isEpisode;
+---
+
+<BaseLayout lang={lang} title={page.title} culture={page.culture} page={page}>
+  <div class:list={['layout', !page.culture && 'solo']}>
+    <Sidebar page={page} />
+
+    <article class:list={[fm.wide && 'wide', fm.dropcap && 'dc']}>
+      <Tools page={page} />
+      <Crumbs page={page} />
+      <h1>{page.title}</h1>
+      <Sheet page={page} />
+
+      {(showMetaLine || showTraditionsMeta) && (
+        <p class="meta-line">
+          {fm.grade && <span class="chip">{fm.grade}</span>}
+          {fm.reviewed && <span class="muted">{t(lang, 'reviewed')} {fm.reviewed}</span>}
+        </p>
+      )}
+
+      {isEpisode ? <EpStage page={page} /> : audio ? <HaPlayer src={audio} lang={lang} /> : null}
+
+      <ArticleBody blocks={blocks} lang={lang} />
+
+      {members.length > 0 && (
+        <section class="subcult-members">
+          <h2>{t(lang, 'traditionsIn')}</h2>
+          <ul class="cards">
+            {members.map((entry) => <Card page={entry} />)}
+          </ul>
+        </section>
+      )}
+
+      <Related page={page} />
+      {showRecommendations && <Recommendations page={page} />}
+
+      <Sources page={page} />
+      <Contribute page={page} />
+    </article>
+
+    {toc.length > 0 && (
+      <aside class="toc">
+        <h3>{t(lang, 'onPage')}</h3>
+        <nav id="TableOfContents">
+          <ul>
+            {toc.map((entry) => (
+              <li class:list={[entry.depth === 3 && 'toc-h3']}>
+                <a href={`#${entry.id}`}>{entry.text}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </aside>
+    )}
+  </div>
+  <Listen page={page} />
+  <CiteScript />
+</BaseLayout>

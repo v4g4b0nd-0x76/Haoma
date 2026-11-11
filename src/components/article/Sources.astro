@@ -1,0 +1,20 @@
+---
+import type { Page } from '@/lib/types';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const sources = page.frontmatter.sources ?? [];
+---
+
+{sources.length > 0 && (
+  <div class="sources">
+    <h2>{t(page.lang, 'sources')}</h2>
+    <ul>
+      {sources.map((source) => <li>{source}</li>)}
+    </ul>
+  </div>
+)}

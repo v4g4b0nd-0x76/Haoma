@@ -1,0 +1,51 @@
+---
+import type { Page } from '@/lib/types';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Tools from '@/components/ui/Tools.astro';
+import Crumbs from '@/components/ui/Crumbs.astro';
+import ArticleBody from '@/components/article/ArticleBody.astro';
+import Sources from '@/components/article/Sources.astro';
+import CiteScript from '@/components/article/CiteScript.astro';
+import { parseBlocks } from '@/lib/content/parse';
+import { getContent, resolvePath } from '@/lib/content/load';
+import { localRoute } from '@/lib/paths';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const { lang, frontmatter: fm } = page;
+const blocks = parseBlocks(page.body, lang);
+const index = getContent();
+const pair = (fm.pair ?? [])
+  .map((path) => resolvePath(index, lang, path))
+  .filter((entry): entry is Page => Boolean(entry));
+---
+
+<BaseLayout lang={lang} title={page.title} culture={page.culture} page={page}>
+  <div class="layout solo">
+    <article class="wide">
+      <Tools page={page} />
+      <Crumbs page={page} />
+      <h1>{page.title}</h1>
+      {fm.tagline && <p class="sheet__def">{fm.tagline}</p>}
+
+      {pair.length > 0 && (
+        <div class="compare-pair">
+          {pair.map((entry) => (
+            <a class="compare-pair__card" href={localRoute(lang, entry.route)}>
+              <span class="compare-pair__k">{entry.culture ?? ''}</span>
+              <strong>{entry.title}</strong>
+              {entry.frontmatter.tagline && <span class="muted">{entry.frontmatter.tagline}</span>}
+            </a>
+          ))}
+        </div>
+      )}
+
+      <ArticleBody blocks={blocks} lang={lang} />
+      <Sources page={page} />
+    </article>
+  </div>
+  <CiteScript />
+</BaseLayout>

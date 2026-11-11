@@ -1,0 +1,28 @@
+---
+import type { Page } from '@/lib/types';
+import { getContent } from '@/lib/content/load';
+import { localRoute } from '@/lib/paths';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const { lang } = page;
+const index = getContent();
+
+const parts = page.id.split('/');
+const ancestors = parts
+  .slice(0, -1)
+  .map((_part, position) => parts.slice(0, position + 1).join('/'))
+  .map((id) => index.byLangId[lang].get(id))
+  .filter((entry): entry is NonNullable<typeof entry> => Boolean(entry));
+---
+
+<div class="crumbs">
+  <a href={localRoute(lang, '')}>{t(lang, 'home')}</a>
+  {ancestors.map((ancestor) => (
+    <> › <a href={localRoute(lang, ancestor.route)}>{ancestor.title}</a></>
+  ))}
+</div>

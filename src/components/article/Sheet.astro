@@ -1,0 +1,83 @@
+---
+import type { Page } from '@/lib/types';
+import { getContent } from '@/lib/content/load';
+import { absoluteUrl, asset, localRoute } from '@/lib/paths';
+import { t, hasTranslation } from '@/lib/i18n';
+import { gradeLabel } from '@/lib/grade';
+import { urlize } from '@/lib/text';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const { lang, frontmatter: fm } = page;
+const index = getContent();
+
+const isLeaf = page.kind === 'article' || page.kind === 'episode';
+const sec = page.sec ?? '';
+const hub = page.culture ? index.byLangId[lang].get(`cultures/${page.culture}`) : undefined;
+const subculture = fm.subculture
+  ? index.byLangId[lang].get(`cultures/${page.culture}/traditions/${fm.subculture}`)
+  : undefined;
+const secLabel = sec ? (hasTranslation(lang, sec) ? t(lang, sec) : sec) : '';
+const today = new Date().toISOString().slice(0, 10);
+---
+
+{isLeaf && (
+  <header class="sheet">
+    {fm.tagline && <p class="sheet__def">{fm.tagline}</p>}
+
+    <div class="sheet__chips sheet__chips--meta">
+      {page.culture && (
+        hub
+          ? <a class="sheet__chip" href={localRoute(lang, hub.route)}>{hub.title}</a>
+          : <span class="sheet__chip">{page.culture}</span>
+      )}
+      {secLabel && <span class="sheet__chip sheet__chip--sec">{secLabel}</span>}
+      {page.kind === 'episode' && <span class="sheet__chip sheet__chip--sec">{t(lang, 'episodes')}</span>}
+      {fm.subculture && sec !== 'traditions' && (
+        subculture
+          ? <a class="sheet__chip sheet__chip--sub" href={localRoute(lang, subculture.route)}>{subculture.title}</a>
+          : <span class="sheet__chip sheet__chip--sub">{fm.subculture}</span>
+      )}
+      {fm.grade && <span class="sheet__chip sheet__chip--grade">{gradeLabel(lang, fm.grade)}</span>}
+    </div>
+
+    {fm.themes && fm.themes.length > 0 && (
+      <div class="sheet__chips sheet__chips--themes">
+        {fm.themes
+          .filter((theme) => !sec || theme.toLowerCase() !== sec.toLowerCase())
+          .map((theme) => (
+            <a
+              class="sheet__chip sheet__chip--theme"
+              href={`${localRoute(lang, 'themes/')}#${urlize(theme)}`}
+            >{theme}</a>
+          ))}
+      </div>
+    )}
+
+    {fm.pronounce && (
+      <p class="sheet__pron muted"><span class="sheet__pron-label">{t(lang, 'pronounce')}</span> {fm.pronounce}</p>
+    )}
+
+    {fm.facts && fm.facts.length > 0 && (
+      <ul class="sheet__facts">
+        {fm.facts.map((fact) => <li>{fact}</li>)}
+      </ul>
+    )}
+
+    <div class="sheet__tools">
+      <button
+        type="button"
+        class="sheet__cite"
+        data-cite
+        data-title={page.title}
+        data-url={absoluteUrl(localRoute(lang, page.route))}
+        data-date={fm.reviewed ?? today}
+        data-site={lang === 'fa' ? 'هوم' : 'Haoma'}
+      >{t(lang, 'citePage')}</button>
+      <span class="sheet__cite-ok muted" data-cite-ok hidden>{t(lang, 'citeCopied')}</span>
+    </div>
+  </header>
+)}

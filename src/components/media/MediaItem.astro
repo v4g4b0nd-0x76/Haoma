@@ -1,0 +1,24 @@
+---
+import { asset } from '@/lib/paths';
+
+interface Props {
+  src: string;
+  caption?: string;
+  scroll?: boolean;
+}
+
+const { src, caption = '', scroll = false } = Astro.props;
+const url = asset(src);
+const extension = src.split('.').pop()?.toLowerCase() ?? '';
+const isVideo = extension === 'mp4' || extension === 'webm';
+const isGif = extension === 'gif';
+const placeholder = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==';
+---
+
+{isVideo ? (
+  <video src={url} muted loop playsinline preload="metadata" data-scroll={scroll ? '1' : undefined}></video>
+) : isGif ? (
+  <img data-gif={url} alt={caption} src={placeholder} />
+) : (
+  <img src={url} alt={caption} loading="lazy" />
+)}

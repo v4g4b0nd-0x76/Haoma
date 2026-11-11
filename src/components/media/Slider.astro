@@ -1,0 +1,27 @@
+---
+import type { ShortcodeBlock } from '@/lib/types';
+import { parsePipeMedia } from '@/lib/content/shortcodes';
+import MediaItem from './MediaItem.astro';
+
+interface Props {
+  block: ShortcodeBlock;
+}
+
+const { block } = Astro.props;
+const items = parsePipeMedia(block.body);
+const ratio = /^[0-9]{1,2}\/[0-9]{1,2}$/.test(block.attrs.ratio ?? '') ? block.attrs.ratio : '16/9';
+const autoplay = block.attrs.autoplay ?? '0';
+---
+
+<figure class="slider-md" data-auto={autoplay} style={`--ratio:${ratio}`}>
+  <div class="sm-track">
+    {items.filter((item) => item.src).map((item) => (
+      <div class="sm-slide">
+        <MediaItem src={item.src} caption={item.caption} />
+        {item.caption && <figcaption>{item.caption}</figcaption>}
+      </div>
+    ))}
+  </div>
+  <button class="sm-prev" type="button" aria-label="Previous">‹</button><button class="sm-next" type="button" aria-label="Next">›</button>
+  <div class="sm-dots"></div>
+</figure>

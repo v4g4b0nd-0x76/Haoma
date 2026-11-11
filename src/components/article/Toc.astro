@@ -1,0 +1,25 @@
+---
+import type { TocEntry } from '@/lib/content/markdown';
+import { t } from '@/lib/i18n';
+import type { Lang } from '@/lib/types';
+
+interface Props {
+  entries: TocEntry[];
+  lang: Lang;
+}
+
+const { entries, lang } = Astro.props;
+---
+
+<aside class="toc hidden xl:block" aria-label={t(lang, 'onPage')}>
+  <h3 class="mb-2 text-sm uppercase tracking-wide text-[var(--muted)]">{t(lang, 'onPage')}</h3>
+  <ul class="space-y-1 text-sm">
+    {entries.map((entry) => (
+      <li class:list={[entry.depth === 3 && 'ms-4']}>
+        <a class="text-[var(--muted)] no-underline hover:text-[var(--accent)]" href={`#${entry.id}`}>
+          {entry.text}
+        </a>
+      </li>
+    ))}
+  </ul>
+</aside>

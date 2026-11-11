@@ -1,0 +1,48 @@
+---
+import { t } from '@/lib/i18n';
+import { localRoute } from '@/lib/paths';
+import IconScribe from '@/components/shell/IconScribe.astro';
+import type { Page } from '@/lib/types';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const { lang } = page;
+const canSave = page.kind === 'article' || page.section === 'episodes';
+const saveKind = page.section === 'episodes' ? 'ep' : (page.sec ?? 'art');
+const savePath = localRoute(lang, page.route);
+---
+
+<div class="tools" role="toolbar">
+  <button type="button" data-act="nav" title={t(lang, 'tNav')} aria-label={t(lang, 'tNav')}>☰</button>
+  <button type="button" data-act="dock" title={t(lang, 'tDock')} aria-label={t(lang, 'tDock')}>⇄</button>
+  <button type="button" data-act="minus" title={t(lang, 'tSmaller')} aria-label={t(lang, 'tSmaller')}>A−</button>
+  <button type="button" data-act="plus" title={t(lang, 'tBigger')} aria-label={t(lang, 'tBigger')}>A+</button>
+  <button type="button" data-act="focus" title={t(lang, 'tFocus')} aria-label={t(lang, 'tFocus')}>◐</button>
+  <button type="button" data-act="reader" title={t(lang, 'readerMode')} aria-label={t(lang, 'readerMode')} aria-pressed="false">¶</button>
+  {canSave && (
+    <button
+      type="button"
+      class="tools__save"
+      data-save
+      data-save-path={savePath}
+      data-save-title={page.title}
+      data-save-culture={page.culture ?? ''}
+      data-save-kind={saveKind}
+      title={t(lang, 'readingSave')}
+      aria-label={t(lang, 'readingSave')}
+      aria-pressed="false"
+    ><IconScribe /></button>
+  )}
+  {canSave && (
+    <button
+      type="button"
+      class="tools__pdf"
+      data-act="pdf"
+      title={t(lang, 'exportPdfHint')}
+      aria-label={t(lang, 'exportPdf')}
+    >{t(lang, 'exportPdf')}</button>
+  )}
+</div>

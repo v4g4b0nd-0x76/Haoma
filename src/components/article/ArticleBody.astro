@@ -1,0 +1,20 @@
+---
+import type { Block, Lang } from '@/lib/types';
+import { renderMarkdown } from '@/lib/content/markdown';
+import Shortcode from './Shortcode.astro';
+
+interface Props {
+  blocks: Block[];
+  lang: Lang;
+}
+
+const { blocks, lang } = Astro.props;
+---
+
+{blocks.map((block) =>
+  block.type === 'markdown' ? (
+    <Fragment set:html={renderMarkdown(block.source, lang)} />
+  ) : (
+    <Shortcode block={block} lang={lang} />
+  ),
+)}

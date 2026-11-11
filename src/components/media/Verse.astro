@@ -1,0 +1,24 @@
+---
+import type { ShortcodeBlock } from '@/lib/types';
+import { parseVerseBody } from '@/lib/content/shortcodes';
+
+interface Props {
+  block: ShortcodeBlock;
+}
+
+const { block } = Astro.props;
+const lines = parseVerseBody(block.body);
+const lang = block.attrs.lang;
+const isRtl = lang === 'fa';
+---
+
+<figure class="verse" lang={lang} dir={isRtl ? 'rtl' : undefined}>
+  {lines.map((line) => (
+    <div class:list={['vl', !line.right && 'one']}>
+      <span class="m1">{line.left}</span>
+      {line.right && <i class="vm" aria-hidden="true"></i>}
+      {line.right && <span class="m2">{line.right}</span>}
+    </div>
+  ))}
+  {block.attrs.source && <figcaption>{block.attrs.source}</figcaption>}
+</figure>

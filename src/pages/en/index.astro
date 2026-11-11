@@ -1,0 +1,21 @@
+---
+// Hugo publishes /en/ as a redirect to the default-language root; keep the URL
+// for parity with existing links.
+import { localRoute } from '@/lib/paths';
+
+const target = localRoute('en', '');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <meta name="robots" content="noindex" />
+    <title>Haoma</title>
+  </head>
+  <body>
+    <a href={target}>Haoma</a>
+  </body>
+</html>

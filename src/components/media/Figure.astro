@@ -1,0 +1,21 @@
+---
+import type { ShortcodeBlock } from '@/lib/types';
+import MediaItem from './MediaItem.astro';
+
+interface Props {
+  block: ShortcodeBlock;
+}
+
+const { block } = Astro.props;
+const { attrs } = block;
+const align = attrs.align ?? 'full';
+const width = attrs.w;
+---
+
+<figure class:list={['fig', align]} style={width ? `--w:${width}` : undefined}>
+  <MediaItem src={attrs.src ?? ''} caption={attrs.caption ?? attrs.alt ?? ''} />
+  {attrs.note && (
+    <span class="note-pop" role="tooltip">{attrs.note}</span>
+  )}
+  {attrs.caption && <figcaption>{attrs.caption}</figcaption>}
+</figure>

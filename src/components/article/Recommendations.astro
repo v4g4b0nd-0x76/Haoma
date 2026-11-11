@@ -1,0 +1,69 @@
+---
+import type { Page } from '@/lib/types';
+import { getContent } from '@/lib/content/load';
+import { absoluteUrl, asset, localRoute } from '@/lib/paths';
+import { sectionEnabled } from '@/lib/data/site';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  page: Page;
+}
+
+const { page } = Astro.props;
+const { lang } = page;
+const culture = page.culture ?? '';
+const enabled = sectionEnabled('recommendations', culture);
+const index = getContent();
+
+let key = '';
+if (page.kind === 'article' && culture) {
+  key = `/cultures/${culture}/${page.sec}/${page.slug}/`;
+} else if (page.kind === 'episode') {
+  key = `/episodes/${page.slug}/`;
+} else if (page.kind === 'culture-hub' && culture) {
+  key = `/cultures/${culture}/`;
+}
+
+const featured = culture
+  ? index.byLang[lang]
+      .filter((entry) => entry.kind === 'article' && entry.culture === culture)
+      .slice(0, 8)
+      .map((entry) => ({
+        k: `/cultures/${entry.culture}/${entry.sec}/${entry.slug}/`,
+        u: localRoute(lang, entry.route),
+        t: entry.title,
+        g: entry.frontmatter.tagline ?? '',
+        c: entry.culture ?? '',
+      }))
+  : [];
+
+const relatedFile = absoluteUrl(asset(`${lang === 'fa' ? 'fa/' : ''}related.json`));
+const themes = (page.frontmatter.themes ?? []).join(' ');
+---
+
+{enabled && (
+  <>
+    <link rel="alternate" type="application/json" href={relatedFile} title="related" hidden />
+    <section
+      class="explore-recs"
+      id="haoma-recs"
+      hidden
+      data-recs
+      data-path={key}
+      data-culture={culture}
+      data-title={page.title}
+      data-themes={themes}
+      data-featured={JSON.stringify(featured)}
+      data-i18n-title={t(lang, 'recsTitle')}
+      data-i18n-hint={t(lang, 'recsHint')}
+      data-i18n-empty={t(lang, 'recsEmpty')}
+      data-i18n-cta={t(lang, 'recsCta')}
+      aria-labelledby="recs-h"
+    >
+      <h2 id="recs-h">{t(lang, 'recsTitle')}</h2>
+      <p class="explore-recs__hint">{t(lang, 'recsHint')}</p>
+      <ul class="cards cards--recs" data-recs-list></ul>
+      <p class="explore-recs__empty muted" data-recs-empty hidden>{t(lang, 'recsEmpty')}</p>
+    </section>
+  </>
+)}

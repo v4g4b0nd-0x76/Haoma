@@ -1,0 +1,18 @@
+---
+import type { ShortcodeBlock } from '@/lib/types';
+import { parseTreeBody } from '@/lib/content/shortcodes';
+
+interface Props {
+  block: ShortcodeBlock;
+}
+
+const { block } = Astro.props;
+const rows = parseTreeBody(block.body);
+---
+
+<figure class="myth-tree">
+  <ul class="myth-tree__list">
+    {rows.map((row) => <li class="myth-tree__row">{row}</li>)}
+  </ul>
+  {block.attrs.caption && <figcaption class="myth-tree__cap muted">{block.attrs.caption}</figcaption>}
+</figure>

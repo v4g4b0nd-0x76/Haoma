@@ -1,0 +1,29 @@
+---
+/**
+ * One source of truth for culture colours.
+ *
+ * Hugo inlined this block from data/themes.json in baseof.html. Rendering it
+ * here means CSS variables always match the JSON, with no build-time copy.
+ */
+import themes from '../../../data/themes.json';
+
+const entries = Object.entries(themes as Record<string, Record<string, string>>);
+const rules = entries
+  .map(([name, theme]) => {
+    const vars = [
+      `--accent:${theme.accent}`,
+      `--bg:${theme.bg}`,
+      `--surface:${theme.surface}`,
+      `--border:${theme.border}`,
+      `--text:${theme.text}`,
+      `--muted:${theme.muted}`,
+      `--anim:${theme.anim || 'none'}`,
+      `--meander:var(--m-${theme.pattern || 'none'})`,
+      `--rune:${JSON.stringify(theme.glyphs || '')}`,
+    ];
+    return `html[data-culture="${name}"]{${vars.join(';')}}`;
+  })
+  .join('\n');
+---
+
+<style is:inline set:html={rules}></style>

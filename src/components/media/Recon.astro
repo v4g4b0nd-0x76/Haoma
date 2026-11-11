@@ -1,0 +1,18 @@
+---
+import type { ShortcodeBlock } from '@/lib/types';
+import { renderInlineBody } from '@/lib/content/markdown';
+import { t } from '@/lib/i18n';
+
+interface Props {
+  block: ShortcodeBlock;
+  lang: 'en' | 'fa';
+}
+
+const { block, lang } = Astro.props;
+const html = renderInlineBody(block.body, lang);
+---
+
+<div class="recon" role="note">
+  <p class="recon__label">{block.attrs.label ?? t(lang, 'reconLabel')}</p>
+  <div class="recon__body"><Fragment set:html={html} /></div>
+</div>
