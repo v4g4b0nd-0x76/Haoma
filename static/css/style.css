@@ -767,10 +767,23 @@ html[dir=rtl] .atlas__tour-nav[data-tour-next]::before{content:"←"}
 html[lang=fa] .cine .pills button,html[lang=fa] .cine .enter,html[lang=fa] .eyebrow,html[lang=fa] .quote cite{letter-spacing:0;text-transform:none}
 html[lang=fa] .cine .sub{font-weight:400}
 @media(max-width:760px){
-  .cine{height:min(86dvh,86vh,720px);min-height:min(420px,78dvh)}
-  .cine-text{padding:clamp(18px,4vh,36px) max(14px,var(--safe-l)) clamp(18px,3.5vh,32px) max(14px,var(--safe-r))}
+  /* Fit under sticky header + motif (16px) so quote/pills stay on the first screen */
+  .cine{
+    --cine-chrome:calc(var(--top-h,4.5rem) + 16px);
+    height:calc(100dvh - var(--cine-chrome));
+    height:calc(100svh - var(--cine-chrome));
+    min-height:min(380px,calc(100dvh - var(--cine-chrome)));
+    max-height:calc(100dvh - var(--cine-chrome));
+  }
+  .cine-text{padding:clamp(14px,3.2vh,28px) max(14px,var(--safe-l)) clamp(14px,2.8vh,24px) max(14px,var(--safe-r))}
+  .cine-bot{gap:clamp(10px,1.8vh,16px)}
+  .cine .logo-word{height:clamp(40px,9vw,72px)}
   .cine .sub{font-size:.95rem}
-  .cine .pills{gap:3px;padding:4px;justify-content:center;scroll-padding-inline:8px}
+  .quote{min-height:0;font-size:.98rem}
+  /* Start-aligned so overflow scrolls from the first chip (center clipped both ends).
+     body.is-home .cine .pills is more specific than .cine .pills — beat it here. */
+  .cine .pills,body.is-home .cine .pills{gap:3px;padding:4px;justify-content:flex-start;scroll-padding-inline:8px;
+    -webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
   .cine .pills button{padding:10px 14px;font-size:.72rem;min-height:var(--tap)}
   .cine .enter{min-height:var(--tap);padding:12px 26px;display:inline-flex;align-items:center}
 }
@@ -814,7 +827,8 @@ body.is-home .lib__chips{justify-content:center}
 body.is-home .files,
 body.is-home .files__item{width:min(100%,42rem);margin-inline:auto;text-align:start}
 html[dir=rtl] body.is-home .files__item{text-align:right}
-body.is-home .cine .pills{justify-content:center}
+/* Desktop/tablet: keep the pill row optically centered. Phones override in the 760px block. */
+@media(min-width:761px){body.is-home .cine .pills{justify-content:center}}
 /* Home full-viewport panels (tablet landscape+, iPad, laptop, desktop)
    No scroll-snap + no forced smooth-scroll — those fight the wheel and stutter. */
 @media (min-width:768px){
@@ -1473,21 +1487,33 @@ aside.toc ul{border-left:0;border-inline-start:1px solid var(--border);padding-l
   .layout > aside.side,html[data-dock=end] .layout > aside.side{grid-area:side;position:static}
   .layout > aside.toc,html[data-dock=end] .layout > aside.toc{grid-area:toc;position:static}
   .navtab{display:none!important}
-  /* compact header: brand + controls on row 1, scrollable nav on row 2, ticker below */
+  /* compact header: brand + controls on row 1, scrollable nav on row 2, ticker below.
+     Grid items default to min-width:auto — without min-width:0 the nav link row
+     forces the whole header wider than the phone and clips .ctrl / .lang. */
   header.top{
     display:grid;
-    grid-template-columns:minmax(0,1fr) auto;
+    grid-template-columns:auto minmax(0,1fr);
     grid-template-areas:"brand ctrl" "nav nav" "tick tick";
     align-items:center;
-    column-gap:12px;
-    row-gap:8px;
-    padding:calc(10px + var(--safe-t)) max(14px,var(--safe-r)) 10px max(14px,var(--safe-l));
+    column-gap:10px;
+    row-gap:6px;
+    width:100%;
+    max-width:100%;
+    box-sizing:border-box;
+    overflow-x:clip;
+    padding:calc(8px + var(--safe-t)) max(14px,var(--safe-r)) 8px max(14px,var(--safe-l));
   }
-  header.top > .brand{grid-area:brand;min-width:0}
-  header.top > .ctrl{grid-area:ctrl;width:auto;max-width:100%;justify-self:end;gap:8px;flex-wrap:nowrap}
-  header.top > .ntick{grid-area:tick;flex:1 1 auto;max-width:none;margin-inline:0}
+  header.top > .brand{grid-area:brand;min-width:0;max-width:42vw}
+  header.top > .ctrl{
+    grid-area:ctrl;min-width:0;width:100%;max-width:100%;
+    justify-self:stretch;justify-content:flex-end;gap:6px;flex-wrap:nowrap;
+  }
+  header.top > .ntick{grid-area:tick;min-width:0;flex:1 1 auto;max-width:none;width:100%;margin-inline:0}
   header.top > nav{
     grid-area:nav;
+    min-width:0;
+    width:100%;
+    max-width:100%;
     flex:1 1 auto;
     flex-wrap:nowrap;
     gap:14px;
@@ -1496,16 +1522,17 @@ aside.toc ul{border-left:0;border-inline-start:1px solid var(--border);padding-l
     -webkit-overflow-scrolling:touch;
     scrollbar-width:none;
     mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);
-    padding-block:2px;
+    padding-block:0;
     scroll-padding-inline:8px;
   }
   html[dir=rtl] header.top > nav{mask-image:linear-gradient(to left,#000 calc(100% - 28px),transparent)}
   header.top > nav::-webkit-scrollbar{display:none;height:0}
-  header.top > nav a{padding:8px 0;font-size:.92rem}
-  .cpick{flex:0 1 auto;min-width:0;max-width:min(160px,42vw)}
-  .cpick__btn{width:100%;min-width:0;padding:7px 8px 7px 6px;min-height:var(--tap)}
+  header.top > nav a{padding:6px 0;font-size:.9rem}
+  .cpick{flex:1 1 auto;min-width:0;max-width:min(160px,42vw)}
+  .cpick__btn{width:100%;min-width:0;max-width:100%;padding:7px 8px 7px 6px;min-height:var(--tap);box-sizing:border-box}
   .cpick__list{inset-inline-end:0;inset-inline-start:auto;width:min(280px,92vw);min-width:0;max-height:min(70dvh,420px);overflow:auto}
-  .lang{padding:0 12px;font-size:.85rem;min-height:var(--tap)}
+  .lang{flex:0 0 auto;padding:0 12px;font-size:.85rem;min-height:var(--tap)}
+  .search,.rlist{flex:0 0 auto}
   /* side + toc become scannable chip rails under the article */
   .layout > aside.side,.layout > aside.toc{
     position:static;max-height:none;overflow:visible;
@@ -1815,6 +1842,15 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
 @media(max-width:640px){
   /* keep banner art readable without owning the whole first screen */
   :root{--hero-h:clamp(180px,48vw,300px);--s3:14px;--s4:22px}
+  /* tighter sticky chrome so the home hero CTAs fit above the fold */
+  header.top{row-gap:4px;column-gap:8px;padding:calc(6px + var(--safe-t)) max(12px,var(--safe-r)) 6px max(12px,var(--safe-l))}
+  header.top > .brand{max-width:36vw}
+  header.top > nav a{padding:4px 0;font-size:.85rem;min-height:40px}
+  header.top > .ctrl{gap:4px}
+  .ntick__hit{padding-block:5px;padding-inline:6px 8px;column-gap:8px}
+  .ntick__mark{width:28px;height:28px;border-radius:8px}
+  .ntick__title{font-size:.8rem}
+  .ntick__close{width:28px}
   .sheet{padding:12px;border-radius:10px}
   .sheet__def{font-size:1rem;margin-bottom:10px}
   .sheet__chips{gap:6px;margin-bottom:10px}
@@ -1852,10 +1888,12 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
   .atlas__dock-acts{width:100%}
   .tools button{min-width:var(--tap);height:var(--tap)}
   .search__open,.keys-help-btn{width:var(--tap);height:var(--tap)}
-  /* culture picker: don't starve the brand wordmark */
-  header.top > .ctrl{gap:6px}
-  .cpick{max-width:min(148px,44vw)}
-  .cpick__name{max-width:9ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  /* culture picker: shrink inside .ctrl; kill the desktop min-width:130px */
+  .cpick{max-width:min(132px,40vw)}
+  .cpick__btn{min-width:0;gap:6px;padding:6px 7px 6px 5px}
+  .cpick__name{max-width:8ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lang{padding:0 9px;font-size:.8rem}
+  .search__open,.rlist__open{width:40px;height:40px;min-width:40px}
   .keys-help-btn{display:none} /* keyboard help is for keyboards */
   .panels{grid-template-columns:1fr;gap:var(--s2)}
   .cards{gap:var(--s2)}
@@ -1873,14 +1911,14 @@ html[lang=fa] .verse{font-style:normal}html[lang=fa] .verse .vl{line-height:2.7;
   html[lang=fa] .sheet__chip{font-size:.74rem;padding:0 10px}
   .yt-card__badge{font-size:.62rem;padding:4px 8px}
   .atlas__zoom-btn{width:40px;height:36px}
-  .cpick{max-width:min(122px,50vw)}
-  .cpick__btn{padding:6px 7px 6px 5px;gap:5px;justify-content:flex-start;min-width:0;min-height:var(--tap)}
-  .cpick__btn .cpick__name{display:block;flex:1 1 auto;min-width:0;max-width:none;
-    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.78rem}
-  html[lang=fa] .cpick__btn .cpick__name{font-size:.82rem}
-  .cpick__chev{display:none}
+  /* Icon-only culture chip — full name stays on aria-label + listbox options */
+  .cpick{flex:0 0 auto;max-width:none}
+  .cpick__btn{width:auto;padding:6px;gap:0;justify-content:center;min-width:var(--tap);min-height:var(--tap)}
+  .cpick__btn .cpick__name,.cpick__chev{display:none}
   .cpick__opt .cpick__name{display:block;max-width:none;overflow:visible;text-overflow:unset;
     white-space:normal;font-size:.9rem}
+  .lang{padding:0 8px;font-size:.78rem}
+  .search__open,.rlist__open{width:var(--tap);height:var(--tap);min-width:var(--tap)}
   html[lang="en"] .brand .logo-word{height:20px;max-width:min(100%,100px)}
   html[lang="fa"] .brand .logo-word{height:22px;max-width:min(100%,88px)}
 }
