@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" preserveAspectRatio="xMidYMid slice"><!-- China: calm wine silk + soft gold — bi disc, ruyi clouds, five-star cue, bronze ding. -->
+<style>
+.cl{animation:cl 18s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}
+.c2{animation-duration:24s;animation-delay:-7s}.c3{animation-duration:20s;animation-delay:-3s}
+@keyframes cl{to{transform:translateX(22px);opacity:.55}}
+.tw{animation:tw 5.5s ease-in-out infinite alternate}.t2{animation-delay:-2.5s}@keyframes tw{to{opacity:.18}}
+.gl{animation:gl 10s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes gl{to{opacity:.8;transform:scale(1.03)}}
+.fl{animation:fl 14s linear infinite;opacity:0}.f2{animation-duration:17s;animation-delay:-5s}.f3{animation-duration:20s;animation-delay:-9s}
+@keyframes fl{0%{transform:translateY(-8px);opacity:0}12%{opacity:.45}100%{transform:translateY(210px) translateX(10px);opacity:0}}
+.st{animation:st 11s ease-in-out infinite alternate;transform-box:fill-box;transform-origin:center}@keyframes st{to{opacity:.75;transform:rotate(5deg)}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+<defs>
+<linearGradient id="s" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#120c0e"/><stop offset=".45" stop-color="#1c1216"/><stop offset="1" stop-color="#2a181c"/></linearGradient>
+<radialGradient id="g"><stop offset="0" stop-color="#c9a84e"/><stop offset="1" stop-color="#c9a84e" stop-opacity="0"/></radialGradient>
+<linearGradient id="silk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#c9a84e" stop-opacity="0"/><stop offset=".5" stop-color="#c9a84e" stop-opacity=".18"/><stop offset="1" stop-color="#c9a84e" stop-opacity="0"/></linearGradient>
+</defs>
+<rect width="1200" height="300" fill="url(#s)"/>
+<!-- quiet silk folds -->
+<g opacity=".12" fill="url(#silk)">
+  <rect x="90" y="0" width="28" height="300"/>
+  <rect x="280" y="0" width="18" height="300"/>
+  <rect x="880" y="0" width="24" height="300"/>
+  <rect x="1040" y="0" width="16" height="300"/>
+</g>
+<!-- soft falling flecks -->
+<g fill="#c9a84e">
+  <circle class="fl" cx="160" cy="20" r="1.2"/><circle class="fl f2" cx="420" cy="8" r="1"/>
+  <circle class="fl f3" cx="720" cy="30" r="1.3"/><circle class="fl" cx="980" cy="12" r="1"/>
+</g>
+<!-- constellation: large star + four escorts -->
+<g transform="translate(900 78)" fill="#c9a84e">
+  <circle class="gl" r="56" fill="url(#g)" opacity=".35"/>
+  <path class="st" d="M0-26L7.5-7.5L28-7.5L11.5 4L17 24L0 12L-17 24L-11.5 4L-28-7.5L-7.5-7.5Z" opacity=".7"/>
+  <g opacity=".5" transform="translate(-48 -18) scale(.38)"><path d="M0-26L7.5-7.5L28-7.5L11.5 4L17 24L0 12L-17 24L-11.5 4L-28-7.5L-7.5-7.5Z"/></g>
+  <g opacity=".45" transform="translate(-40 10) scale(.32)"><path d="M0-26L7.5-7.5L28-7.5L11.5 4L17 24L0 12L-17 24L-11.5 4L-28-7.5L-7.5-7.5Z"/></g>
+  <g opacity=".4" transform="translate(-28 36) scale(.28)"><path d="M0-26L7.5-7.5L28-7.5L11.5 4L17 24L0 12L-17 24L-11.5 4L-28-7.5L-7.5-7.5Z"/></g>
+  <g opacity=".38" transform="translate(-52 28) scale(.24)"><path d="M0-26L7.5-7.5L28-7.5L11.5 4L17 24L0 12L-17 24L-11.5 4L-28-7.5L-7.5-7.5Z"/></g>
+</g>
+<!-- central bi disc -->
+<g transform="translate(520 150)" fill="none" stroke="#c9a84e">
+  <circle class="gl" r="78" stroke-width="1.8" opacity=".5"/>
+  <circle r="52" stroke-width="1.2" opacity=".38"/>
+  <circle r="18" stroke-width="1.6" opacity=".55"/>
+  <circle r="6" fill="#c9a84e" stroke="none" opacity=".55"/>
+</g>
+<!-- ruyi / cloud scrolls -->
+<g class="cl" fill="none" stroke="#c9a84e" stroke-width="1.5" opacity=".4" stroke-linecap="round">
+  <path d="M40 120c28-34 68-34 96 0s68 28 96 0"/>
+  <path d="M70 148c18-22 48-22 66 0s48 18 66 0"/>
+  <path d="M100 172c14-16 36-16 50 0"/>
+</g>
+<g class="cl c2" fill="none" stroke="#c9a84e" stroke-width="1.3" opacity=".32" stroke-linecap="round">
+  <path d="M620 70c26-24 60-24 86 0s58 20 84 0"/>
+  <path d="M650 96c16-14 40-14 56 0s40 12 56 0"/>
+</g>
+<g class="cl c3" fill="none" stroke="#c9a84e" stroke-width="1.2" opacity=".28" stroke-linecap="round">
+  <path d="M180 220c30-22 70-22 100 0s70 18 100 0"/>
+  <path d="M220 244c18-12 44-12 62 0"/>
+</g>
+<!-- bronze ding -->
+<g transform="translate(180 168)" fill="#c9a84e" opacity=".55">
+  <rect x="10" y="22" width="52" height="32" rx="3"/>
+  <rect x="0" y="16" width="72" height="10" rx="2"/>
+  <rect x="16" y="54" width="7" height="28" rx="1"/>
+  <rect x="49" y="54" width="7" height="28" rx="1"/>
+  <rect x="32.5" y="54" width="7" height="22" rx="1"/>
+  <circle cx="20" cy="10" r="3.6"/><circle cx="52" cy="10" r="3.6"/>
+  <path d="M22 34h10v4h-5v4h5v4H22M40 34h10v4h-5v4h5v4H40" fill="none" stroke="#161012" stroke-width="1.2" opacity=".45"/>
+</g>
+<rect x="0" y="288" width="1200" height="12" fill="#c9a84e" opacity=".28"/>
+<g fill="#c9a84e" opacity=".22">
+  <circle class="tw" cx="80" cy="60" r="1.1"/><circle class="tw t2" cx="340" cy="44" r=".9"/>
+  <circle class="tw" cx="760" cy="52" r="1.1"/><circle class="tw t2" cx="1120" cy="68" r="1"/>
+</g>
+</svg>

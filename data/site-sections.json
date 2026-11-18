@@ -6,7 +6,9 @@
       "greek": true,
       "iranian": true,
       "mesopotamian": true,
-      "indian": true
+      "indian": true,
+      "japanese": true,
+      "chinese": true
     }
   },
   "stories": {
@@ -16,7 +18,9 @@
       "greek": true,
       "iranian": true,
       "mesopotamian": true,
-      "indian": true
+      "indian": true,
+      "japanese": true,
+      "chinese": true
     }
   }
 }

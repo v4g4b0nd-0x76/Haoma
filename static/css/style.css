@@ -1,5 +1,5 @@
 /* ---------- tokens ---------- */
-:root{--bg:#14161a;--surface:#1c1f25;--border:#2a2e36;--text:#c9ccd3;--muted:#8a8f9a;--accent:#9aa3b5;--head:Georgia,"Source Serif Pro",serif;--rune:"";--meander:var(--m-none);--anim:fall;--m-none:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E");--m-meander:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='14'%3E%3Cpath d='M0 13h20V3H6v6h8' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");--m-rosette:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14'%3E%3Ccircle cx='14' cy='7' r='3.5' fill='none' stroke='black' stroke-width='1.2'/%3E%3Cpath d='M14 0v14M7 7h14' stroke='black' stroke-width='.8'/%3E%3C/svg%3E");--m-zigzag:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14'%3E%3Cpath d='M0 11l7-8 7 8 7-8 7 8' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");--m-waves:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14'%3E%3Cpath d='M0 8q7-9 14 0t14 0' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");--s1:8px;--s2:16px;--s3:24px;--s4:40px;--s5:64px;
+:root{--bg:#14161a;--surface:#1c1f25;--border:#2a2e36;--text:#c9ccd3;--muted:#8a8f9a;--accent:#9aa3b5;--head:Georgia,"Source Serif Pro",serif;--rune:"";--meander:var(--m-none);--anim:fall;--m-none:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1' height='1'/%3E");--m-meander:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='14'%3E%3Cpath d='M0 13h20V3H6v6h8' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");--m-rosette:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14'%3E%3Ccircle cx='14' cy='7' r='3.5' fill='none' stroke='black' stroke-width='1.2'/%3E%3Cpath d='M14 0v14M7 7h14' stroke='black' stroke-width='.8'/%3E%3C/svg%3E");--m-zigzag:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14'%3E%3Cpath d='M0 11l7-8 7 8 7-8 7 8' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");--m-waves:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='14'%3E%3Cpath d='M0 8q7-9 14 0t14 0' fill='none' stroke='black' stroke-width='1.5'/%3E%3C/svg%3E");--m-cloud:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='14'%3E%3Cpath d='M2 10c6-8 12-8 18 0s10 6 14 0' fill='none' stroke='black' stroke-width='1.4'/%3E%3Cpath d='M6 12c4-5 8-5 12 0' fill='none' stroke='black' stroke-width='1'/%3E%3C/svg%3E");--s1:8px;--s2:16px;--s3:24px;--s4:40px;--s5:64px;
 /* one grid for the whole site: shell width, the two 210px rails and the gap
    between them. Every container and every reading column is derived from these. */
 --shell:1320px;--aside:210px;
@@ -132,7 +132,9 @@ h1,h2,h3{font-family:var(--head);color:#e3e5ea;line-height:1.25;font-weight:600}
    .ctrl onto a second row in the ~900–1200px band and look like a broken navbar. */
 .top{display:flex;justify-content:space-between;align-items:center;gap:var(--s2);flex-wrap:nowrap;
   padding:calc(var(--s2) + var(--safe-t)) max(var(--s3),var(--safe-r)) var(--s2) max(var(--s3),var(--safe-l));
-  background:color-mix(in srgb,var(--surface) 92%,transparent);max-width:none;
+  /* solid enough that scrolled titles never ghost through the sticky chrome
+     (esp. iOS PWA black-translucent + status-bar overlap) */
+  background:color-mix(in srgb,var(--surface) 97%,#000);max-width:none;
   position:sticky;top:0;z-index:50;backdrop-filter:blur(14px) saturate(1.1);-webkit-backdrop-filter:blur(14px) saturate(1.1);
   border-bottom:1px solid color-mix(in srgb,var(--border) 85%,transparent);
   box-shadow:0 10px 28px -22px rgba(0,0,0,.65)}
@@ -262,6 +264,8 @@ audio{width:100%;margin:var(--s1) 0 var(--s3)}
 .cards .card[data-culture=mesopotamian],.panel[data-culture=mesopotamian]{--accent:#6f8fd6;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='28'%3E%3Cpath d='M0 14l11-10 11 10 11-10 11 10' fill='none' stroke='%23fff' stroke-width='1' opacity='.42'/%3E%3C/svg%3E");--card-grid-size:44px 28px;--card-motif:url("../img/atlas/mesopotamian-motifs.svg?v=seal-3")}
 .cards .card[data-culture=indian],.panel[data-culture=indian]{--accent:#d9708f;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52'%3E%3Ccircle cx='26' cy='26' r='18' fill='none' stroke='%23fff' stroke-width='.55' opacity='.3'/%3E%3Ccircle cx='26' cy='26' r='10' fill='none' stroke='%23fff' stroke-width='.5' opacity='.34'/%3E%3Cpath d='M26 4v44M4 26h44' stroke='%23fff' stroke-width='.4' opacity='.22'/%3E%3C/svg%3E");--card-grid-size:52px;--card-motif:url("../img/atlas/indian-motifs.svg?v=seal-3")}
 .cards .card[data-culture=norse],.panel[data-culture=norse]{--accent:#7fa8c9;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 4v40M8 12l32 24M40 12L8 36' stroke='%23fff' stroke-width='.7' opacity='.36'/%3E%3C/svg%3E");--card-grid-size:48px;--card-motif:url("../img/atlas/norse-motifs.svg?v=seal-3")}
+.cards .card[data-culture=japanese],.panel[data-culture=japanese]{--accent:#bc002d;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='28'%3E%3Cpath d='M0 20q13-16 26 0t26 0' fill='none' stroke='%23fff' stroke-width='1' opacity='.45'/%3E%3Cpath d='M0 26q13-12 26 0t26 0' fill='none' stroke='%23fff' stroke-width='.7' opacity='.32'/%3E%3C/svg%3E");--card-grid-size:52px 28px;--card-motif:url("../img/atlas/japanese-motifs.svg?v=seal-3")}
+.cards .card[data-culture=chinese],.panel[data-culture=chinese]{--accent:#c9a84e;--card-grid:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M8 8h10v6h-5v6h5v6H8M30 8h10v6h-5v6h5v6H30M8 30h10v6h-5v6h5v6H8M30 30h10v6h-5v6h5v6H30' fill='none' stroke='%23fff' stroke-width='.7' opacity='.4'/%3E%3Cpath d='M24 16l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z' fill='none' stroke='%23fff' stroke-width='.55' opacity='.35'/%3E%3C/svg%3E");--card-grid-size:48px;--card-motif:url("../img/atlas/chinese-motifs.svg?v=seal-4")}
 
 /* shared shell */
 .cards .card{position:relative;display:flex;overflow:hidden;isolation:isolate;
@@ -527,6 +531,10 @@ body:has(.resume:not([hidden])) .motif{padding-top:var(--resume-h,48px)}
   --world-motif:url("../img/atlas/indian-motifs.svg?v=seal-3")}
 .home-choose[data-culture=norse]{--accent:#7fa8c9;--bg:#12161c;--surface:#1a2029;--border:#273241;--anim:fall;--meander:var(--m-none);
   --world-motif:url("../img/atlas/norse-motifs.svg?v=seal-3")}
+.home-choose[data-culture=japanese]{--accent:#bc002d;--bg:#121212;--surface:#1c1c1e;--border:#3a3a40;--anim:drift;--meander:var(--m-waves);
+  --world-motif:url("../img/atlas/japanese-motifs.svg?v=seal-3")}
+.home-choose[data-culture=chinese]{--accent:#c9a84e;--bg:#161012;--surface:#21181b;--border:#3a2e32;--anim:fall;--meander:var(--m-cloud);
+  --world-motif:url("../img/atlas/chinese-motifs.svg?v=seal-4")}
 .world-atmos{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
 .world-atmos__fall{position:absolute;inset:-20%;opacity:.28;background-size:140px 140px;
   background-image:radial-gradient(2px 2px at 20px 30px,var(--accent),transparent),radial-gradient(1.5px 1.5px at 90px 70px,var(--accent),transparent),radial-gradient(2px 2px at 130px 120px,var(--accent),transparent);
@@ -644,12 +652,16 @@ html[lang=fa] .atlas__label{font-weight:500;font-size:.74rem}
   --atlas-grid-greek:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Cpath d='M0 32h28V12H8v12h12' fill='none' stroke='%23fff' stroke-width='1.1' opacity='.38'/%3E%3Cpath d='M0 0h40M0 40h40M0 0v40M40 0v40' stroke='%23fff' stroke-width='.35' opacity='.18'/%3E%3C/svg%3E");
   --atlas-grid-mesopotamian:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='28'%3E%3Cpath d='M0 14l11-10 11 10 11-10 11 10' fill='none' stroke='%23fff' stroke-width='1' opacity='.4'/%3E%3Cpath d='M0 0h44M0 28h44' stroke='%23fff' stroke-width='.4' opacity='.2'/%3E%3C/svg%3E");
   --atlas-grid-indian:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='52'%3E%3Ccircle cx='26' cy='26' r='18' fill='none' stroke='%23fff' stroke-width='.55' opacity='.28'/%3E%3Ccircle cx='26' cy='26' r='10' fill='none' stroke='%23fff' stroke-width='.5' opacity='.32'/%3E%3Cpath d='M26 4v44M4 26h44M10 10l32 32M42 10L10 42' stroke='%23fff' stroke-width='.4' opacity='.22'/%3E%3C/svg%3E");
-  --atlas-grid-norse:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 4v40M8 12l32 24M40 12L8 36' stroke='%23fff' stroke-width='.7' opacity='.34'/%3E%3Cpath d='M4 4h40v40H4z' fill='none' stroke='%23fff' stroke-width='.4' opacity='.2'/%3E%3C/svg%3E")}
+  --atlas-grid-norse:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M24 4v40M8 12l32 24M40 12L8 36' stroke='%23fff' stroke-width='.7' opacity='.34'/%3E%3Cpath d='M4 4h40v40H4z' fill='none' stroke='%23fff' stroke-width='.4' opacity='.2'/%3E%3C/svg%3E");
+  --atlas-grid-japanese:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='52' height='28'%3E%3Cpath d='M0 20q13-16 26 0t26 0' fill='none' stroke='%23fff' stroke-width='1' opacity='.38'/%3E%3Cpath d='M0 26q13-12 26 0t26 0' fill='none' stroke='%23fff' stroke-width='.65' opacity='.26'/%3E%3C/svg%3E");
+  --atlas-grid-chinese:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='48' height='48'%3E%3Cpath d='M8 8h10v6h-5v6h5v6H8M30 8h10v6h-5v6h5v6H30M8 30h10v6h-5v6h5v6H8M30 30h10v6h-5v6h5v6H30' fill='none' stroke='%23fff' stroke-width='.65' opacity='.38'/%3E%3Cpath d='M24 14l3.5 7 7.5 1-5.5 5.5 1.5 7.5-7-3.5-7 3.5 1.5-7.5-5.5-5.5 7.5-1z' fill='none' stroke='%23fff' stroke-width='.5' opacity='.32'/%3E%3C/svg%3E")}
 .atlas[data-culture=iranian]{--atlas-grid:var(--atlas-grid-iranian);--atlas-motif:url("../img/atlas/iranian-motifs.svg?v=seal-3")}
 .atlas[data-culture=greek]{--atlas-grid:var(--atlas-grid-greek);--atlas-motif:url("../img/atlas/greek-motifs.svg?v=seal-3")}
 .atlas[data-culture=mesopotamian]{--atlas-grid:var(--atlas-grid-mesopotamian);--atlas-motif:url("../img/atlas/mesopotamian-motifs.svg?v=seal-3")}
 .atlas[data-culture=indian]{--atlas-grid:var(--atlas-grid-indian);--atlas-motif:url("../img/atlas/indian-motifs.svg?v=seal-3")}
 .atlas[data-culture=norse]{--atlas-grid:var(--atlas-grid-norse);--atlas-motif:url("../img/atlas/norse-motifs.svg?v=seal-3")}
+.atlas[data-culture=japanese]{--atlas-grid:var(--atlas-grid-japanese);--atlas-motif:url("../img/atlas/japanese-motifs.svg?v=seal-3")}
+.atlas[data-culture=chinese]{--atlas-grid:var(--atlas-grid-chinese);--atlas-motif:url("../img/atlas/chinese-motifs.svg?v=seal-4")}
 .atlas__canvas{position:relative;width:100%;min-height:360px;border:1px solid color-mix(in srgb,var(--accent) 40%,var(--border));border-radius:10px;background-color:var(--bg);background-image:
   radial-gradient(ellipse at 50% 42%,color-mix(in srgb,var(--accent) 16%,transparent),transparent 58%),
   linear-gradient(180deg,color-mix(in srgb,var(--surface) 88%,#000),var(--bg));
@@ -669,6 +681,8 @@ html[lang=fa] .atlas__label{font-weight:500;font-size:.74rem}
 .atlas[data-culture=mesopotamian] .atlas__canvas::before{-webkit-mask-size:44px 28px;mask-size:44px 28px}
 .atlas[data-culture=indian] .atlas__canvas::before{-webkit-mask-size:52px 52px;mask-size:52px 52px;opacity:.38}
 .atlas[data-culture=norse] .atlas__canvas::before{-webkit-mask-size:48px 48px;mask-size:48px 48px;opacity:.36}
+.atlas[data-culture=japanese] .atlas__canvas::before{-webkit-mask-size:52px 28px;mask-size:52px 28px;opacity:.4}
+.atlas[data-culture=chinese] .atlas__canvas::before{-webkit-mask-size:48px 48px;mask-size:48px 48px;opacity:.38}
 /* One large literary seal — detail over repetition */
 .atlas__canvas::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;
   background-color:color-mix(in srgb,var(--accent) 72%,transparent);
@@ -679,6 +693,8 @@ html[lang=fa] .atlas__label{font-weight:500;font-size:.74rem}
 .atlas[data-culture=mesopotamian] .atlas__canvas::after{opacity:.36}
 .atlas[data-culture=indian] .atlas__canvas::after{opacity:.34}
 .atlas[data-culture=norse] .atlas__canvas::after{opacity:.32}
+.atlas[data-culture=japanese] .atlas__canvas::after{opacity:.36}
+.atlas[data-culture=chinese] .atlas__canvas::after{opacity:.35}
 .atlas__canvas > *{position:relative;z-index:1}
 .atlas__canvas--empty{display:flex;align-items:center;justify-content:center;min-height:320px;cursor:default}
 .atlas__empty{display:flex;flex-direction:column;align-items:center;gap:14px;padding:28px 24px;max-width:36ch;text-align:center}
@@ -1014,6 +1030,8 @@ html[dir=rtl] .story-rail[data-story-dir="-1"] .story-card:not(.is-active){trans
 .story-card[data-culture=mesopotamian]{--accent:#6f8fd6}
 .story-card[data-culture=indian]{--accent:#d9708f}
 .story-card[data-culture=norse]{--accent:#7fa8c9}
+.story-card[data-culture=japanese]{--accent:#bc002d}
+.story-card[data-culture=chinese]{--accent:#c9a84e}
 .story-card__hit{display:flex;flex-direction:column;flex:1;min-height:0;text-decoration:none;color:inherit;
   padding:28px 28px 20px;gap:16px;text-align:start}
 html[dir=rtl] .story-card__hit{text-align:right}
@@ -1027,6 +1045,7 @@ html[dir=rtl] .story-card__hit{text-align:right}
 .story-card[data-motif=meander] .story-card__motif{-webkit-mask:var(--m-meander) center/70% no-repeat;mask:var(--m-meander) center/70% no-repeat}
 .story-card[data-motif=zigzag] .story-card__motif{-webkit-mask:var(--m-zigzag) center/70% no-repeat;mask:var(--m-zigzag) center/70% no-repeat}
 .story-card[data-motif=waves] .story-card__motif{-webkit-mask:var(--m-waves) center/70% no-repeat;mask:var(--m-waves) center/70% no-repeat}
+.story-card[data-motif=cloud] .story-card__motif{-webkit-mask:var(--m-cloud) center/70% no-repeat;mask:var(--m-cloud) center/70% no-repeat}
 .story-card__body{display:flex;flex-direction:column;gap:12px;flex:1;min-height:0;align-items:stretch}
 .story-card__kicker{font:600 .65rem/1 var(--ui);letter-spacing:.1em;text-transform:uppercase;color:var(--accent);opacity:.9;text-align:center}
 html[lang=fa] .story-card__kicker{letter-spacing:0;text-transform:none;font-family:var(--head);font-size:.72rem}
@@ -1502,6 +1521,7 @@ aside.toc ul{border-left:0;border-inline-start:1px solid var(--border);padding-l
     box-sizing:border-box;
     overflow-x:clip;
     padding:calc(8px + var(--safe-t)) max(14px,var(--safe-r)) 8px max(14px,var(--safe-l));
+    background:var(--surface);
   }
   header.top > .brand{grid-area:brand;min-width:0;max-width:42vw}
   header.top > .ctrl{
@@ -1977,6 +1997,18 @@ html[data-culture=norse]{
   --orn:url("../img/ornaments/norse.svg?v=cult-1");
   --egg-glyph:"ᛟ";
 }
+html[data-culture=japanese]{
+  /* Torii + seigaiha tip */
+  --egg-mask:url("../img/ornaments/japanese.svg?v=cult-1");
+  --orn:url("../img/ornaments/japanese.svg?v=cult-1");
+  --egg-glyph:"神";
+}
+html[data-culture=chinese]{
+  /* Bi disc + cloud curl */
+  --egg-mask:url("../img/ornaments/chinese.svg?v=cult-1");
+  --orn:url("../img/ornaments/chinese.svg?v=cult-1");
+  --egg-glyph:"龍";
+}
 
 /* 1) Motif strip: slow horizontal drift of the pattern mask */
 @media(prefers-reduced-motion:no-preference){
@@ -2178,6 +2210,8 @@ html[data-culture=greek]{--orn:url("../img/ornaments/greek.svg?v=cult-1")}
 html[data-culture=indian]{--orn:url("../img/ornaments/indian.svg?v=cult-1")}
 html[data-culture=mesopotamian]{--orn:url("../img/ornaments/mesopotamian.svg?v=cult-1")}
 html[data-culture=norse]{--orn:url("../img/ornaments/norse.svg?v=cult-1")}
+html[data-culture=japanese]{--orn:url("../img/ornaments/japanese.svg?v=cult-1")}
+html[data-culture=chinese]{--orn:url("../img/ornaments/chinese.svg?v=cult-1")}
 html[data-culture=base]{--orn:url("../img/ornaments/base.svg?v=cult-1")}
 
 /* Motif rail: slow pattern drift + hidden glyph slot (JS may reveal) */
@@ -2247,6 +2281,24 @@ html[data-culture=mesopotamian] .motif::before{animation-duration:40s;animation-
 html[data-culture=mesopotamian] article::before{width:20px;height:20px}
 html[data-culture=norse] .motif::after{letter-spacing:1.1em;opacity:.55}
 html[data-culture=norse]{--orn-pulse:4.4s}
+html[data-culture=japanese]{--orn-pulse:5.4s}
+html[data-culture=japanese] .motif::before{animation-duration:48s}
+/* white lattice spark + hinomaru ember */
+html[data-culture=japanese] .bg{background-image:
+  radial-gradient(2px 2px at 24px 28px,#fff,transparent),
+  radial-gradient(1.5px 1.5px at 110px 80px,var(--accent),transparent),
+  radial-gradient(2px 2px at 160px 140px,color-mix(in srgb,var(--accent) 55%,#fff),transparent)}
+html[data-culture=japanese] .motif::after{color:#f5f5f5;opacity:.7}
+html[data-culture=chinese]{--orn-pulse:5.2s}
+/* quiet wine + soft gold — readable, still distinct from Iranian amber/brown */
+html[data-culture=chinese] .hero-art::after{filter:drop-shadow(0 0 12px color-mix(in srgb,var(--accent) 35%,transparent))}
+html[data-culture=chinese] article>h1::after{height:3px;border-radius:0}
+html[data-culture=chinese] .motif::after{color:var(--accent);opacity:.55}
+html[data-culture=chinese] .motif::before{animation-duration:48s}
+html[data-culture=chinese] .bg{background-image:
+  radial-gradient(1.6px 1.6px at 22px 26px,color-mix(in srgb,var(--accent) 55%,transparent),transparent),
+  radial-gradient(1.2px 1.2px at 110px 90px,color-mix(in srgb,var(--accent) 40%,transparent),transparent);
+  background-size:200px 200px}
 
 /* Brand hover wink (easter egg cue) */
 html[data-fixed] .brand:hover .logo-word,
@@ -2363,7 +2415,16 @@ html[data-reader="1"] footer{
   html[data-reader="1"] footer{transition:none}
 }
 
-/* Installed / standalone: quieter chrome tip area */
+/* Installed / standalone: quieter chrome tip area.
+   black-translucent draws under the status bar — need viewport-fit=cover
+   (see BaseLayout) so --safe-t is non-zero, and an opaque header so page
+   text never bleeds through the notch / Dynamic Island band. */
 body.is-standalone .pwa-banner:not(#pwa-update){display:none}
-body.is-standalone header.top{padding-block:calc(8px + var(--safe-t)) 8px}
+body.is-standalone header.top{
+  padding-block:calc(10px + var(--safe-t)) 8px;
+  background:var(--surface);
+  backdrop-filter:none;-webkit-backdrop-filter:none}
+body.is-standalone .listen{
+  background:var(--surface);
+  backdrop-filter:none;-webkit-backdrop-filter:none}
 

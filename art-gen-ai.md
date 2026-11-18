@@ -67,6 +67,8 @@ Use these accents for glows, small ornaments, and particle colour. Do not invent
 | **greek** | `#c98a5a` | Warm bronze horizon | Olympus, **twelve Olympians**, temple, olive, meander |
 | **mesopotamian** | `#6f8fd6` | Lapis + warm sand dusk | Ziggurat, Ishtar star, twin rivers, cedars |
 | **indian** | `#d9708f` | Lotus dusk **rose-orange** | Kailash, Setu, Lanka, Sudarshana, lotus, diyas |
+| **japanese** | `#bc002d` | Hinomaru red on black/white night | Fuji, white snow cap, torii, seigaiha |
+| **chinese** | `#c9a84e` | Soft gold on muted wine night | Silk folds, bi disc, ruyi clouds, ding, five-star cue |
 
 Page particle anim (site chrome, not the image file): `fall` · `drift` · `rise` · `none` — see themes. Card fallback uses the same particle idea + culture lattice/seal from `static/img/atlas/*-motifs.svg`.
 
@@ -93,7 +95,7 @@ Logo art stays gold-on-night. Culture page art uses **culture accent**, not logo
 6. Tiny secondary story details at edges (eyes in rock, mist, sparks) — low contrast.
 7. Keep the **horizontal centre** interesting: hero CSS uses `object-fit: contain` with a blurred duplicate behind — empty centre looks broken.
 
-**Reference files (current heroes in `themes.json`):** `static/img/norse-fjord.svg`, `static/img/iranian-alborz.svg`, `static/img/greek-olympus.svg`, `static/img/mesopotamian-ur.svg`, `static/img/indian-setu.svg`, `static/img/base-night.svg`. Older banners (`norse.svg`, `greek.svg`, …) stay in the repo for history — do not point themes at them unless a human asks.
+**Reference files (current heroes in `themes.json`):** `static/img/norse-fjord.svg`, `static/img/iranian-alborz.svg`, `static/img/greek-olympus.svg`, `static/img/mesopotamian-ur.svg`, `static/img/indian-setu.svg`, `static/img/japanese-fuji.svg`, `static/img/chinese-kunlun.svg`, `static/img/base-night.svg`. Older banners (`norse.svg`, `greek.svg`, …) stay in the repo for history — do not point themes at them unless a human asks.
 
 ### 4.1a Improve heroes — never drain them
 

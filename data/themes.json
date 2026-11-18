@@ -70,5 +70,29 @@
     "pattern": "waves",
     "glyphs": "॥ · पद्म · ॥ · पद्म · ॥",
     "banner": "indian-setu.svg"
+  },
+  "japanese": {
+    "accent": "#bc002d",
+    "bg": "#121212",
+    "surface": "#1c1c1e",
+    "border": "#3a3a40",
+    "text": "#f5f5f5",
+    "muted": "#a8a8ae",
+    "anim": "drift",
+    "pattern": "waves",
+    "glyphs": "· 神 · 道 · 鏡 ·",
+    "banner": "japanese-fuji.svg"
+  },
+  "chinese": {
+    "accent": "#c9a84e",
+    "bg": "#161012",
+    "surface": "#21181b",
+    "border": "#3a2e32",
+    "text": "#e4dcd4",
+    "muted": "#9a8e8a",
+    "anim": "fall",
+    "pattern": "cloud",
+    "glyphs": "· 道 · 龍 · 天 ·",
+    "banner": "chinese-kunlun.svg"
   }
 }

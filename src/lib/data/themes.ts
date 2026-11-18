@@ -8,7 +8,7 @@ export interface Theme {
   text: string;
   muted: string;
   anim: 'fall' | 'drift' | 'rise' | 'none';
-  pattern: 'none' | 'meander' | 'rosette' | 'zigzag' | 'waves';
+  pattern: 'none' | 'meander' | 'rosette' | 'zigzag' | 'waves' | 'cloud';
   glyphs: string;
   banner: string;
 }

@@ -1,10 +1,10 @@
 /* Haoma service worker — shell assets + recently visited HTML.
    Scope is the directory that hosts this file (site root or /Haoma/).
-   Does not cache large media (audio/video/library). Version: pwa-2 */
+   Does not cache large media (audio/video/library). Version: pwa-3 */
 /* eslint-disable no-restricted-globals */
 (function () {
-  var SHELL_CACHE = "haoma-shell-pwa-2";
-  var PAGES_CACHE = "haoma-pages-pwa-2";
+  var SHELL_CACHE = "haoma-shell-pwa-3";
+  var PAGES_CACHE = "haoma-pages-pwa-3";
   var MAX_PAGES = 40;
   var SHELL = [
     "./",

@@ -8,8 +8,14 @@
       "motif": "rosette",
       "animated": true,
       "links": [
-        { "path": "/cultures/iranian/stories/two-spirits/", "label": "Read the full tale" },
-        { "path": "/cultures/iranian/characters/zarathustra/", "label": "Zarathustra" }
+        {
+          "path": "/cultures/iranian/stories/two-spirits/",
+          "label": "Read the full tale"
+        },
+        {
+          "path": "/cultures/iranian/characters/zarathustra/",
+          "label": "Zarathustra"
+        }
       ]
     },
     {
@@ -20,8 +26,14 @@
       "motif": "rosette",
       "animated": true,
       "links": [
-        { "path": "/cultures/iranian/characters/mehr/", "label": "Read about Mehr" },
-        { "path": "/cultures/iranian/traditions/mehr/", "label": "Mehr tradition" }
+        {
+          "path": "/cultures/iranian/characters/mehr/",
+          "label": "Read about Mehr"
+        },
+        {
+          "path": "/cultures/iranian/traditions/mehr/",
+          "label": "Mehr tradition"
+        }
       ]
     },
     {
@@ -32,7 +44,10 @@
       "motif": "rosette",
       "animated": false,
       "links": [
-        { "path": "/cultures/iranian/history/zoroastrianism-in-persia/", "label": "Read the history" }
+        {
+          "path": "/cultures/iranian/history/zoroastrianism-in-persia/",
+          "label": "Read the history"
+        }
       ]
     },
     {
@@ -43,8 +58,14 @@
       "motif": "none",
       "animated": true,
       "links": [
-        { "path": "/cultures/norse/characters/odin/", "label": "Read about Odin" },
-        { "path": "/cultures/norse/stories/ragnarok/", "label": "Ragnarök" }
+        {
+          "path": "/cultures/norse/characters/odin/",
+          "label": "Read about Odin"
+        },
+        {
+          "path": "/cultures/norse/stories/ragnarok/",
+          "label": "Ragnarök"
+        }
       ]
     },
     {
@@ -55,8 +76,14 @@
       "motif": "none",
       "animated": true,
       "links": [
-        { "path": "/cultures/norse/stories/ragnarok/", "label": "Read Ragnarök" },
-        { "path": "/cultures/norse/history/viking-age/", "label": "Viking Age" }
+        {
+          "path": "/cultures/norse/stories/ragnarok/",
+          "label": "Read Ragnarök"
+        },
+        {
+          "path": "/cultures/norse/history/viking-age/",
+          "label": "Viking Age"
+        }
       ]
     },
     {
@@ -67,8 +94,14 @@
       "motif": "meander",
       "animated": true,
       "links": [
-        { "path": "/cultures/greek/characters/zeus/", "label": "Read about Zeus" },
-        { "path": "/compare/odin-zeus/", "label": "Odin ↔ Zeus" }
+        {
+          "path": "/cultures/greek/characters/zeus/",
+          "label": "Read about Zeus"
+        },
+        {
+          "path": "/compare/odin-zeus/",
+          "label": "Odin ↔ Zeus"
+        }
       ]
     },
     {
@@ -79,7 +112,10 @@
       "motif": "meander",
       "animated": false,
       "links": [
-        { "path": "/cultures/greek/characters/athena/", "label": "Read about Athena" }
+        {
+          "path": "/cultures/greek/characters/athena/",
+          "label": "Read about Athena"
+        }
       ]
     },
     {
@@ -90,8 +126,14 @@
       "motif": "zigzag",
       "animated": true,
       "links": [
-        { "path": "/cultures/mesopotamian/characters/enkidu/", "label": "Read about Enkidu" },
-        { "path": "/cultures/mesopotamian/stories/journey-to-the-cedar-forest/", "label": "Cedar Forest" }
+        {
+          "path": "/cultures/mesopotamian/characters/enkidu/",
+          "label": "Read about Enkidu"
+        },
+        {
+          "path": "/cultures/mesopotamian/stories/journey-to-the-cedar-forest/",
+          "label": "Cedar Forest"
+        }
       ]
     },
     {
@@ -102,7 +144,10 @@
       "motif": "zigzag",
       "animated": true,
       "links": [
-        { "path": "/cultures/mesopotamian/stories/journey-to-the-cedar-forest/", "label": "Read the journey" }
+        {
+          "path": "/cultures/mesopotamian/stories/journey-to-the-cedar-forest/",
+          "label": "Read the journey"
+        }
       ]
     },
     {
@@ -113,8 +158,14 @@
       "motif": "waves",
       "animated": true,
       "links": [
-        { "path": "/cultures/indian/stories/rama-and-the-bridge/", "label": "Read the bridge story" },
-        { "path": "/cultures/indian/characters/rama/", "label": "Rama" }
+        {
+          "path": "/cultures/indian/stories/rama-and-the-bridge/",
+          "label": "Read the bridge story"
+        },
+        {
+          "path": "/cultures/indian/characters/rama/",
+          "label": "Rama"
+        }
       ]
     },
     {
@@ -125,7 +176,82 @@
       "motif": "waves",
       "animated": false,
       "links": [
-        { "path": "/cultures/indian/characters/rama/", "label": "Read about Rama" }
+        {
+          "path": "/cultures/indian/characters/rama/",
+          "label": "Read about Rama"
+        }
+      ]
+    },
+    {
+      "id": "sun-in-the-cave",
+      "culture": "japanese",
+      "title": "Light Behind the Rock",
+      "blurb": "When Amaterasu seals herself in the Heavenly Rock Cave, the plain of high heaven goes dark. The kami do not break the stone — they dance, laugh, and hold up a mirror until curiosity returns the sun. Follow the rite that becomes a myth of restored light.",
+      "motif": "waves",
+      "animated": true,
+      "links": [
+        {
+          "path": "/cultures/japanese/stories/cave-of-heaven/",
+          "label": "Read the cave story"
+        },
+        {
+          "path": "/cultures/japanese/characters/amaterasu/",
+          "label": "Amaterasu"
+        }
+      ]
+    },
+    {
+      "id": "serpent-tail-sword",
+      "culture": "japanese",
+      "title": "Sword in the Serpent",
+      "blurb": "Susanoo’s exile ends in Izumo with sake, eight gates, and Yamata no Orochi. In the tail he finds a blade that later ages name among the imperial treasures. Storm, land-clearing, and sovereignty share one cut.",
+      "motif": "waves",
+      "animated": true,
+      "links": [
+        {
+          "path": "/cultures/japanese/stories/susanoo-and-the-serpent/",
+          "label": "Read the serpent fight"
+        },
+        {
+          "path": "/cultures/japanese/characters/susanoo/",
+          "label": "Susanoo"
+        }
+      ]
+    },
+    {
+      "id": "five-colour-sky",
+      "culture": "chinese",
+      "title": "Five-Colour Mend",
+      "blurb": "A pillar of heaven falls. Flood and fire tilt the world. Nüwa answers with craft — melting five-coloured stones to patch the sky. Meet the creatrix who repairs cosmos instead of conquering it.",
+      "motif": "cloud",
+      "animated": true,
+      "links": [
+        {
+          "path": "/cultures/chinese/stories/nuwa-mends-the-sky/",
+          "label": "Read the sky-mending"
+        },
+        {
+          "path": "/cultures/chinese/characters/nuwa/",
+          "label": "Nüwa"
+        }
+      ]
+    },
+    {
+      "id": "channels-of-yu",
+      "culture": "chinese",
+      "title": "Channels of Yu",
+      "blurb": "The flood will not obey a wall alone. Yu opens rivers for thirteen years of labour until the plain can hold grain again. Walk the Chinese myth of public work — then see how Heaven’s mandate judges the rulers who inherit that plain.",
+      "motif": "cloud",
+      "animated": false,
+      "links": [
+        {
+          "path": "/cultures/chinese/stories/yu-and-the-flood/",
+          "label": "Read Yu and the flood"
+        },
+        {
+          "path": "/cultures/chinese/history/mandate-of-heaven/",
+          "label": "Mandate of Heaven"
+        }
       ]
     }
   ],
@@ -138,8 +264,14 @@
       "motif": "rosette",
       "animated": true,
       "links": [
-        { "path": "/cultures/iranian/stories/two-spirits/", "label": "خواندن داستان کامل" },
-        { "path": "/cultures/iranian/characters/zarathustra/", "label": "زرتشت" }
+        {
+          "path": "/cultures/iranian/stories/two-spirits/",
+          "label": "خواندن داستان کامل"
+        },
+        {
+          "path": "/cultures/iranian/characters/zarathustra/",
+          "label": "زرتشت"
+        }
       ]
     },
     {
@@ -150,8 +282,14 @@
       "motif": "rosette",
       "animated": true,
       "links": [
-        { "path": "/cultures/iranian/characters/mehr/", "label": "خواندن دربارهٔ مهر" },
-        { "path": "/cultures/iranian/traditions/mehr/", "label": "سنت مهر" }
+        {
+          "path": "/cultures/iranian/characters/mehr/",
+          "label": "خواندن دربارهٔ مهر"
+        },
+        {
+          "path": "/cultures/iranian/traditions/mehr/",
+          "label": "سنت مهر"
+        }
       ]
     },
     {
@@ -162,7 +300,10 @@
       "motif": "rosette",
       "animated": false,
       "links": [
-        { "path": "/cultures/iranian/history/zoroastrianism-in-persia/", "label": "خواندن تاریخ" }
+        {
+          "path": "/cultures/iranian/history/zoroastrianism-in-persia/",
+          "label": "خواندن تاریخ"
+        }
       ]
     },
     {
@@ -173,8 +314,14 @@
       "motif": "none",
       "animated": true,
       "links": [
-        { "path": "/cultures/norse/characters/odin/", "label": "خواندن دربارهٔ اودین" },
-        { "path": "/cultures/norse/stories/ragnarok/", "label": "راگناروک" }
+        {
+          "path": "/cultures/norse/characters/odin/",
+          "label": "خواندن دربارهٔ اودین"
+        },
+        {
+          "path": "/cultures/norse/stories/ragnarok/",
+          "label": "راگناروک"
+        }
       ]
     },
     {
@@ -185,8 +332,14 @@
       "motif": "none",
       "animated": true,
       "links": [
-        { "path": "/cultures/norse/stories/ragnarok/", "label": "خواندن راگناروک" },
-        { "path": "/cultures/norse/history/viking-age/", "label": "عصر وایکینگ" }
+        {
+          "path": "/cultures/norse/stories/ragnarok/",
+          "label": "خواندن راگناروک"
+        },
+        {
+          "path": "/cultures/norse/history/viking-age/",
+          "label": "عصر وایکینگ"
+        }
       ]
     },
     {
@@ -197,8 +350,14 @@
       "motif": "meander",
       "animated": true,
       "links": [
-        { "path": "/cultures/greek/characters/zeus/", "label": "خواندن دربارهٔ زئوس" },
-        { "path": "/compare/odin-zeus/", "label": "اودین ↔ زئوس" }
+        {
+          "path": "/cultures/greek/characters/zeus/",
+          "label": "خواندن دربارهٔ زئوس"
+        },
+        {
+          "path": "/compare/odin-zeus/",
+          "label": "اودین ↔ زئوس"
+        }
       ]
     },
     {
@@ -209,7 +368,10 @@
       "motif": "meander",
       "animated": false,
       "links": [
-        { "path": "/cultures/greek/characters/athena/", "label": "خواندن دربارهٔ آتنا" }
+        {
+          "path": "/cultures/greek/characters/athena/",
+          "label": "خواندن دربارهٔ آتنا"
+        }
       ]
     },
     {
@@ -220,8 +382,14 @@
       "motif": "zigzag",
       "animated": true,
       "links": [
-        { "path": "/cultures/mesopotamian/characters/enkidu/", "label": "خواندن دربارهٔ انکیدو" },
-        { "path": "/cultures/mesopotamian/stories/journey-to-the-cedar-forest/", "label": "جنگل سرو" }
+        {
+          "path": "/cultures/mesopotamian/characters/enkidu/",
+          "label": "خواندن دربارهٔ انکیدو"
+        },
+        {
+          "path": "/cultures/mesopotamian/stories/journey-to-the-cedar-forest/",
+          "label": "جنگل سرو"
+        }
       ]
     },
     {
@@ -232,7 +400,10 @@
       "motif": "zigzag",
       "animated": true,
       "links": [
-        { "path": "/cultures/mesopotamian/stories/journey-to-the-cedar-forest/", "label": "خواندن سفر" }
+        {
+          "path": "/cultures/mesopotamian/stories/journey-to-the-cedar-forest/",
+          "label": "خواندن سفر"
+        }
       ]
     },
     {
@@ -243,8 +414,14 @@
       "motif": "waves",
       "animated": true,
       "links": [
-        { "path": "/cultures/indian/stories/rama-and-the-bridge/", "label": "خواندن داستان پل" },
-        { "path": "/cultures/indian/characters/rama/", "label": "راما" }
+        {
+          "path": "/cultures/indian/stories/rama-and-the-bridge/",
+          "label": "خواندن داستان پل"
+        },
+        {
+          "path": "/cultures/indian/characters/rama/",
+          "label": "راما"
+        }
       ]
     },
     {
@@ -255,7 +432,82 @@
       "motif": "waves",
       "animated": false,
       "links": [
-        { "path": "/cultures/indian/characters/rama/", "label": "خواندن دربارهٔ راما" }
+        {
+          "path": "/cultures/indian/characters/rama/",
+          "label": "خواندن دربارهٔ راما"
+        }
+      ]
+    },
+    {
+      "id": "sun-in-the-cave",
+      "culture": "japanese",
+      "title": "نور پشت سنگ",
+      "blurb": "وقتی آماتراسو خود را در غار سنگی آسمان می‌بندد، دشت بلند تاریک می‌شود. کامی‌ها سنگ را نمی‌شکنند — می‌رقصند، می‌خندند و آینه بالا می‌گیرند تا کنجکاوی خورشید را برگرداند. آیینی را دنبال کن که اسطورهٔ نورِ بازگردانده می‌شود.",
+      "motif": "waves",
+      "animated": true,
+      "links": [
+        {
+          "path": "/cultures/japanese/stories/cave-of-heaven/",
+          "label": "خواندن داستان غار"
+        },
+        {
+          "path": "/cultures/japanese/characters/amaterasu/",
+          "label": "آماتراسو"
+        }
+      ]
+    },
+    {
+      "id": "serpent-tail-sword",
+      "culture": "japanese",
+      "title": "شمشیر در اژدها",
+      "blurb": "تبعید سوسانو در ایزومو با ساکه، هشت در و یاماتانو اوروچی پایان می‌گیرد. در دم تیغه‌ای می‌یابد که اعصار بعد میان گنجینه‌های امپراتوری نام می‌برند. توفان، پاک‌سازی زمین و فرمانروایی در یک ضربه شریک‌اند.",
+      "motif": "waves",
+      "animated": true,
+      "links": [
+        {
+          "path": "/cultures/japanese/stories/susanoo-and-the-serpent/",
+          "label": "خواندن نبرد اژدها"
+        },
+        {
+          "path": "/cultures/japanese/characters/susanoo/",
+          "label": "سوسانو"
+        }
+      ]
+    },
+    {
+      "id": "five-colour-sky",
+      "culture": "chinese",
+      "title": "وصلهٔ پنج‌رنگ",
+      "blurb": "ستونی از آسمان می‌افتد. سیل و آتش جهان را کج می‌کند. نووا با پیشه پاسخ می‌دهد — سنگ‌های پنج‌رنگ را می‌گدازد تا آسمان را وصله کند. با آفریننده‌ای آشنا شو که کیهان را ترمیم می‌کند نه فتح.",
+      "motif": "cloud",
+      "animated": true,
+      "links": [
+        {
+          "path": "/cultures/chinese/stories/nuwa-mends-the-sky/",
+          "label": "خواندن ترمیم آسمان"
+        },
+        {
+          "path": "/cultures/chinese/characters/nuwa/",
+          "label": "نووا"
+        }
+      ]
+    },
+    {
+      "id": "channels-of-yu",
+      "culture": "chinese",
+      "title": "کانال‌های یو",
+      "blurb": "سیل فقط به دیوار گوش نمی‌دهد. یو سیزده سال رود می‌گشاید تا دشت دوباره غله بگیرد. اسطورهٔ چینی کار عمومی را راه برو — سپس ببین فرمان آسمان چگونه فرمانروایانی را داوری می‌کند که آن دشت را به ارث می‌برند.",
+      "motif": "cloud",
+      "animated": false,
+      "links": [
+        {
+          "path": "/cultures/chinese/stories/yu-and-the-flood/",
+          "label": "خواندن یو و سیل"
+        },
+        {
+          "path": "/cultures/chinese/history/mandate-of-heaven/",
+          "label": "فرمان آسمان"
+        }
       ]
     }
   ]

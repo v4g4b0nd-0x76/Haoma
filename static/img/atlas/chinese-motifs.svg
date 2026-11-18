@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 320 320" fill="none">
+  <!-- Bi disc + leiwen corners + five-point star — lacquer seal (not mountain/rosette) -->
+  <g transform="translate(160 160)" stroke="#fff" stroke-linecap="round" stroke-linejoin="round">
+    <circle r="52" stroke-width="1.5" opacity=".92"/>
+    <circle r="30" stroke-width="1.15" opacity=".72"/>
+    <circle r="11" stroke-width="1.4"/>
+    <circle r="3.5" fill="#fff" stroke="none"/>
+    <!-- star in ring -->
+    <path d="M0-70L6-56L22-56L9-47L14-33L0-42L-14-33L-9-47L-22-56L-6-56Z" stroke-width="1.1" opacity=".7"/>
+    <!-- leiwen corners -->
+    <g stroke-width="1" opacity=".5" fill="none">
+      <path d="M-118-78h28v14h-14v14h14v14h-28"/>
+      <path d="M90-78h28v14h-14v14h14v14h-28"/>
+      <path d="M-118 50h28v14h-14v14h14v14h-28"/>
+      <path d="M90 50h28v14h-14v14h14v14h-28"/>
+    </g>
+    <!-- ruyi curls -->
+    <g stroke-width="1.2" opacity=".55" fill="none">
+      <path d="M-100 0c20-28 52-28 72 0"/>
+      <path d="M28 0c20-28 52-28 72 0"/>
+      <path d="M-40 88c22-18 58-18 80 0"/>
+    </g>
+    <circle r="118" stroke-width=".7" opacity=".35"/>
+    <circle r="136" stroke-width="1.1" opacity=".48"/>
+  </g>
+</svg>

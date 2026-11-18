@@ -16,7 +16,7 @@ a halo, a ladder border with degree ticks, ribbon title, compass rose, scale bar
 the water and engraved monsters ("here be dragons"). Art lives in tools/mapart.py.
 
 Outputs, per map: <name>.svg (English) and <name>-fa.svg (Farsi):
-    world  middle-east  persia  india  aegean  scandinavia
+    world  middle-east  persia  india  aegean  scandinavia  japan  china
 Pin positions are percentages of the map box and are printed at the end; they do not change
 when the art changes. Set COSINE_ASPECT = False to keep the old (stretched) proportions.
 """
@@ -229,6 +229,40 @@ MAPS = {
         creatures=[("serpent", 2.6, 58.6, 1.4, 0, "JORMUNGANDR"), ("wolf", 14.6, 60.2, 1.3, 1, "FENRIR"), ("dragon", 22.4, 66.6, 1.3, 0, "NIDHOGG")],
         ships=[("longship", -9, 60.6, 1.0, 0), ("longship", 21.6, 57.0, .85, 1), ("longship", 7.4, 54.2, .8, 0)],
     ),
+    "japan": dict(
+        box=(128, 147, 30, 46), w=1300, res="50", cos=True, graticule=5,
+        title={"en": "The Archipelago", "fa": "مجمع‌الجزایر"},
+        labels=[
+            ("HONSHU", 138.5, 36.2, 18, "r"), ("KYUSHU", 130.8, 32.6, 12, "r"), ("SHIKOKU", 133.5, 33.6, 10, "r"),
+            ("HOKKAIDO", 142.5, 43.4, 12, "r"), ("IZUMO", 132.8, 35.4, 10, "r"), ("YAMATO", 135.8, 34.5, 11, "r"),
+            ("SEA OF JAPAN", 135.5, 39.5, 12, "s"), ("PACIFIC OCEAN", 143.5, 33.5, 13, "s"),
+        ],
+        ranges=[[(138.2, 35.4), (138.7, 35.9), (139.2, 36.4)], [(139.5, 36.8), (140.2, 37.4)]],
+        forests=[(138.5, 36.5, 1.4, 1.8, "pine"), (131.2, 33.0, 1.0, 1.0, "pine"), (141.5, 43.0, 1.6, 1.2, "pine")],
+        hills=[(135.8, 34.6, .9, .7), (133.2, 33.7, .7, .5)],
+        rivers=[[(139.0, 36.0), (139.5, 35.6), (139.8, 35.2)]],
+        creatures=[("dragon", 132.6, 35.2, 1.1, 0, "OROCHI"), ("bird", 139.0, 35.4, 1.0, 1, "YATA")],
+        ships=[("dhow", 134.5, 34.0, .7, 0), ("dhow", 140.5, 34.8, .65, 1)],
+    ),
+    "china": dict(
+        box=(95, 125, 20, 45), w=1300, res="50", cos=True, graticule=5,
+        title={"en": "The Yellow River World", "fa": "جهان رود زرد"},
+        labels=[
+            ("ZHONGYUAN", 113.5, 34.5, 16, "r"), ("GUANZHONG", 108.5, 34.3, 12, "r"), ("YAN", 116.5, 39.5, 11, "r"),
+            ("SHU", 104.0, 30.5, 11, "r"), ("KUNLUN", 98.5, 36.0, 12, "r"), ("YELLOW RIVER", 112.0, 35.5, 11, "s"),
+            ("YANGTZE", 112.0, 30.5, 11, "s"), ("SOUTH CHINA SEA", 114.0, 22.5, 12, "s"),
+        ],
+        ranges=[[(98, 36), (102, 35.5), (106, 34)], [(103, 31), (106, 30), (109, 29.5)], [(112, 36), (116, 38)]],
+        forests=[(110, 32, 2.5, 1.5, "round"), (118, 28, 2.0, 1.6, "round"), (105, 28, 1.4, 1.2, "pine")],
+        deserts=[(100, 40, 3.0, 1.6), (105, 38, 2.0, 1.2)],
+        hills=[(112, 34, 1.6, 1.0), (108, 33, 1.2, .8)],
+        rivers=[
+            [(100, 36), (105, 35.5), (110, 35), (114, 35.2), (118, 37)],
+            [(104, 29), (108, 30), (112, 30.5), (116, 31.5), (120, 32)],
+        ],
+        creatures=[("dragon", 112.5, 34.8, 1.3, 0, "LONG"), ("bird", 108.0, 34.0, 1.1, 1, "FENG")],
+        ships=[("dhow", 120.5, 30.0, .75, 0), ("dhow", 114.0, 23.5, .7, 1)],
+    ),
 }
 
 PINS = {
@@ -240,7 +274,9 @@ PINS = {
     # Culture pins: Getty Mesopotamia ~44°E 34°N; Iranian plateau (Media–
     # Persis belt, north of Arabia) ~53.5°E 32.5°N; Vedic Madhyadeśa ~77°E 27°N;
     # Olympus 22.4°E 40.1°N; Uppsala 17.6°E 59.9°N.
-    "world": [("Mesopotamia", 44, 34), ("Persia", 53.5, 32.5), ("India", 77, 27), ("Greece", 22.4, 40.1), ("The North", 17.6, 59.9)],
+    "japan": [("Yamato", 135.8, 34.5), ("Ise", 136.7, 34.5), ("Izumo", 132.8, 35.4), ("Fuji", 138.7, 35.4), ("Kyushu", 130.8, 32.5)],
+    "china": [("Anyang", 114.3, 36.1), ("Luoyang", 112.4, 34.7), ("Kunlun", 98.5, 36.0), ("Yellow River", 112.0, 35.0), ("Chengdu", 104.1, 30.7)],
+    "world": [("Mesopotamia", 44, 34), ("Persia", 53.5, 32.5), ("India", 77, 27), ("Greece", 22.4, 40.1), ("The North", 17.6, 59.9), ("China", 110, 34), ("Japan", 138, 36)],
 }
 
 FA = {
@@ -259,6 +295,11 @@ FA = {
     "SIMORGH": "سیمرغ", "DAHAKA": "ضحاک", "DAEVA": "دیو", "HUMBABA": "همبابا", "MUSHUSSU": "موشووشو", "ANZU": "آنزو",
     "GARUDA": "گارودا", "NAGA": "ناگا", "MAKARA": "ماکارا", "SCYLLA": "اسکیلا", "PYTHON": "پیتون", "MINOTAUR": "مینوتور",
     "CHIMERA": "کیمرا", "JORMUNGANDR": "یورمونگاندر", "FENRIR": "فنریر", "NIDHOGG": "نیدهوگر",
+    "HONSHU": "هونشو", "KYUSHU": "کیوشو", "SHIKOKU": "شیکوکو", "HOKKAIDO": "هوکایدو",
+    "IZUMO": "ایزومو", "YAMATO": "یاماتو", "SEA OF JAPAN": "دریای ژاپن",
+    "ZHONGYUAN": "جونگ‌یوان", "GUANZHONG": "گوانجونگ", "YAN": "یان", "SHU": "شو",
+    "KUNLUN": "کونلون", "YELLOW RIVER": "رود زرد", "YANGTZE": "یانگ‌تسه", "SOUTH CHINA SEA": "دریای جنوبی چین",
+    "OROCHI": "اوروچی", "YATA": "یاتا", "LONG": "لونگ", "FENG": "فنگ",
 }
 
 

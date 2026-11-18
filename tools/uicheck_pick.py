@@ -113,7 +113,7 @@ def main():
 
     # ---- each option lights up in its own colour on hover ---------------------
     print("hover")
-    for key in ("mesopotamian", "norse", "greek", "indian"):
+    for key in ("mesopotamian", "norse", "greek", "indian", "japanese", "chinese"):
         box = p.box('.cpick__opt[data-pick="%s"]' % key)
         p.move(box["x"] + box["w"] / 2, box["y"] + box["h"] / 2)
         time.sleep(0.3)

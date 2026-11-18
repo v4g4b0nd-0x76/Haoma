@@ -2,7 +2,7 @@
 <html lang="{{ site.Language.LanguageCode }}" dir="{{ site.Language.LanguageDirection | default "ltr" }}" data-culture="{{ .Params.culture | default "base" }}"{{ if .Params.culture }} data-fixed="1"{{ end }} data-pwa-install="{{ i18n "pwaInstall" }}" data-pwa-later="{{ i18n "pwaLater" }}" data-pwa-body="{{ i18n "pwaBody" }}" data-pwa-ios="{{ i18n "pwaIosTip" }}" data-pwa-update="{{ i18n "pwaUpdate" }}" data-pwa-update-go="{{ i18n "pwaUpdateGo" }}" data-study-continue="{{ i18n "studyContinue" }}" data-study-continue-go="{{ i18n "studyContinueGo" }}" data-study-save="{{ i18n "readingSave" }}" data-study-saved="{{ i18n "readingSaved" }}" data-study-unsave="{{ i18n "readingUnsave" }}" data-study-reader="{{ i18n "readerMode" }}">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 {{ partial "head-seo.html" . }}
 <link rel="icon" href="{{ "img/brand/favicon.svg" | relURL }}" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="{{ "img/brand/favicon-32.png" | relURL }}">
@@ -17,7 +17,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="{{ site.Title }}">
 <script src="{{ printf "%s?v=study-boot-1" ("js/boot.js" | relURL) }}"></script>
-<link rel="stylesheet" href="{{ printf "%s?v=mobile-header-2" ("css/style.css" | relURL) }}">
+<link rel="stylesheet" href="{{ printf "%s?v=cult-cn-3" ("css/style.css" | relURL) }}">
 <style>{{ range $k, $t := site.Data.themes }}[data-culture="{{ $k }}"]{--accent:{{ $t.accent | safeCSS }};--bg:{{ $t.bg | safeCSS }};--surface:{{ $t.surface | safeCSS }};--border:{{ $t.border | safeCSS }};--text:{{ $t.text | safeCSS }};--muted:{{ $t.muted | safeCSS }};--anim:{{ $t.anim | default "none" | safeCSS }};--meander:var(--m-{{ $t.pattern | default "none" | safeCSS }});--rune:{{ printf "%q" ($t.glyphs | default "") | safeCSS }}}
 {{ end }}</style>
 {{- if eq site.Language.Lang "fa" -}}
@@ -120,6 +120,6 @@
 <script src="{{ printf "%s?v=home-scroll-2" ("js/home-scroll.js" | relURL) }}"></script>
 {{- end -}}
 <script src="{{ printf "%s?v=scribe-icon-1" ("js/study.js" | relURL) }}" defer></script>
-<script src="{{ printf "%s?v=pwa-2" ("js/pwa.js" | relURL) }}" defer></script>
+<script src="{{ printf "%s?v=pwa-3" ("js/pwa.js" | relURL) }}" defer></script>
 </body>
 </html>

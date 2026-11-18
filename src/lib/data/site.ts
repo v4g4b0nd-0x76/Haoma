@@ -40,7 +40,7 @@ export interface StoryCard {
   culture: string;
   title: string;
   blurb: string;
-  motif: 'none' | 'rosette' | 'meander' | 'zigzag' | 'waves';
+  motif: 'none' | 'rosette' | 'meander' | 'zigzag' | 'waves' | 'cloud';
   animated?: boolean;
   links: StoryLink[];
 }
