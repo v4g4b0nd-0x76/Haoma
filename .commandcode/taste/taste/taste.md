@@ -1,0 +1,8 @@
+# Taste
+- For Farsi (Persian) localizations, prioritize natural, fluent, everyday language over literal translation; keep technical and internationally recognized terms in their original Latin form instead of inventing Farsi equivalents. Confidence: 0.85
+- Values clean architecture with reusable, dedicated components: each concern (animations, poem quotes, storytelling assets, etc.) gets its own fixed component so changing one part of the app is easy; static content, translations and similar assets live in well-defined directories that are quick and easy to access. Confidence: 0.75
+- Wants the build to keep serving as a fully static site deployed via GitHub Actions — no runtime server requirement. Confidence: 0.7
+- Pushes back on heavyweight frameworks: even when a tool is the most popular/ecosystem-rich choice, prefers a lighter alternative that fits the actual purpose over the biggest-name option. Confidence: 0.6
+- Wants editor/admin interfaces modeled closely on Notion's UI/UX (layout, spacing, sidebar behavior, right-click actions) rather than bespoke designs. Confidence: 0.7
+- Wants the agent to work autonomously: don't stop to ask for permission before editing files or running any commands — assume full access, just continue the task. Confidence: 0.9
+- When porting or migrating an existing site/app, expects the UI to be *exactly* identical to the current production version — reuse the existing stylesheet and reproduce the original DOM/class names instead of restyling with new tooling (e.g. Tailwind) or "close enough" approximations; verify against the live/production build. Confidence: 0.8
