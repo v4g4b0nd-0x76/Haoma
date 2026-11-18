@@ -11,30 +11,6 @@
     "glyphs": "",
     "banner": "base-night.svg"
   },
-  "norse": {
-    "accent": "#7fa8c9",
-    "bg": "#12161c",
-    "surface": "#1a2029",
-    "border": "#273241",
-    "text": "#c9ccd3",
-    "muted": "#8a8f9a",
-    "anim": "fall",
-    "pattern": "none",
-    "glyphs": "ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ",
-    "banner": "norse-fjord.svg"
-  },
-  "greek": {
-    "accent": "#c98a5a",
-    "bg": "#14161a",
-    "surface": "#1c1f25",
-    "border": "#2a2e36",
-    "text": "#c9ccd3",
-    "muted": "#8a8f9a",
-    "anim": "drift",
-    "pattern": "meander",
-    "glyphs": "· Α · Θ · Η · Ν · Α ·",
-    "banner": "greek-olympus.svg"
-  },
   "iranian": {
     "accent": "#e0a03a",
     "bg": "#171412",
@@ -59,6 +35,18 @@
     "glyphs": "𒀭 𒈹 𒀭 𒀯 𒀭 𒈹 𒀭 𒀯",
     "banner": "mesopotamian-ur.svg"
   },
+  "greek": {
+    "accent": "#c98a5a",
+    "bg": "#14161a",
+    "surface": "#1c1f25",
+    "border": "#2a2e36",
+    "text": "#c9ccd3",
+    "muted": "#8a8f9a",
+    "anim": "drift",
+    "pattern": "meander",
+    "glyphs": "· Α · Θ · Η · Ν · Α ·",
+    "banner": "greek-olympus.svg"
+  },
   "indian": {
     "accent": "#d9708f",
     "bg": "#15121b",
@@ -70,6 +58,18 @@
     "pattern": "waves",
     "glyphs": "॥ · पद्म · ॥ · पद्म · ॥",
     "banner": "indian-setu.svg"
+  },
+  "chinese": {
+    "accent": "#c9a84e",
+    "bg": "#161012",
+    "surface": "#21181b",
+    "border": "#3a2e32",
+    "text": "#e4dcd4",
+    "muted": "#9a8e8a",
+    "anim": "fall",
+    "pattern": "cloud",
+    "glyphs": "· 道 · 龍 · 天 ·",
+    "banner": "chinese-kunlun.svg"
   },
   "japanese": {
     "accent": "#bc002d",
@@ -83,16 +83,16 @@
     "glyphs": "· 神 · 道 · 鏡 ·",
     "banner": "japanese-fuji.svg"
   },
-  "chinese": {
-    "accent": "#c9a84e",
-    "bg": "#161012",
-    "surface": "#21181b",
-    "border": "#3a2e32",
-    "text": "#e4dcd4",
-    "muted": "#9a8e8a",
+  "norse": {
+    "accent": "#7fa8c9",
+    "bg": "#12161c",
+    "surface": "#1a2029",
+    "border": "#273241",
+    "text": "#c9ccd3",
+    "muted": "#8a8f9a",
     "anim": "fall",
-    "pattern": "cloud",
-    "glyphs": "· 道 · 龍 · 天 ·",
-    "banner": "chinese-kunlun.svg"
+    "pattern": "none",
+    "glyphs": "ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ ᚹ ᚺ ᚾ ᛁ ᛃ ᛇ ᛈ ᛉ ᛊ ᛏ ᛒ ᛖ ᛗ ᛚ ᛜ ᛞ ᛟ",
+    "banner": "norse-fjord.svg"
   }
 }

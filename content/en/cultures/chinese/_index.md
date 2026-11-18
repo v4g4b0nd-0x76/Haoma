@@ -1,5 +1,6 @@
 ---
 title: "Chinese"
+weight: 5
 culture: chinese
 quote: "When the pillars of heaven broke, Nüwa melted five-coloured stones to mend the sky."
 quoteSource: "Huainanzi (paraphrase)"

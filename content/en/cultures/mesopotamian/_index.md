@@ -1,5 +1,6 @@
 ---
 title: "Mesopotamian"
+weight: 2
 culture: mesopotamian
 quote: "Gilgamesh wept for Enkidu and set out to find the secret of life."
 quoteSource: "Epic of Gilgamesh (paraphrase)"

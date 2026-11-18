@@ -38,6 +38,8 @@ export interface Frontmatter {
   card_bg_kind?: 'static' | 'gif';
   pair?: string[];
   date?: string;
+  /** Lower comes first in culture lists / home worlds / picker (Hugo + Astro). */
+  weight?: number;
   audio?: string;
   youtube?: string;
   spotify?: string;

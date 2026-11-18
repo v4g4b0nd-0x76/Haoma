@@ -1,5 +1,6 @@
 ---
 title: Greek
+weight: 3
 culture: greek
 quote: ""
 quoteSource: ""

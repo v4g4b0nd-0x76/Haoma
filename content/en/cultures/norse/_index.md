@@ -1,5 +1,6 @@
 ---
 title: Norse
+weight: 7
 culture: norse
 quote: "Odin hung nine nights on the windswept tree, and learned the runes."
 quoteSource: "Havamal, stanza 138 (paraphrase)"

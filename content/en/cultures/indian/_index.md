@@ -1,5 +1,6 @@
 ---
 title: "Indian"
+weight: 4
 culture: indian
 quote: "When the sea would not part, the vanara army built a bridge of stones to Lanka."
 quoteSource: "Ramayana (paraphrase)"

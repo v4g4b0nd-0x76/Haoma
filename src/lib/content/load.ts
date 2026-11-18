@@ -203,7 +203,14 @@ function isoDate(value: unknown): string | undefined {
   return undefined;
 }
 
+function pageWeight(page: Page): number {
+  const weight = page.frontmatter.weight;
+  return typeof weight === 'number' && Number.isFinite(weight) ? weight : 1000;
+}
+
 function comparePages(a: Page, b: Page): number {
+  const byWeight = pageWeight(a) - pageWeight(b);
+  if (byWeight) return byWeight;
   if (a.date && b.date) return b.date.localeCompare(a.date);
   return a.title.localeCompare(b.title);
 }

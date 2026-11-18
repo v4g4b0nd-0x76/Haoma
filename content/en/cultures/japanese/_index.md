@@ -1,5 +1,6 @@
 ---
 title: "Japanese"
+weight: 6
 culture: japanese
 quote: "Amaterasu hid in the rock cave, and the plain of high heaven fell dark until the kami danced her back into light."
 quoteSource: "Kojiki (paraphrase)"
